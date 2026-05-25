@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>ELIOT HANTUTE // [CYBER_CORE]</title>
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;family=Hanken+Grotesk:wght@400;500&amp;family=Material+Symbols+Outlined:wgh[...]
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;family=Hanken+Grotesk:wght@400;500&amp;family=Material+Symbols+Outlined:wght@100..700,FILL@0..1,GRAD@-25..200,opsz@20..48" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
         tailwind.config = {
@@ -101,7 +101,7 @@
     position: fixed;
     inset: 0;
     z-index: 99;
-    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD8sj4x_KTvj8SzRdY_bts235Lmqwo_rcKzDW4c_DeVOQcn_IjxVTWcaI0kVLeDVfxGExHNwKGpwe9vIiE0Rp_l38QOVAclYQaCoGS1WMOux9GwMAAEu90y0hGJ[...]
+    background-image: url(data:image/svg+xml,%3Csvg%20viewBox=%270%200%20256%20256%27%20xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter%20id=%27noise%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.7%27%20numOctaves=%274%27%20seed=%271%27%20result=%27noise%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url(%23noise)%27/%3E%3C/svg%3E);
     opacity: 0.05;
     pointer-events: none
     }
@@ -361,7 +361,7 @@ header.scrolled {
 </div>
 </header>
 <!-- Terminal-style Navigation Drawer -->
-<aside class="fixed right-0 top-0 h-full w-full md:w-[450px] bg-surface-container border-l border-primary/20 z-[60] transform translate-x-full transition-transform duration-500 ease-in-out flex flex-c[...]
+<aside id="nav-drawer" class="fixed right-0 top-0 h-full w-full md:w-[450px] bg-surface-container border-l border-primary/20 z-[60] transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col">
 <div class="p-8 border-b border-border-subtle flex justify-between items-center bg-surface-container-highest/30">
 <div class="flex flex-col">
 <span class="font-technical-heading text-[10px] text-primary">ACCESS_GRANTED</span>
@@ -408,19 +408,19 @@ header.scrolled {
 <!-- Aggressive Cyberpunk Background Slideshow -->
 <div class="absolute inset-0 z-0" id="hero-slideshow">
 <div class="hero-slide active">
-<img alt="Slide 1" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0uhRuUIDZaWY7BLYcd9lJQeXkD6HGvlxXFXgjNgZYFWHko4A1p9BTl[...]
+<img alt="Slide 1" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1634942537326-73c3d5938ba9?w=1600&h=900&fit=crop"/>
 </div>
 <div class="hero-slide">
-<img alt="Slide 2" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujEG_BmKLX_xBFG6UVy0K7tSTOM1pgOY4TjbfJ0yBH6VOHHaleAKM[...]
+<img alt="Slide 2" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1579783902614-e3fb5141b0cb?w=1600&h=900&fit=crop"/>
 </div>
 <div class="hero-slide">
-<img alt="Slide 3" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0uhdATYoU33CpzmnGCoVU0QEGZbL0mWiEKKJO8IIY7MJaT-vNtatRf[...]
+<img alt="Slide 3" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1533928298208-27ff66555d0d?w=1600&h=900&fit=crop"/>
 </div>
 <div class="hero-slide">
-<img alt="Slide 4" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ug41Y82zco8OteMPZeeAN0Ra5wn2NEG7pngVpPQUnS2NXr1ONXx45[...]
+<img alt="Slide 4" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1563089145-1d37b5bb592d?w=1600&h=900&fit=crop"/>
 </div>
 <div class="hero-slide">
-<img alt="Slide 5" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujpZyhmeUEVEkJRtarwCiIgvzedpI3vNcrkr6ugW-2iK9NrkrnWk-[...]
+<img alt="Slide 5" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1505228395891-9a51e7e86e81?w=1600&h=900&fit=crop"/>
 </div>
 <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
 <div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background/40"></div>
@@ -492,7 +492,7 @@ header.scrolled {
 <!-- Arc Reflex -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0ujys_ndt9[...]
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Arc Reflex"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-primary text-primary font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#DESIGN</span>
@@ -505,7 +505,7 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Refonte du site Arc-Reflex pour le Centre de Neuro Pédagogie de Strasbourg. Focus sur l'accessibilité cognitive.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.arc-reflex.com/">
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.arc-reflex.com/" target="_blank">
                         Launch Project <span class="material-symbols-outlined text-xs">arrow_forward</span>
 </a>
 </div>
@@ -513,7 +513,7 @@ header.scrolled {
 <!-- Design Figma -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD[...]
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Design Figma"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-primary text-primary font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#DESIGN</span>
@@ -525,7 +525,7 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Site fictif pour un espace de co-working.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.figma.com/design/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=33-714&t=vnWum8ctPG6x4TDa-0">
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.figma.com/design/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=33-714&t=vnWum8ctPG6x4TDa-0" target="_blank">
                         Explore Prototype <span class="material-symbols-outlined text-xs">arrow_forward</span>
 </a>
 </div>
@@ -533,7 +533,7 @@ header.scrolled {
 <!-- Zeden -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0uiCjh0xDD[...]
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Zeden"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-[#ecb1ff] text-[#ecb1ff] font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#VISUAL</span>
@@ -545,7 +545,7 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Écosystème numérique pour l'artiste ZEDEN. Intégration de visuels génératifs en temps réel.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://zeden-864496946830.europe-west2.run.app/">
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://zeden-864496946830.europe-west2.run.app/" target="_blank">
                         Explore Site <span class="material-symbols-outlined text-xs">arrow_forward</span>
 </a>
 </div>
@@ -553,7 +553,7 @@ header.scrolled {
 <!-- Showreel -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0uj3RI7ZYQ[...]
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Showreel"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-[#09fd7f] text-[#09fd7f] font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#SOUND</span>
@@ -565,7 +565,7 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Laboratoire d'exploration sonore : Performance live &amp; Motion design basé sur le spectre audio.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.youtube.com/watch?v=jFTdQC90yzI&t=1s">
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.youtube.com/watch?v=jFTdQC90yzI&t=1s" target="_blank">
                         Initiate Stream <span class="material-symbols-outlined text-xs">play_arrow</span>
 </a>
 </div>
@@ -576,16 +576,16 @@ header.scrolled {
 <div class="md:col-span-7 space-y-8">
 <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-3"><span class="w-8 h-px bg-primary"></span> 001 — ARCHIVE_01</span>
 <h2 class="font-display-xl text-6xl md:text-8xl uppercase leading-none tracking-tight">HI, I ENJOY WORKING.</h2>
-<p class="font-body-md text-on-surface-variant max-w-xl text-lg leading-relaxed border-l border-primary/20 pl-8">Je travaille à l'intersection du graphisme, de la vidéo et du son. Générer des form[...]
+<p class="font-body-md text-on-surface-variant max-w-xl text-lg leading-relaxed border-l border-primary/20 pl-8">Je travaille à l'intersection du graphisme, de la vidéo et du son. Générer des formes visuelles qui résonnent avec l'intention créative.</p>
 </div>
 <div class="md:col-span-5 grid grid-cols-1 gap-4">
 <div class="bg-surface-container p-12 border border-border-subtle flex justify-between items-start group hover:border-primary/50 transition-colors">
 <span class="font-display-xl text-7xl text-primary group-hover:scale-110 transition-transform duration-500">03</span>
-<div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Disciplines</span><span class="font-technical-heading text-[10px] text-[...]
+<div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Disciplines</span><span class="font-technical-heading text-[10px] text-on-surface-variant/60">Design • Motion • Sound</span></div>
 </div>
 <div class="bg-surface-container p-12 border border-border-subtle flex justify-between items-start group hover:border-primary/50 transition-colors">
 <span class="font-display-xl text-7xl text-primary group-hover:scale-110 transition-transform duration-500">∞</span>
-<div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Créativité</span><span class="font-technical-heading text-[10px] text[...]
+<div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Créativité</span><span class="font-technical-heading text-[10px] text-on-surface-variant/60">Sans Limite</span></div>
 </div>
 </div>
 </section>
@@ -611,10 +611,10 @@ header.scrolled {
 </div>
 </div>
 <div class="relative aspect-[21/9] w-full overflow-hidden mb-12 group border border-white/10">
-<img alt="Audio Exploration" class="w-full h-full object-cover grayscale brightness-[0.4] group-hover:scale-105 transition-transform duration-[2000ms] ease-out" src="https://lh3.googleusercontent.com/[...]
+<img alt="Audio Exploration" class="w-full h-full object-cover grayscale brightness-[0.4] group-hover:scale-105 transition-transform duration-[2000ms] ease-out" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&h=700&fit=crop"/>
 <div class="absolute inset-0 bg-primary/10 mix-blend-color opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute inset-0 flex items-center justify-center">
-<a href="https://www.youtube.com/watch?v=n617nasyrIg" class="w-32 h-32 rounded-full border-2 border-primary flex items-center justify-center group-hover:bg-primary group-hover:text-background transition-all hover:scale-110 duration-500 relative">
+<a href="https://www.youtube.com/watch?v=n617nasyrIg" target="_blank" class="w-32 h-32 rounded-full border-2 border-primary flex items-center justify-center group-hover:bg-primary group-hover:text-background transition-all hover:scale-110 duration-500 relative">
 <span class="material-symbols-outlined text-5xl z-10" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
 <div class="absolute inset-0 rounded-full border border-primary animate-ping opacity-30"></div>
 </a>
@@ -638,7 +638,7 @@ header.scrolled {
 </h2>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://www.instagram.com/zeden[...]
+<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://www.instagram.com/zeden" target="_blank">
 <div class="flex justify-between items-start z-10">
 <span class="font-technical-heading text-[10px] text-on-surface-variant group-hover:text-background transition-colors uppercase">social_01</span>
 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-background group-hover:rotate-45 transition-all duration-500">arrow_outward</span>
@@ -646,7 +646,7 @@ header.scrolled {
 <span class="font-display-xl text-5xl uppercase tracking-wider group-hover:text-background transition-colors z-10">INSTAGRAM</span>
 <div class="absolute -right-4 -bottom-4 font-display-xl text-9xl opacity-0 group-hover:opacity-10 text-white transition-opacity">IG</div>
 </a>
-<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://open.spotify.com/intl-f[...]
+<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://open.spotify.com/intl-fr" target="_blank">
 <div class="flex justify-between items-start z-10">
 <span class="font-technical-heading text-[10px] text-on-surface-variant group-hover:text-background transition-colors uppercase">social_02</span>
 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-background group-hover:rotate-45 transition-all duration-500">arrow_outward</span>
@@ -654,7 +654,7 @@ header.scrolled {
 <span class="font-display-xl text-5xl uppercase tracking-wider group-hover:text-background transition-colors z-10">SPOTIFY</span>
 <div class="absolute -right-4 -bottom-4 font-display-xl text-9xl opacity-0 group-hover:opacity-10 text-white transition-opacity">SP</div>
 </a>
-<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://soundcloud.com/zedenmus[...]
+<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://soundcloud.com/zedenmusic" target="_blank">
 <div class="flex justify-between items-start z-10">
 <span class="font-technical-heading text-[10px] text-on-surface-variant group-hover:text-background transition-colors uppercase">social_03</span>
 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-background group-hover:rotate-45 transition-all duration-500">arrow_outward</span>
@@ -662,7 +662,7 @@ header.scrolled {
 <span class="font-display-xl text-5xl uppercase tracking-wider group-hover:text-background transition-colors z-10">SOUNDCLOUD</span>
 <div class="absolute -right-4 -bottom-4 font-display-xl text-9xl opacity-0 group-hover:opacity-10 text-white transition-opacity">SC</div>
 </a>
-<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="mailto:zedenbassmusic@gmail.com[...]
+<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="mailto:zedenbassmusic@gmail.com">
 <div class="flex justify-between items-start z-10">
 <span class="font-technical-heading text-[10px] text-on-surface-variant group-hover:text-background transition-colors uppercase">terminal_input</span>
 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-background group-hover:rotate-45 transition-all duration-500">arrow_outward</span>
@@ -751,7 +751,6 @@ header.scrolled {
     const openMenu = () => {
         navDrawer.classList.remove('translate-x-full');
         document.body.style.overflow = 'hidden';
-        navDrawer.querySelectorAll('span').forEach(s => s.classList.add('animate-pulse'));
     };
 
     const closeMenu = () => {
