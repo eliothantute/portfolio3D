@@ -45,6 +45,47 @@
 <style>.material-symbols-outlined {
     font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
     }
+/* Custom Cursor */
+.custom-cursor {
+    width: 8px;
+    height: 8px;
+    background: #ff571a;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, background-color 0.3s;
+}
+.custom-cursor-ring {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 87, 26, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+}
+.cursor-hover .custom-cursor {
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+}
+.cursor-hover .custom-cursor-ring {
+    width: 60px;
+    height: 60px;
+    border-color: #ff571a;
+    border-width: 2px;
+}
+
+/* Hide default cursor on desktop */
+@media (min-width: 1024px) {
+    body { cursor: none; }
+    a, button, [role="button"] { cursor: none; }
+}
+
 /* Scanlines & Noise Overlay */
 .scan-lines {
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
@@ -228,7 +269,7 @@
         transform: skew(0.51deg);
         } 90% {
         clip: rect(92px, 9999px, 97px, 0);
-        transform: skew(0.3deg);
+        transform: skew(0.30deg);
         } 95% {
         clip: rect(11px, 9999px, 86px, 0);
         transform: skew(0.12deg);
@@ -271,9 +312,23 @@ header.scrolled {
     }
 .cyber-bg-gradient {
     background: radial-gradient(circle at 50% 50%, rgba(255, 87, 26, 0.1) 0%, transparent 70%)
-    }</style>
+    }
+/* Hero Slideshow Transitions */
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    z-index: 0;
+}
+.hero-slide.active {
+    opacity: 1;
+}
+</style>
 </head>
 <body class="bg-background text-on-surface font-body-md selection:bg-primary selection:text-white overflow-x-hidden">
+<div class="custom-cursor" id="cursor-dot" style="left: 278px; top: 5078px;"></div>
+<div class="custom-cursor-ring" id="cursor-ring" style="left: 278px; top: 5078px;"></div>
 <div class="scroll-indicator" id="scroll-bar"></div>
 <div class="scan-lines"></div>
 <div class="noise-overlay"></div>
@@ -348,9 +403,23 @@ header.scrolled {
 <main>
 <!-- Hero Section -->
 <section class="min-h-screen flex flex-col justify-center px-grid-margin relative overflow-hidden" id="home">
-<!-- Aggressive Cyberpunk Background -->
-<div class="absolute inset-0 z-0">
-<img alt="Cyberpunk Background" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0uhdATYoU33CpzmnGCoVU0QEGZbL0mWiEKKJO8IIY7MJaT-vNtatRfSprD-IDzEcApz96rkMOjwUCCLkIY4XIBEude5m86lGyDmtv_s5bBwv0m5DTOcle6Mz9u_HH3gJZ3MenZgFWgPrLWdGLq4JENdoNIzB0ukBJ_zid5ST3J4DXgDr-boPLcyN7iV0YR6Yzds8ejuDQXqrFxBcEnuoLgNiCqMO505_eTUbY-kstXvH4v1DnsiRDy1p__cC">
+<!-- Aggressive Cyberpunk Background Slideshow -->
+<div class="absolute inset-0 z-0" id="hero-slideshow">
+<div class="hero-slide">
+<img alt="Slide 1" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0uhRuUIDZaWY7BLYcd9lJQeXkD6HGvlxXFXgjNgZYFWHko4A1p9BTlQQ0D3zAm4ArzHtcgjRUSP8L47RPBZQ7WBzXheGcmtR7GIiAmwVbbvnof2XuQE29iM1FzHciUoavlEdcHBSDTlCrsGKFX1fKTQDKmmkNl0vkkUtEf6T9-RQ3B3tNbHyzyeY3gBHtgPetF1GBbKrYw2z1HRA49BEnxIAms-uQsNNliKJTiO20PiVBwo8qyOjDbavUqWR">
+</div>
+<div class="hero-slide">
+<img alt="Slide 2" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujEG_BmKLX_xBFG6UVy0K7tSTOM1pgOY4TjbfJ0yBH6VOHHaleAKMox57LQ5dAzYONwDLdmAXPZETIloqwnK3a_L6vx5k_mAnObQ71S97SwKE16VpuV_WDnP-EegZHYNNyBWBhRzTNV39QwcIL6hIAtdDQrZJVT893KaUOzsIkEv8XWWz6dbpaLWMzS4y0FpLWFGJrutCGaruSytmf-PGChNjl9UwEaamT1gh6iItYxQv3nBLb80WSI-p2J">
+</div>
+<div class="hero-slide">
+<img alt="Slide 3" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0uhdATYoU33CpzmnGCoVU0QEGZbL0mWiEKKJO8IIY7MJaT-vNtatRfSprD-IDzEcApz96rkMOjwUCCLkIY4XIBEude5m86lGyDmtv_s5bBwv0m5DTOcle6Mz9u_HH3gJZ3MenZgFWgPrLWdGLq4JENdoNIzB0ukBJ_zid5ST3J4DXgDr-boPLcyN7iV0YR6Yzds8ejuDQXqrFxBcEnuoLgNiCqMO505_eTUbY-kstXvH4v1DnsiRDy1p__cC">
+</div>
+<div class="hero-slide active">
+<img alt="Slide 4" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ug41Y82zco8OteMPZeeAN0Ra5wn2NEG7pngVpPQUnS2NXr1ONXx45FK2WnmAG3Z9qHstmVKXo3IB5Rx5tSzPNdcq9ZrpC55VBalytjq79KC8vrB7IzYMWmx-UOJ6Di1i6gXPf930T81sS2C84DedTFeUjj-zOghIvn8ot07mUwYb7XxySlU78Ak5xVgh7rnmAVurFNB_ASulzzbnoeroBr71gyAIOXpZy4yYAmKUf-5QS6VB2PH4SL5AeE">
+</div>
+<div class="hero-slide">
+<img alt="Slide 5" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujpZyhmeUEVEkJRtarwCiIgvzedpI3vNcrkr6ugW-2iK9NrkrnWk-nT5LOghuTa_TNxJ2MV7rfn2yJ_CXc7psoSaSkkgZn9QsUlaaY-Di8i0mbrUl5CoL-18dSPgUYeLYROcU8ua0g1GAjcchNh37PhOYjkp171NNIho_FU72ZwbH508oKtCfQ2G5zM_eHdJBjBs-Sgd2-uBUZakWlF2iGM3cXPGHMqIza6CImnNzQBTxZsOUhhhERvr4RH">
+</div>
 <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
 <div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background/40"></div>
 <div class="absolute inset-0 cyber-bg-gradient"></div>
@@ -406,8 +475,6 @@ header.scrolled {
 <span class="w-4 h-4 bg-primary rotate-45"></span>
 </div>
 </div>
-<!-- About/Visual Split -->
-
 <!-- Work Grid -->
 <section class="reveal py-section-gap border-t border-white/5 active" id="design">
 <div class="px-grid-margin mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
@@ -435,16 +502,16 @@ header.scrolled {
 <h3 class="font-display-xl text-4xl uppercase tracking-tight group-hover:text-primary transition-colors">Web Design</h3>
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
-<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Refonte du site Arc-Reflex pour le Centre de Neuro Pédagogie de Strasbourg. Focus sur l'accessibilité cognitive.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.arc-reflex.com/">
+<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Écosystème numérique pour l'artiste ZEDEN. Intégration de visuels génératifs en temps réel.</p>
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://zeden-864496946830.europe-west2.run.app/" rel="noopener noreferrer" target="_blank">
                         Launch Project <span class="material-symbols-outlined text-xs">arrow_forward</span>
 </a>
 </div>
 </div>
 <!-- Design Figma -->
-<div class="space-y-6 group">
+<a class="space-y-6 group block" href="https://www.figma.com/design/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=33-714&amp;t=vnWum8ctPG6x4TDa-0" rel="noopener noreferrer" target="_blank">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfSPCoE74cR4lIkCe2i5E0DR_BBweJxtE2RGH7DFhYFvED7t4EDpaP3KqxL2nwEvOCY8mQK-Z8y0SgmC3ZSsM6Ll8xzLF8gPTvsShazXdB0b2_miPYAOdWG3Xt2AypApc12VRD_B9oK0WfYTnQ6SlfflcHZJXoy1faR1JhpfCDqFv1EPUcNiuVEB66MkRleCmpY6TB337GI868HycM78RNB-onkgZOO0JLSyguibLyFyMvHxLRmQlcCtB2g9YRU9mGFJLeogzQu8HI">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNUXY4Z1zjH1u0jv5cwaibx5cST_5eP845X_CmZJxRiGChkr8BiDmnII23H09ZnGmbEmRYw10RGdCjZVHxZfTXhhClLykX3hD41iq_wBqDSAdOdAUGHyrt4AO91vWOvbMGQogPVyJfvCbZzs9TauAmeEIvd3KSzAcUSIURuU5F8HTO9VscWh8cOCqdnFqPNqOq3N8TEbcA83n-Lo1CXadtu5xKEb7vt8qxbnyZJfrnv4M4xLvZ2DM1vEChadivwYOWp-xhKPB-G9Ob">
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-primary text-primary font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#DESIGN</span>
@@ -456,15 +523,15 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Site fictif pour un espace de co-working.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="#">
+<span class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] group-hover:translate-x-2 transition-transform mt-4">
                         Explore Prototype <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</span>
+</div>
 </a>
-</div>
-</div>
 <!-- Zeden -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0uiCjh0xDD_b7aWfRL0V9eoncciiIZuLGwLqjx47GsqJBgDdirE8AgdK7zHJ2iqbxFLv0xbk3dfghAPOpPrYa0G_5hAgewwNxtFxChILW1q0sI-sHXfzAjz-htouJOGvzm7ayWfAHVAbZkqUh_DGdRekAxUH7kfmP3tXm1mCqq7PjN3LTD6TZXYYG_NfxdiWrvCxIrtZUViSFYgRff7_EVfqm9bGc4zTZefUhIWZNmrO1NUFsOIw8Sn6QKIs">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNAyy0Ge_vCnzbXy76aw-TVTnsszDU5j_IC5rpfzkHgz3zsBYveojxaqG-2FLBvguEFFzUTPMnqZ4QMjjhndGmiY0-sdxN91q2AEKKqF6d_v_6n85mTKKWcns2D7lwsJGbqZjMhaIYKKngmDodDkJ_LY_PjLnLzL3Elv_QjOqcTsESaUrAVaLxlwA0ilmqCoRn4h5gCFQXyU-_O_QUFk4buYePkUljDG0GHxDwEk5TiPAN4FJeB3_Sje0xxcS3Oiq181KfcqKIwZxz">
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-[#ecb1ff] text-[#ecb1ff] font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#VISUAL</span>
@@ -475,19 +542,19 @@ header.scrolled {
 <h3 class="font-display-xl text-4xl uppercase tracking-tight group-hover:text-primary transition-colors">VISUEl</h3>
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
-<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Écosystème numérique pour l'artiste ZEDEN. Intégration de visuels génératifs en temps réel.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="#">
+<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Laboratoire d'exploration sonore : Performance live &amp; Motion design basé sur le spectre audio.</p>
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.youtube.com/watch?v=jFTdQC90yzI" rel="noopener noreferrer" target="_blank">
                         Explore Site <span class="material-symbols-outlined text-xs">arrow_forward</span>
 </a>
 </div>
 </div>
-<!-- Showreel -->
-<div class="space-y-6 group">
+<!-- Showreel (ARC REFLEX) -->
+<a class="space-y-6 group block" href="https://www.arc-reflex.com/" rel="noopener noreferrer" target="_blank">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
 <img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0uj3RI7ZYQGvNviCGo9lBAOeS7GFPqhvsGcdCQndmCCBwvGzu6f-4mpdWP-pPUrj_c4n7iF7l4m5miTDM7HGGmKCK3pDTbObdUJTxeW6AW00HA6RjOes_kXLKa-vDv00zDXZqoiyaCb1wO-16X5a6mM87zrAE_KfCohlsAV8d3tRLCxNmm055bjUWY9WvEdbhLXf9XrjQvxPRMT4nK5rmp_J5iL7dKj0kmOpTZaKgGYzeP_DOoStMLbIYEtV">
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
-<span class="px-3 py-1 border border-[#09fd7f] text-[#09fd7f] font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#SOUND</span>
+<span class="px-3 py-1 border border-[#09fd7f] text-[#09fd7f] font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#DESIGN</span>
 </div>
 </div>
 <div class="space-y-3">
@@ -495,14 +562,31 @@ header.scrolled {
 <h3 class="font-display-xl text-4xl uppercase tracking-tight group-hover:text-primary transition-colors">SITE ARC REFLEX</h3>
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
-<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Laboratoire d'exploration sonore : Performance live &amp; Motion design basé sur le spectre audio.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="#">
+<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Refonte du site Arc-Reflex pour le Centre de Neuro Pédagogie de Strasbourg. Focus sur l'accessibilité cognitive.</p>
+<div class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] group-hover:translate-x-2 transition-transform mt-4">
                         Initiate Stream <span class="material-symbols-outlined text-xs">play_arrow</span>
+</div>
+</div>
 </a>
 </div>
+</section>
+<section class="reveal py-section-gap px-grid-margin grid grid-cols-1 md:grid-cols-12 gap-12 active" id="visual">
+<div class="md:col-span-7 space-y-8">
+<span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-3"><span class="w-8 h-px bg-primary"></span> 001 — ARCHIVE_01</span>
+<h2 class="font-display-xl text-6xl md:text-8xl uppercase leading-none tracking-tight">HI, I ENJOY WORKING.</h2>
+<p class="font-body-md text-on-surface-variant max-w-xl text-lg leading-relaxed border-l border-primary/20 pl-8">Je travaille à l'intersection du graphisme, de la vidéo et du son. Générer des formes, couleurs et ambiances pour les faire interagir avec le son — c’est là que tout se joue. Direction artistique, prise d'image, édition, montage et composition sonore. Du concept à la livraison, je pilote chaque étape avec une obsession pour le détail technique et l'impact émotionnel.</p>
+</div>
+<div class="md:col-span-5 grid grid-cols-1 gap-4">
+<div class="bg-surface-container p-12 border border-border-subtle flex justify-between items-start group hover:border-primary/50 transition-colors">
+<span class="font-display-xl text-7xl text-primary group-hover:scale-110 transition-transform duration-500">03</span>
+<div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Disciplines</span><span class="font-technical-heading text-[10px] text-primary/40 block mt-1">LOADED_OK</span></div>
+</div>
+<div class="bg-surface-container p-12 border border-border-subtle flex justify-between items-start group hover:border-primary/50 transition-colors">
+<span class="font-display-xl text-7xl text-primary group-hover:scale-110 transition-transform duration-500">∞</span>
+<div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Créativité</span><span class="font-technical-heading text-[10px] text-primary/40 block mt-1">UNLIMITED_CAP</span></div>
 </div>
 </div>
-</section><section class="reveal py-section-gap px-grid-margin grid grid-cols-1 md:grid-cols-12 gap-12 active" id="visual"><div class="md:col-span-7 space-y-8"><span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-3"><span class="w-8 h-px bg-primary"></span> 001 — ARCHIVE_01</span><h2 class="font-display-xl text-6xl md:text-8xl uppercase leading-none tracking-tight">HI, I ENJOY WORKING.</h2><p class="font-body-md text-on-surface-variant max-w-xl text-lg leading-relaxed border-l border-primary/20 pl-8">Je travaille à l'intersection du graphisme, de la vidéo et du son. Générer des formes, couleurs et ambiances pour les faire interagir avec le son — c’est là que tout se joue. Direction artistique, prise d'image, édition, montage et composition sonore. Du concept à la livraison, je pilote chaque étape avec une obsession pour le détail technique et l'impact émotionnel.</p></div><div class="md:col-span-5 grid grid-cols-1 gap-4"><div class="bg-surface-container p-12 border border-border-subtle flex justify-between items-start group hover:border-primary/50 transition-colors"><span class="font-display-xl text-7xl text-primary group-hover:scale-110 transition-transform duration-500">03</span><div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Disciplines</span><span class="font-technical-heading text-[10px] text-primary/40 block mt-1">LOADED_OK</span></div></div><div class="bg-surface-container p-12 border border-border-subtle flex justify-between items-start group hover:border-primary/50 transition-colors"><span class="font-display-xl text-7xl text-primary group-hover:scale-110 transition-transform duration-500">∞</span><div class="text-right"><span class="font-technical-heading text-[10px] tracking-widest text-on-surface-variant uppercase block">Créativité</span><span class="font-technical-heading text-[10px] text-primary/40 block mt-1">UNLIMITED_CAP</span></div></div></div></section>
+</section>
 <!-- Sound Exploration Section -->
 <section class="reveal py-section-gap px-grid-margin active" id="sound">
 <div class="max-w-[1440px] mx-auto">
@@ -524,20 +608,7 @@ header.scrolled {
 </div>
 </div>
 </div>
-<div class="relative aspect-[21/9] w-full overflow-hidden mb-12 group border border-white/10">
-<img alt="Audio Exploration" class="w-full h-full object-cover grayscale brightness-[0.4] group-hover:scale-105 transition-transform duration-[2000ms] ease-out" src="https://lh3.googleusercontent.com/aida/ADBb0ujrcr0cK48SSfWapLkviIpqTBQgmH5pn6zo4CSvWPSex5QbQlz8DPB3TBxuOxefdF58YpT1f1IBqEuYwXC95_tbXVKbDq_6azgA_K17-AQxsJUvY7Rqv2hKXKo46lWpWZasplKJh3COUME3Vh-V6scktF-gX1688QzKt_bc8g3mTn7JWnbbz9jnEQVYSxwFITzUKAz5tsFxOXChCIMeHSUyQ6w53dq5ZRsg4TMDG2IpdvOlZFkQ4g48Q72Y">
-<div class="absolute inset-0 bg-primary/10 mix-blend-color opacity-0 group-hover:opacity-100 transition-opacity"></div>
-<div class="absolute inset-0 flex items-center justify-center">
-<button class="w-32 h-32 rounded-full border-2 border-primary flex items-center justify-center group-hover:bg-primary group-hover:text-background transition-all hover:scale-110 duration-500 relative">
-<span class="material-symbols-outlined text-5xl z-10" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-<div class="absolute inset-0 rounded-full border border-primary animate-ping opacity-30"></div>
-</button>
-</div>
-<div class="absolute bottom-10 left-10 flex items-center gap-3">
-<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-<span class="font-technical-heading text-xs text-primary uppercase tracking-[0.4em] font-bold">SIGNAL_DETECTED // 44.1kHz</span>
-</div>
-</div>
+<div class="relative aspect-[21/9] w-full overflow-hidden mb-12 group border border-white/10"><iframe class="w-full h-full" src="https://www.youtube.com/embed/n617nasyrIg?iv_load_policy=3&amp;rel=0&amp;modestbranding=1&amp;playsinline=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe><div class="absolute bottom-10 left-10 flex items-center gap-3 z-10 pointer-events-none"><div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div><span class="font-technical-heading text-xs text-primary uppercase tracking-[0.4em] font-bold">SIGNAL_DETECTED // 44.1kHz</span></div></div>
 </div>
 </section>
 <!-- Contact Section -->
@@ -600,6 +671,52 @@ header.scrolled {
 </footer>
 </main>
 <script>
+    // Custom Cursor Logic
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    let ringX = 0, ringY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        dot.style.left = `${mouseX}px`;
+        dot.style.top = `${mouseY}px`;
+    });
+
+    // Animate ring with lag
+    function animateRing() {
+        let distX = mouseX - ringX;
+        let distY = mouseY - ringY;
+        
+        ringX = ringX + distX * 0.2;
+        ringY = ringY + distY * 0.2;
+        
+        ring.style.left = `${ringX}px`;
+        ring.style.top = `${ringY}px`;
+        
+        requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // Cursor hover effects
+    const interactiveElements = document.querySelectorAll('a, button, .group');
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // Hero Slideshow Logic
+    const slides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+    setInterval(nextSlide, 5000); // 5 seconds per slide
+
     // Navigation functionality
     const header = document.getElementById('main-header');
     const menuToggle = document.getElementById('menu-toggle');
@@ -619,7 +736,6 @@ header.scrolled {
     const openMenu = () => {
         navDrawer.classList.remove('translate-x-full');
         document.body.style.overflow = 'hidden';
-        // Add subtle glitch to drawer title on open
         navDrawer.querySelectorAll('span').forEach(s => s.classList.add('animate-pulse'));
     };
 
