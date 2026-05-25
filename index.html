@@ -1,53 +1,52 @@
 <!DOCTYPE html>
-<html class="dark" lang="fr">
-<head>
+
+<html class="dark" lang="fr" style=""><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>ELIOT HANTUTE // [CYBER_CORE]</title>
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Hanken+Grotesk:wght@400;500&family=Material+Symbols+Outlined:wght@100..700,FILL@0..1,GRAD@-25..200,opsz@20..48" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;family=Hanken+Grotesk:wght@400;500&amp;family=Material+Symbols+Outlined:wght@100..700,FILL@0..1,GRAD@-25..200,opsz@20..48" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
-tailwind.config = {
-    darkMode: "class",
-    theme: {
-        extend: {
-            "colors": {
-                "primary": "#ff571a",
-                "background": "#131313",
-                "surface": "#131313",
-                "surface-container": "#201f1f",
-                "surface-container-high": "#2a2a2a",
-                "surface-container-highest": "#353534",
-                "surface-container-low": "#1c1b1b",
-                "surface-container-lowest": "#0e0e0e",
-                "on-surface": "#e5e2e1",
-                "on-surface-variant": "#e6beb2",
-                "border-subtle": "#2A2A2A",
-                "terminal-gray": "#E5E2E1"
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#ff571a",
+                        "background": "#131313",
+                        "surface": "#131313",
+                        "surface-container": "#201f1f",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-highest": "#353534",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#e6beb2",
+                        "border-subtle": "#2A2A2A",
+                        "terminal-gray": "#E5E2E1"
+                    },
+                    "spacing": {
+                        "grid-gutter": "1px",
+                        "grid-margin": "2rem",
+                        "section-gap": "4rem",
+                        "terminal-unit": "4px"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Anybody"],
+                        "headline-lg": ["Anybody"],
+                        "headline-lg-mobile": ["Anybody"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Hanken Grotesk"],
+                        "technical-heading": ["JetBrains Mono"]
+                    }
+                },
             },
-            "spacing": {
-                "grid-gutter": "1px",
-                "grid-margin": "2rem",
-                "section-gap": "4rem",
-                "terminal-unit": "4px"
-            },
-            "fontFamily": {
-                "display-xl": ["Anybody"],
-                "headline-lg": ["Anybody"],
-                "headline-lg-mobile": ["Anybody"],
-                "label-sm": ["JetBrains Mono"],
-                "body-md": ["Hanken Grotesk"],
-                "technical-heading": ["JetBrains Mono"]
-            }
-        },
-    },
-}
-</script>
-<style>
-.material-symbols-outlined {
+        }
+    </script>
+<style>.material-symbols-outlined {
     font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
-}
+    }
 /* Custom Cursor */
 .custom-cursor {
     width: 8px;
@@ -97,36 +96,36 @@ tailwind.config = {
     position: fixed;
     inset: 0;
     z-index: 100
-}
+    }
 .noise-overlay {
     position: fixed;
     inset: 0;
     z-index: 99;
-    background-image: url(data:image/svg+xml,%3Csvg%20viewBox=%270%200%20256%20256%27%20xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter%20id=%27noise%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%270.7%27%20numOctaves=%274%27%20seed=%271%27%20result=%27noise%27/%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url(%23noise)%27/%3E%3C/svg%3E);
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD8sj4x_KTvj8SzRdY_bts235Lmqwo_rcKzDW4c_DeVOQcn_IjxVTWcaI0kVLeDVfxGExHNwKGpwe9vIiE0Rp_l38QOVAclYQaCoGS1WMOux9GwMAAEu90y0hGJ);
     opacity: 0.05;
     pointer-events: none
-}
+    }
 /* Improved Intersection Observer Reveals */
 .reveal {
     opacity: 0;
     transform: translatey(40px) scale(0.98);
     transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity
-}
+    }
 .reveal.active {
     opacity: 1;
     transform: translatey(0) scale(1)
-}
+    }
 /* Advanced Glitch Effect */
 .glitch-wrapper {
     display: grid;
     grid-template-columns: 1fr
-}
+    }
 .glitch-text {
     grid-row-start: 1;
     grid-column-start: 1;
     position: relative
-}
+    }
 .glitch-text::before, .glitch-text::after {
     content: attr(data-text);
     position: absolute;
@@ -136,76 +135,165 @@ tailwind.config = {
     height: 100%;
     background: transparent;
     opacity: 0.8
-}
+    }
 .glitch-text:hover::before {
     left: 2px;
     text-shadow: -2px 0 #ff571a;
     clip: rect(44px, 450px, 56px, 0);
     animation: glitch-anim 2s infinite linear alternate-reverse
-}
+    }
 .glitch-text:hover::after {
     left: -2px;
     text-shadow: -2px 0 #00fff9;
     clip: rect(44px, 450px, 56px, 0);
     animation: glitch-anim2 2s infinite linear alternate-reverse
-}
+    }
 @keyframes glitch-anim {
-    0% { clip: rect(31px, 9999px, 94px, 0); transform: skew(0.85deg); }
-    5% { clip: rect(70px, 9999px, 71px, 0); transform: skew(0.85deg); }
-    10% { clip: rect(90px, 9999px, 48px, 0); transform: skew(0.15deg); }
-    15% { clip: rect(32px, 9999px, 9px, 0); transform: skew(0.67deg); }
-    20% { clip: rect(76px, 9999px, 52px, 0); transform: skew(0.83deg); }
-    25% { clip: rect(21px, 9999px, 92px, 0); transform: skew(0.24deg); }
-    30% { clip: rect(38px, 9999px, 58px, 0); transform: skew(0.7deg); }
-    35% { clip: rect(100px, 9999px, 60px, 0); transform: skew(0.64deg); }
-    40% { clip: rect(45px, 9999px, 99px, 0); transform: skew(0.8deg); }
-    45% { clip: rect(82px, 9999px, 72px, 0); transform: skew(0.48deg); }
-    50% { clip: rect(96px, 9999px, 54px, 0); transform: skew(0.18deg); }
-    55% { clip: rect(9px, 9999px, 69px, 0); transform: skew(0.01deg); }
-    60% { clip: rect(70px, 9999px, 83px, 0); transform: skew(0.44deg); }
-    65% { clip: rect(61px, 9999px, 20px, 0); transform: skew(0.3deg); }
-    70% { clip: rect(54px, 9999px, 70px, 0); transform: skew(0.69deg); }
-    75% { clip: rect(58px, 9999px, 12px, 0); transform: skew(0.83deg); }
-    80% { clip: rect(12px, 9999px, 45px, 0); transform: skew(0.39deg); }
-    85% { clip: rect(81px, 9999px, 56px, 0); transform: skew(0.18deg); }
-    90% { clip: rect(34px, 9999px, 60px, 0); transform: skew(0.51deg); }
-    95% { clip: rect(59px, 9999px, 92px, 0); transform: skew(0.37deg); }
-    100% { clip: rect(12px, 9999px, 94px, 0); transform: skew(0.25deg); }
-}
+    0% {
+        clip: rect(31px, 9999px, 94px, 0);
+        transform: skew(0.85deg);
+        } 5% {
+        clip: rect(70px, 9999px, 71px, 0);
+        transform: skew(0.85deg);
+        } 10% {
+        clip: rect(90px, 9999px, 48px, 0);
+        transform: skew(0.15deg);
+        } 15% {
+        clip: rect(32px, 9999px, 9px, 0);
+        transform: skew(0.67deg);
+        } 20% {
+        clip: rect(76px, 9999px, 52px, 0);
+        transform: skew(0.83deg);
+        } 25% {
+        clip: rect(21px, 9999px, 92px, 0);
+        transform: skew(0.24deg);
+        } 30% {
+        clip: rect(38px, 9999px, 58px, 0);
+        transform: skew(0.7deg);
+        } 35% {
+        clip: rect(100px, 9999px, 60px, 0);
+        transform: skew(0.64deg);
+        } 40% {
+        clip: rect(45px, 9999px, 99px, 0);
+        transform: skew(0.8deg);
+        } 45% {
+        clip: rect(82px, 9999px, 72px, 0);
+        transform: skew(0.48deg);
+        } 50% {
+        clip: rect(96px, 9999px, 54px, 0);
+        transform: skew(0.18deg);
+        } 55% {
+        clip: rect(9px, 9999px, 69px, 0);
+        transform: skew(0.01deg);
+        } 60% {
+        clip: rect(70px, 9999px, 83px, 0);
+        transform: skew(0.44deg);
+        } 65% {
+        clip: rect(61px, 9999px, 20px, 0);
+        transform: skew(0.3deg);
+        } 70% {
+        clip: rect(54px, 9999px, 70px, 0);
+        transform: skew(0.69deg);
+        } 75% {
+        clip: rect(58px, 9999px, 12px, 0);
+        transform: skew(0.83deg);
+        } 80% {
+        clip: rect(12px, 9999px, 45px, 0);
+        transform: skew(0.39deg);
+        } 85% {
+        clip: rect(81px, 9999px, 56px, 0);
+        transform: skew(0.18deg);
+        } 90% {
+        clip: rect(34px, 9999px, 60px, 0);
+        transform: skew(0.51deg);
+        } 95% {
+        clip: rect(59px, 9999px, 92px, 0);
+        transform: skew(0.37deg);
+        } 100% {
+        clip: rect(12px, 9999px, 94px, 0);
+        transform: skew(0.25deg);
+        }
+    }
 @keyframes glitch-anim2 {
-    0% { clip: rect(65px, 9999px, 100px, 0); transform: skew(0.15deg); }
-    5% { clip: rect(52px, 9999px, 74px, 0); transform: skew(0.96deg); }
-    10% { clip: rect(79px, 9999px, 85px, 0); transform: skew(0.56deg); }
-    15% { clip: rect(75px, 9999px, 5px, 0); transform: skew(0.38deg); }
-    20% { clip: rect(67px, 9999px, 61px, 0); transform: skew(0.61deg); }
-    25% { clip: rect(14px, 9999px, 79px, 0); transform: skew(0.85deg); }
-    30% { clip: rect(1px, 9999px, 66px, 0); transform: skew(0.86deg); }
-    35% { clip: rect(32px, 9999px, 59px, 0); transform: skew(0.64deg); }
-    40% { clip: rect(61px, 9999px, 61px, 0); transform: skew(0.04deg); }
-    45% { clip: rect(27px, 9999px, 11px, 0); transform: skew(0.44deg); }
-    50% { clip: rect(54px, 9999px, 32px, 0); transform: skew(0.17deg); }
-    55% { clip: rect(72px, 9999px, 20px, 0); transform: skew(0.04deg); }
-    60% { clip: rect(71px, 9999px, 7px, 0); transform: skew(0.19deg); }
-    65% { clip: rect(4px, 9999px, 35px, 0); transform: skew(0.07deg); }
-    70% { clip: rect(77px, 9999px, 2px, 0); transform: skew(0.71deg); }
-    75% { clip: rect(98px, 9999px, 14px, 0); transform: skew(0.16deg); }
-    80% { clip: rect(68px, 9999px, 9px, 0); transform: skew(0.24deg); }
-    85% { clip: rect(53px, 9999px, 25px, 0); transform: skew(0.51deg); }
-    90% { clip: rect(92px, 9999px, 97px, 0); transform: skew(0.30deg); }
-    95% { clip: rect(11px, 9999px, 86px, 0); transform: skew(0.12deg); }
-    100% { clip: rect(11px, 9999px, 5px, 0); transform: skew(0.04deg); }
-}
+    0% {
+        clip: rect(65px, 9999px, 100px, 0);
+        transform: skew(0.15deg);
+        } 5% {
+        clip: rect(52px, 9999px, 74px, 0);
+        transform: skew(0.96deg);
+        } 10% {
+        clip: rect(79px, 9999px, 85px, 0);
+        transform: skew(0.56deg);
+        } 15% {
+        clip: rect(75px, 9999px, 5px, 0);
+        transform: skew(0.38deg);
+        } 20% {
+        clip: rect(67px, 9999px, 61px, 0);
+        transform: skew(0.61deg);
+        } 25% {
+        clip: rect(14px, 9999px, 79px, 0);
+        transform: skew(0.85deg);
+        } 30% {
+        clip: rect(1px, 9999px, 66px, 0);
+        transform: skew(0.86deg);
+        } 35% {
+        clip: rect(32px, 9999px, 59px, 0);
+        transform: skew(0.64deg);
+        } 40% {
+        clip: rect(61px, 9999px, 61px, 0);
+        transform: skew(0.04deg);
+        } 45% {
+        clip: rect(27px, 9999px, 11px, 0);
+        transform: skew(0.44deg);
+        } 50% {
+        clip: rect(54px, 9999px, 32px, 0);
+        transform: skew(0.17deg);
+        } 55% {
+        clip: rect(72px, 9999px, 20px, 0);
+        transform: skew(0.04deg);
+        } 60% {
+        clip: rect(71px, 9999px, 7px, 0);
+        transform: skew(0.19deg);
+        } 65% {
+        clip: rect(4px, 9999px, 35px, 0);
+        transform: skew(0.07deg);
+        } 70% {
+        clip: rect(77px, 9999px, 2px, 0);
+        transform: skew(0.71deg);
+        } 75% {
+        clip: rect(98px, 9999px, 14px, 0);
+        transform: skew(0.16deg);
+        } 80% {
+        clip: rect(68px, 9999px, 9px, 0);
+        transform: skew(0.24deg);
+        } 85% {
+        clip: rect(53px, 9999px, 25px, 0);
+        transform: skew(0.51deg);
+        } 90% {
+        clip: rect(92px, 9999px, 97px, 0);
+        transform: skew(0.30deg);
+        } 95% {
+        clip: rect(11px, 9999px, 86px, 0);
+        transform: skew(0.12deg);
+        } 100% {
+        clip: rect(11px, 9999px, 5px, 0);
+        transform: skew(0.04deg);
+        }
+    }
 /* Marquee Strip */
 .marquee {
     white-space: nowrap;
     overflow: hidden;
     display: inline-block;
     animation: marquee 30s linear infinite
-}
+    }
 @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
+    0% {
+        transform: translateX(0);
+        } 100% {
+        transform: translateX(-50%);
+        }
+    }
 /* Navbar dynamic state */
 header.scrolled {
     padding-top: 1rem;
@@ -213,7 +301,7 @@ header.scrolled {
     background-color: rgba(19, 19, 19, 0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 87, 26, 0.2)
-}
+    }
 /* Scroll Progress */
 .scroll-indicator {
     position: fixed;
@@ -223,10 +311,10 @@ header.scrolled {
     background: #ff571a;
     z-index: 101;
     transition: width 0.1s ease-out
-}
+    }
 .cyber-bg-gradient {
     background: radial-gradient(circle at 50% 50%, rgba(255, 87, 26, 0.1) 0%, transparent 70%)
-}
+    }
 /* Hero Slideshow Transitions */
 .hero-slide {
     position: absolute;
@@ -253,9 +341,18 @@ header.scrolled {
 <span class="font-technical-heading text-sm font-bold text-primary tracking-widest">[ EH_SYS ]</span>
 </div>
 <nav class="hidden md:flex gap-12">
-<a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#visual">Work<span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span></a>
-<a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#sound">Audio<span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span></a>
-<a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#contact">Contact<span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span></a>
+<a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#visual">
+                Work
+                <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
+</a>
+<a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#sound">
+                Audio
+                <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
+</a>
+<a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#contact">
+                Contact
+                <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
+</a>
 </nav>
 <button class="flex items-center gap-3 text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 uppercase text-[11px] font-technical-heading group" id="menu-toggle">
 <span class="hidden sm:inline">// MENU</span>
@@ -272,48 +369,77 @@ header.scrolled {
 </div>
 <button class="material-symbols-outlined text-on-surface-variant hover:text-primary hover:rotate-90 transition-all duration-300" id="menu-close">close</button>
 </div>
-<div class="p-8 font-technical-heading text-[10px] text-primary/40 border-b border-border-subtle">SYSTEM_ROOT &gt; _</div>
+<div class="p-8 font-technical-heading text-[10px] text-primary/40 border-b border-border-subtle">
+        SYSTEM_ROOT &gt; _
+    </div>
 <nav class="flex flex-col flex-grow justify-center p-12 space-y-10">
 <a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#home">
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">01</span>
-<span>HOME.exe</span></a>
+<span class="">HOME.exe</span>
+</a>
 <a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#visual">
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">02</span>
-<span>VISUAL.iso</span></a>
+<span class="">VISUAL.iso</span>
+</a>
 <a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#design">
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">03</span>
-<span>DESIGN.dll</span></a>
+<span class="">DESIGN.dll</span>
+</a>
 <a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#sound">
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">04</span>
-<span>SOUND.wav</span></a>
+<span class="">SOUND.wav</span>
+</a>
 <a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#contact">
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">05</span>
-<span>CONTACT.msg</span></a>
+<span class="">CONTACT.msg</span>
+</a>
 </nav>
 <div class="p-12 border-t border-border-subtle bg-surface-container-lowest">
-<p class="font-technical-heading text-[10px] text-on-surface-variant/50 leading-relaxed">ELIOT HANTUTE OPERATING SYSTEM v4.2<br/>ENCRYPTED CONNECTION STABLE<br/>READY FOR INPUT.</p>
+<p class="font-technical-heading text-[10px] text-on-surface-variant/50 leading-relaxed">
+            ELIOT HANTUTE OPERATING SYSTEM v4.2<br/>
+            ENCRYPTED CONNECTION STABLE<br/>
+            READY FOR INPUT.
+        </p>
 </div>
 </aside>
 <main>
 <!-- Hero Section -->
 <section class="min-h-screen flex flex-col justify-center px-grid-margin relative overflow-hidden" id="home">
+<!-- Aggressive Cyberpunk Background Slideshow -->
 <div class="absolute inset-0 z-0" id="hero-slideshow">
-<div class="hero-slide active"><img alt="Slide 1" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1634942537326-73c3d5938ba9?w=1600&h=900&fit=crop"/></div>
-<div class="hero-slide"><img alt="Slide 2" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1579783902614-e3fb5141b0cb?w=1600&h=900&fit=crop"/></div>
-<div class="hero-slide"><img alt="Slide 3" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1533928298208-27ff66555d0d?w=1600&h=900&fit=crop"/></div>
-<div class="hero-slide"><img alt="Slide 4" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1563089145-1d37b5bb592d?w=1600&h=900&fit=crop"/></div>
-<div class="hero-slide"><img alt="Slide 5" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://images.unsplash.com/photo-1505228395891-9a51e7e86e81?w=1600&h=900&fit=crop"/></div>
+<div class="hero-slide active">
+<img alt="Slide 1" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0uhRuUIDZaWY7BLYcd9lJQeXkD6HGvlxXFXgjNgZYFWHko4A1LvSwc"/>
+</div>
+<div class="hero-slide">
+<img alt="Slide 2" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujEG_BmKLX_xBFG6UVy0K7tSTOM1pgOY4TjbfJ0yBH6VOHHaJ6Z"/>
+</div>
+<div class="hero-slide">
+<img alt="Slide 3" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0uhdATYoU33CpzmnGCoVU0QEGZbL0mWiEKKJO8IIY7MJaT-vNfXJ"/>
+</div>
+<div class="hero-slide">
+<img alt="Slide 4" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ug41Y82zco8OteMPZeeAN0Ra5wn2NEG7pngVpPQUnS2NXr1O9hf"/>
+</div>
+<div class="hero-slide">
+<img alt="Slide 5" class="w-full h-full object-cover opacity-30 grayscale contrast-125 scale-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujpZyhmeUEVEkJRtarwCiIgvzedpI3vNcrkr6ugW-2iK9NrkYDg"/>
+</div>
 <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
 <div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background/40"></div>
 <div class="absolute inset-0 cyber-bg-gradient"></div>
 </div>
 <div class="relative z-10 space-y-6 reveal active max-w-7xl mx-auto w-full">
-<span class="inline-block font-technical-heading text-xs text-primary tracking-[0.5em] uppercase px-3 py-1 border-l-2 border-primary bg-primary/5">// SYSTEM_STATUS: OPERATIONAL</span>
+<span class="inline-block font-technical-heading text-xs text-primary tracking-[0.5em] uppercase px-3 py-1 border-l-2 border-primary bg-primary/5">
+                // SYSTEM_STATUS: OPERATIONAL
+            </span>
 <div class="glitch-wrapper">
-<h1 class="font-display-xl text-[16vw] md:text-[10vw] uppercase leading-[0.85] tracking-tighter glitch-text" data-text="ELIOT HANTUTE CREATE.">ELIOT<br/>HANTUTE<br/><span class="text-primary">CREATE.</span></h1>
+<h1 class="font-display-xl text-[16vw] md:text-[10vw] uppercase leading-[0.85] tracking-tighter glitch-text" data-text="ELIOT HANTUTE CREATE.">
+                    ELIOT<br/>HANTUTE<br/><span class="text-primary">CREATE.</span>
+</h1>
 </div>
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-12 mt-16 pt-8 border-t border-white/5">
-<p class="font-technical-heading text-[11px] leading-relaxed tracking-[0.3em] text-on-surface-variant uppercase">DESIGNER · MOTION · COMPOSITION SONORE<br/>STRASBOURG / PARIS [CORE_LOC]</p>
+<p class="font-technical-heading text-[11px] leading-relaxed tracking-[0.3em] text-on-surface-variant uppercase">
+                    DESIGNER · MOTION · COMPOSITION SONORE<br/>
+                    STRASBOURG / PARIS [CORE_LOC]
+                </p>
 <div class="hidden md:flex gap-8">
 <div class="flex flex-col">
 <span class="text-[10px] font-technical-heading text-primary/40">LAT: 48.5734</span>
@@ -340,6 +466,7 @@ header.scrolled {
 <span class="w-4 h-4 bg-primary rotate-45"></span>
 <span class="font-display-xl text-5xl md:text-7xl uppercase opacity-10 hover:opacity-100 transition-opacity cursor-default tracking-widest">ART_DIRECTION</span>
 <span class="w-4 h-4 bg-primary rotate-45"></span>
+<!-- Duplicate for seamless loop -->
 <span class="font-display-xl text-5xl md:text-7xl uppercase opacity-10 hover:opacity-100 transition-opacity cursor-default tracking-widest text-primary">GRAPHIC_DESIGN</span>
 <span class="w-4 h-4 bg-primary rotate-45"></span>
 <span class="font-display-xl text-5xl md:text-7xl uppercase opacity-10 hover:opacity-100 transition-opacity cursor-default tracking-widest">MOTION_GRAPHICS</span>
@@ -357,12 +484,15 @@ header.scrolled {
 <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase mb-4 block">// 002 — PROJETS SÉLECTIONNÉS</span>
 <h2 class="font-display-xl text-8xl md:text-[10rem] uppercase leading-none">WORK</h2>
 </div>
-<p class="font-technical-heading text-[10px] text-on-surface-variant/40 uppercase tracking-widest pb-4">TOTAL_ITEMS: [04] // SORT: DESC</p>
+<p class="font-technical-heading text-[10px] text-on-surface-variant/40 uppercase tracking-widest pb-4">
+                TOTAL_ITEMS: [04] // SORT: DESC
+            </p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 bg-background px-grid-margin" id="work">
+<!-- Arc Reflex -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Arc Reflex"/>
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0ujysZpxRo4JdYmhX4q6C_zOg0fQVVT_zTfBW1Ww3RjVqvKLkd4" alt="Arc Reflex"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-primary text-primary font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#DESIGN</span>
@@ -375,12 +505,15 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Refonte du site Arc-Reflex pour le Centre de Neuro Pédagogie de Strasbourg. Focus sur l'accessibilité cognitive.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.arc-reflex.com/" target="_blank">Launch Project <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.arc-reflex.com/" target="_blank">
+                        Launch Project <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</a>
 </div>
 </div>
+<!-- Design Figma -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Design Figma"/>
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0ujysZpxRo4JdYmhX4q6C_zOg0fQVVT_zTfBW1Ww3RjVqvKLkd4" alt="Design Figma"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-primary text-primary font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#DESIGN</span>
@@ -392,12 +525,15 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Site fictif pour un espace de co-working.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.figma.com/design/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=33-714&t=vnWum8ctPG6x4TDa-0" target="_blank">Explore Prototype <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.figma.com/design/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=33-714&t=vnWum8ctPG6x4TDa-0" target="_blank">
+                        Explore Prototype <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</a>
 </div>
 </div>
+<!-- Zeden -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Zeden"/>
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0ujysZpxRo4JdYmhX4q6C_zOg0fQVVT_zTfBW1Ww3RjVqvKLkd4" alt="Zeden"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-[#ecb1ff] text-[#ecb1ff] font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#VISUAL</span>
@@ -409,12 +545,15 @@ header.scrolled {
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Écosystème numérique pour l'artiste ZEDEN. Intégration de visuels génératifs en temps réel.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://zeden-864496946830.europe-west2.run.app/" target="_blank">Explore Site <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://zeden-864496946830.europe-west2.run.app/" target="_blank">
+                        Explore Site <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</a>
 </div>
 </div>
+<!-- Showreel -->
 <div class="space-y-6 group">
 <div class="relative bg-surface-container aspect-square overflow-hidden border border-border-subtle transition-all duration-500 group-hover:border-primary/30">
-<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=600&fit=crop" alt="Showreel"/>
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0ujysZpxRo4JdYmhX4q6C_zOg0fQVVT_zTfBW1Ww3RjVqvKLkd4" alt="Showreel"/>
 <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute top-6 left-6 flex flex-col gap-2">
 <span class="px-3 py-1 border border-[#09fd7f] text-[#09fd7f] font-technical-heading text-[10px] uppercase tracking-widest bg-background/90 backdrop-blur-sm">#SOUND</span>
@@ -422,11 +561,13 @@ header.scrolled {
 </div>
 <div class="space-y-3">
 <div class="flex items-center gap-4">
-<h3 class="font-display-xl text-4xl uppercase tracking-tight group-hover:text-primary transition-colors">SHOWREEL</h3>
+<h3 class="font-display-xl text-4xl uppercase tracking-tight group-hover:text-primary transition-colors">SITE ARC REFLEX</h3>
 <div class="h-px flex-grow bg-white/10 group-hover:bg-primary/20 transition-colors"></div>
 </div>
 <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Laboratoire d'exploration sonore : Performance live &amp; Motion design basé sur le spectre audio.</p>
-<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.youtube.com/watch?v=jFTdQC90yzI&t=1s" target="_blank">Initiate Stream <span class="material-symbols-outlined text-xs">play_arrow</span></a>
+<a class="inline-flex items-center gap-2 font-technical-heading text-[10px] text-primary uppercase tracking-[0.2em] hover:translate-x-2 transition-transform mt-4" href="https://www.youtube.com/watch?v=jFTdQC90yzI&t=1s" target="_blank">
+                        Initiate Stream <span class="material-symbols-outlined text-xs">play_arrow</span>
+</a>
 </div>
 </div>
 </div>
@@ -453,11 +594,15 @@ header.scrolled {
 <div class="max-w-[1440px] mx-auto">
 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-20">
 <div class="space-y-6">
-<span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase inline-flex items-center gap-4"><span class="w-12 h-[2px] bg-primary"></span> 003 — FREQUENCY_LAB</span>
+<span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase inline-flex items-center gap-4">
+<span class="w-12 h-[2px] bg-primary"></span> 003 — FREQUENCY_LAB
+                    </span>
 <h2 class="font-display-xl text-8xl md:text-[12rem] uppercase leading-[0.8] tracking-tighter">SOUND</h2>
 </div>
 <div class="max-w-md space-y-4">
-<p class="font-body-md text-on-surface-variant text-lg leading-relaxed">Exploration des textures organiques et synthétiques. Recherche d'un équilibre entre chaos contrôlé et harmonie minérale.</p>
+<p class="font-body-md text-on-surface-variant text-lg leading-relaxed">
+                        Exploration des textures organiques et synthétiques. Recherche d'un équilibre entre chaos contrôlé et harmonie minérale.
+                    </p>
 <div class="flex gap-4">
 <div class="h-1 flex-grow bg-primary/20 rounded-full overflow-hidden">
 <div class="h-full bg-primary w-2/3 animate-pulse"></div>
@@ -466,7 +611,7 @@ header.scrolled {
 </div>
 </div>
 <div class="relative aspect-[21/9] w-full overflow-hidden mb-12 group border border-white/10">
-<img alt="Audio Exploration" class="w-full h-full object-cover grayscale brightness-[0.4] group-hover:scale-105 transition-transform duration-[2000ms] ease-out" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&h=700&fit=crop"/>
+<img alt="Audio Exploration" class="w-full h-full object-cover grayscale brightness-[0.4] group-hover:scale-105 transition-transform duration-[2000ms] ease-out" src="https://lh3.googleusercontent.com/aida/ADBb0uiPh0Z6TqX6R_6XzJM3hWuEu39V6tgBnNd6pBvxfCvfGbR-fXdX"/>
 <div class="absolute inset-0 bg-primary/10 mix-blend-color opacity-0 group-hover:opacity-100 transition-opacity"></div>
 <div class="absolute inset-0 flex items-center justify-center">
 <a href="https://www.youtube.com/watch?v=n617nasyrIg" target="_blank" class="w-32 h-32 rounded-full border-2 border-primary flex items-center justify-center group-hover:bg-primary group-hover:text-background transition-all hover:scale-110 duration-500 relative">
@@ -485,8 +630,12 @@ header.scrolled {
 <section class="reveal py-section-gap px-grid-margin border-t border-white/5 bg-surface-container-lowest active" id="contact">
 <div class="max-w-[1440px] mx-auto space-y-24">
 <div class="space-y-6">
-<span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-4"><span class="w-12 h-[2px] bg-primary"></span> 004 — ESTABLISH_LINK</span>
-<h2 class="font-display-xl text-[10vw] md:text-[12vw] uppercase leading-[0.8] tracking-tighter">TRAVAILLONS<br/><span class="text-primary">ENSEMBLE.</span></h2>
+<span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-4">
+<span class="w-12 h-[2px] bg-primary"></span> 004 — ESTABLISH_LINK
+                </span>
+<h2 class="font-display-xl text-[10vw] md:text-[12vw] uppercase leading-[0.8] tracking-tighter">
+                    TRAVAILLONS<br/><span class="text-primary">ENSEMBLE.</span>
+</h2>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 <a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://www.instagram.com/zeden" target="_blank">
@@ -497,7 +646,7 @@ header.scrolled {
 <span class="font-display-xl text-5xl uppercase tracking-wider group-hover:text-background transition-colors z-10">INSTAGRAM</span>
 <div class="absolute -right-4 -bottom-4 font-display-xl text-9xl opacity-0 group-hover:opacity-10 text-white transition-opacity">IG</div>
 </a>
-<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://open.spotify.com/" target="_blank">
+<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://open.spotify.com/intl-fr" target="_blank">
 <div class="flex justify-between items-start z-10">
 <span class="font-technical-heading text-[10px] text-on-surface-variant group-hover:text-background transition-colors uppercase">social_02</span>
 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-background group-hover:rotate-45 transition-all duration-500">arrow_outward</span>
@@ -505,7 +654,7 @@ header.scrolled {
 <span class="font-display-xl text-5xl uppercase tracking-wider group-hover:text-background transition-colors z-10">SPOTIFY</span>
 <div class="absolute -right-4 -bottom-4 font-display-xl text-9xl opacity-0 group-hover:opacity-10 text-white transition-opacity">SP</div>
 </a>
-<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://soundcloud.com/" target="_blank">
+<a class="group relative flex flex-col justify-between h-64 p-8 border border-white/10 bg-background hover:bg-primary transition-all duration-500 overflow-hidden" href="https://soundcloud.com/zedenmusic" target="_blank">
 <div class="flex justify-between items-start z-10">
 <span class="font-technical-heading text-[10px] text-on-surface-variant group-hover:text-background transition-colors uppercase">social_03</span>
 <span class="material-symbols-outlined text-on-surface-variant group-hover:text-background group-hover:rotate-45 transition-all duration-500">arrow_outward</span>
@@ -532,115 +681,130 @@ header.scrolled {
 <span class="flex items-center gap-2"><span class="w-1 h-1 bg-green-500 rounded-full"></span> SIGNAL_STABLE</span>
 <span class="hidden sm:inline">VER: 4.2.0_BETA</span>
 </div>
+<!-- Decorative footer elements -->
 <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
 </footer>
 </main>
 <script>
-const dot = document.getElementById('cursor-dot');
-const ring = document.getElementById('cursor-ring');
-let mouseX = 0, mouseY = 0;
-let ringX = 0, ringY = 0;
+    // Custom Cursor Logic
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0;
+    let ringX = 0, ringY = 0;
 
-window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    dot.style.left = `${mouseX}px`;
-    dot.style.top = `${mouseY}px`;
-});
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        dot.style.left = `${mouseX}px`;
+        dot.style.top = `${mouseY}px`;
+    });
 
-function animateRing() {
-    let distX = mouseX - ringX;
-    let distY = mouseY - ringY;
-    ringX = ringX + distX * 0.2;
-    ringY = ringY + distY * 0.2;
-    ring.style.left = `${ringX}px`;
-    ring.style.top = `${ringY}px`;
-    requestAnimationFrame(animateRing);
-}
-animateRing();
-
-const interactiveElements = document.querySelectorAll('a, button, .group');
-interactiveElements.forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-});
-
-const slides = document.querySelectorAll('.hero-slide');
-let currentSlide = 0;
-function nextSlide() {
-    slides[currentSlide].classList.remove('active');
-    currentSlide = (currentSlide + 1) % slides.length;
-    slides[currentSlide].classList.add('active');
-}
-setInterval(nextSlide, 5000);
-
-const header = document.getElementById('main-header');
-const menuToggle = document.getElementById('menu-toggle');
-const menuClose = document.getElementById('menu-close');
-const navDrawer = document.getElementById('nav-drawer');
-const navLinks = navDrawer.querySelectorAll('a');
-
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
+    // Animate ring with lag
+    function animateRing() {
+        let distX = mouseX - ringX;
+        let distY = mouseY - ringY;
+        
+        ringX = ringX + distX * 0.2;
+        ringY = ringY + distY * 0.2;
+        
+        ring.style.left = `${ringX}px`;
+        ring.style.top = `${ringY}px`;
+        
+        requestAnimationFrame(animateRing);
     }
-});
+    animateRing();
 
-const openMenu = () => {
-    navDrawer.classList.remove('translate-x-full');
-    document.body.style.overflow = 'hidden';
-};
+    // Cursor hover effects
+    const interactiveElements = document.querySelectorAll('a, button, .group');
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
 
-const closeMenu = () => {
-    navDrawer.classList.add('translate-x-full');
-    document.body.style.overflow = '';
-};
+    // Hero Slideshow Logic
+    const slides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+    setInterval(nextSlide, 5000); // 5 seconds per slide
 
-menuToggle.addEventListener('click', openMenu);
-menuClose.addEventListener('click', closeMenu);
-navLinks.forEach(link => link.addEventListener('click', closeMenu));
+    // Navigation functionality
+    const header = document.getElementById('main-header');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    const navDrawer = document.getElementById('nav-drawer');
+    const navLinks = navDrawer.querySelectorAll('a');
 
-window.onscroll = function() {
-    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    let scrolled = (winScroll / height) * 100;
-    document.getElementById("scroll-bar").style.width = scrolled + "%";
-};
-
-const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
+    // Sticky Header and Blur on Scroll
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
         }
     });
-}, observerOptions);
 
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    const openMenu = () => {
+        navDrawer.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    };
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        const target = document.querySelector(targetId);
-        if (target) {
-            const headerOffset = 100;
-            const elementPosition = target.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }
+    const closeMenu = () => {
+        navDrawer.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+    };
+
+    menuToggle.addEventListener('click', openMenu);
+    menuClose.addEventListener('click', closeMenu);
+    navLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+    // Scroll Progress Bar
+    window.onscroll = function() {
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("scroll-bar").style.width = scrolled + "%";
+    };
+
+    // Smooth IntersectionObserver reveals
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            const target = document.querySelector(targetId);
+            if (target) {
+                const headerOffset = 100;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
-});
 </script>
 </body>
 </html>
