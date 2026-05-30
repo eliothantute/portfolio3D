@@ -5,9 +5,9 @@
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;family=Hanken+Grotesk:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config"> 
-        tailwind.config = {  
-            darkMode: "class",   
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
             theme: {
                 extend: {
                     "colors": {
@@ -496,7 +496,7 @@ header.scrolled {
         <span class="relative z-10 material-symbols-outlined text-primary group-hover:text-background group-hover:rotate-45 transition-all duration-500">
           arrow_outward
         </span>
-      </a> 
+      </a>
 
     </div>
 
@@ -537,7 +537,16 @@ header.scrolled {
 </div>
 </div>
 
-
+  <!-- MP4 LOOP -->
+  <video
+    class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-screen pointer-events-none"
+    autoplay
+    muted
+    loop
+    playsinline
+  >
+    <source src="visual-loop.mp4" type="video/mp4">
+  </video>
                 
 <!-- Work Grid -->
 <section class="reveal py-section-gap border-t border-white/5 active" id="work">
@@ -548,9 +557,10 @@ header.scrolled {
         // 002 — PROJETS SÉLECTIONNÉS
       </span>
 
-<h2 class="font-display-xl text-5xl md:text-[10rem] uppercase leading-none">
-  WORK
-</h2>
+      <h2 class="section-title font-display-xl text-8xl md:text-[10rem] uppercase leading-none">
+        WORK
+      </h2>
+    </div>
 
     <p class="font-technical-heading text-[10px] text-on-surface-variant/40 uppercase tracking-widest pb-4">
       TOTAL_ITEMS: [04] // SORT: DESC
@@ -842,6 +852,45 @@ header.scrolled {
   </div>
 
 </div>
+
+
+<!-- MUSIC PERFORMANCE -->
+<div class="mb-6 mt-20">
+
+  <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-4">
+    <span class="w-12 h-[2px] bg-primary"></span>
+    006 — LIVE_MUSIC_SESSION
+  </span>
+
+  <h3 class="font-display-xl text-4xl md:text-6xl uppercase tracking-tight mt-4">
+    MUSIC PERFORMANCE
+  </h3>
+
+</div>
+
+<div class="relative aspect-[21/9] w-full overflow-hidden group border border-white/10">
+
+  <iframe
+    class="w-full h-full"
+    src="https://www.youtube.com/watch?v=htLSyUeeQrA"
+    title="Music Performance"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen>
+  </iframe>
+
+  <div class="absolute bottom-10 left-10 flex items-center gap-3 z-10 pointer-events-none">
+
+    <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+
+    <span class="font-technical-heading text-xs text-primary uppercase tracking-[0.4em] font-bold">
+      PERFORMANCE_SIGNAL // ACTIVE
+    </span>
+
+  </div>
+
+</div>
+        
         
 <!-- Contact Section -->
 <section class="reveal py-section-gap px-grid-margin border-t border-white/5 bg-surface-container-lowest active" id="contact">
@@ -890,7 +939,6 @@ header.scrolled {
 </div>
 </div>
 </section>
-        
 <!-- Footer -->
 <footer class="py-20 px-grid-margin border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12 bg-background relative overflow-hidden">
 <div class="font-display-xl text-3xl uppercase tracking-[0.5em] text-primary relative z-10">E · H</div>
