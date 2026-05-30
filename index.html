@@ -537,16 +537,7 @@ header.scrolled {
 </div>
 </div>
 
-  <!-- MP4 LOOP -->
-  <video
-    class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-screen pointer-events-none"
-    autoplay
-    muted
-    loop
-    playsinline
-  >
-    <source src="Design sans titre(4).mp4" type="video/mp4">
-  </video>
+
                 
 <!-- Work Grid -->
 <section class="reveal py-section-gap border-t border-white/5 active" id="work">
@@ -911,6 +902,37 @@ header.scrolled {
 </div>
 </div>
 </section>
+
+        <footer class="relative py-20 px-grid-margin border-t border-white/5 overflow-hidden">
+
+  <!-- VIDEO BACKGROUND -->
+  <video
+    class="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+    autoplay
+    muted
+    loop
+    playsinline>
+    <source src="Design sans titre(4).mp4" type="video/mp4">
+  </video>
+
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-background/80"></div>
+
+  <!-- Footer content -->
+  <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-12">
+
+    <div class="font-display-xl text-3xl uppercase tracking-[0.5em] text-primary">
+      E · H
+    </div>
+
+    <div class="font-technical-heading text-[9px] tracking-[0.5em] uppercase opacity-50">
+      © 2026 ELIOT HANTUTE
+    </div>
+
+  </div>
+
+</footer>
+        
 <!-- Footer -->
 <footer class="py-20 px-grid-margin border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12 bg-background relative overflow-hidden">
 <div class="font-display-xl text-3xl uppercase tracking-[0.5em] text-primary relative z-10">E · H</div>
