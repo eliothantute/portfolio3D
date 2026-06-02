@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ping Paris — Case Study</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ff571a",
+            background: "#131313",
+            surface: "#201f1f",
+            "on-surface": "#e5e2e1",
+            "on-surface-variant": "#e6beb2",
+            "border-subtle": "#2A2A2A"
+          },
+          fontFamily: {
+            "display-xl": ["Anybody"],
+            "technical-heading": ["JetBrains Mono"],
+            "body-md": ["Hanken Grotesk"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-background text-on-surface font-body-md">
+
+  <header class="fixed top-0 left-0 right-0 z-50 px-8 py-6 bg-background/80 backdrop-blur border-b border-white/10">
+    <div class="max-w-[1440px] mx-auto flex justify-between items-center">
+      <a href="index.html" class="font-technical-heading text-primary text-sm tracking-widest">
+        ← BACK_TO_PORTFOLIO
+      </a>
+      <span class="font-technical-heading text-[10px] text-on-surface-variant tracking-widest">
+        PROJECT_CASE_STUDY
+      </span>
+    </div>
+  </header>
+
+  <main class="pt-32 px-8 pb-24">
+
+    <section class="max-w-[1440px] mx-auto">
+
+      <div class="flex flex-col md:flex-row justify-between gap-12 mb-16">
+        <div>
+          <span class="font-technical-heading text-primary text-sm tracking-widest uppercase">
+            01_ Projet actuel
+          </span>
+
+          <h1 class="font-display-xl text-7xl md:text-[9rem] uppercase leading-none mt-6">
+            Ping<br>
+            <span class="text-primary">Paris</span>
+          </h1>
+        </div>
+
+        <div class="max-w-md pt-6">
+          <p class="text-on-surface-variant text-lg leading-relaxed">
+            Application mobile pour localiser les tables de ping-pong à Paris,
+            consulter la météo, trouver les spots proches et créer une expérience communautaire.
+          </p>
+
+          <div class="flex gap-4 mt-8">
+            <a href="https://pingparisapp.vercel.app/" target="_blank"
+               class="bg-primary text-background px-6 py-4 font-technical-heading text-[10px] uppercase tracking-widest">
+              Voir le projet →
+            </a>
+
+            <a href="https://github.com/eliothantute/pingparisapp" target="_blank"
+               class="border border-white/20 px-6 py-4 font-technical-heading text-[10px] uppercase tracking-widest hover:text-primary hover:border-primary">
+              GitHub ↗
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-white/10 bg-surface p-8 mb-16">
+        <img
+          src="ping-paris-app.png"
+          alt="Ping Paris preview"
+          class="w-full max-h-[720px] object-cover opacity-90"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-20">
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Role</h3>
+          <p>Design UI, intégration web, prototype, déploiement</p>
+        </div>
+
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Stack</h3>
+          <p>HTML, CSS, JavaScript, React CDN, Leaflet, Open-Meteo API, PWA</p>
+        </div>
+
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Objectif</h3>
+          <p>Trouver rapidement une table de ping-pong autour de soi à Paris.</p>
+        </div>
+
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Statut</h3>
+          <p>Prototype fonctionnel en cours d’amélioration.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+        <section>
+          <h2 class="font-display-xl text-5xl uppercase mb-6">Le problème</h2>
+          <p class="text-on-surface-variant leading-relaxed text-lg">
+            Il existe de nombreuses tables de ping-pong à Paris, mais elles sont dispersées,
+            parfois difficiles à localiser et rarement présentées dans une interface claire et mobile.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="font-display-xl text-5xl uppercase mb-6">La solution</h2>
+          <p class="text-on-surface-variant leading-relaxed text-lg">
+            Ping Paris centralise les spots sur une carte interactive avec géolocalisation,
+            météo en temps réel, fiches détaillées, recherche et navigation mobile.
+          </p>
+        </section>
+      </div>
+
+      <section class="mb-20">
+        <h2 class="font-display-xl text-5xl uppercase mb-8">Fonctionnalités</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">📍</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Géolocalisation</h3>
+            <p class="text-on-surface-variant">Trouver les tables proches de l’utilisateur.</p>
+          </div>
+
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">🗺️</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Carte interactive</h3>
+            <p class="text-on-surface-variant">Pins Leaflet, fiches spots et navigation Google Maps.</p>
+          </div>
+
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">☀️</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Météo API</h3>
+            <p class="text-on-surface-variant">Connexion à Open-Meteo pour afficher les conditions de jeu.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-20">
+        <h2 class="font-display-xl text-5xl uppercase mb-8">Ce que ça montre</h2>
+
+        <div class="border border-white/10 bg-surface p-8">
+          <p class="text-on-surface-variant leading-relaxed text-lg">
+            Ce projet montre ma capacité à transformer une idée produit en prototype interactif :
+            structure d’application, interface mobile, carte dynamique, API externe, logique de navigation,
+            déploiement web et version installable en PWA.
+          </p>
+        </div>
+      </section>
+
+      <div class="flex justify-between items-center border-t border-white/10 pt-10">
+        <a href="index.html" class="font-technical-heading text-primary uppercase tracking-widest">
+          ← Retour portfolio
+        </a>
+
+        <a href="https://pingparisapp.vercel.app/" target="_blank"
+           class="font-technical-heading text-primary uppercase tracking-widest">
+          Ouvrir l’app →
+        </a>
+      </div>
+
+    </section>
+  </main>
+
+</body>
+</html>
