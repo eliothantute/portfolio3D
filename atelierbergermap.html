@@ -1,97 +1,202 @@
-<a href="index.html">← BACK_TO_PORTFOLIO</a>
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier Berger — Case Study</title>
 
-<p>PROJECT_CASE_STUDY</p>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<p>01_ Projet prototype</p>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ff571a",
+            background: "#131313",
+            surface: "#201f1f",
+            "on-surface": "#e5e2e1",
+            "on-surface-variant": "#e6beb2",
+            "border-subtle": "#2A2A2A"
+          },
+          fontFamily: {
+            "display-xl": ["Anybody"],
+            "technical-heading": ["JetBrains Mono"],
+            "body-md": ["Hanken Grotesk"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
 
-<h1>Atelier Berger<br>Carte Interactive</h1>
+<body class="bg-background text-on-surface font-body-md">
 
-<p>
-  Prototype web interactif permettant d’explorer les projets de l’Atelier Berger à travers un globe 3D, une liste de réalisations et des fiches détaillées.
-</p>
+  <header class="fixed top-0 left-0 right-0 z-50 px-8 py-6 bg-background/80 backdrop-blur border-b border-white/10">
+    <div class="max-w-[1440px] mx-auto flex justify-between items-center">
+      <a href="index.html" class="font-technical-heading text-primary text-sm tracking-widest">
+        ← BACK_TO_PORTFOLIO
+      </a>
+      <span class="font-technical-heading text-[10px] text-on-surface-variant tracking-widest">
+        PROJECT_CASE_STUDY
+      </span>
+    </div>
+  </header>
 
-<a href="https://atelier-berger-carte-interactive.vercel.app/" target="_blank">Voir le projet →</a>
-<a href="https://github.com/eliothantute/Atelier-Berger-Carte-Interactive-" target="_blank">GitHub ↗</a>
+  <main class="pt-32 px-8 pb-24">
 
-<img src="images/atelierbergermap.png" alt="Atelier Berger Carte Interactive preview">
+    <section class="max-w-[1440px] mx-auto">
 
-<h3>Role</h3>
-<p>UI design, prototype interactif, intégration React, globe 3D, déploiement</p>
+      <div class="flex flex-col md:flex-row justify-between gap-12 mb-16">
+        <div>
+          <span class="font-technical-heading text-primary text-sm tracking-widest uppercase">
+            02_ Prototype interactif
+          </span>
 
-<h3>Stack</h3>
-<p>React, TypeScript, Vite, Tailwind CSS, Motion, React Globe GL, Three.js/WebGL, Google AI Studio / Stitch, Vercel</p>
+          <h1 class="font-display-xl text-7xl md:text-[9rem] uppercase leading-none mt-6">
+            Atelier<br>
+            <span class="text-primary">Berger</span>
+          </h1>
+        </div>
 
-<h3>Objectif</h3>
-<p>
-  Présenter les projets architecturaux de l’Atelier Berger dans une expérience plus immersive, visuelle et interactive qu’un portfolio classique.
-</p>
+        <div class="max-w-md pt-6">
+          <p class="text-on-surface-variant text-lg leading-relaxed">
+            Carte interactive immersive pour explorer les projets de l’Atelier Berger à travers un globe 3D, une liste de réalisations et des fiches détaillées.
+          </p>
 
-<h3>Statut</h3>
-<p>Prototype fonctionnel déployé en ligne.</p>
+          <div class="flex gap-4 mt-8">
+            <a href="https://atelier-berger-carte-interactive.vercel.app/" target="_blank"
+               class="bg-primary text-background px-6 py-4 font-technical-heading text-[10px] uppercase tracking-widest">
+              Voir le projet →
+            </a>
 
-<h2>Le problème</h2>
-<p>
-  Les projets d’architecture sont souvent présentés sous forme de grilles statiques. Cela rend difficile la perception de leur répartition géographique, de leur diversité et de leur contexte.
-</p>
+            <a href="https://github.com/eliothantute/Atelier-Berger-Carte-Interactive-" target="_blank"
+               class="border border-white/20 px-6 py-4 font-technical-heading text-[10px] uppercase tracking-widest hover:text-primary hover:border-primary">
+              GitHub ↗
+            </a>
+          </div>
+        </div>
+      </div>
 
-<h2>La solution</h2>
-<p>
-  Le projet propose une interface interactive avec un globe 3D, une liste de projets et des fiches détaillées. L’utilisateur peut explorer les réalisations par localisation, visualiser les projets sur la carte et accéder rapidement aux informations principales.
-</p>
+      <div class="border border-white/10 bg-surface p-8 mb-16">
+        <img
+          src="atelierbergermap.png"
+          alt="Atelier Berger Carte Interactive preview"
+          class="w-full max-h-[720px] object-cover opacity-90"
+        />
+      </div>
 
-<h2>Workflow</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-20">
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Role</h3>
+          <p>Prototype IA, design UI, intégration React, globe 3D, déploiement</p>
+        </div>
 
-<h3>1. Prototype avec Google AI Studio / Stitch</h3>
-<p>
-  Le projet a d’abord été généré et structuré avec Google AI Studio / Stitch afin d’obtenir rapidement une base d’interface, des composants React et une première logique de navigation.
-</p>
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Stack</h3>
+          <p>React, TypeScript, Vite, Tailwind CSS, Motion, React Globe GL, Google AI Studio, Vercel</p>
+        </div>
 
-<h3>2. Structuration du projet</h3>
-<p>
-  L’application a ensuite été organisée en composants : WorldMap, ProjectList, ProjectDetail, ContactModal et CreativeProcessStory.
-</p>
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Objectif</h3>
+          <p>Présenter des projets d’architecture de manière immersive et géolocalisée.</p>
+        </div>
 
-<h3>3. Intégration du globe 3D</h3>
-<p>
-  Le globe a été développé avec React Globe GL, une librairie React basée sur Three.js et WebGL. Les projets sont affichés sous forme de points géolocalisés grâce à leurs coordonnées latitude/longitude.
-</p>
+        <div class="border border-white/10 p-6 bg-surface">
+          <h3 class="font-technical-heading text-primary text-sm uppercase mb-4">Statut</h3>
+          <p>Prototype fonctionnel déployé en ligne.</p>
+        </div>
+      </div>
 
-<h3>4. Design et interactions</h3>
-<p>
-  L’interface utilise Tailwind CSS pour la mise en page et Motion pour les animations. L’objectif était de créer une expérience fluide, visuelle et premium adaptée à un studio d’architecture.
-</p>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+        <section>
+          <h2 class="font-display-xl text-5xl uppercase mb-6">Le problème</h2>
+          <p class="text-on-surface-variant leading-relaxed text-lg">
+            Les portfolios d’architecture présentent souvent les projets sous forme de grilles statiques, ce qui rend difficile la lecture de leur répartition géographique et de leur diversité.
+          </p>
+        </section>
 
-<h3>5. Déploiement</h3>
-<p>
-  Le projet a été versionné sur GitHub puis déployé avec Vercel pour obtenir une version consultable en ligne.
-</p>
+        <section>
+          <h2 class="font-display-xl text-5xl uppercase mb-6">La solution</h2>
+          <p class="text-on-surface-variant leading-relaxed text-lg">
+            Atelier Berger Carte Interactive propose une expérience visuelle avec un globe 3D, des points géolocalisés, une liste de projets et des fiches détaillées pour explorer les réalisations de façon plus immersive.
+          </p>
+        </section>
+      </div>
 
-<h2>Fonctionnalités</h2>
+      <section class="mb-20">
+        <h2 class="font-display-xl text-5xl uppercase mb-8">Workflow</h2>
 
-<h3>Globe interactif</h3>
-<p>
-  Visualisation des projets sur un globe 3D avec points cliquables.
-</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">🤖</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Prototype IA</h3>
+            <p class="text-on-surface-variant">Base du projet générée avec Google AI Studio / Stitch, puis retravaillée manuellement.</p>
+          </div>
 
-<h3>Liste de projets</h3>
-<p>
-  Affichage des réalisations avec leurs informations principales.
-</p>
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">🌍</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Globe 3D</h3>
+            <p class="text-on-surface-variant">Intégration d’un globe interactif avec React Globe GL, basé sur Three.js et WebGL.</p>
+          </div>
 
-<h3>Fiches détaillées</h3>
-<p>
-  Chaque projet peut être consulté à travers une fiche dédiée.
-</p>
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">🚀</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Déploiement</h3>
+            <p class="text-on-surface-variant">Projet versionné sur GitHub puis mis en ligne avec Vercel.</p>
+          </div>
+        </div>
+      </section>
 
-<h3>Navigation immersive</h3>
-<p>
-  L’utilisateur peut passer d’une vue globale à une lecture plus détaillée des projets.
-</p>
+      <section class="mb-20">
+        <h2 class="font-display-xl text-5xl uppercase mb-8">Fonctionnalités</h2>
 
-<h2>Ce que ça montre</h2>
-<p>
-  Ce projet montre ma capacité à transformer un prototype généré avec IA en interface web fonctionnelle : structuration React, intégration TypeScript, design responsive, visualisation 3D, logique de composants, gestion des données projets et déploiement web.
-</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">📍</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Projets géolocalisés</h3>
+            <p class="text-on-surface-variant">Les réalisations sont affichées à partir de coordonnées latitude / longitude.</p>
+          </div>
 
-<a href="index.html">← Retour portfolio</a>
-<a href="https://atelier-berger-carte-interactive.vercel.app/" target="_blank">Ouvrir le projet →</a>
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">🧭</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Navigation interactive</h3>
+            <p class="text-on-surface-variant">L’utilisateur peut explorer les projets depuis la carte, la liste ou les fiches détaillées.</p>
+          </div>
+
+          <div class="border border-white/10 p-8 bg-surface">
+            <div class="text-3xl mb-4">🎬</div>
+            <h3 class="font-technical-heading text-primary uppercase mb-3">Animations UI</h3>
+            <p class="text-on-surface-variant">Transitions et micro-interactions créées avec Motion pour une expérience plus fluide.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-20">
+        <h2 class="font-display-xl text-5xl uppercase mb-8">Ce que ça montre</h2>
+
+        <div class="border border-white/10 bg-surface p-8">
+          <p class="text-on-surface-variant leading-relaxed text-lg">
+            Ce projet montre ma capacité à transformer un prototype généré avec l’IA en interface web fonctionnelle : structuration React, composants TypeScript, design responsive, visualisation 3D, gestion de données projets, animations UI et déploiement web.
+          </p>
+        </div>
+      </section>
+
+      <div class="flex justify-between items-center border-t border-white/10 pt-10">
+        <a href="index.html" class="font-technical-heading text-primary uppercase tracking-widest">
+          ← Retour portfolio
+        </a>
+
+        <a href="https://atelier-berger-carte-interactive.vercel.app/" target="_blank"
+           class="font-technical-heading text-primary uppercase tracking-widest">
+          Ouvrir le projet →
+        </a>
+      </div>
+
+    </section>
+  </main>
+
+</body>
+</html>
