@@ -613,40 +613,41 @@ header.scrolled {
       </a>
     </article>
 
-    <article class="group relative overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(10,14,22,0.95)_0%,rgba(8,11,18,0.98)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
-      <a href="atelierbergermap.html" class="relative block min-h-[16.5rem]" aria-label="Open Atelier Berger Globe project">
-        <img src="atelierbergermap.png" alt="Atelier Berger Globe 3D map" class="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-screen group-hover:opacity-45 group-hover:scale-105 transition-all duration-700" />
-        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,10,18,0.2)_0%,rgba(7,10,18,0.6)_55%,rgba(7,10,18,0.95)_100%)]"></div>
+    <article class="group relative overflow-hidden rounded-[28px] border border-primary/30 bg-[linear-gradient(180deg,rgba(6,8,18,0.97)_0%,rgba(4,6,14,0.99)_100%)] shadow-[0_0_80px_rgba(255,87,26,0.15),0_30px_90px_rgba(0,0,0,0.6)]">
+      <!-- Live rotating Three.js globe -->
+      <canvas id="globe-canvas" class="absolute inset-0 w-full h-full" style="opacity:0.7;pointer-events:none;"></canvas>
+      <!-- Radial vignette so text stays readable -->
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,transparent_30%,rgba(4,6,14,0.85)_70%)]"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,6,14,0.1)_0%,rgba(4,6,14,0.5)_60%,rgba(4,6,14,0.95)_100%)]"></div>
 
-        <div class="relative z-10 flex min-h-[16.5rem] h-full w-full flex-col justify-between p-7 md:p-8">
-          <div class="flex items-start justify-between gap-6">
-            <span class="text-[10px] uppercase tracking-[0.42em] text-white/45">Map</span>
-            <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/50">
-              <span>2024</span>
-              <span>3D / WebGL</span>
-            </div>
+      <a href="atelierbergermap.html" class="relative z-10 flex min-h-[22rem] h-full w-full flex-col justify-between p-7 md:p-8 block" aria-label="Open Atelier Berger Globe project">
+        <div class="flex items-start justify-between gap-6">
+          <span class="text-[10px] uppercase tracking-[0.42em] text-primary/70 font-technical-heading">Map</span>
+          <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/50 font-technical-heading">
+            <span>2024</span>
+            <span>3D / WebGL</span>
           </div>
+        </div>
 
-          <div class="space-y-5 max-w-lg">
-            <h3 class="text-[2.35rem] md:text-[5rem] font-semibold uppercase leading-[0.88] tracking-[-0.07em] text-white">
-              Atelier<br>Berger Globe
-            </h3>
-            <p class="max-w-md text-[15px] md:text-[16px] leading-[1.8] text-white/72" data-i18n="work-card2-desc">
-              Globe 3D interactif pour visualiser les projets d'architecture de l'agence Atelier Berger à travers le monde.
-            </p>
-          </div>
+        <div class="space-y-5 max-w-lg">
+          <h3 class="text-[2.35rem] md:text-[5rem] font-semibold uppercase leading-[0.88] tracking-[-0.07em] text-white">
+            Atelier<br>Berger Globe
+          </h3>
+          <p class="max-w-md text-[15px] md:text-[16px] leading-[1.8] text-white/72" data-i18n="work-card2-desc">
+            Globe 3D interactif pour visualiser les projets d'architecture de l'agence Atelier Berger à travers le monde.
+          </p>
+        </div>
 
-          <div class="flex items-center justify-between gap-4 pt-8 border-t border-white/10">
-            <div class="flex flex-wrap gap-2">
-              <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Three.js</span>
-              <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">WebGL</span>
-              <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">3D Map</span>
-            </div>
-            <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff]">
-              <span data-i18n="work-view-proto">Voir le projet</span>
-              <span class="material-symbols-outlined text-xs">arrow_forward</span>
-            </span>
+        <div class="flex items-center justify-between gap-4 pt-8 border-t border-white/10">
+          <div class="flex flex-wrap gap-2">
+            <span class="rounded-full border border-primary/40 bg-primary/10 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-primary/80">Three.js</span>
+            <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">WebGL</span>
+            <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">3D Map</span>
           </div>
+          <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
+            <span data-i18n="work-view-proto">Voir le projet</span>
+            <span class="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </span>
         </div>
       </a>
     </article>
@@ -1066,6 +1067,93 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
 const storedLang = localStorage.getItem('lang');
 const browserLang = navigator.language && navigator.language.startsWith('fr') ? 'fr' : 'en';
 applyLang(storedLang || browserLang);
+</script>
+
+<!-- Three.js rotating globe for Atelier Berger card -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+
+const canvas = document.getElementById('globe-canvas');
+if (canvas) {
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
+  camera.position.z = 2.6;
+
+  // Globe sphere
+  const geo = new THREE.SphereGeometry(1, 64, 64);
+
+  // Wireframe overlay
+  const wireMat = new THREE.MeshBasicMaterial({ color: 0xff571a, wireframe: true, transparent: true, opacity: 0.12 });
+  const wire = new THREE.Mesh(geo, wireMat);
+  scene.add(wire);
+
+  // Solid dark base
+  const solidMat = new THREE.MeshPhongMaterial({ color: 0x060a14, transparent: true, opacity: 0.85 });
+  const solid = new THREE.Mesh(geo, solidMat);
+  solid.scale.setScalar(0.995);
+  scene.add(solid);
+
+  // Atmosphere glow
+  const atmGeo = new THREE.SphereGeometry(1.08, 32, 32);
+  const atmMat = new THREE.MeshBasicMaterial({ color: 0xff571a, transparent: true, opacity: 0.04, side: THREE.BackSide });
+  scene.add(new THREE.Mesh(atmGeo, atmMat));
+
+  // Dot markers for world cities
+  const cities = [
+    [48.85, 2.35],   // Paris
+    [51.5, -0.12],   // London
+    [40.71, -74.0],  // New York
+    [35.68, 139.69], // Tokyo
+    [-33.86, 151.2], // Sydney
+    [55.75, 37.62],  // Moscow
+    [-23.55, -46.63],// São Paulo
+    [1.35, 103.82],  // Singapore
+    [19.43, -99.13], // Mexico City
+    [30.04, 31.24],  // Cairo
+  ];
+  const dotGeo = new THREE.SphereGeometry(0.016, 8, 8);
+  const dotMat = new THREE.MeshBasicMaterial({ color: 0xff571a });
+  cities.forEach(([lat, lon]) => {
+    const phi   = (90 - lat)  * Math.PI / 180;
+    const theta = (lon + 180) * Math.PI / 180;
+    const dot = new THREE.Mesh(dotGeo, dotMat);
+    dot.position.setFromSphericalCoords(1.01, phi, theta);
+    scene.add(dot);
+  });
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+  const dirLight = new THREE.DirectionalLight(0xff8855, 1.2);
+  dirLight.position.set(3, 2, 2);
+  scene.add(dirLight);
+
+  // Resize
+  function resize() {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+
+  // Animate
+  const group = new THREE.Group();
+  group.add(wire, solid);
+  scene.add(group);
+
+  let t = 0;
+  (function animate() {
+    requestAnimationFrame(animate);
+    t += 0.0035;
+    group.rotation.y = t;
+    group.rotation.x = Math.sin(t * 0.3) * 0.12;
+    renderer.render(scene, camera);
+  })();
+}
 </script>
 
 </body></html>
