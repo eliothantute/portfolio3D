@@ -613,33 +613,42 @@ header.scrolled {
       </a>
     </article>
 
-    <article class="group relative overflow-hidden rounded-[28px] border border-white/20 bg-[radial-gradient(circle_at_82%_28%,rgba(147,117,255,0.4),transparent_16%),linear-gradient(180deg,rgba(30,24,54,0.96)_0%,rgba(16,14,27,0.96)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
-      <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(132,94,255,0.12)_34%,transparent_50%,rgba(132,94,255,0.12)_67%,transparent_100%)] opacity-70"></div>
-      <div class="absolute right-10 top-8 h-24 w-24 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.45),rgba(168,136,255,0.55)_38%,rgba(91,64,156,0.1)_70%,transparent_72%)] blur-[1px]"></div>
-      <div class="absolute left-1/2 top-[63%] -translate-x-1/2 -translate-y-1/2 h-14 w-14 rounded-full border-2 border-[#ff5d1f] flex items-center justify-center bg-black/25">
-        <span class="h-3 w-3 rounded-full bg-white/90"></span>
-      </div>
-      <div class="relative z-10 flex min-h-[16.5rem] flex-col justify-between p-7 md:p-8">
-        <div class="flex items-start justify-between gap-6">
-          <span class="text-[10px] uppercase tracking-[0.42em] text-white/45">Stack</span>
-        </div>
+    <article class="group relative overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(10,14,22,0.95)_0%,rgba(8,11,18,0.98)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
+      <a href="atelierbergermap.html" class="relative block min-h-[16.5rem]" aria-label="Open Atelier Berger Globe project">
+        <img src="atelierbergermap.png" alt="Atelier Berger Globe 3D map" class="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-screen group-hover:opacity-45 group-hover:scale-105 transition-all duration-700" />
+        <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,10,18,0.2)_0%,rgba(7,10,18,0.6)_55%,rgba(7,10,18,0.95)_100%)]"></div>
 
-        <div class="space-y-5 max-w-lg">
-          <h3 class="text-[2.35rem] md:text-[5rem] font-semibold uppercase leading-[0.88] tracking-[-0.07em] text-white">
-            Clean<br>Interface
-          </h3>
-          <p class="max-w-md text-[15px] md:text-[16px] leading-[1.8] text-white/72" data-i18n="work-card2-desc">
-            Une présentation plus sombre et épurée, avec une hiérarchie plus forte et des surfaces plus douces.
-          </p>
-        </div>
+        <div class="relative z-10 flex min-h-[16.5rem] h-full w-full flex-col justify-between p-7 md:p-8">
+          <div class="flex items-start justify-between gap-6">
+            <span class="text-[10px] uppercase tracking-[0.42em] text-white/45">Map</span>
+            <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/50">
+              <span>2024</span>
+              <span>3D / WebGL</span>
+            </div>
+          </div>
 
-        <div class="flex flex-wrap gap-2 pt-8">
-          <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Typography</span>
-          <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Layout</span>
-          <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Motion</span>
-          <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">UI</span>
+          <div class="space-y-5 max-w-lg">
+            <h3 class="text-[2.35rem] md:text-[5rem] font-semibold uppercase leading-[0.88] tracking-[-0.07em] text-white">
+              Atelier<br>Berger Globe
+            </h3>
+            <p class="max-w-md text-[15px] md:text-[16px] leading-[1.8] text-white/72" data-i18n="work-card2-desc">
+              Globe 3D interactif pour visualiser les projets d'architecture de l'agence Atelier Berger à travers le monde.
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between gap-4 pt-8 border-t border-white/10">
+            <div class="flex flex-wrap gap-2">
+              <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Three.js</span>
+              <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">WebGL</span>
+              <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">3D Map</span>
+            </div>
+            <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff]">
+              <span data-i18n="work-view-proto">Voir le projet</span>
+              <span class="material-symbols-outlined text-xs">arrow_forward</span>
+            </span>
+          </div>
         </div>
-      </div>
+      </a>
     </article>
 
     <article class="overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(11,11,15,0.96)_0%,rgba(8,8,11,0.98)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
@@ -991,7 +1000,7 @@ const translations = {
     'work-featured-badge': 'Projet mis en avant',
     'work-ping-desc':    "Prototype d\u2019application mobile pour localiser les tables de ping-pong \u00e0 Paris et d\u00e9couvrir les spots proches.",
     'work-view-proto':   'Voir le prototype',
-    'work-card2-desc':   'Une pr\u00e9sentation plus sombre et \u00e9pur\u00e9e, avec une hi\u00e9rarchie plus forte et des surfaces plus douces.',
+    'work-card2-desc':   "Globe 3D interactif pour visualiser les projets d\u2019architecture de l\u2019agence Atelier Berger \u00e0 travers le monde.",
     'work-more':         'Plus de projets',
     'work-accessibility':'Accessibilit\u00e9',
     'sound-desc':        "Exploration des textures organiques et synth\u00e9tiques. Recherche d\u2019un \u00e9quilibre entre chaos contr\u00f4l\u00e9 et harmonie.",
@@ -1011,7 +1020,7 @@ const translations = {
     'work-featured-badge': 'Featured project',
     'work-ping-desc':    'Mobile app prototype to locate ping-pong tables in Paris and discover nearby spots.',
     'work-view-proto':   'View prototype',
-    'work-card2-desc':   'A darker, quieter presentation with stronger hierarchy and softer surfaces.',
+    'work-card2-desc':   'Interactive 3D globe to visualise the architectural projects of Atelier Berger across the world.',
     'work-more':         'More work',
     'work-accessibility':'Accessibility',
     'sound-desc':        'Exploration of organic and synthetic textures. Seeking a balance between controlled chaos and harmony.',
