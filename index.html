@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="dark" lang="fr" style=""><head>
+<!DOCTYPE html><html class="dark" lang="fr" id="html-root" style=""><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>ELIOT HANTUTE // [CYBER_CORE]</title>
@@ -358,20 +358,21 @@ header.scrolled {
 </div>
 <nav class="hidden md:flex gap-12">
 <a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#visual">
-                Work
+                <span data-i18n="nav-work">Projets</span>
                 <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
 </a>
 <a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#sound">
-                Audio
+                <span data-i18n="nav-audio">Audio</span>
                 <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
 </a>
 <a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#contact">
-                Contact
+                <span data-i18n="nav-contact">Contact</span>
                 <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
 </a>
 </nav>
+<button class="font-technical-heading text-[10px] tracking-[0.2em] uppercase border border-white/20 px-3 py-1.5 hover:text-primary hover:border-primary transition-all duration-200 mr-4" id="lang-toggle" aria-label="Changer de langue"><span id="lang-fr-label" class="text-primary">FR</span><span class="opacity-30 mx-1">/</span><span id="lang-en-label" class="opacity-40">EN</span></button>
 <button class="flex items-center gap-3 text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 uppercase text-[11px] font-technical-heading group" id="menu-toggle">
-<span>Menu</span>
+<span data-i18n="nav-menu">Menu</span>
 <span class="material-symbols-outlined group-hover:rotate-90 transition-transform duration-300">menu</span>
 </button>
 </div>
@@ -477,8 +478,8 @@ header.scrolled {
     </div>
 
     <div class="mt-10 space-y-3">
-      <p class="font-technical-heading text-sm md:text-xl leading-relaxed tracking-[0.25em] text-on-surface uppercase">
-        // UI DESIGNER • CREATIVE DEVELOPER BASED IN PARIS
+      <p class="font-technical-heading text-sm md:text-xl leading-relaxed tracking-[0.25em] text-on-surface uppercase" data-i18n="hero-subtitle">
+        // DESIGNER UI • DÉVELOPPEUR CRÉATIF BASÉ À PARIS
       </p>
     </div>
 
@@ -491,8 +492,8 @@ header.scrolled {
       >
         <div class="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"></div>
 
-        <span class="relative z-10 font-technical-heading text-[11px] tracking-[0.3em] uppercase group-hover:text-background transition-colors duration-500">
-          VIEW_WORK
+        <span class="relative z-10 font-technical-heading text-[11px] tracking-[0.3em] uppercase group-hover:text-background transition-colors duration-500" data-i18n="hero-cta-work">
+          VOIR_PROJETS
         </span>
 
         <span class="relative z-10 material-symbols-outlined text-primary group-hover:text-background group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500">
@@ -506,8 +507,8 @@ header.scrolled {
       >
         <div class="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"></div>
 
-        <span class="relative z-10 font-technical-heading text-[11px] tracking-[0.3em] uppercase group-hover:text-background transition-colors duration-500">
-          GET_IN_TOUCH
+        <span class="relative z-10 font-technical-heading text-[11px] tracking-[0.3em] uppercase group-hover:text-background transition-colors duration-500" data-i18n="hero-cta-contact">
+          ME_CONTACTER
         </span>
 
         <span class="relative z-10 material-symbols-outlined text-primary group-hover:text-background group-hover:rotate-45 transition-all duration-500">
@@ -522,8 +523,8 @@ header.scrolled {
   <!-- Scroll Indicator -->
   <div class="absolute bottom-12 right-grid-margin reveal active hidden md:block">
     <div class="flex items-center gap-4">
-      <span class="font-technical-heading text-[10px] text-on-surface-variant/40 tracking-[0.5em] vertical-rl [writing-mode:vertical-lr] animate-pulse">
-        SCROLL_DOWN
+      <span class="font-technical-heading text-[10px] text-on-surface-variant/40 tracking-[0.5em] vertical-rl [writing-mode:vertical-lr] animate-pulse" data-i18n="hero-scroll">
+        DÉFILER
       </span>
       <div class="w-px h-24 bg-gradient-to-b from-primary to-transparent"></div>
     </div>
@@ -561,11 +562,11 @@ header.scrolled {
       <span class="w-12 h-[2px] bg-[#9b7cff]"></span>
       002 — PROJECT_ARCHIVE
     </span>
-    <h2 class="text-4xl md:text-6xl font-semibold uppercase leading-[0.9] tracking-[-0.06em] text-white">
-      Selected projects
+    <h2 class="text-4xl md:text-6xl font-semibold uppercase leading-[0.9] tracking-[-0.06em] text-white" data-i18n="work-heading">
+      Projets sélectionnés
     </h2>
-    <p class="max-w-2xl text-[15px] md:text-[16px] text-white/60 leading-[1.8] tracking-[0.01em]">
-      A darker, quieter presentation with stronger hierarchy and softer surfaces.
+    <p class="max-w-2xl text-[15px] md:text-[16px] text-white/60 leading-[1.8] tracking-[0.01em]" data-i18n="work-intro-desc">
+      Une présentation plus sombre et épurée, avec une hiérarchie plus forte et des surfaces plus douces.
     </p>
   </div>
 
@@ -579,8 +580,8 @@ header.scrolled {
 
         <div class="relative z-10 flex min-h-[34rem] h-full w-full flex-col justify-between p-7 md:p-8">
           <div class="flex items-start justify-between gap-6">
-            <span class="inline-flex items-center rounded-full border border-white/20 bg-white/6 px-4 py-1 text-[9px] uppercase tracking-[0.38em] text-white/78">
-              Featured project
+            <span class="inline-flex items-center rounded-full border border-white/20 bg-white/6 px-4 py-1 text-[9px] uppercase tracking-[0.38em] text-white/78" data-i18n="work-featured-badge">
+              Projet mis en avant
             </span>
             <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/50">
               <span>2026</span>
@@ -592,8 +593,8 @@ header.scrolled {
             <h3 class="text-[2.8rem] md:text-[4.9rem] font-semibold uppercase leading-[0.86] tracking-[-0.08em] text-white">
               Ping Paris
             </h3>
-            <p class="max-w-xl text-[15px] md:text-[17px] leading-[1.75] text-white/76">
-              Prototype d'application mobile pour localiser les tables de ping-pong a Paris et decouvrir les spots proches.
+            <p class="max-w-xl text-[15px] md:text-[17px] leading-[1.75] text-white/76" data-i18n="work-ping-desc">
+              Prototype d'application mobile pour localiser les tables de ping-pong à Paris et découvrir les spots proches.
             </p>
           </div>
 
@@ -604,7 +605,7 @@ header.scrolled {
               <span class="rounded-full border border-white/20 bg-white/6 px-3 py-1 text-[9px] uppercase tracking-[0.32em] text-white/72">Geolocation</span>
             </div>
             <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff]">
-              View prototype
+              <span data-i18n="work-view-proto">Voir le prototype</span>
               <span class="material-symbols-outlined text-xs">arrow_forward</span>
             </span>
           </div>
@@ -627,8 +628,8 @@ header.scrolled {
           <h3 class="text-[2.35rem] md:text-[5rem] font-semibold uppercase leading-[0.88] tracking-[-0.07em] text-white">
             Clean<br>Interface
           </h3>
-          <p class="max-w-md text-[15px] md:text-[16px] leading-[1.8] text-white/72">
-            A darker, quieter presentation with stronger hierarchy and softer surfaces.
+          <p class="max-w-md text-[15px] md:text-[16px] leading-[1.8] text-white/72" data-i18n="work-card2-desc">
+            Une présentation plus sombre et épurée, avec une hiérarchie plus forte et des surfaces plus douces.
           </p>
         </div>
 
@@ -643,7 +644,7 @@ header.scrolled {
 
     <article class="overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(11,11,15,0.96)_0%,rgba(8,8,11,0.98)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
       <div class="flex items-center justify-between px-7 pt-7 md:px-8">
-        <span class="text-[10px] uppercase tracking-[0.42em] text-white/35">More work</span>
+        <span class="text-[10px] uppercase tracking-[0.42em] text-white/35" data-i18n="work-more">Plus de projets</span>
         <span class="text-[10px] uppercase tracking-[0.42em] text-[#cbb7ff]">Archive</span>
       </div>
 
@@ -678,7 +679,7 @@ header.scrolled {
               <img src="arc-reflex-project.png" alt="Arc Reflex preview" class="h-12 w-16 object-cover border border-white/15" />
               <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Arc Reflex</span>
             </div>
-            <span class="text-[9px] uppercase tracking-[0.38em] text-white/45">Accessibility</span>
+            <span class="text-[9px] uppercase tracking-[0.38em] text-white/45" data-i18n="work-accessibility">Accessibilité</span>
           </a>
         </div>
       </div>
@@ -696,7 +697,7 @@ header.scrolled {
 <h2 class="font-display-xl text-4xl md:text-[8rem] uppercase leading-[0.8] tracking-tighter">SOUND DESIGN & VIDEO </h2>
 </div>
 <div class="max-w-md space-y-4">
-<p class="font-body-md text-on-surface-variant text-lg leading-relaxed">
+<p class="font-body-md text-on-surface-variant text-lg leading-relaxed" data-i18n="sound-desc">
                         Exploration des textures organiques et synthétiques. Recherche d'un équilibre entre chaos contrôlé et harmonie.
                     </p>
 <div class="flex gap-4">
@@ -798,7 +799,7 @@ allowfullscreen>
 <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-4">
 <span class="w-12 h-[2px] bg-primary"></span> 004 — ESTABLISH_LINK
                 </span>
-<h2 class="font-display-xl text-[10vw] md:text-[12vw] uppercase leading-[0.8] tracking-tighter">
+<h2 class="font-display-xl text-[10vw] md:text-[12vw] uppercase leading-[0.8] tracking-tighter" data-i18n-html="contact-heading">
                     TRAVAILLONS<br><span class="text-primary">ENSEMBLE.</span>
 </h2>
 </div>
@@ -973,5 +974,89 @@ allowfullscreen>
     });
 </script>
 
+<script>
+// ─── i18n Language Switcher ───────────────────────────────────────────────────
+const translations = {
+  fr: {
+    'nav-work':          'Projets',
+    'nav-audio':         'Audio',
+    'nav-contact':       'Contact',
+    'nav-menu':          'Menu',
+    'hero-subtitle':     '// DESIGNER UI \u2022 D\u00c9VELOPPEUR CR\u00c9ATIF BAS\u00c9 \u00c0 PARIS',
+    'hero-cta-work':     'VOIR_PROJETS',
+    'hero-cta-contact':  'ME_CONTACTER',
+    'hero-scroll':       'D\u00c9FILER',
+    'work-heading':      'Projets s\u00e9lectionn\u00e9s',
+    'work-intro-desc':   'Une pr\u00e9sentation plus sombre et \u00e9pur\u00e9e, avec une hi\u00e9rarchie plus forte et des surfaces plus douces.',
+    'work-featured-badge': 'Projet mis en avant',
+    'work-ping-desc':    "Prototype d\u2019application mobile pour localiser les tables de ping-pong \u00e0 Paris et d\u00e9couvrir les spots proches.",
+    'work-view-proto':   'Voir le prototype',
+    'work-card2-desc':   'Une pr\u00e9sentation plus sombre et \u00e9pur\u00e9e, avec une hi\u00e9rarchie plus forte et des surfaces plus douces.',
+    'work-more':         'Plus de projets',
+    'work-accessibility':'Accessibilit\u00e9',
+    'sound-desc':        "Exploration des textures organiques et synth\u00e9tiques. Recherche d\u2019un \u00e9quilibre entre chaos contr\u00f4l\u00e9 et harmonie.",
+    'contact-heading':   'TRAVAILLONS<br><span class="text-primary">ENSEMBLE.</span>',
+  },
+  en: {
+    'nav-work':          'Work',
+    'nav-audio':         'Audio',
+    'nav-contact':       'Contact',
+    'nav-menu':          'Menu',
+    'hero-subtitle':     '// UI DESIGNER \u2022 CREATIVE DEVELOPER BASED IN PARIS',
+    'hero-cta-work':     'VIEW_WORK',
+    'hero-cta-contact':  'GET_IN_TOUCH',
+    'hero-scroll':       'SCROLL_DOWN',
+    'work-heading':      'Selected projects',
+    'work-intro-desc':   'A darker, quieter presentation with stronger hierarchy and softer surfaces.',
+    'work-featured-badge': 'Featured project',
+    'work-ping-desc':    'Mobile app prototype to locate ping-pong tables in Paris and discover nearby spots.',
+    'work-view-proto':   'View prototype',
+    'work-card2-desc':   'A darker, quieter presentation with stronger hierarchy and softer surfaces.',
+    'work-more':         'More work',
+    'work-accessibility':'Accessibility',
+    'sound-desc':        'Exploration of organic and synthetic textures. Seeking a balance between controlled chaos and harmony.',
+    'contact-heading':   'LET\u2019S WORK<br><span class="text-primary">TOGETHER.</span>',
+  }
+};
+
+let currentLang = 'fr';
+
+function applyLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+
+  // Plain-text elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  // HTML elements (contain tags like <br> or <span>)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  // Update <html lang>
+  document.getElementById('html-root').setAttribute('lang', lang);
+
+  // Update toggle visual state
+  const frLabel = document.getElementById('lang-fr-label');
+  const enLabel = document.getElementById('lang-en-label');
+  frLabel.className = lang === 'fr' ? 'text-primary' : 'opacity-40';
+  enLabel.className = lang === 'en' ? 'text-primary' : 'opacity-40';
+
+  localStorage.setItem('lang', lang);
+}
+
+document.getElementById('lang-toggle').addEventListener('click', () => {
+  applyLang(currentLang === 'fr' ? 'en' : 'fr');
+});
+
+// Init: honour stored preference, fallback to browser language
+const storedLang = localStorage.getItem('lang');
+const browserLang = navigator.language && navigator.language.startsWith('fr') ? 'fr' : 'en';
+applyLang(storedLang || browserLang);
+</script>
 
 </body></html>
