@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eliot Hantute - Fantasy 3D Version</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-night: #07121b;
+      --bg-forest: #0f2a1f;
+      --gold: #f2cd83;
+      --gold-soft: #d5ac66;
+      --mint: #8fe5c3;
+      --text: #f7f4e8;
+      --text-soft: #d7d3c2;
+      --panel: rgba(11, 21, 24, 0.62);
+      --panel-border: rgba(242, 205, 131, 0.28);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      background: radial-gradient(circle at 20% 15%, #163049, var(--bg-night) 55%, #02070b 100%);
+      color: var(--text);
+      font-family: Manrope, sans-serif;
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+    }
+
+    .mist {
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(124, 213, 177, 0.12), transparent 40%),
+        radial-gradient(circle at 70% 30%, rgba(242, 205, 131, 0.14), transparent 44%),
+        radial-gradient(circle at 50% 75%, rgba(122, 153, 255, 0.1), transparent 50%);
+      animation: mistDrift 16s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes mistDrift {
+      from {
+        transform: translate3d(-2%, -1%, 0) scale(1);
+      }
+      to {
+        transform: translate3d(2.5%, 1.5%, 0) scale(1.06);
+      }
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      width: min(1140px, 100% - 2rem);
+      margin: 0 auto;
+      padding: clamp(1rem, 2vw, 2rem) 0 6rem;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: .5rem;
+      padding: .9rem 1rem;
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(18, 30, 32, 0.76), rgba(8, 12, 15, 0.5));
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+
+    .topbar a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: .84rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .badge {
+      color: var(--mint);
+      font-size: .73rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      opacity: .9;
+    }
+
+    .hero {
+      min-height: min(80vh, 780px);
+      display: grid;
+      align-items: center;
+      grid-template-columns: 1.2fr .8fr;
+      gap: clamp(1rem, 5vw, 4rem);
+      padding: clamp(2.2rem, 4vw, 4.2rem) 0 1rem;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: Cinzel, serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 0.92;
+      letter-spacing: .03em;
+      font-size: clamp(2.2rem, 9vw, 6.8rem);
+      text-wrap: balance;
+      text-shadow: 0 0 22px rgba(242, 205, 131, 0.22);
+    }
+
+    .hero h1 .accent {
+      color: var(--gold);
+    }
+
+    .hero p {
+      margin: 1.1rem 0 0;
+      max-width: 60ch;
+      color: var(--text-soft);
+      line-height: 1.8;
+      font-size: clamp(.94rem, 2vw, 1.1rem);
+    }
+
+    .hero-panel {
+      border: 1px solid var(--panel-border);
+      border-radius: 18px;
+      padding: 1.1rem;
+      background: var(--panel);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 45px var(--shadow);
+    }
+
+    .pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 0 rgba(143, 229, 195, 0.45);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(143, 229, 195, 0.45); }
+      70% { box-shadow: 0 0 0 14px rgba(143, 229, 195, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(143, 229, 195, 0); }
+    }
+
+    .cta-row {
+      margin-top: 1.6rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+
+    .btn {
+      border: 1px solid var(--panel-border);
+      background: rgba(7, 16, 19, 0.68);
+      color: var(--text);
+      padding: .9rem 1.15rem;
+      border-radius: 12px;
+      text-decoration: none;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      font-weight: 700;
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #f2cd83, #c4944a);
+      color: #10110f;
+      border-color: #f2cd83;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+
+    .grid {
+      margin-top: 2.4rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .9rem;
+    }
+
+    .card {
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      padding: 1rem;
+      min-height: 180px;
+      transition: transform .35s ease, border-color .35s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(242, 205, 131, 0.52);
+    }
+
+    .card h3 {
+      margin: .4rem 0 .6rem;
+      color: var(--gold);
+      font-family: Cinzel, serif;
+      font-size: 1rem;
+      letter-spacing: .04em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-soft);
+      line-height: 1.6;
+      font-size: .92rem;
+    }
+
+    .section-title {
+      margin: 4rem 0 1rem;
+      font-family: Cinzel, serif;
+      font-size: clamp(1.3rem, 4vw, 2.3rem);
+      color: var(--gold);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .quest-log {
+      margin-top: 1rem;
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      background: rgba(10, 17, 20, 0.72);
+      padding: 1rem;
+    }
+
+    .quest {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .8rem;
+      padding: .8rem .4rem;
+      border-bottom: 1px solid rgba(242, 205, 131, 0.13);
+      font-size: .92rem;
+    }
+
+    .quest:last-child {
+      border-bottom: 0;
+    }
+
+    .quest small {
+      color: var(--mint);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgba(242, 205, 131, 0.2);
+      color: rgba(247, 244, 232, 0.65);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: 72vh;
+      }
+
+      .hero-panel {
+        max-width: 560px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .content {
+        width: min(1140px, 100% - 1rem);
+        padding-bottom: 4rem;
+      }
+
+      .topbar {
+        padding: .75rem .8rem;
+      }
+
+      .badge {
+        display: none;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quest {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mist,
+      .pulse {
+        animation: none;
+      }
+
+      .btn,
+      .card {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="mist" aria-hidden="true"></div>
+
+  <div class="content">
+    <header class="topbar">
+      <a href="index.html">Retour Portfolio</a>
+      <span class="badge">Fantasy 3D Responsive Edition</span>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>
+          The Heroic <span class="accent">Interface</span><br />
+          of Eliot Hantute
+        </h1>
+        <p>
+          Une version alternative du site, inspirée de l'ambiance aventure fantasy: lumières magiques,
+          reliefs en 3D, particules vivantes et transitions fluides. La scène s'adapte automatiquement
+          au mobile pour garder les performances et l'impact visuel.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#quests">Explorer l'univers</a>
+          <a class="btn" href="mailto:zedenbassmusic@gmail.com">Lancer une collaboration</a>
+        </div>
+      </div>
+
+      <aside class="hero-panel">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;">
+          <span class="pulse"></span>
+          <strong style="font-family:Cinzel, serif;letter-spacing:.08em;color:var(--gold);text-transform:uppercase;">World Status</strong>
+        </div>
+        <p style="margin:.2rem 0 0;color:var(--text-soft);line-height:1.7;">
+          Crystal energy stable. Forest temple activated. Camera animée par curseur et scroll.
+          Sur mobile: densité réduite pour un rendu plus fluide.
+        </p>
+      </aside>
+    </section>
+
+    <section id="quests">
+      <h2 class="section-title">Compétences légendaires</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>UI Enchanted</h3>
+          <p>Interfaces immersives, hiérarchie claire, composants modernes et direction artistique forte.</p>
+        </article>
+        <article class="card">
+          <h3>Creative Dev</h3>
+          <p>Expériences interactives avec animation, scènes WebGL et logique front-end propre.</p>
+        </article>
+        <article class="card">
+          <h3>Sound Vision</h3>
+          <p>Fusion image/son, narration visuelle, rhythm design et univers de marque cohérent.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Quest Log</h2>
+      <div class="quest-log">
+        <div class="quest"><span>Construire des interfaces mémorables et performantes</span><small>PRIORITY HIGH</small></div>
+        <div class="quest"><span>Créer des expériences 3D lisibles sur mobile</span><small>RESPONSIVE READY</small></div>
+        <div class="quest"><span>Mixer design graphique, motion et technique</span><small>COMPLETED</small></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      2026 - Eliot Hantute // Fantasy Interface Build
+    </footer>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+
+    const canvas = document.getElementById('scene');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x07121b, 12, 38);
+
+    const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 120);
+    camera.position.set(0, 3.1, 10.5);
+
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    const dprCap = isMobile ? 1.35 : 1.8;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, dprCap));
+    renderer.setClearColor(0x000000, 0);
+
+    const hemi = new THREE.HemisphereLight(0x9bc7ff, 0x172a1d, 0.95);
+    scene.add(hemi);
+
+    const moonLight = new THREE.DirectionalLight(0xf5e8b7, 1.2);
+    moonLight.position.set(6, 11, 4);
+    scene.add(moonLight);
+
+    const rim = new THREE.PointLight(0x8fe5c3, 0.9, 26, 2);
+    rim.position.set(-6, 4, -2);
+    scene.add(rim);
+
+    const terrainGeo = new THREE.PlaneGeometry(42, 42, 110, 110);
+    const pos = terrainGeo.attributes.position;
+    for (let i = 0; i < pos.count; i += 1) {
+      const x = pos.getX(i);
+      const y = pos.getY(i);
+      const height =
+        Math.sin(x * 0.45) * 0.45 +
+        Math.cos(y * 0.34) * 0.52 +
+        Math.sin((x + y) * 0.23) * 0.38;
+      pos.setZ(i, height);
+    }
+    terrainGeo.computeVertexNormals();
+
+    const terrainMat = new THREE.MeshStandardMaterial({
+      color: 0x173727,
+      metalness: 0.04,
+      roughness: 0.9,
+      flatShading: true
+    });
+
+    const terrain = new THREE.Mesh(terrainGeo, terrainMat);
+    terrain.rotation.x = -Math.PI / 2;
+    terrain.position.y = -1.35;
+    scene.add(terrain);
+
+    const temple = new THREE.Group();
+    const towerGeo = new THREE.CylinderGeometry(0.38, 0.6, 2.8, 6);
+    const towerMat = new THREE.MeshStandardMaterial({ color: 0x6e7b80, roughness: 0.72, metalness: 0.08, flatShading: true });
+
+    for (let i = 0; i < 7; i += 1) {
+      const angle = (i / 7) * Math.PI * 2;
+      const tower = new THREE.Mesh(towerGeo, towerMat);
+      tower.position.set(Math.cos(angle) * 2.5, 0.32, Math.sin(angle) * 2.5);
+      temple.add(tower);
+    }
+
+    const monolithGeo = new THREE.ConeGeometry(0.9, 3.5, 4);
+    const monolithMat = new THREE.MeshStandardMaterial({ color: 0xc4a26c, emissive: 0x3d2b11, emissiveIntensity: 0.65, flatShading: true });
+    const monolith = new THREE.Mesh(monolithGeo, monolithMat);
+    monolith.position.y = 1.1;
+    monolith.rotation.y = Math.PI * 0.25;
+    temple.add(monolith);
+
+    temple.position.set(0, -0.5, -1.6);
+    scene.add(temple);
+
+    const runeGeo = new THREE.TorusGeometry(1.22, 0.06, 12, 90);
+    const runeMat = new THREE.MeshBasicMaterial({ color: 0x8fe5c3, transparent: true, opacity: 0.68 });
+    const rune = new THREE.Mesh(runeGeo, runeMat);
+    rune.position.set(0, 0.35, -1.6);
+    rune.rotation.x = Math.PI / 2;
+    scene.add(rune);
+
+    const dustCount = isMobile ? 90 : 180;
+    const dustGeo = new THREE.BufferGeometry();
+    const dustPos = new Float32Array(dustCount * 3);
+    for (let i = 0; i < dustCount; i += 1) {
+      dustPos[i * 3 + 0] = (Math.random() - 0.5) * 24;
+      dustPos[i * 3 + 1] = Math.random() * 7 + 0.2;
+      dustPos[i * 3 + 2] = (Math.random() - 0.5) * 24;
+    }
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+
+    const dustMat = new THREE.PointsMaterial({
+      color: 0xffe3b0,
+      size: isMobile ? 0.045 : 0.06,
+      transparent: true,
+      opacity: 0.85,
+      sizeAttenuation: true
+    });
+    const dust = new THREE.Points(dustGeo, dustMat);
+    scene.add(dust);
+
+    const clock = new THREE.Clock();
+    const target = new THREE.Vector2(0, 0);
+
+    function resize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.addEventListener('pointermove', (event) => {
+      target.x = (event.clientX / window.innerWidth) * 2 - 1;
+      target.y = (event.clientY / window.innerHeight) * 2 - 1;
+    });
+
+    function animate() {
+      const t = clock.getElapsedTime();
+      const scrollFactor = Math.min(window.scrollY / 1200, 1);
+
+      temple.rotation.y = t * 0.16;
+      monolith.position.y = 1.1 + Math.sin(t * 1.8) * 0.1;
+      rune.rotation.z = t * 0.55;
+      rune.material.opacity = 0.5 + Math.sin(t * 2.2) * 0.18;
+
+      dust.rotation.y = t * 0.02;
+      const p = dust.geometry.attributes.position;
+      for (let i = 0; i < dustCount; i += 1) {
+        const idx = i * 3;
+        p.array[idx + 1] += Math.sin(t + i * 0.32) * 0.0009;
+      }
+      p.needsUpdate = true;
+
+      camera.position.x += ((target.x * 1.2) - camera.position.x) * 0.018;
+      camera.position.y += ((2.9 + target.y * 0.5 - scrollFactor * 0.55) - camera.position.y) * 0.02;
+      camera.position.z += ((10.5 - scrollFactor * 1.1) - camera.position.z) * 0.02;
+      camera.lookAt(0, 0.3 - scrollFactor * 0.3, -1.8);
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
