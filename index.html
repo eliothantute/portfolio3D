@@ -104,11 +104,6 @@
     opacity: 0.05;
     pointer-events: none
     }
-        iframe {
-    position: relative;
-    z-index: 200;
-}
-        
 /* Improved Intersection Observer Reveals */
 .reveal {
     opacity: 0;
@@ -389,14 +384,326 @@ header.scrolled {
 
 }
 }
+
+
+/* Premium project interactions */
+.loading-bar {
+  width: 18%;
+  animation: loading 4s ease-in-out infinite;
+}
+@keyframes loading {
+  0% { width: 18%; }
+  40% { width: 58%; }
+  70% { width: 82%; }
+  100% { width: 18%; }
+}
+.project-clicking {
+  transform: perspective(1000px) scale(1.025) !important;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 0 120px rgba(80,140,255,0.45), 0 40px 120px rgba(0,0,0,0.7) !important;
+}
+.ripple {
+  position: absolute;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(255, 87, 26, 0.28);
+  pointer-events: none;
+  animation: ripple 650ms ease-out forwards;
+  z-index: 50;
+}
+@keyframes ripple {
+  to { transform: translate(-50%, -50%) scale(18); opacity: 0; }
+}
+.video-card iframe,
+.video-hero iframe {
+  display: block;
+  border: 0;
+}
+@media (max-width: 768px) {
+  :root { --mobile-gutter: 1rem; }
+  .px-grid-margin { padding-left: var(--mobile-gutter); padding-right: var(--mobile-gutter); }
+  #work article a { min-height: 28rem; }
+  #atelier-card a { min-height: 34rem; }
+  #globe-canvas { opacity: 0.62; }
+  .tracking-\[0\.35em\], .tracking-\[0\.42em\], .tracking-\[0\.34em\] { letter-spacing: 0.18em; }
+  .project-clicking { transform: scale(0.99) !important; }
+}
+.section-title {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.05em;
+  width: 100%;
+  height: 0.12em;
+  background: linear-gradient(90deg, #ff571a, transparent);
+  transform: translateX(-105%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active .section-title::after {
+  transform: translateX(0);
+}
+
+.section-title span {
+  display: inline-block;
+  animation: titleFloat 4s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.04em);
+  }
+}
+
+.section-kicker {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-kicker::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,87,26,0.35), transparent);
+  transform: translateX(-120%);
+  animation: scanTitle 3s ease-in-out infinite;
+}
+
+@keyframes scanTitle {
+  0% {
+    transform: translateX(-120%);
+  }
+  55%, 100% {
+    transform: translateX(120%);
+  }
+}
+/* ===========================
+   PREMIUM SECTION TITLES
+=========================== */
+
+.section-title{
+
+    position:relative;
+
+    display:inline-block;
+
+    font-size:clamp(3rem,7vw,6.8rem);
+
+    font-weight:600;
+
+    line-height:.88;
+
+    letter-spacing:-.07em;
+
+    color:white;
+
+    overflow:hidden;
+
+}
+
+.section-title span{
+
+    display:inline-block;
+
+    position:relative;
+
+    animation:titleFloat 6s ease-in-out infinite;
+
+}
+
+/* Halo */
+
+.section-title span::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-30%;
+
+    left:-70%;
+
+    width:60%;
+
+    height:160%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.18),
+        rgba(130,170,255,.65),
+        rgba(255,255,255,.18),
+        transparent
+    );
+
+    transform:skewX(-22deg);
+
+    animation:titleLight 4s ease-in-out infinite;
+
+}
+
+/* Underline */
+
+.section-title::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-12px;
+
+    width:100%;
+
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        #ff571a,
+        #5d8eff,
+        transparent
+    );
+
+    transform:scaleX(0);
+
+    transform-origin:left;
+
+}
+
+.reveal.active .section-title::after{
+
+    animation:underlineGrow 1.2s cubic-bezier(.19,1,.22,1) forwards;
+
+}
+
+/* Small label */
+
+.section-kicker{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.section-kicker::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,87,26,.35),
+        transparent
+    );
+
+    transform:translateX(-150%);
+
+    animation:scan 3s linear infinite;
+
+}
+
+/* Hover */
+
+.section-title:hover{
+
+    transform:translateX(6px);
+
+    transition:.5s;
+
+}
+
+/* Animations */
+
+@keyframes titleLight{
+
+    0%{
+
+        left:-80%;
+
+    }
+
+    45%{
+
+        left:130%;
+
+    }
+
+    100%{
+
+        left:130%;
+
+    }
+
+}
+
+@keyframes underlineGrow{
+
+    from{
+
+        transform:scaleX(0);
+
+    }
+
+    to{
+
+        transform:scaleX(1);
+
+    }
+
+}
+
+@keyframes titleFloat{
+
+    0%,100%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-3px);
+
+    }
+
+}
+
+@keyframes scan{
+
+    from{
+
+        transform:translateX(-120%);
+
+    }
+
+    to{
+
+        transform:translateX(120%);
+
+    }
+
+}
 </style>
 </head>
 <body class="bg-background text-on-surface font-body-md selection:bg-primary selection:text-white overflow-x-hidden">
 <div class="custom-cursor" id="cursor-dot" style="left: 278px; top: 5078px;"></div>
 <div class="custom-cursor-ring" id="cursor-ring" style="left: 278px; top: 5078px;"></div>
 <div class="scroll-indicator" id="scroll-bar"></div>
-<div class="scan-lines"></div>
-<div class="noise-overlay"></div>
 <!-- Header -->
 <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-grid-margin py-8" id="main-header">
 <div class="max-w-[1440px] mx-auto flex justify-between items-center w-full">
@@ -441,11 +748,11 @@ header.scrolled {
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">01</span>
 <span class="">HOME.exe</span>
 </a>
-<a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#visual">
+<a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#work">
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">02</span>
 <span class="">VISUAL.iso</span>
 </a>
-<a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#design">
+<a class="group flex items-baseline gap-4 text-4xl font-display-xl tracking-wider hover:text-primary transition-all" href="#work">
 <span class="text-xs font-technical-heading text-primary group-hover:translate-x-2 transition-transform">03</span>
 <span class="">DESIGN.dll</span>
 </a>
@@ -600,20 +907,22 @@ header.scrolled {
 
 <!-- Work Grid -->
 <section class="reveal py-section-gap border-t border-white/5 active portfolio-clean" id="work">
-  <div class="px-grid-margin mb-10 flex flex-col gap-4 max-w-3xl">
-    <span class="font-technical-heading text-[10px] text-[#c8b7ff] tracking-[0.32em] uppercase inline-flex items-center gap-4">
-      <span class="w-12 h-[2px] bg-[#9b7cff]"></span>
-      002 — PROJECT_ARCHIVE
-    </span>
-    <h2 class="text-4xl md:text-6xl font-semibold uppercase leading-[0.9] tracking-[-0.06em] text-white" data-i18n="work-heading">
-      Projets sélectionnés
-    </h2>
+  <div class="px-grid-margin mb-16 flex flex-col gap-6 max-w-4xl">
 
-  </div>
+  <span class="section-kicker font-technical-heading text-[10px] uppercase tracking-[0.35em] text-primary inline-flex items-center gap-4">
+    <span class="w-12 h-[2px] bg-primary"></span>
+    002 — PROJECT_ARCHIVE
+  </span>
 
+  <h2 class="section-title" data-i18n="work-heading">
+    <span>Projets sélectionnés</span>
+  </h2>
+
+</div>
   <div class="px-grid-margin space-y-4">
+    <!-- Ping Paris -->
     <article class="group relative overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(18,16,24,0.92)_0%,rgba(11,11,15,0.95)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
-      <a href="ping-paris.html" class="relative block min-h-[34rem]" aria-label="Open Ping Paris project">
+      <a href="ping-paris.html" class="relative block min-h-[34rem] active:scale-[0.99] transition-transform duration-300" aria-label="Open Ping Paris project">
         <img src="assets/images/ping-paris-app.png" alt="Ping Paris app prototype" class="absolute inset-0 h-full w-full object-cover opacity-35 mix-blend-screen group-hover:opacity-45 group-hover:scale-105 transition-all duration-700" />
         <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,7,10,0.12)_0%,rgba(7,7,10,0.52)_55%,rgba(7,7,10,0.95)_100%)]"></div>
         <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(132,94,255,0.12)_34%,transparent_50%,rgba(132,94,255,0.12)_67%,transparent_100%)] opacity-70"></div>
@@ -624,7 +933,7 @@ header.scrolled {
             <span class="inline-flex items-center rounded-full border border-white/20 bg-white/6 px-4 py-1 text-[9px] uppercase tracking-[0.38em] text-white/78" data-i18n="work-featured-badge">
               Projet mis en avant
             </span>
-            <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/50">
+            <div class="ml-auto flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/50">
               <span>2026</span>
               <span>Mobile / Prototype</span>
             </div>
@@ -645,247 +954,121 @@ header.scrolled {
               <span class="rounded-full border border-white/20 bg-white/6 px-3 py-1 text-[9px] uppercase tracking-[0.32em] text-white/72">Leaflet</span>
               <span class="rounded-full border border-white/20 bg-white/6 px-3 py-1 text-[9px] uppercase tracking-[0.32em] text-white/72">Geolocation</span>
             </div>
-           <span class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
-        <span>Voir le prototype</span>
-        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              
+            <span class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
+              <span>Voir le prototype</span>
+              <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
             </span>
           </div>
         </div>
       </a>
     </article>
 
-   <article class="group relative overflow-hidden rounded-[28px]  shadow-[0_0_90px_rgba(80,140,255,0.25),0_30px_90px_rgba(0,0,0,0.65)]">
+    <!-- Atelier Berger -->
+    <article id="atelier-card" class="group relative overflow-hidden rounded-[28px] border border-primary/20 bg-[#030814] shadow-[0_0_90px_rgba(80,140,255,0.25),0_30px_90px_rgba(0,0,0,0.65)] transition-transform duration-300 will-change-transform">
+      <canvas id="globe-canvas" class="absolute inset-0 z-0 w-full h-full opacity-100 pointer-events-none"></canvas>
+      <div class="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(3,8,20,0.96)_0%,rgba(3,8,20,0.75)_34%,rgba(3,8,20,0.18)_62%,rgba(3,8,20,0.65)_100%)]"></div>
+      <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_72%_45%,rgba(70,130,255,0.18)_0%,transparent_48%)]"></div>
 
-  <canvas id="globe-canvas" class="absolute inset-0 z-0 w-full h-full opacity-100 pointer-events-none"></canvas>
+      <a href="atelierbergermap.html" class="relative z-10 flex min-h-[40rem] w-full flex-col justify-between p-7 md:p-8 active:scale-[0.99] transition-transform duration-300" aria-label="Open Atelier Berger Globe project">
+        <div class="flex items-start justify-between gap-6">
+          <div class="flex flex-wrap items-center gap-4">
+            <div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2">
+              <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              <span class="font-technical-heading text-[10px] uppercase tracking-[0.35em] text-primary">PROJET EN COURS...</span>
+            </div>
+            <div class="hidden md:flex items-center gap-3">
+              <div class="w-28 h-[3px] rounded-full bg-white/10 overflow-hidden">
+                <div class="loading-bar h-full bg-primary"></div>
+              </div>
+              <span id="loading-percent" class="font-technical-heading text-[10px] text-white/45">78%</span>
+            </div>
+          </div>
 
-  <div class="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(3,8,20,0.96)_0%,rgba(3,8,20,0.75)_34%,rgba(3,8,20,0.18)_62%,rgba(3,8,20,0.65)_100%)]"></div>
-  <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_72%_45%,rgba(70,130,255,0.18)_0%,transparent_48%)]"></div>
+          <div class="ml-auto flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/70 font-technical-heading">
+            <span>2026</span>
+            <span>3D / WebGL</span>
+          </div>
+        </div>
 
-  <a href="atelierbergermap.html"
-     class="relative z-10 flex min-h-[40rem] w-full flex-col justify-between p-7 md:p-8"
-     aria-label="Open Atelier Berger Globe project">
+        <div class="max-w-3xl space-y-5">
+          <h3 class="text-[3.3rem] md:text-[5.7rem] font-semibold uppercase leading-[0.86] tracking-[-0.08em] text-white">
+            Atelier<br>Berger Globe 3D
+          </h3>
+          <p class="max-w-xl text-[15px] md:text-[17px] font-[300] tracking-[0.01em] leading-[1.85] text-white/70">
+            Globe Map interactif pour l'agence Atelier Berger à travers le monde. De Paris à Dubaï, de Londres à Tokyo, leurs projets d'architecture intérieure, de joaillerie et d'hôtellerie de prestige.
+          </p>
+        </div>
 
-    <div class="flex items-start justify-between gap-6">
-      <span class=" items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-primary font-technical-heading">
-        <span class="h-[2px] w-12 bg-primary"></span>
-        <div class="flex items-center gap-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-8 border-t border-white/15">
+          <div class="flex flex-wrap gap-2">
+            <span class="rounded-full border border-primary/60 bg-primary/10 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-primary">Three.js</span>
+            <span class="rounded-full border border-white/45 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Tailwind CSS</span>
+            <span class="rounded-full border border-white/45 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Vite.js</span>
+          </div>
+          <span class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
+            <span>Voir le projet</span>
+            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </span>
+        </div>
+      </a>
+    </article>
 
-  <div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2">
-
-    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-
-    <span class="font-technical-heading text-[10px] uppercase tracking-[0.35em] text-primary">
-      PROJET EN COURS...
-    </span>
-
-  </div>
-
-  <div class="hidden md:flex items-center gap-3">
-
-    <div class="w-28 h-[3px] rounded-full bg-white/10 overflow-hidden">
-
-      <div class="loading-bar h-full bg-primary"></div>
-
-    </div>
-
-    <span id="loading-percent"
-          class="font-technical-heading text-[10px] text-white/45">
-      78%
-    </span>
-
-  </div>
-
-</div>
-
-      <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/70 font-technical-heading">
-        <span>2026</span>
-        <span>3D / WebGL</span>
-      </div>
-    </div>
-
-    <div class="max-w-3xl space-y-5">
-      <h3 class="text-[3.3rem] md:text-[5.7rem] font-semibold uppercase leading-[0.86] tracking-[-0.08em] text-white">
-        Atelier<br>Berger Globe 3D
-      </h3>
-
-<p class="max-w-xl text-[15px] md:text-[17px] font-[300] tracking-[0.01em] leading-[1.85] text-white/70">
-          Globe Map interactif pour l'agence Atelier Berger à travers le monde. De Paris à Dubaï, de Londres à Tokyo, leurs projets d'architecture intérieure, de joaillerie et d'hôtellerie de prestige.
-      </p>
-    </div>
-
-    <div class="flex items-center justify-between gap-4 pt-8 border-t border-white/15">
-      <div class="flex flex-wrap gap-2">
-        <span class="rounded-full border border-primary/60 bg-primary/10 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-primary">Three.js</span>
-        <span class="rounded-full border border-white/45 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Tailwind CSS</span>
-        <span class="rounded-full border border-white/45 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Vite.js</span>
-      </div>
-
-      <span class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
-        <span>Voir le projet</span>
-        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-      </span>
-    </div>
-
-  </a>
-</article>
-
+    <!-- Archive -->
     <article class="overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(11,11,15,0.96)_0%,rgba(8,8,11,0.98)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
       <div class="flex items-center justify-between px-7 pt-7 md:px-8">
         <span class="text-[10px] uppercase tracking-[0.42em] text-white/35" data-i18n="work-more">Plus de projets</span>
         <span class="text-[10px] uppercase tracking-[0.42em] text-[#cbb7ff]">Archive</span>
       </div>
-
       <div class="px-7 pb-7 pt-6 md:px-8 md:pb-8">
         <div class="space-y-0">
-          <a href="https://eliothantute.github.io/site/zeden-website.html" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 border-b border-white/10 py-4 text-white transition-colors hover:text-white/80" rel="noopener noreferrer">
-            <div class="flex items-center gap-3 min-w-0">
-              <img src="assets/images/zeden-project.jpg" alt="Zeden AudioLab preview" class="h-12 w-16 object-cover border border-white/15" />
-              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Zeden AudioLab</span>
-            </div>
+          <a href="zeden-website.html" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 border-b border-white/10 py-4 text-white transition-colors hover:text-white/80">
+            <div class="flex items-center gap-3 min-w-0"><img src="assets/images/zeden-project.jpg" alt="Zeden AudioLab preview" class="h-12 w-16 object-cover border border-white/15" /><span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Zeden AudioLab</span></div>
             <span class="text-[9px] uppercase tracking-[0.38em] text-white/45 sm:text-right">UI / Front-End</span>
           </a>
-
-          
           <a href="https://www.figma.com/design/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=33-714&t=vnWum8ctPG6x4TDa-0" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 border-b border-white/10 py-4 text-white transition-colors hover:text-white/80" target="_blank" rel="noopener noreferrer">
-            <div class="flex items-center gap-3 min-w-0">
-              <img src="assets/images/OFISS.png" alt="Design Figma preview" class="h-12 w-16 object-cover border border-white/15" />
-              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Design Figma</span>
-            </div>
+            <div class="flex items-center gap-3 min-w-0"><img src="assets/images/OFISS.png" alt="Design Figma preview" class="h-12 w-16 object-cover border border-white/15" /><span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Design Figma</span></div>
             <span class="text-[9px] uppercase tracking-[0.38em] text-white/45 sm:text-right">Concept</span>
           </a>
-
-          <a href="https://eliothantute.github.io/site/arc-reflex-project.html" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-4 text-white transition-colors hover:text-white/80" rel="noopener noreferrer">
-            <div class="flex items-center gap-3 min-w-0">
-              <img src="assets/images/arc-reflex-project.png" alt="Site Arc Reflex preview" class="h-12 w-16 object-cover border border-white/15" />
-              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Site Arc Reflex</span>
-            </div>
+          <a href="arc-reflex-project.html" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-4 text-white transition-colors hover:text-white/80">
+            <div class="flex items-center gap-3 min-w-0"><img src="assets/images/arc-reflex-project.png" alt="Site Arc Reflex preview" class="h-12 w-16 object-cover border border-white/15" /><span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Site Arc Reflex</span></div>
             <span class="text-[9px] uppercase tracking-[0.38em] text-white/45 sm:text-right" data-i18n="work-accessibility">Accessibilité</span>
           </a>
         </div>
       </div>
     </article>
   </div>
+</section>
+
 <!-- Video / Sound Section -->
 <section id="sound" class="reveal py-section-gap px-grid-margin border-t border-white/5 active portfolio-clean">
   <div class="max-w-[1440px] mx-auto">
-
-    <!-- Header -->
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-20">
       <div class="space-y-6">
-        <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase inline-flex items-center gap-4">
-          <span class="w-12 h-[2px] bg-primary"></span>
-          003 — AUDIO_VISUAL_LAB
-        </span>
-
-      
-
-    <!-- Two videos -->
-    <div class="grid lg:grid-cols-2 gap-6 md:gap-8">
-
-      <!-- Video 1 -->
-      <article class="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] hover:border-primary/45 transition-all duration-500 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
-        <div class="relative aspect-video overflow-hidden bg-black">
-          <iframe
-            class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.035]"
-            src="https://www.youtube.com/embed/n617nasyrIg"
-            title="Music Production"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-          </iframe>
-        </div>
-
-        <div class="p-7 md:p-8">
-          <span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">
-            Music Production
-          </span>
-
-          <h3 class="mt-3 text-2xl md:text-3xl uppercase font-semibold text-white tracking-[-0.04em]">
-            Electronic Composition
-          </h3>
-
-          <p class="mt-4 text-white/55 leading-8 font-light">
-            Composition musicale, textures sonores et identité audio.
-          </p>
-        </div>
-      </article>
-
-      <!-- Video 2 -->
-      <article class="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] hover:border-primary/45 transition-all duration-500 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
-        <div class="relative aspect-video overflow-hidden bg-black">
-          <iframe
-            class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.035]"
-            src="https://www.youtube.com/embed/p_tCq55WbfA"
-            title="Son à l'image"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-          </iframe>
-        </div>
-
-        <div class="p-7 md:p-8">
-          <span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">
-            Sound To Picture
-          </span>
-
-          <h3 class="mt-3 text-2xl md:text-3xl uppercase font-semibold text-white tracking-[-0.04em]">
-            Son à l'image
-          </h3>
-
-          <p class="mt-4 text-white/55 leading-8 font-light">
-            Synchronisation audio, narration visuelle et émotion sonore.
-          </p>
-        </div>
-      </article>
-
+        <span class="font-tecnical-heading text-[11px] text-primary tracking-widest uppercase inline-flex items-center gap-4"><span class="w-12 h-[2px] bg-primary"></span>003 — AUDIO_VISUAL_LAB</span>
+      </div>
     </div>
 
-    <!-- Big video -->
-    <article class="group mt-8 relative overflow-hidden rounded-[32px] border border-primary/20 bg-white/[0.025] hover:border-primary/55 transition-all duration-500 shadow-[0_35px_100px_rgba(0,0,0,0.5)]">
+    <div class="grid lg:grid-cols-2 gap-6 md:gap-8">
+      <article class="video-card group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] hover:border-primary/45 transition-all duration-500 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+        <div class="relative aspect-video overflow-hidden bg-black"><iframe class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.035]" src="https://www.youtube.com/embed/n617nasyrIg" title="Music Production" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+        <div class="p-7 md:p-8"><span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">Music Production</span><h3 class="mt-3 text-2xl md:text-3xl uppercase font-semibold text-white tracking-[-0.04em]">Electronic Composition</h3><p class="mt-4 text-white/55 leading-8 font-light">Composition musicale, textures sonores et identité audio.</p></div>
+      </article>
+      <article class="video-card group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] hover:border-primary/45 transition-all duration-500 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+        <div class="relative aspect-video overflow-hidden bg-black"><iframe class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.035]" src="https://www.youtube.com/embed/p_tCq55WbfA" title="Son à l'image" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+        <div class="p-7 md:p-8"><span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">Sound To Picture</span><h3 class="mt-3 text-2xl md:text-3xl uppercase font-semibold text-white tracking-[-0.04em]">Son à l'image</h3><p class="mt-4 text-white/55 leading-8 font-light">Synchronisation audio, narration visuelle et émotion sonore.</p></div>
+      </article>
+    </div>
 
-      <div class="relative aspect-[21/9] overflow-hidden bg-black">
-        <iframe
-          class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.025]"
-          src="https://www.youtube.com/embed/N9wPBsxTEY4"
-          title="DJ Set & Mapping"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
-      </div>
-
+    <article class="video-hero group mt-8 relative overflow-hidden rounded-[32px] border border-primary/20 bg-white/[0.025] hover:border-primary/55 transition-all duration-500 shadow-[0_35px_100px_rgba(0,0,0,0.5)]">
+      <div class="relative aspect-[21/9] overflow-hidden bg-black"><iframe class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.025]" src="https://www.youtube.com/embed/N9wPBsxTEY4" title="DJ Set & Mapping" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
       <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 p-8 md:p-10 border-t border-white/10">
-
-        <div>
-          <span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">
-            Live Performance
-          </span>
-
-          <h3 class="mt-4 text-4xl md:text-5xl uppercase font-semibold text-white tracking-[-0.055em] leading-[0.95]">
-            Music Composition × Visual
-          </h3>
-
-          <p class="mt-5 max-w-xl text-white/55 leading-8 font-light">
-            Performance audiovisuelle mêlant composition électronique, mapping et direction visuelle.
-          </p>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-          <span class="font-technical-heading text-[10px] uppercase tracking-[0.35em] text-white/45">
-            LIVE_SIGNAL // ACTIVE
-          </span>
-        </div>
-
+        <div><span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">Live Performance</span><h3 class="mt-4 text-4xl md:text-5xl uppercase font-semibold text-white tracking-[-0.055em] leading-[0.95]">Music Composition × Visual</h3><p class="mt-5 max-w-xl text-white/55 leading-8 font-light">Performance audiovisuelle mêlant composition électronique, mapping et direction visuelle.</p></div>
+        <div class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="font-technical-heading text-[10px] uppercase tracking-[0.35em] text-white/45">LIVE_SIGNAL // ACTIVE</span></div>
       </div>
     </article>
-
   </div>
 </section>
 
-
-        
 <!-- Contact Section -->
 <section class="reveal py-section-gap px-grid-margin border-t border-white/5 bg-surface-container-lowest active" id="contact">
 <div class="max-w-[1440px] mx-auto space-y-24">
@@ -945,6 +1128,13 @@ header.scrolled {
 <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
 </footer>
 </main>
+<div id="page-transition" class="fixed inset-0 z-[99999] pointer-events-none opacity-0 bg-[#030814] transition-opacity duration-500">
+  <div class="absolute inset-0 flex items-center justify-center">
+    <div class="w-40 h-40 rounded-full border border-primary/40 animate-ping"></div>
+    <span class="absolute font-technical-heading text-primary text-[11px] tracking-[0.45em] uppercase">OPENING_PROJECT</span>
+  </div>
+</div>
+
 <script>
     // Custom Cursor Logic
     const dot = document.getElementById('cursor-dot');
@@ -1165,76 +1355,104 @@ const browserLang = navigator.language && navigator.language.startsWith('fr') ? 
 applyLang(storedLang || browserLang);
 </script>
 
+
+<script>
+const percent = document.getElementById('loading-percent');
+if (percent) {
+  let value = 18;
+  let dir = 1;
+  setInterval(() => {
+    value += dir;
+    if (value >= 82) dir = -1;
+    if (value <= 18) dir = 1;
+    percent.textContent = value + '%';
+  }, 60);
+}
+
+const atelierCard = document.getElementById('atelier-card');
+const transitionOverlay = document.getElementById('page-transition');
+if (atelierCard) {
+  const link = atelierCard.querySelector('a');
+
+  atelierCard.addEventListener('mousemove', (e) => {
+    if (window.innerWidth < 900) return;
+    const rect = atelierCard.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    atelierCard.style.transform = `perspective(1000px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg)`;
+  });
+
+  atelierCard.addEventListener('mouseleave', () => {
+    atelierCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+  });
+
+  atelierCard.addEventListener('click', (e) => {
+    if (!link) return;
+    e.preventDefault();
+    const rect = atelierCard.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.left = `${e.clientX - rect.left}px`;
+    ripple.style.top = `${e.clientY - rect.top}px`;
+    ripple.style.width = '40px';
+    ripple.style.height = '40px';
+    atelierCard.appendChild(ripple);
+    atelierCard.classList.add('project-clicking');
+    if (transitionOverlay) {
+      transitionOverlay.classList.remove('opacity-0');
+      transitionOverlay.classList.add('opacity-100');
+    }
+    setTimeout(() => { window.location.href = link.href; }, 650);
+  });
+}
+</script>
+
 <!-- Three.js rotating globe for Atelier Berger card -->
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
 
 const canvas = document.getElementById('globe-canvas');
+const card = document.getElementById('atelier-card');
 
 if (canvas) {
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: true
-  });
-
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-
   const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
   camera.position.z = 3.2;
 
   const globeGroup = new THREE.Group();
   scene.add(globeGroup);
-
   globeGroup.position.x = 0.95;
   globeGroup.position.y = 0.05;
   globeGroup.scale.setScalar(1.35);
 
   const radius = 1.25;
 
-  // Dark globe base
   const baseGeo = new THREE.SphereGeometry(radius, 96, 96);
-  const baseMat = new THREE.MeshPhongMaterial({
-    color: 0x071126,
-    transparent: true,
-    opacity: 0.92,
-    shininess: 35
-  });
-
+  const baseMat = new THREE.MeshPhongMaterial({ color: 0x071126, transparent: true, opacity: 0.92, shininess: 35 });
   const base = new THREE.Mesh(baseGeo, baseMat);
   globeGroup.add(base);
 
-  // Particle surface
-  const particleCount = 22000;
+  const particleCount = window.innerWidth < 768 ? 10000 : 22000;
   const positions = [];
   const colors = [];
-
   const colorBlue = new THREE.Color(0x4f8cff);
   const colorWhite = new THREE.Color(0xdbe8ff);
 
   for (let i = 0; i < particleCount; i++) {
     const u = Math.random();
     const v = Math.random();
-
     const theta = 2 * Math.PI * u;
     const phi = Math.acos(2 * v - 1);
-
     const r = radius + Math.random() * 0.025;
-
     const x = r * Math.sin(phi) * Math.cos(theta);
     const y = r * Math.cos(phi);
     const z = r * Math.sin(phi) * Math.sin(theta);
-
-    const wave =
-      Math.sin(theta * 5.0 + phi * 8.0) +
-      Math.sin(theta * 13.0) * 0.35 +
-      Math.cos(phi * 18.0) * 0.4;
-
+    const wave = Math.sin(theta * 5.0 + phi * 8.0) + Math.sin(theta * 13.0) * 0.35 + Math.cos(phi * 18.0) * 0.4;
     if (wave > -0.35 || Math.random() > 0.55) {
       positions.push(x, y, z);
-
       const c = wave > 0.45 ? colorWhite : colorBlue;
       colors.push(c.r, c.g, c.b);
     }
@@ -1244,50 +1462,24 @@ if (canvas) {
   particlesGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
   particlesGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
-  const particlesMat = new THREE.PointsMaterial({
-    size: 0.008,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.95,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  });
-
+  const particlesMat = new THREE.PointsMaterial({ size: 0.008, vertexColors: true, transparent: true, opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending });
   const particles = new THREE.Points(particlesGeo, particlesMat);
   globeGroup.add(particles);
 
-  // Outer glow
   const glowGeo = new THREE.SphereGeometry(radius * 1.05, 96, 96);
-  const glowMat = new THREE.MeshBasicMaterial({
-    color: 0x4f8cff,
-    transparent: true,
-    opacity: 0.12,
-    side: THREE.BackSide,
-    blending: THREE.AdditiveBlending
-  });
-
+  const glowMat = new THREE.MeshBasicMaterial({ color: 0x4f8cff, transparent: true, opacity: 0.12, side: THREE.BackSide, blending: THREE.AdditiveBlending });
   const glow = new THREE.Mesh(glowGeo, glowMat);
   globeGroup.add(glow);
 
-  // Thin wire layer
   const wireGeo = new THREE.SphereGeometry(radius * 1.01, 48, 48);
-  const wireMat = new THREE.MeshBasicMaterial({
-    color: 0x6da3ff,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.055
-  });
-
+  const wireMat = new THREE.MeshBasicMaterial({ color: 0x6da3ff, wireframe: true, transparent: true, opacity: 0.055 });
   const wire = new THREE.Mesh(wireGeo, wireMat);
   globeGroup.add(wire);
 
-  // Lights
   scene.add(new THREE.AmbientLight(0xffffff, 0.35));
-
   const light1 = new THREE.DirectionalLight(0x8fb7ff, 2.4);
   light1.position.set(3, 2, 4);
   scene.add(light1);
-
   const light2 = new THREE.DirectionalLight(0xff571a, 1.1);
   light2.position.set(-3, -1, 2);
   scene.add(light2);
@@ -1295,27 +1487,56 @@ if (canvas) {
   function resize() {
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
-
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
-
   new ResizeObserver(resize).observe(canvas);
   resize();
 
-  function animate() {
-    requestAnimationFrame(animate);
-
-    globeGroup.rotation.y += 0.0022;
-    globeGroup.rotation.x = -0.15;
-    particles.rotation.y += 0.0007;
-    wire.rotation.y -= 0.0006;
-
-    renderer.render(scene, camera);
+  let targetSpeed = 0.0022;
+  let currentSpeed = 0.0022;
+  if (card) {
+    card.addEventListener('mouseenter', () => { targetSpeed = 0.00015; });
+    card.addEventListener('mouseleave', () => { targetSpeed = 0.0022; });
+    card.addEventListener('click', () => { targetSpeed = 0.006; setTimeout(() => { targetSpeed = 0.00015; }, 240); });
   }
 
+  function animate() {
+    requestAnimationFrame(animate);
+    currentSpeed += (targetSpeed - currentSpeed) * 0.06;
+    globeGroup.rotation.y += currentSpeed;
+    globeGroup.rotation.x = -0.15;
+    particles.rotation.y += currentSpeed * 0.3;
+    wire.rotation.y -= currentSpeed * 0.25;
+    renderer.render(scene, camera);
+  }
   animate();
 }
 </script>
+  animate();
+}
+</script>
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from(".section-title", {
+    y: 80,
+    opacity: 0,
+    duration: 1.3,
+    ease: "power4.out",
+    scrollTrigger: {
+      trigger: ".section-title",
+      start: "top 80%"
+    }
+  });
+</script>
+
+</body>
+</html>
 </body></html>
