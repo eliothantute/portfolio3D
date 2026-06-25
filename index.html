@@ -291,6 +291,7 @@
         clip: rect(11px, 9999px, 5px, 0);
         transform: skew(0.04deg);
         }
+        
     }
 /* Marquee Strip */
 .marquee {
@@ -363,6 +364,30 @@ header.scrolled {
     font-size: 1.9rem;
     line-height: 1;
   }
+  .loading-bar{
+    width:0%;
+    animation:loading 4s ease-in-out infinite;
+}
+
+@keyframes loading{
+
+    0%{
+        width:18%;
+    }
+
+    40%{
+        width:58%;
+    }
+
+    70%{
+        width:82%;
+    }
+
+    100%{
+        width:18%;
+    }
+
+}
 }
 </style>
 </head>
@@ -376,10 +401,13 @@ header.scrolled {
 <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-grid-margin py-8" id="main-header">
 <div class="max-w-[1440px] mx-auto flex justify-between items-center w-full">
 <nav class="hidden md:flex gap-12">
-<a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#visual">
-                <span data-i18n="nav-work">Projets</span>
-                <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
-</a>
+<a
+  class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group"
+  href="#work"
+>
+    <span data-i18n="nav-work">Projets</span>
+    <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
+  </a>
 <a class="font-technical-heading text-[10px] tracking-[0.2em] hover:text-primary transition-colors uppercase relative group" href="#sound">
                 <span data-i18n="nav-audio">Audio</span>
                 <span class="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all group-hover:w-full"></span>
@@ -475,7 +503,7 @@ header.scrolled {
     loop
     playsinline
   >
-    <source src="Design sans titre(4).mp4" type="video/mp4">
+    <source src="assets/videos/Design sans titre(4).mp4" type="video/mp4">
   </video>
 
   <!-- Hero Content -->
@@ -484,11 +512,11 @@ header.scrolled {
     <div class="glitch-wrapper">
       <h1
         class="font-display-xl text-[15vw] md:text-[9vw] uppercase leading-[0.85] tracking-tighter glitch-text"
-        data-text="ELIOT HANTUTE CREATE."
+        data-text="ELIOT HANTUTE LAB_"
       >
         ELIOT<br>
         HANTUTE<br>
-        <span class="text-primary">CREATE_</span>
+        <span class="text-primary">LAB_</span>
       </h1>
     </div>
 
@@ -580,15 +608,13 @@ header.scrolled {
     <h2 class="text-4xl md:text-6xl font-semibold uppercase leading-[0.9] tracking-[-0.06em] text-white" data-i18n="work-heading">
       Projets sélectionnés
     </h2>
-    <p class="max-w-2xl text-[15px] md:text-[16px] text-white/60 leading-[1.8] tracking-[0.01em]" data-i18n="work-intro-desc">
-      Une présentation plus sombre et épurée, avec une hiérarchie plus forte et des surfaces plus douces.
-    </p>
+
   </div>
 
   <div class="px-grid-margin space-y-4">
     <article class="group relative overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(18,16,24,0.92)_0%,rgba(11,11,15,0.95)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
       <a href="ping-paris.html" class="relative block min-h-[34rem]" aria-label="Open Ping Paris project">
-        <img src="ping-paris-app.png" alt="Ping Paris app prototype" class="absolute inset-0 h-full w-full object-cover opacity-35 mix-blend-screen group-hover:opacity-45 group-hover:scale-105 transition-all duration-700" />
+        <img src="assets/images/ping-paris-app.png" alt="Ping Paris app prototype" class="absolute inset-0 h-full w-full object-cover opacity-35 mix-blend-screen group-hover:opacity-45 group-hover:scale-105 transition-all duration-700" />
         <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,7,10,0.12)_0%,rgba(7,7,10,0.52)_55%,rgba(7,7,10,0.95)_100%)]"></div>
         <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(132,94,255,0.12)_34%,transparent_50%,rgba(132,94,255,0.12)_67%,transparent_100%)] opacity-70"></div>
         <div class="absolute inset-x-0 bottom-0 h-[6.2rem] bg-[linear-gradient(180deg,rgba(8,8,12,0.05)_0%,rgba(8,8,12,0.65)_45%,rgba(8,8,12,0.94)_100%)]"></div>
@@ -619,53 +645,90 @@ header.scrolled {
               <span class="rounded-full border border-white/20 bg-white/6 px-3 py-1 text-[9px] uppercase tracking-[0.32em] text-white/72">Leaflet</span>
               <span class="rounded-full border border-white/20 bg-white/6 px-3 py-1 text-[9px] uppercase tracking-[0.32em] text-white/72">Geolocation</span>
             </div>
-            <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff]">
-              <span data-i18n="work-view-proto">Voir le prototype</span>
-              <span class="material-symbols-outlined text-xs">arrow_forward</span>
+           <span class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
+        <span>Voir le prototype</span>
+        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              
             </span>
           </div>
         </div>
       </a>
     </article>
 
-    <article class="group relative overflow-hidden rounded-[28px] border border-primary/30 bg-[linear-gradient(180deg,rgba(6,8,18,0.97)_0%,rgba(4,6,14,0.99)_100%)] shadow-[0_0_80px_rgba(255,87,26,0.15),0_30px_90px_rgba(0,0,0,0.6)]">
-      <!-- Live rotating Three.js globe -->
-      <canvas id="globe-canvas" class="absolute inset-0 w-full h-full" style="opacity:0.7;pointer-events:none;"></canvas>
-      <!-- Radial vignette so text stays readable -->
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,transparent_30%,rgba(4,6,14,0.85)_70%)]"></div>
-      <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,6,14,0.1)_0%,rgba(4,6,14,0.5)_60%,rgba(4,6,14,0.95)_100%)]"></div>
+   <article class="group relative overflow-hidden rounded-[28px]  shadow-[0_0_90px_rgba(80,140,255,0.25),0_30px_90px_rgba(0,0,0,0.65)]">
 
-      <a href="atelierbergermap.html" class="relative z-10 flex min-h-[22rem] h-full w-full flex-col justify-between p-7 md:p-8 block" aria-label="Open Atelier Berger Globe project">
-        <div class="flex items-start justify-between gap-6">
-          <span class="text-[10px] uppercase tracking-[0.42em] text-primary/70 font-technical-heading">Map</span>
-          <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/50 font-technical-heading">
-            <span>2024</span>
-            <span>3D / WebGL</span>
-          </div>
-        </div>
+  <canvas id="globe-canvas" class="absolute inset-0 z-0 w-full h-full opacity-100 pointer-events-none"></canvas>
 
-        <div class="space-y-5 max-w-lg">
-          <h3 class="text-[2.35rem] md:text-[5rem] font-semibold uppercase leading-[0.88] tracking-[-0.07em] text-white">
-            Atelier<br>Berger Globe
-          </h3>
-          <p class="max-w-md text-[15px] md:text-[16px] leading-[1.8] text-white/72" data-i18n="work-card2-desc">
-            Globe 3D interactif pour visualiser les projets d'architecture de l'agence Atelier Berger à travers le monde.
-          </p>
-        </div>
+  <div class="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(3,8,20,0.96)_0%,rgba(3,8,20,0.75)_34%,rgba(3,8,20,0.18)_62%,rgba(3,8,20,0.65)_100%)]"></div>
+  <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_72%_45%,rgba(70,130,255,0.18)_0%,transparent_48%)]"></div>
 
-        <div class="flex items-center justify-between gap-4 pt-8 border-t border-white/10">
-          <div class="flex flex-wrap gap-2">
-            <span class="rounded-full border border-primary/40 bg-primary/10 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-primary/80">Three.js</span>
-            <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">WebGL</span>
-            <span class="rounded-full border border-white/35 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">3D Map</span>
-          </div>
-          <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
-            <span data-i18n="work-view-proto">Voir le projet</span>
-            <span class="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform">arrow_forward</span>
-          </span>
-        </div>
-      </a>
-    </article>
+  <a href="atelierbergermap.html"
+     class="relative z-10 flex min-h-[40rem] w-full flex-col justify-between p-7 md:p-8"
+     aria-label="Open Atelier Berger Globe project">
+
+    <div class="flex items-start justify-between gap-6">
+      <span class=" items-center gap-4 text-[10px] uppercase tracking-[0.42em] text-primary font-technical-heading">
+        <span class="h-[2px] w-12 bg-primary"></span>
+        <div class="flex items-center gap-4">
+
+  <div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2">
+
+    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+
+    <span class="font-technical-heading text-[10px] uppercase tracking-[0.35em] text-primary">
+      PROJET EN COURS...
+    </span>
+
+  </div>
+
+  <div class="hidden md:flex items-center gap-3">
+
+    <div class="w-28 h-[3px] rounded-full bg-white/10 overflow-hidden">
+
+      <div class="loading-bar h-full bg-primary"></div>
+
+    </div>
+
+    <span id="loading-percent"
+          class="font-technical-heading text-[10px] text-white/45">
+      78%
+    </span>
+
+  </div>
+
+</div>
+
+      <div class="flex flex-col items-end gap-2 text-right text-[9px] uppercase tracking-[0.3em] text-white/70 font-technical-heading">
+        <span>2026</span>
+        <span>3D / WebGL</span>
+      </div>
+    </div>
+
+    <div class="max-w-3xl space-y-5">
+      <h3 class="text-[3.3rem] md:text-[5.7rem] font-semibold uppercase leading-[0.86] tracking-[-0.08em] text-white">
+        Atelier<br>Berger Globe 3D
+      </h3>
+
+<p class="max-w-xl text-[15px] md:text-[17px] font-[300] tracking-[0.01em] leading-[1.85] text-white/70">
+          Globe Map interactif pour l'agence Atelier Berger à travers le monde. De Paris à Dubaï, de Londres à Tokyo, leurs projets d'architecture intérieure, de joaillerie et d'hôtellerie de prestige.
+      </p>
+    </div>
+
+    <div class="flex items-center justify-between gap-4 pt-8 border-t border-white/15">
+      <div class="flex flex-wrap gap-2">
+        <span class="rounded-full border border-primary/60 bg-primary/10 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-primary">Three.js</span>
+        <span class="rounded-full border border-white/45 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Tailwind CSS</span>
+        <span class="rounded-full border border-white/45 px-4 py-1 text-[9px] uppercase tracking-[0.34em] text-white/80">Vite.js</span>
+      </div>
+
+      <span class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.34em] text-[#cbb7ff] group-hover:text-primary transition-colors">
+        <span>Voir le projet</span>
+        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      </span>
+    </div>
+
+  </a>
+</article>
 
     <article class="overflow-hidden rounded-[28px] border border-white/20 bg-[linear-gradient(180deg,rgba(11,11,15,0.96)_0%,rgba(8,8,11,0.98)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
       <div class="flex items-center justify-between px-7 pt-7 md:px-8">
@@ -677,23 +740,16 @@ header.scrolled {
         <div class="space-y-0">
           <a href="https://eliothantute.github.io/site/zeden-website.html" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 border-b border-white/10 py-4 text-white transition-colors hover:text-white/80" rel="noopener noreferrer">
             <div class="flex items-center gap-3 min-w-0">
-              <img src="zeden-project.jpg" alt="ZEDEN AudioLab preview" class="h-12 w-16 object-cover border border-white/15" />
-              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">ZEDEN AudioLab</span>
+              <img src="assets/images/zeden-project.jpg" alt="Zeden AudioLab preview" class="h-12 w-16 object-cover border border-white/15" />
+              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Zeden AudioLab</span>
             </div>
             <span class="text-[9px] uppercase tracking-[0.38em] text-white/45 sm:text-right">UI / Front-End</span>
           </a>
 
-          <a href="https://eliothantute.github.io/site/atelierbergermap.html" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 border-b border-white/10 py-4 text-white transition-colors hover:text-white/80" rel="noopener noreferrer">
-            <div class="flex items-center gap-3 min-w-0">
-              <img src="atelierbergermap.png" alt="Atelier Berger Globe preview" class="h-12 w-16 object-cover border border-white/15" />
-              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Atelier Berger Globe</span>
-            </div>
-            <span class="text-[9px] uppercase tracking-[0.38em] text-white/45 sm:text-right">Map</span>
-          </a>
-
+      
           <a href="https://www.figma.com/design/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=33-714&t=vnWum8ctPG6x4TDa-0" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 border-b border-white/10 py-4 text-white transition-colors hover:text-white/80" target="_blank" rel="noopener noreferrer">
             <div class="flex items-center gap-3 min-w-0">
-              <img src="OFISS.png" alt="Design Figma preview" class="h-12 w-16 object-cover border border-white/15" />
+              <img src="assets/images/OFISS.png" alt="Design Figma preview" class="h-12 w-16 object-cover border border-white/15" />
               <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Design Figma</span>
             </div>
             <span class="text-[9px] uppercase tracking-[0.38em] text-white/45 sm:text-right">Concept</span>
@@ -701,8 +757,8 @@ header.scrolled {
 
           <a href="https://eliothantute.github.io/site/arc-reflex-project.html" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-4 text-white transition-colors hover:text-white/80" rel="noopener noreferrer">
             <div class="flex items-center gap-3 min-w-0">
-              <img src="arc-reflex-project.png" alt="Arc Reflex preview" class="h-12 w-16 object-cover border border-white/15" />
-              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Arc Reflex</span>
+              <img src="assets/images/arc-reflex-project.png" alt="Site Arc Reflex preview" class="h-12 w-16 object-cover border border-white/15" />
+              <span class="text-[1.05rem] md:text-[2.35rem] font-medium leading-none truncate">Site Arc Reflex</span>
             </div>
             <span class="text-[9px] uppercase tracking-[0.38em] text-white/45 sm:text-right" data-i18n="work-accessibility">Accessibilité</span>
           </a>
@@ -710,110 +766,123 @@ header.scrolled {
       </div>
     </article>
   </div>
-</section>
-<!-- Audio Visual Exploration Section -->
-<section class="reveal py-section-gap px-grid-margin active" id="sound">
-<div class="max-w-[1440px] mx-auto">
-<div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-20">
-<div class="space-y-6">
-<span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase inline-flex items-center gap-4">
-<span class="w-12 h-[2px] bg-primary"></span> 003 — FREQUENCY_LAB
-                    </span>
-<h2 class="font-display-xl text-4xl md:text-[8rem] uppercase leading-[0.8] tracking-tighter">SOUND DESIGN & VIDEO </h2>
-</div>
-<div class="max-w-md space-y-4">
-<p class="font-body-md text-on-surface-variant text-lg leading-relaxed" data-i18n="sound-desc">
-                        Exploration des textures organiques et synthétiques. Recherche d'un équilibre entre chaos contrôlé et harmonie.
-                    </p>
-<div class="flex gap-4">
-<div class="h-1 flex-grow bg-primary/20 rounded-full overflow-hidden">
-<div class="h-full bg-primary w-2/3 animate-pulse"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="relative aspect-[21/9] w-full overflow-hidden mb-12 group border border-white/10">
-<iframe
-class="w-full h-full"
-id="integrated-youtube-player"
-src="https://www.youtube.com/embed/n617nasyrIg?iv_load_policy=3&amp;rel=0&amp;modestbranding=1&amp;playsinline=1"
-title="Integrated YouTube player"
-frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-referrerpolicy="strict-origin-when-cross-origin"
-allowfullscreen>
-</iframe>
-<div class="absolute bottom-10 left-10 flex items-center gap-3 z-10 pointer-events-none">
-<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-<span class="font-technical-heading text-xs text-primary uppercase tracking-[0.4em] font-bold">SIGNAL_DETECTED // 44.1kHz</span>
-</div>
-</div>
-</div>
-</section>
+<!-- Video / Sound Section -->
+<section id="sound" class="reveal py-section-gap px-grid-margin border-t border-white/5 active portfolio-clean">
+  <div class="max-w-[1440px] mx-auto">
 
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-20">
+      <div class="space-y-6">
+        <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase inline-flex items-center gap-4">
+          <span class="w-12 h-[2px] bg-primary"></span>
+          003 — AUDIO_VISUAL_LAB
+        </span>
 
-<!-- VIDEO TITLE -->
-<div class="mb-6 mt-16">
+      
 
-  <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-4">
-    <span class="w-12 h-[2px] bg-primary"></span>
-    004 — VISUAL_ARCHIVE
-  </span>
+    <!-- Two videos -->
+    <div class="grid lg:grid-cols-2 gap-6 md:gap-8">
 
-  <h3 class="font-display-xl text-4xl md:text-6xl uppercase tracking-tight mt-4">
-    SON À L'IMAGE
-  </h3>
+      <!-- Video 1 -->
+      <article class="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] hover:border-primary/45 transition-all duration-500 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+        <div class="relative aspect-video overflow-hidden bg-black">
+          <iframe
+            class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.035]"
+            src="https://www.youtube.com/embed/n617nasyrIg"
+            title="Music Production"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
 
-</div>
+        <div class="p-7 md:p-8">
+          <span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">
+            Music Production
+          </span>
 
-<!-- VIDEO -->
-<div class="relative w-full overflow-hidden border border-white/10">
-  <iframe
-    class="w-full aspect-video"
-    src="https://www.youtube.com/embed/p_tCq55WbfA?controls=0&modestbranding=1&rel=0"
-    title="SON À L'IMAGE"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
-</div>
-        
+          <h3 class="mt-3 text-2xl md:text-3xl uppercase font-semibold text-white tracking-[-0.04em]">
+            Electronic Composition
+          </h3>
 
-</div>
+          <p class="mt-4 text-white/55 leading-8 font-light">
+            Composition musicale, textures sonores et identité audio.
+          </p>
+        </div>
+      </article>
 
-<!-- COMPOSITION & VISUAL -->
-<div class="mb-6 mt-20">
+      <!-- Video 2 -->
+      <article class="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] hover:border-primary/45 transition-all duration-500 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+        <div class="relative aspect-video overflow-hidden bg-black">
+          <iframe
+            class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.035]"
+            src="https://www.youtube.com/embed/p_tCq55WbfA"
+            title="Son à l'image"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
 
-  <span class="font-technical-heading text-[11px] text-primary tracking-widest uppercase flex items-center gap-4">
-    <span class="w-12 h-[2px] bg-primary"></span>
-    005 — LIVE_VISUAL_PERFORMANCE
-  </span>
+        <div class="p-7 md:p-8">
+          <span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">
+            Sound To Picture
+          </span>
 
-  <h3 class="font-display-xl text-4xl md:text-6xl uppercase tracking-tight mt-4">
-    Music Composition & > Visual
-  </h3>
+          <h3 class="mt-3 text-2xl md:text-3xl uppercase font-semibold text-white tracking-[-0.04em]">
+            Son à l'image
+          </h3>
 
-</div>
+          <p class="mt-4 text-white/55 leading-8 font-light">
+            Synchronisation audio, narration visuelle et émotion sonore.
+          </p>
+        </div>
+      </article>
 
-<div class="relative aspect-[21/9] w-full overflow-hidden mb-20 group border border-white/10">
+    </div>
 
-  <iframe
-    class="w-full h-full"
-    src="https://www.youtube.com/embed/N9wPBsxTEY4?rel=0&modestbranding=1"
-    title="DJ Set & Mapping"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen>
-  </iframe>
+    <!-- Big video -->
+    <article class="group mt-8 relative overflow-hidden rounded-[32px] border border-primary/20 bg-white/[0.025] hover:border-primary/55 transition-all duration-500 shadow-[0_35px_100px_rgba(0,0,0,0.5)]">
 
-  <div class="absolute bottom-10 left-10 flex items-center gap-3 z-10 pointer-events-none">
-    <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+      <div class="relative aspect-[21/9] overflow-hidden bg-black">
+        <iframe
+          class="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-[1.025]"
+          src="https://www.youtube.com/embed/N9wPBsxTEY4"
+          title="DJ Set & Mapping"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
 
-    <span class="font-technical-heading text-xs text-primary uppercase tracking-[0.4em] font-bold">
-      LIVE_SIGNAL // ACTIVE
-    </span>
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 p-8 md:p-10 border-t border-white/10">
+
+        <div>
+          <span class="font-technical-heading text-primary text-[10px] uppercase tracking-[0.35em]">
+            Live Performance
+          </span>
+
+          <h3 class="mt-4 text-4xl md:text-5xl uppercase font-semibold text-white tracking-[-0.055em] leading-[0.95]">
+            Music Composition × Visual
+          </h3>
+
+          <p class="mt-5 max-w-xl text-white/55 leading-8 font-light">
+            Performance audiovisuelle mêlant composition électronique, mapping et direction visuelle.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+          <span class="font-technical-heading text-[10px] uppercase tracking-[0.35em] text-white/45">
+            LIVE_SIGNAL // ACTIVE
+          </span>
+        </div>
+
+      </div>
+    </article>
+
   </div>
-
-</div>
+</section>
 
 
         
@@ -1000,47 +1069,59 @@ allowfullscreen>
 </script>
 
 <script>
-// ─── i18n Language Switcher ───────────────────────────────────────────────────
 const translations = {
   fr: {
-    'nav-work':          'Projets',
-    'nav-audio':         'Audio',
-    'nav-contact':       'Contact',
-    'nav-menu':          'Menu',
-    'hero-subtitle':     '// DESIGNER UI \u2022 D\u00c9VELOPPEUR CR\u00c9ATIF BAS\u00c9 \u00c0 PARIS',
-    'hero-cta-work':     'VOIR_PROJETS',
-    'hero-cta-contact':  'ME_CONTACTER',
-    'hero-scroll':       'D\u00c9FILER',
-    'work-heading':      'Projets s\u00e9lectionn\u00e9s',
-    'work-intro-desc':   'Une pr\u00e9sentation plus sombre et \u00e9pur\u00e9e, avec une hi\u00e9rarchie plus forte et des surfaces plus douces.',
+    'nav-work': 'Projets',
+    'nav-audio': 'Audio',
+    'nav-contact': 'Contact',
+    'nav-menu': 'Menu',
+
+    'hero-subtitle': '// DESIGNER UI • DÉVELOPPEUR CRÉATIF BASÉ À PARIS',
+    'hero-cta-work': 'VOIR_PROJETS',
+    'hero-cta-contact': 'ME_CONTACTER',
+    'hero-scroll': 'DÉFILER',
+
+    'work-heading': 'Projets sélectionnés',
+    'work-intro-desc': 'Une présentation plus sombre et épurée, avec une hiérarchie plus forte et des surfaces plus douces.',
     'work-featured-badge': 'Projet mis en avant',
-    'work-ping-desc':    "Prototype d\u2019application mobile pour localiser les tables de ping-pong \u00e0 Paris et d\u00e9couvrir les spots proches.",
-    'work-view-proto':   'Voir le prototype',
-    'work-card2-desc':   "Globe 3D interactif pour visualiser les projets d\u2019architecture de l\u2019agence Atelier Berger \u00e0 travers le monde.",
-    'work-more':         'Plus de projets',
-    'work-accessibility':'Accessibilit\u00e9',
-    'sound-desc':        "Exploration des textures organiques et synth\u00e9tiques. Recherche d\u2019un \u00e9quilibre entre chaos contr\u00f4l\u00e9 et harmonie.",
-    'contact-heading':   'TRAVAILLONS<br><span class="text-primary">ENSEMBLE.</span>',
+    'work-ping-desc': 'Prototype d’application mobile pour localiser les tables de ping-pong à Paris et découvrir les spots proches.',
+    'work-view-proto': 'Voir le projet',
+
+    'work-card2-desc': `Globe 3D interactif pour visualiser les projets d’architecture de l’agence Atelier Berger à travers le monde.<br><br>De Paris à Dubaï, de Londres à Tokyo, leurs projets d’architecture intérieure, de joaillerie et d’hôtellerie de prestige.`,
+
+    'work-more': 'Plus de projets',
+    'work-accessibility': 'Accessibilité',
+
+    'sound-desc': 'Exploration des textures organiques et synthétiques. Recherche d’un équilibre entre chaos contrôlé et harmonie.',
+
+    'contact-heading': 'TRAVAILLONS<br><span class="text-primary">ENSEMBLE.</span>',
   },
+
   en: {
-    'nav-work':          'Work',
-    'nav-audio':         'Audio',
-    'nav-contact':       'Contact',
-    'nav-menu':          'Menu',
-    'hero-subtitle':     '// UI DESIGNER \u2022 CREATIVE DEVELOPER BASED IN PARIS',
-    'hero-cta-work':     'VIEW_WORK',
-    'hero-cta-contact':  'GET_IN_TOUCH',
-    'hero-scroll':       'SCROLL_DOWN',
-    'work-heading':      'Selected projects',
-    'work-intro-desc':   'A darker, quieter presentation with stronger hierarchy and softer surfaces.',
+    'nav-work': 'Work',
+    'nav-audio': 'Audio',
+    'nav-contact': 'Contact',
+    'nav-menu': 'Menu',
+
+    'hero-subtitle': '// UI DESIGNER • CREATIVE DEVELOPER BASED IN PARIS',
+    'hero-cta-work': 'VIEW_WORK',
+    'hero-cta-contact': 'GET_IN_TOUCH',
+    'hero-scroll': 'SCROLL_DOWN',
+
+    'work-heading': 'Selected projects',
+    'work-intro-desc': 'A darker, quieter presentation with stronger hierarchy and softer surfaces.',
     'work-featured-badge': 'Featured project',
-    'work-ping-desc':    'Mobile app prototype to locate ping-pong tables in Paris and discover nearby spots.',
-    'work-view-proto':   'View prototype',
-    'work-card2-desc':   'Interactive 3D globe to visualise the architectural projects of Atelier Berger across the world.',
-    'work-more':         'More work',
-    'work-accessibility':'Accessibility',
-    'sound-desc':        'Exploration of organic and synthetic textures. Seeking a balance between controlled chaos and harmony.',
-    'contact-heading':   'LET\u2019S WORK<br><span class="text-primary">TOGETHER.</span>',
+    'work-ping-desc': 'Mobile app prototype to locate ping-pong tables in Paris and discover nearby spots.',
+    'work-view-proto': 'View project',
+
+    'work-card2-desc': `Interactive 3D globe showcasing Atelier Berger’s architectural projects around the world.<br><br>From Paris to Dubai, London to Tokyo, discover their luxury interior architecture, jewellery boutiques and hospitality projects.`,
+
+    'work-more': 'More work',
+    'work-accessibility': 'Accessibility',
+
+    'sound-desc': 'Exploration of organic and synthetic textures. Seeking a balance between controlled chaos and harmony.',
+
+    'contact-heading': 'LET’S WORK<br><span class="text-primary">TOGETHER.</span>',
   }
 };
 
@@ -1089,86 +1170,152 @@ applyLang(storedLang || browserLang);
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
 
 const canvas = document.getElementById('globe-canvas');
+
 if (canvas) {
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true
+  });
+
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
+
   const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
-  camera.position.z = 2.6;
+  camera.position.z = 3.2;
 
-  // Globe sphere
-  const geo = new THREE.SphereGeometry(1, 64, 64);
+  const globeGroup = new THREE.Group();
+  scene.add(globeGroup);
 
-  // Wireframe overlay
-  const wireMat = new THREE.MeshBasicMaterial({ color: 0xff571a, wireframe: true, transparent: true, opacity: 0.12 });
-  const wire = new THREE.Mesh(geo, wireMat);
-  scene.add(wire);
+  globeGroup.position.x = 0.95;
+  globeGroup.position.y = 0.05;
+  globeGroup.scale.setScalar(1.35);
 
-  // Solid dark base
-  const solidMat = new THREE.MeshPhongMaterial({ color: 0x060a14, transparent: true, opacity: 0.85 });
-  const solid = new THREE.Mesh(geo, solidMat);
-  solid.scale.setScalar(0.995);
-  scene.add(solid);
+  const radius = 1.25;
 
-  // Atmosphere glow
-  const atmGeo = new THREE.SphereGeometry(1.08, 32, 32);
-  const atmMat = new THREE.MeshBasicMaterial({ color: 0xff571a, transparent: true, opacity: 0.04, side: THREE.BackSide });
-  scene.add(new THREE.Mesh(atmGeo, atmMat));
-
-  // Dot markers for world cities
-  const cities = [
-    [48.85, 2.35],   // Paris
-    [51.5, -0.12],   // London
-    [40.71, -74.0],  // New York
-    [35.68, 139.69], // Tokyo
-    [-33.86, 151.2], // Sydney
-    [55.75, 37.62],  // Moscow
-    [-23.55, -46.63],// São Paulo
-    [1.35, 103.82],  // Singapore
-    [19.43, -99.13], // Mexico City
-    [30.04, 31.24],  // Cairo
-  ];
-  const dotGeo = new THREE.SphereGeometry(0.016, 8, 8);
-  const dotMat = new THREE.MeshBasicMaterial({ color: 0xff571a });
-  cities.forEach(([lat, lon]) => {
-    const phi   = (90 - lat)  * Math.PI / 180;
-    const theta = (lon + 180) * Math.PI / 180;
-    const dot = new THREE.Mesh(dotGeo, dotMat);
-    dot.position.setFromSphericalCoords(1.01, phi, theta);
-    scene.add(dot);
+  // Dark globe base
+  const baseGeo = new THREE.SphereGeometry(radius, 96, 96);
+  const baseMat = new THREE.MeshPhongMaterial({
+    color: 0x071126,
+    transparent: true,
+    opacity: 0.92,
+    shininess: 35
   });
 
-  // Lights
-  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
-  const dirLight = new THREE.DirectionalLight(0xff8855, 1.2);
-  dirLight.position.set(3, 2, 2);
-  scene.add(dirLight);
+  const base = new THREE.Mesh(baseGeo, baseMat);
+  globeGroup.add(base);
 
-  // Resize
+  // Particle surface
+  const particleCount = 22000;
+  const positions = [];
+  const colors = [];
+
+  const colorBlue = new THREE.Color(0x4f8cff);
+  const colorWhite = new THREE.Color(0xdbe8ff);
+
+  for (let i = 0; i < particleCount; i++) {
+    const u = Math.random();
+    const v = Math.random();
+
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+
+    const r = radius + Math.random() * 0.025;
+
+    const x = r * Math.sin(phi) * Math.cos(theta);
+    const y = r * Math.cos(phi);
+    const z = r * Math.sin(phi) * Math.sin(theta);
+
+    const wave =
+      Math.sin(theta * 5.0 + phi * 8.0) +
+      Math.sin(theta * 13.0) * 0.35 +
+      Math.cos(phi * 18.0) * 0.4;
+
+    if (wave > -0.35 || Math.random() > 0.55) {
+      positions.push(x, y, z);
+
+      const c = wave > 0.45 ? colorWhite : colorBlue;
+      colors.push(c.r, c.g, c.b);
+    }
+  }
+
+  const particlesGeo = new THREE.BufferGeometry();
+  particlesGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  particlesGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+  const particlesMat = new THREE.PointsMaterial({
+    size: 0.008,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.95,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+
+  const particles = new THREE.Points(particlesGeo, particlesMat);
+  globeGroup.add(particles);
+
+  // Outer glow
+  const glowGeo = new THREE.SphereGeometry(radius * 1.05, 96, 96);
+  const glowMat = new THREE.MeshBasicMaterial({
+    color: 0x4f8cff,
+    transparent: true,
+    opacity: 0.12,
+    side: THREE.BackSide,
+    blending: THREE.AdditiveBlending
+  });
+
+  const glow = new THREE.Mesh(glowGeo, glowMat);
+  globeGroup.add(glow);
+
+  // Thin wire layer
+  const wireGeo = new THREE.SphereGeometry(radius * 1.01, 48, 48);
+  const wireMat = new THREE.MeshBasicMaterial({
+    color: 0x6da3ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.055
+  });
+
+  const wire = new THREE.Mesh(wireGeo, wireMat);
+  globeGroup.add(wire);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+
+  const light1 = new THREE.DirectionalLight(0x8fb7ff, 2.4);
+  light1.position.set(3, 2, 4);
+  scene.add(light1);
+
+  const light2 = new THREE.DirectionalLight(0xff571a, 1.1);
+  light2.position.set(-3, -1, 2);
+  scene.add(light2);
+
   function resize() {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
+
   new ResizeObserver(resize).observe(canvas);
   resize();
 
-  // Animate
-  const group = new THREE.Group();
-  group.add(wire, solid);
-  scene.add(group);
-
-  let t = 0;
-  (function animate() {
+  function animate() {
     requestAnimationFrame(animate);
-    t += 0.0035;
-    group.rotation.y = t;
-    group.rotation.x = Math.sin(t * 0.3) * 0.12;
+
+    globeGroup.rotation.y += 0.0022;
+    globeGroup.rotation.x = -0.15;
+    particles.rotation.y += 0.0007;
+    wire.rotation.y -= 0.0006;
+
     renderer.render(scene, camera);
-  })();
+  }
+
+  animate();
 }
 </script>
-
 </body></html>
