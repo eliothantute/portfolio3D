@@ -1,0 +1,6 @@
+{
+  "name": "Eliot Hantute Portfolio",
+  "description": "Portfolio interactif haut de gamme, immersif et futuriste avec animations 3D WebGL et transitions cinématiques.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
