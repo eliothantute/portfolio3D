@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Language } from '../types';
 
 const SOUNDCLOUD_TRACK_URL = 'https://soundcloud.com/zedenmusic/four-walls-zeden-remix';
+const SOUNDCLOUD_CLIENT_ID = 'lmRjTI0FqeXygHMXc3hRzS7hth20PNk5';
 
 interface AudioPlayerProps {
   isMuted: boolean;
@@ -45,18 +46,76 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const resolveViaProxy = async (): Promise<string> => {
+    const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
+    const proxyCandidates = ['/api/soundcloud/stream-url', `${baseUrl}/api/soundcloud/stream-url`];
+
+    for (const endpoint of proxyCandidates) {
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          continue;
+        }
+
+        const payload = (await response.json()) as {url?: string};
+        if (payload.url) {
+          return payload.url;
+        }
+      } catch {
+        // Ignore and continue to next endpoint/fallback strategy.
+      }
+    }
+
+    throw new Error('SOUNDCLOUD_PROXY_UNAVAILABLE');
+  };
+
+  const resolveDirectFromSoundCloud = async (): Promise<string> => {
+    const resolveEndpoint = `https://api-v2.soundcloud.com/resolve?url=${encodeURIComponent(
+      SOUNDCLOUD_TRACK_URL,
+    )}&client_id=${SOUNDCLOUD_CLIENT_ID}`;
+
+    const resolveResponse = await fetch(resolveEndpoint);
+    if (!resolveResponse.ok) {
+      throw new Error('SOUNDCLOUD_RESOLVE_FAILED');
+    }
+
+    const track = (await resolveResponse.json()) as {
+      media?: {
+        transcodings?: Array<{format?: {protocol?: string}; url?: string}>;
+      };
+    };
+
+    const transcodings = track.media?.transcodings;
+    if (!transcodings?.length) {
+      throw new Error('SOUNDCLOUD_TRANSCODING_MISSING');
+    }
+
+    const preferred =
+      transcodings.find((item) => item?.format?.protocol === 'progressive') || transcodings[0];
+
+    if (!preferred?.url) {
+      throw new Error('SOUNDCLOUD_TRANSCODING_URL_MISSING');
+    }
+
+    const streamResponse = await fetch(`${preferred.url}?client_id=${SOUNDCLOUD_CLIENT_ID}`);
+    if (!streamResponse.ok) {
+      throw new Error('SOUNDCLOUD_STREAM_LOOKUP_FAILED');
+    }
+
+    const streamData = (await streamResponse.json()) as {url?: string};
+    if (!streamData.url) {
+      throw new Error('SOUNDCLOUD_STREAM_UNAVAILABLE');
+    }
+
+    return streamData.url;
+  };
+
   const resolveSoundCloudStream = async (): Promise<string> => {
-    const response = await fetch('/api/soundcloud/stream-url');
-    if (!response.ok) {
-      throw new Error('SOUNDCLOUD_STREAM_UNAVAILABLE');
+    try {
+      return await resolveViaProxy();
+    } catch {
+      return resolveDirectFromSoundCloud();
     }
-
-    const payload = (await response.json()) as {url?: string};
-    if (!payload.url) {
-      throw new Error('SOUNDCLOUD_STREAM_UNAVAILABLE');
-    }
-
-    return payload.url;
   };
 
   const ensureAudioGraph = async () => {
