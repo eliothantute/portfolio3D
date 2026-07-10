@@ -3,6 +3,7 @@ import { Language } from '../types';
 
 const SOUNDCLOUD_TRACK_URL = 'https://soundcloud.com/zedenmusic/four-walls-zeden-remix';
 const SOUNDCLOUD_CLIENT_ID = 'lmRjTI0FqeXygHMXc3hRzS7hth20PNk5';
+const LOCAL_FALLBACK_AUDIO = '/audio/berlin.mp3';
 
 interface AudioPlayerProps {
   isMuted: boolean;
@@ -114,7 +115,11 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     try {
       return await resolveViaProxy();
     } catch {
-      return resolveDirectFromSoundCloud();
+      try {
+        return await resolveDirectFromSoundCloud();
+      } catch {
+        return `${import.meta.env.BASE_URL || '/'}${LOCAL_FALLBACK_AUDIO.replace(/^\//, '')}`;
+      }
     }
   };
 
