@@ -30,7 +30,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  const trackName = 'ZEDEN // FOUR_WALLS_REMIX';
+  const trackName = 'ZEDEN // BERLIN';
   const barCount = 12;
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
