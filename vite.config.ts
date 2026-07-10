@@ -73,7 +73,10 @@ const soundCloudProxyPlugin = () => {
 };
 
 export default defineConfig(() => {
+  const base = process.env.VITE_BASE || '/';
+
   return {
+    base,
     plugins: [react(), tailwindcss(), soundCloudProxyPlugin()],
     resolve: {
       alias: {
