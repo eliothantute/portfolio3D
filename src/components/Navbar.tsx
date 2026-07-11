@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="lux-interactive group inline-flex items-center gap-2 font-display text-sm font-semibold uppercase tracking-[0.16em] text-slate-900 sm:text-[0.9rem]"
           >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-slate-900" />
-            Eliot Hantute
+            Eliot Lab
           </a>
 
           <nav className="hidden items-center gap-6 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 lg:flex">

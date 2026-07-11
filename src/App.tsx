@@ -47,7 +47,7 @@ export default function App() {
       <Background3D analyserRef={analyserRef} />
 
       <section className="sr-only" aria-label={lang === 'fr' ? 'Résumé des projets principaux' : 'Primary projects summary'}>
-        <h1>{lang === 'fr' ? 'Portfolio UI et développement front-end de Eliot Hantute' : 'UI design and front-end portfolio by Eliot Hantute'}</h1>
+        <h1>{lang === 'fr' ? 'Portfolio UI et développement front-end de Eliot Lab' : 'UI design and front-end portfolio by Eliot Lab'}</h1>
         <ul>
           {currentProjects.slice(0, 6).map((project) => (
             <li key={`seo-${project.id}`}>
