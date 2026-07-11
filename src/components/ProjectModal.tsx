@@ -183,7 +183,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   </div>
                 ))}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
