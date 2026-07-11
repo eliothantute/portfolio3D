@@ -9,19 +9,19 @@ interface Background3DProps {
 
 export const Background3D: React.FC<Background3DProps> = ({ analyserRef }) => {
   return (
-    <div className="pointer-events-auto absolute inset-0 z-[1] h-screen w-screen overflow-hidden">
+    <div className="pointer-events-auto fixed inset-0 z-[1] h-screen w-screen overflow-hidden">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 42 }}
-        dpr={[1, 1.8]}
-        gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+        dpr={[1, 1.5]}
+        gl={{ alpha: true, antialias: false, powerPreference: 'high-performance' }}
       >
         <ambientLight intensity={0.45} />
         <directionalLight position={[4, 5, 3]} intensity={1.25} color="#ffd9cc" />
         <pointLight position={[-5, -2, -4]} intensity={1.1} color="#9be7ff" />
 
-        <AudioSphere analyserRef={analyserRef} />
+        <AudioSphere analyserRef={analyserRef} quality="high" />
 
-        <Environment resolution={256}>
+        <Environment resolution={192}>
           <Lightformer
             form="ring"
             color="#9ab6ff"

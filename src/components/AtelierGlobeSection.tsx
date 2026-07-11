@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Project, Language } from '../types';
 
@@ -18,10 +18,12 @@ export const AtelierGlobeSection: React.FC<AtelierGlobeSectionProps> = ({
   onLeaveItem,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [showControlsHint, setShowControlsHint] = useState(true);
 
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
+    const isMobile = window.matchMedia('(max-width: 900px)').matches || window.matchMedia('(pointer: coarse)').matches;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
@@ -30,17 +32,17 @@ export const AtelierGlobeSection: React.FC<AtelierGlobeSectionProps> = ({
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
-      antialias: true,
+      antialias: !isMobile,
       powerPreference: 'high-performance',
     });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2));
 
     const root = new THREE.Group();
     scene.add(root);
 
     const shell = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.72, 7),
+      new THREE.IcosahedronGeometry(1.72, isMobile ? 5 : 7),
       new THREE.MeshPhysicalMaterial({
         color: 0x132a69,
         roughness: 0.2,
@@ -57,7 +59,7 @@ export const AtelierGlobeSection: React.FC<AtelierGlobeSectionProps> = ({
     shell.position.x = 1.4;
     root.add(shell);
 
-    const dotsCount = 14000;
+    const dotsCount = isMobile ? 6800 : 14000;
     const dotPositions = new Float32Array(dotsCount * 3);
     const golden = Math.PI * (3 - Math.sqrt(5));
 
@@ -204,8 +206,30 @@ export const AtelierGlobeSection: React.FC<AtelierGlobeSectionProps> = ({
             ref={canvasRef}
             onMouseEnter={() => onHoverItem?.('GLOBE')}
             onMouseLeave={onLeaveItem}
+            aria-label={
+              lang === 'fr'
+                ? 'Globe 3D interactif, cliquez et glissez pour tourner.'
+                : 'Interactive 3D globe, click and drag to rotate.'
+            }
             className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing"
           />
+
+          <div className="absolute bottom-6 left-6 z-20 flex items-center gap-3 sm:bottom-8 sm:left-8">
+            {showControlsHint && (
+              <div className="rounded-full border border-white/20 bg-black/35 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/80 backdrop-blur-md">
+                {lang === 'fr' ? 'Clique + glisse pour tourner' : 'Click + drag to rotate'}
+              </div>
+            )}
+            <button
+              onClick={() => setShowControlsHint((prev) => !prev)}
+              onMouseEnter={() => onHoverItem?.('AIDE')}
+              onMouseLeave={onLeaveItem}
+              aria-label={lang === 'fr' ? 'Afficher ou masquer l\'aide de navigation du globe' : 'Toggle globe navigation help'}
+              className="lux-interactive inline-flex h-9 items-center justify-center rounded-full border border-white/25 bg-black/35 px-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/85 hover:border-[#ff6b2c] hover:text-[#ff6b2c]"
+            >
+              {lang === 'fr' ? 'Aide' : 'Help'}
+            </button>
+          </div>
 
           <div className="relative z-10 flex min-h-[640px] flex-col px-6 pb-9 pt-8 sm:px-10 sm:pb-10 sm:pt-9 lg:px-12 lg:pb-12">
             <div className="mb-10 flex flex-wrap items-center justify-between gap-4">

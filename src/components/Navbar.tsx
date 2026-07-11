@@ -116,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseLeave={onLeaveItem}
               className="lux-interactive inline-flex h-9 items-center justify-center rounded-full border border-slate-800 bg-slate-900 px-4 font-mono text-[10px] uppercase tracking-[0.18em] text-white hover:bg-slate-700"
             >
-              {lang === 'fr' ? 'Parler' : 'Start'}
+              Contact
             </a>
           </div>
         </div>

@@ -32,7 +32,7 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE: /portfolio3D/
+          VITE_BASE: /
         run: npm run build
 
       - name: Configure Pages

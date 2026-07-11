@@ -5,11 +5,14 @@ import { ThreeEvent, useFrame } from '@react-three/fiber';
 
 interface AudioSphereProps {
   analyserRef: React.MutableRefObject<AnalyserNode | null>;
+  quality?: 'high' | 'low';
 }
 
-const PARTICLE_COUNT = 20000;
-const HALO_PARTICLE_COUNT = 6000;
 const BASE_RADIUS = 1.36;
+const QUALITY_PRESETS = {
+  high: { particleCount: 20000, haloParticleCount: 6000 },
+  low: { particleCount: 9000, haloParticleCount: 2600 },
+} as const;
 
 const createSphereDirections = (count: number) => {
   const dirs = new Float32Array(count * 3);
@@ -28,7 +31,10 @@ const createSphereDirections = (count: number) => {
   return dirs;
 };
 
-export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
+export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality = 'high' }) => {
+  const particleCount = QUALITY_PRESETS[quality].particleCount;
+  const haloParticleCount = QUALITY_PRESETS[quality].haloParticleCount;
+
   const groupRef = useRef<THREE.Group>(null);
   const pointsPrimaryRef = useRef<THREE.Points>(null);
   const pointsSecondaryRef = useRef<THREE.Points>(null);
@@ -54,26 +60,26 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
   const groupTargetYRef = useRef(0);
   const groupScaleRef = useRef(1);
 
-  const directions = useMemo(() => createSphereDirections(PARTICLE_COUNT), []);
-  const haloDirections = useMemo(() => createSphereDirections(HALO_PARTICLE_COUNT), []);
+  const directions = useMemo(() => createSphereDirections(particleCount), [particleCount]);
+  const haloDirections = useMemo(() => createSphereDirections(haloParticleCount), [haloParticleCount]);
 
   const primaryGeometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(PARTICLE_COUNT * 3), 3));
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(particleCount * 3), 3));
     return geo;
-  }, []);
+  }, [particleCount]);
 
   const secondaryGeometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(PARTICLE_COUNT * 3), 3));
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(particleCount * 3), 3));
     return geo;
-  }, []);
+  }, [particleCount]);
 
   const haloGeometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(HALO_PARTICLE_COUNT * 3), 3));
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(haloParticleCount * 3), 3));
     return geo;
-  }, []);
+  }, [haloParticleCount]);
 
   const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation();
@@ -168,7 +174,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
     );
     clickImpulseRef.current = Math.max(0, clickImpulseRef.current - delta * 2.8);
 
-    const kickEnergy = THREE.MathUtils.clamp(subEnergyRef.current * 2.6 + kickPulseRef.current * 1.4, 0, 2.8);
+    const kickEnergy = THREE.MathUtils.clamp(subEnergyRef.current * 1.7 + kickPulseRef.current * 0.85, 0, 1.9);
     const dragBoost = isDraggingRef.current ? 0.35 : 0;
 
     const dragX = THREE.MathUtils.clamp(state.pointer.x * 2.1, -2.4, 2.4);
@@ -214,13 +220,13 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
       const secondary = secondaryAttr.array as Float32Array;
 
       const waveAmp =
-        0.05
-        + kickEnergy * 0.13
-        + clickImpulseRef.current * 0.06
-        + hoverStrengthRef.current * 0.04
-        + kickPulseRef.current * 0.24;
+        0.035
+        + kickEnergy * 0.08
+        + clickImpulseRef.current * 0.03
+        + hoverStrengthRef.current * 0.02
+        + kickPulseRef.current * 0.14;
 
-      for (let i = 0; i < PARTICLE_COUNT; i += 1) {
+      for (let i = 0; i < particleCount; i += 1) {
         const ix = i * 3;
         const dx = directions[ix];
         const dy = directions[ix + 1];
@@ -261,9 +267,9 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
 
     if (haloAttr) {
       const halo = haloAttr.array as Float32Array;
-      const haloAmp = 0.04 + kickEnergy * 0.12 + kickPulseRef.current * 0.2;
+      const haloAmp = 0.028 + kickEnergy * 0.07 + kickPulseRef.current * 0.12;
 
-      for (let i = 0; i < HALO_PARTICLE_COUNT; i += 1) {
+      for (let i = 0; i < haloParticleCount; i += 1) {
         const ix = i * 3;
         const dx = haloDirections[ix];
         const dy = haloDirections[ix + 1];
@@ -281,8 +287,8 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
     }
 
     if (primaryMaterialRef.current) {
-      const targetSize = 0.018 + kickEnergy * 0.018 + kickPulseRef.current * 0.03;
-      const targetOpacity = 0.74 + kickEnergy * 0.22 + clickImpulseRef.current * 0.16 + kickPulseRef.current * 0.12;
+      const targetSize = 0.016 + kickEnergy * 0.011 + kickPulseRef.current * 0.015;
+      const targetOpacity = 0.68 + kickEnergy * 0.12 + clickImpulseRef.current * 0.08 + kickPulseRef.current * 0.06;
 
       primaryMaterialRef.current.size = THREE.MathUtils.lerp(
         primaryMaterialRef.current.size,
@@ -297,8 +303,8 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
     }
 
     if (secondaryMaterialRef.current) {
-      const targetSize = 0.0085 + kickEnergy * 0.008 + kickPulseRef.current * 0.005;
-      const targetOpacity = 0.3 + kickEnergy * 0.2 + kickPulseRef.current * 0.08;
+      const targetSize = 0.008 + kickEnergy * 0.0045 + kickPulseRef.current * 0.003;
+      const targetOpacity = 0.26 + kickEnergy * 0.11 + kickPulseRef.current * 0.05;
 
       secondaryMaterialRef.current.size = THREE.MathUtils.lerp(
         secondaryMaterialRef.current.size,
@@ -313,8 +319,8 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
     }
 
     if (haloMaterialRef.current) {
-      const targetSize = 0.0046 + kickEnergy * 0.005 + kickPulseRef.current * 0.013;
-      const targetOpacity = 0.08 + kickEnergy * 0.07 + hoverStrengthRef.current * 0.02 + kickPulseRef.current * 0.22;
+      const targetSize = 0.0043 + kickEnergy * 0.0025 + kickPulseRef.current * 0.007;
+      const targetOpacity = 0.07 + kickEnergy * 0.04 + hoverStrengthRef.current * 0.012 + kickPulseRef.current * 0.12;
 
       haloMaterialRef.current.size = THREE.MathUtils.lerp(
         haloMaterialRef.current.size,
@@ -329,7 +335,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
     }
 
     if (hitAreaRef.current) {
-      const targetScale = 1.05 + hoverStrengthRef.current * 0.06 + clickImpulseRef.current * 0.08;
+      const targetScale = 1.03 + hoverStrengthRef.current * 0.03 + clickImpulseRef.current * 0.04;
       hitAreaRef.current.scale.setScalar(targetScale);
     }
   });
@@ -341,10 +347,10 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
           <pointsMaterial
             ref={primaryMaterialRef}
             color="#0a0a0a"
-            size={0.018}
+            size={0.016}
             sizeAttenuation
             transparent
-            opacity={0.78}
+            opacity={0.7}
             blending={THREE.NormalBlending}
             depthWrite={false}
           />
@@ -354,7 +360,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
           <pointsMaterial
             ref={secondaryMaterialRef}
             color="#161616"
-            size={0.009}
+            size={0.008}
             sizeAttenuation
             transparent
             opacity={0.3}
@@ -366,7 +372,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef }) => {
           <pointsMaterial
             ref={haloMaterialRef}
             color="#1f1f1f"
-            size={0.0045}
+            size={0.0043}
             sizeAttenuation
             transparent
             opacity={0.08}

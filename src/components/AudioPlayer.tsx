@@ -141,7 +141,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       const analyser = context.createAnalyser();
 
       analyser.fftSize = 2048;
-      analyser.smoothingTimeConstant = 0.85;
+      analyser.smoothingTimeConstant = 0.94;
 
       source.connect(analyser);
       analyser.connect(context.destination);
@@ -218,7 +218,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             }
             const avg = sum / (end - start);
             const next = Math.max(14, Math.min(100, Math.round((avg / 255) * 100)));
-            return Math.round(value * 0.65 + next * 0.35);
+            return Math.round(value * 0.82 + next * 0.18);
           })
         );
       }
@@ -381,7 +381,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             </div>
             <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full bg-[#ff571a] transition-[width] duration-150"
+                className="h-full bg-[#ff571a] transition-[width] duration-250"
                 style={{ width: `${progress}%` }}
               />
             </div>

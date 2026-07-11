@@ -3,6 +3,7 @@ import pingParisImg from '../assets/images/regenerated_image_1782446553640.png';
 import arcReflexImg from '../assets/images/arc-reflex-project.png';
 import zedenImg from '../assets/images/zeden-project.jpg';
 import ofissImg from '../assets/images/OFISS.png';
+import atelierBergerBlueImg from '../assets/images/image_069-1-1.jpg';
 
 export const projectsData: Record<'fr' | 'en', Project[]> = {
   fr: [
@@ -21,7 +22,7 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       status: 'Prototype fonctionnel déployé',
       liveUrl: 'https://www.ateliersberger.com/',
       githubUrl: 'https://github.com/eliothantute/Atelier-Berger-Carte-Interactive-',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+      image: atelierBergerBlueImg,
       featured: true,
       isThreeD: true,
       coordinates: { lat: 48.8566, lng: 2.3522, locationName: 'Paris // Dubaï // Tokyo' },
@@ -133,7 +134,7 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       status: 'Deployed Functional Prototype',
       liveUrl: 'https://www.ateliersberger.com/',
       githubUrl: 'https://github.com/eliothantute/Atelier-Berger-Carte-Interactive-',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+      image: atelierBergerBlueImg,
       featured: true,
       isThreeD: true,
       coordinates: { lat: 48.8566, lng: 2.3522, locationName: 'Paris // Dubai // Tokyo' },

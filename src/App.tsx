@@ -5,6 +5,7 @@ import { CustomCursor } from './components/CustomCursor';
 import { Background3D } from './components/Background3D';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { CinematicVideoSection } from './components/CinematicVideoSection';
 import { ProjectCards } from './components/ProjectCards';
 import { AtelierGlobeSection } from './components/AtelierGlobeSection';
 import { AboutSection } from './components/AboutSection';
@@ -44,6 +45,28 @@ export default function App() {
 
       {/* Arrière-Plan Three.js Cinématique */}
       <Background3D analyserRef={analyserRef} />
+
+      <section className="sr-only" aria-label={lang === 'fr' ? 'Résumé des projets principaux' : 'Primary projects summary'}>
+        <h1>{lang === 'fr' ? 'Portfolio UI et développement front-end de Eliot Hantute' : 'UI design and front-end portfolio by Eliot Hantute'}</h1>
+        <ul>
+          {currentProjects.slice(0, 6).map((project) => (
+            <li key={`seo-${project.id}`}>
+              <h2>{project.title}</h2>
+              <p>{project.subtitle}</p>
+              {project.liveUrl && (
+                <a href={project.liveUrl} aria-label={`${lang === 'fr' ? 'Voir le projet' : 'View project'} ${project.title}`}>
+                  {lang === 'fr' ? 'Voir le projet' : 'View project'}
+                </a>
+              )}
+              {project.githubUrl && (
+                <a href={project.githubUrl} aria-label={`${lang === 'fr' ? 'Voir le code de' : 'View code for'} ${project.title}`}>
+                  {lang === 'fr' ? 'Voir le code' : 'View code'}
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
 
       {/* Calque de Bruit Cinématique Subtil */}
       <div className="cyber-noise" />
@@ -100,6 +123,8 @@ export default function App() {
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
+
+        <CinematicVideoSection lang={lang} />
 
         <ProjectModal
           project={selectedProject}
