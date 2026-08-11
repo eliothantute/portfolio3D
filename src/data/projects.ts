@@ -99,8 +99,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
     },
     {
       id: 'ofiss',
-      title: 'OFISS Architecture',
-      client: 'OFISS Studio',
+      title: 'OFISS Corworking Space',
+      client: 'Fictif',
       subtitle: 'Espace Digital & Identité Architecturale',
       description: "Vitrine interactive épurée conçue pour l'agence d'architecture et de design d'intérieur OFISS.",
       longDescription: "Conception d'une expérience digitale sur-mesure pour OFISS, retranscrivant la pureté des lignes, la précision spatiale et le dialogue des matières propres à l'identité du studio.",
@@ -110,11 +110,11 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       stack: ['React', 'Tailwind CSS', 'Motion', 'TypeScript', 'Vite'],
       objective: "Traduire la rigueur architecturale et le raffinement visuel de l'agence sur le support digital.",
       status: 'Projet Déployé',
+      liveUrl: 'https://www.figma.com/proto/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=28-4962&t=menLt33T2VzfGBdX-1',
       image: ofissImg,
       featured: true,
       metrics: [
-        { label: 'Esthétique', value: 'Minimaliste' },
-        { label: 'Fluidité', value: '60 FPS' }
+        { label: 'Esthétique', value: 'Minimaliste' }
       ]
     }
   ],
@@ -211,22 +211,22 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
     },
     {
       id: 'ofiss',
-      title: 'OFISS Architecture',
-      client: 'OFISS Studio',
+      title: 'OFISS Coworking Space',
+      client: 'Fictive',
       subtitle: 'Digital Space & Architectural Identity',
       description: "Refined interactive showcase tailored for interior architecture and design agency OFISS.",
       longDescription: "Crafting a bespoke digital experience for OFISS that reflects the studio's spatial precision, pure geometric lines, and dialogue between raw materials.",
       year: '2026',
-      category: 'Architecture & Design Showcase',
+      category: 'Branding & Design Showcase',
       role: ['Art Direction', 'UI/UX Architecture', 'Front-End Development'],
       stack: ['React', 'Tailwind CSS', 'Motion', 'TypeScript', 'Vite'],
       objective: "Translate the agency's architectural rigor and visual elegance into a seamless web experience.",
       status: 'Deployed Project',
+      liveUrl: 'https://www.figma.com/proto/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=28-4962&t=menLt33T2VzfGBdX-1',
       image: ofissImg,
       featured: true,
       metrics: [
-        { label: 'Aesthetics', value: 'Minimalist' },
-        { label: 'Performance', value: '60 FPS' }
+        { label: 'Aesthetics', value: 'Minimalist' }
       ]
     }
   ]

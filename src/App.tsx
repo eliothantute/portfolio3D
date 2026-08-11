@@ -7,7 +7,6 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CinematicVideoSection } from './components/CinematicVideoSection';
 import { ProjectCards } from './components/ProjectCards';
-import { AtelierGlobeSection } from './components/AtelierGlobeSection';
 import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
 import { AudioPlayer } from './components/AudioPlayer';
@@ -22,7 +21,6 @@ export default function App() {
   const analyserRef = useRef<AnalyserNode | null>(null);
 
   const currentProjects = projectsData[lang];
-  const atelierProject = currentProjects.find((p) => p.id === 'atelier-berger')!;
 
   const handleHoverItem = (text: string) => {
     setCursorText(text);
@@ -83,14 +81,6 @@ export default function App() {
 
         <Hero
           lang={lang}
-          onHoverItem={handleHoverItem}
-          onLeaveItem={handleLeaveItem}
-        />
-
-        <AtelierGlobeSection
-          project={atelierProject}
-          lang={lang}
-          onSelectProject={(project) => setSelectedProject(project)}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
