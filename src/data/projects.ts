@@ -4,6 +4,7 @@ import arcReflexImg from '../assets/images/arc-reflex-project.png';
 import zedenImg from '../assets/images/zeden-project.jpg';
 import ofissImg from '../assets/images/OFISS.png';
 import atelierBergerBlueImg from '../assets/images/image_069-1-1.jpg';
+import eloraImg from '../assets/images/hero.png';
 
 export const projectsData: Record<'fr' | 'en', Project[]> = {
   fr: [
@@ -30,6 +31,27 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'FPS Cible', value: '60 FPS' },
         { label: 'Particules 3D', value: '22,000+' },
         { label: 'Temps de réponse', value: '< 16ms' }
+      ]
+    },
+    {
+      id: 'elora',
+      title: 'Elora',
+      client: 'Elora',
+      subtitle: 'Site Vitrine sur Maquette Figma',
+      description: "Intégration front-end fidèle d'une maquette Figma conçue par le designer UI Dylan Rambinaising.",
+      longDescription: "Développement complet du site Elora à partir d'une maquette Figma détaillée, réalisée par le designer UI Dylan Rambinaising. Un travail de collaboration étroite entre design et développement pour retranscrire fidèlement chaque interaction, espacement et micro-détail visuel de la maquette dans une expérience web performante.",
+      year: '2026',
+      category: 'Intégration Web & Collaboration Design',
+      role: ['Développement Front-End', 'Intégration Figma vers Code', 'Responsive Design'],
+      stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Figma'],
+      objective: "Traduire fidèlement une maquette Figma en un site web réactif et performant, en étroite collaboration avec le designer UI.",
+      status: 'En ligne',
+      liveUrl: 'https://elora-sitev3.vercel.app/',
+      image: eloraImg,
+      featured: false,
+      metrics: [
+        { label: 'Rôle', value: 'Développeur' },
+        { label: 'Design UI', value: 'Dylan Rambinaising' }
       ]
     },
     {
@@ -142,6 +164,27 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'Target FPS', value: '60 FPS' },
         { label: '3D Particles', value: '22,000+' },
         { label: 'Frame Time', value: '< 16ms' }
+      ]
+    },
+    {
+      id: 'elora',
+      title: 'Elora',
+      client: 'Elora',
+      subtitle: 'Showcase Site from Figma Design',
+      description: "Pixel-faithful front-end build of a Figma design crafted by UI designer Dylan Rambinaising.",
+      longDescription: "Full development of the Elora website from a detailed Figma design created by UI designer Dylan Rambinaising. A close collaboration between design and development to faithfully translate every interaction, spacing rule, and visual micro-detail into a performant web experience.",
+      year: '2026',
+      category: 'Web Integration & Design Collaboration',
+      role: ['Front-End Development', 'Figma-to-Code Integration', 'Responsive Design'],
+      stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Figma'],
+      objective: "Faithfully translate a Figma design into a responsive, high-performance website in close collaboration with the UI designer.",
+      status: 'Live',
+      liveUrl: 'https://elora-sitev3.vercel.app/',
+      image: eloraImg,
+      featured: false,
+      metrics: [
+        { label: 'Role', value: 'Developer' },
+        { label: 'UI Design', value: 'Dylan Rambinaising' }
       ]
     },
     {
