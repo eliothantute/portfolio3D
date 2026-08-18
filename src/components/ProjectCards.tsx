@@ -133,32 +133,49 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         setIsHovered(false);
         onLeave?.();
       }}
+      onPointerMove={(event) => {
+        const bounds = event.currentTarget.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+        const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+        event.currentTarget.style.setProperty('--card-pointer-x', `${x}%`);
+        event.currentTarget.style.setProperty('--card-pointer-y', `${y}%`);
+        event.currentTarget.style.setProperty('--card-rotate-x', `${(50 - y) * 0.08}deg`);
+        event.currentTarget.style.setProperty('--card-rotate-y', `${(x - 50) * 0.08}deg`);
+      }}
+      onPointerLeave={(event) => {
+        event.currentTarget.style.setProperty('--card-pointer-x', '50%');
+        event.currentTarget.style.setProperty('--card-pointer-y', '50%');
+        event.currentTarget.style.setProperty('--card-rotate-x', '0deg');
+        event.currentTarget.style.setProperty('--card-rotate-y', '0deg');
+      }}
       onClick={onClick}
       className="group cursor-pointer rounded-[26px]"
     >
-      <div className="relative overflow-hidden rounded-[26px] bg-slate-100">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="aspect-[16/10] h-full w-full object-cover transition-[transform,filter] duration-700 ease-[var(--ease-standard)] group-hover:scale-[1.14] group-hover:-translate-y-2 group-hover:rotate-[-1deg] group-hover:saturate-110 group-hover:contrast-105"
-        />
-        {project.video && (
-          <video
-            src={project.video}
-            muted
-            loop
-            autoPlay={isHovered}
-            playsInline
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 aspect-[16/10] h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+      <div className="project-card-surface">
+        <div className="relative overflow-hidden rounded-[26px] bg-slate-100">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="aspect-[16/10] h-full w-full object-cover transition-[transform,filter] duration-700 ease-[var(--ease-standard)] group-hover:scale-[1.14] group-hover:-translate-y-2 group-hover:rotate-[-1deg] group-hover:saturate-110 group-hover:contrast-105"
           />
-        )}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(15,23,42,0.08)_56%,rgba(15,23,42,0.34)_100%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-        <div className="absolute inset-x-0 bottom-0 h-24 translate-y-5 bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.14)_18%,rgba(255,255,255,0.02)_100%)] opacity-0 blur-[2px] transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100" />
-        <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10" />
-      </div>
+          {project.video && (
+            <video
+              src={project.video}
+              muted
+              loop
+              autoPlay={isHovered}
+              playsInline
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 aspect-[16/10] h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            />
+          )}
+          <div className="project-card-sheen" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(15,23,42,0.08)_56%,rgba(15,23,42,0.34)_100%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+          <div className="absolute inset-x-0 bottom-0 h-24 translate-y-5 bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.14)_18%,rgba(255,255,255,0.02)_100%)] opacity-0 blur-[2px] transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100" />
+          <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10" />
+        </div>
 
-      <div className="mt-4 sm:mt-5">
+        <div className="mt-4 sm:mt-5">
         <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-600 opacity-80 transition-[transform,opacity] duration-300 group-hover:-translate-y-0.5 group-hover:opacity-100">
           {meta}
         </div>
@@ -177,6 +194,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </p>
         <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500">
           {project.year} • {project.status}
+        </div>
         </div>
       </div>
     </motion.article>
