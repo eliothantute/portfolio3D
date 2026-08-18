@@ -157,6 +157,92 @@
   will-change: transform, opacity;
 }
 
+.projects-orbit-shell {
+  position: relative;
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+  padding-inline: max(1rem, calc((100vw - 1440px) / 2 + 1rem));
+  overscroll-behavior: contain;
+}
+
+.projects-orbit-stage {
+  position: relative;
+  height: 560px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.projects-orbit-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(74vw, 620px);
+  transform: translate(-50%, -50%) translate3d(var(--orbit-x), 0, var(--orbit-z)) rotateY(var(--orbit-rotate)) scale(var(--orbit-scale));
+  transform-style: preserve-3d;
+  transition: transform 620ms var(--ease-standard), opacity 620ms var(--ease-standard);
+  will-change: transform;
+}
+
+.projects-orbit-slide .group {
+  height: 100%;
+  padding: 0.25rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 16px 44px rgba(23, 33, 59, 0.1);
+  transition: transform 360ms var(--ease-standard), box-shadow 360ms var(--ease-standard);
+}
+
+.projects-orbit-slide .group:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 64px rgba(23, 33, 59, 0.18);
+}
+
+.projects-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0 0.25rem;
+}
+
+.projects-carousel-arrow {
+  display: inline-flex;
+  height: 42px;
+  width: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text);
+  font-size: 1.1rem;
+  transition: transform 220ms var(--ease-standard), background-color 220ms var(--ease-standard);
+}
+
+.projects-carousel-arrow:hover {
+  background: white;
+  transform: scale(1.08);
+}
+
+.projects-carousel-caption {
+  margin-inline: auto 0.5rem;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+@media (min-width: 1024px) {
+  .projects-orbit-stage {
+    height: 660px;
+  }
+
+  .projects-orbit-slide {
+    width: min(54vw, 760px);
+  }
+}
+
 .landing-intro-controls {
   position: fixed;
   bottom: 10vh;
