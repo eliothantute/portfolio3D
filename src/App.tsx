@@ -18,6 +18,7 @@ export default function App() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isIntroActive, setIsIntroActive] = useState(true);
   const analyserRef = useRef<AnalyserNode | null>(null);
 
   const currentProjects = projectsData[lang];
@@ -42,7 +43,25 @@ export default function App() {
       <CustomCursor cursorText={cursorText} isHovered={isHovered} />
 
       {/* Arrière-Plan Three.js Cinématique */}
-      <Background3D analyserRef={analyserRef} />
+      <Background3D
+        analyserRef={analyserRef}
+        isIntroActive={isIntroActive}
+      />
+
+      {isIntroActive && (
+        <div className="landing-intro-controls">
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/60">
+            Explore the terrarium
+          </p>
+          <button
+            type="button"
+            onClick={() => setIsIntroActive(false)}
+            className="landing-enter-button"
+          >
+            Entrer dans le portfolio
+          </button>
+        </div>
+      )}
 
       <section className="sr-only" aria-label={lang === 'fr' ? 'Résumé des projets principaux' : 'Primary projects summary'}>
         <h1>{lang === 'fr' ? 'Portfolio UI et développement front-end de Eliot Lab' : 'UI design and front-end portfolio by Eliot Lab'}</h1>

@@ -14,6 +14,7 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   image: string;
+  video?: string;
   featured?: boolean;
   isThreeD?: boolean;
   coordinates?: { lat: number; lng: number; locationName: string };

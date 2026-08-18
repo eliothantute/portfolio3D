@@ -11,8 +11,9 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ cursorText, isHovere
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    // Vérifier si desktop
-    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    const checkDesktop = () => {
+      setIsDesktop(window.matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)').matches);
+    };
     checkDesktop();
     window.addEventListener('resize', checkDesktop);
 

@@ -86,6 +86,28 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ lang, onHoverIte
             </a>
           ))}
         </div>
+
+        <p className="mx-auto mt-12 max-w-2xl text-[10px] leading-relaxed text-slate-400">
+          Landing 3D based on{' '}
+          <a
+            href="https://sketchfab.com/3d-models/smol-ame-in-an-upcycled-terrarium-hololiveen-490ccce249d242188fda5ad3160a4b24"
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-slate-300 underline-offset-2 hover:text-slate-600"
+          >
+            “Smol Ame in an Upcycled Terrarium”
+          </a>{' '}
+          by{' '}
+          <a
+            href="https://sketchfab.com/seafoam"
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-slate-300 underline-offset-2 hover:text-slate-600"
+          >
+            Seafoam
+          </a>{' '}
+          under CC-BY-4.0.
+        </p>
       </div>
     </section>
   );

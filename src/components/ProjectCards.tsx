@@ -1,5 +1,25 @@
 import React, { useMemo, useState } from 'react';
+import { motion, type Variants } from 'framer-motion';
 import { Project, Language } from '../types';
+
+const cardRevealVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      delay: index * 0.12, // 120ms between cards; adjust this for a faster/slower cascade.
+      ease: [0.22, 0.61, 0.36, 1],
+    },
+  }),
+};
+
+const cardHoverTransition = {
+  type: 'spring' as const,
+  stiffness: 260,
+  damping: 20,
+};
 
 const renderStaggeredTitle = (text: string, baseDelay = 0) =>
   text.split('').map((character, index) => (
@@ -67,10 +87,11 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
               isSelected={idx === selectedIdx}
               onHover={() => {
                 setSelectedIdx(idx);
-                onHoverItem?.('OPEN');
+                onHoverItem?.(lang === 'fr' ? 'VOIR LE PROJET' : 'VIEW PROJECT');
               }}
               onLeave={onLeaveItem}
               onClick={() => handleCardClick(project, idx)}
+              index={idx}
             />
           ))}
         </div>
@@ -86,41 +107,71 @@ interface ProjectCardProps {
   onHover: () => void;
   onLeave?: () => void;
   onClick: () => void;
+  index: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({
+export const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   lang,
   isSelected,
   onHover,
   onLeave,
   onClick,
+  index,
 }) => {
   const meta = `${project.stack.slice(0, 4).join(' • ')}`;
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <article
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
+    <motion.article
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.18 }}
+      variants={cardRevealVariants}
+      whileHover={{
+        scale: 1.035,
+        boxShadow: '0 26px 60px rgba(23, 33, 59, 0.18)',
+      }}
+      transition={cardHoverTransition}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        onHover();
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        onLeave?.();
+      }}
       onClick={onClick}
-      className="group cursor-pointer"
+      className="group cursor-pointer rounded-[26px]"
     >
       <div className="relative overflow-hidden rounded-[26px] bg-slate-100">
         <img
           src={project.image}
           alt={project.title}
-            className="aspect-[16/10] h-full w-full object-cover transition-[transform,filter] duration-700 ease-[var(--ease-standard)] group-hover:scale-[1.14] group-hover:-translate-y-2 group-hover:rotate-[-1deg] group-hover:saturate-110 group-hover:contrast-105"
+          className="aspect-[16/10] h-full w-full object-cover transition-[transform,filter] duration-700 ease-[var(--ease-standard)] group-hover:scale-[1.14] group-hover:-translate-y-2 group-hover:rotate-[-1deg] group-hover:saturate-110 group-hover:contrast-105"
         />
+        {project.video && (
+          <video
+            src={project.video}
+            muted
+            loop
+            autoPlay={isHovered}
+            playsInline
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 aspect-[16/10] h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          />
+        )}
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(15,23,42,0.08)_56%,rgba(15,23,42,0.34)_100%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
         <div className="absolute inset-x-0 bottom-0 h-24 translate-y-5 bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.14)_18%,rgba(255,255,255,0.02)_100%)] opacity-0 blur-[2px] transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100" />
         <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10" />
       </div>
 
       <div className="mt-4 sm:mt-5">
-        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-600">
+        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-600 opacity-80 transition-[transform,opacity] duration-300 group-hover:-translate-y-0.5 group-hover:opacity-100">
           {meta}
         </div>
-        <h3 className="flex items-baseline gap-3 text-[2rem] font-medium leading-none tracking-tight text-[#15161a] transition-transform duration-500 ease-[var(--ease-standard)] group-hover:translate-x-4 sm:text-[3.15rem]">
+        <h3 className="flex items-baseline gap-3 text-[2rem] font-medium leading-none tracking-tight text-[#15161a] transition-[transform,opacity] duration-500 ease-[var(--ease-standard)] group-hover:-translate-y-0.5 group-hover:translate-x-4 sm:text-[3.15rem]">
           <span
             className={`text-[2rem] leading-none transition-all duration-300 ease-[var(--ease-standard)] sm:text-[3rem] ${
               isSelected ? 'opacity-100' : 'opacity-25 group-hover:opacity-65'
@@ -139,6 +190,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           {project.year} • {project.status}
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };
