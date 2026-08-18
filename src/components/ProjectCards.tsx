@@ -58,7 +58,7 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
   onLeaveItem,
 }) => {
   const featuredProjects = useMemo(() => projects.slice(0, Math.min(6, projects.length)), [projects]);
-  const [selectedIdx, setSelectedIdx] = useState(() => Math.max(0, featuredProjects.length - 1));
+  const [selectedIdx, setSelectedIdx] = useState(0);
   const lastWheelAt = useRef(0);
 
   const handleCardClick = (project: Project, index: number) => {
