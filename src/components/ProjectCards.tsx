@@ -80,7 +80,7 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
   return (
     <section
       id="projects"
-      className="relative z-10 overflow-hidden border-t border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f4f7fd_100%)] py-16 sm:py-20"
+      className="relative z-10 overflow-hidden border-t border-slate-200 bg-white py-16 sm:py-20"
     >
       <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-10">
         <div className="mb-10 flex items-end justify-between gap-6 sm:mb-12">
@@ -101,24 +101,29 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
           <div className="projects-orbit-stage" aria-label={lang === 'fr' ? 'Carousel orbital des projets. Faites défiler pour changer de projet.' : 'Orbital project carousel. Scroll to change project.'}>
           {featuredProjects.map((project, idx) => {
             const offset = getOrbitOffset(idx, selectedIdx, featuredProjects.length);
-            const visible = Math.abs(offset) <= 2;
-            const angle = offset * 0.58;
-            const x = Math.sin(angle) * 330;
-            const z = Math.cos(angle) * 260 - 260;
-            const rotationY = -angle * 0.72;
-            const scale = offset === 0 ? 1 : Math.max(0.62, 1 - Math.abs(offset) * 0.13);
+            const visible = Math.abs(offset) <= 1;
+            const orbitRadius = Math.min(window.innerWidth * 0.44, 500);
+            const x = offset * orbitRadius;
+            const z = offset === 0 ? 0 : -150;
+            const y = offset === 0 ? 0 : 18;
+            const rotationY = offset * -0.3;
+            const scale = offset === 0 ? 1 : 0.74;
 
             return visible ? (
-            <div
+            <motion.div
               className="projects-orbit-slide"
               key={`${project.id}-${idx}`}
-              style={{
-                '--orbit-x': `${x}px`,
-                '--orbit-z': `${z}px`,
-                '--orbit-rotate': `${rotationY}rad`,
-                '--orbit-scale': scale,
-                zIndex: 10 - Math.abs(offset),
-              } as React.CSSProperties}
+              animate={{
+                x,
+                y,
+                z,
+                rotateY: rotationY,
+                scale,
+                opacity: offset === 0 ? 1 : 0.76,
+              }}
+              transition={{ type: 'spring', stiffness: 125, damping: 19, mass: 0.85 }}
+              transformTemplate={(_, generatedTransform) => `translate(-50%, -50%) ${generatedTransform}`}
+              style={{ zIndex: 10 - Math.abs(offset) }}
               onClick={() => {
                 if (offset !== 0) setSelectedIdx(idx);
               }}
@@ -134,7 +139,7 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
                 onClick={() => handleCardClick(project, idx)}
                 index={idx}
               />
-            </div>
+            </motion.div>
             ) : null;
           })}
           </div>

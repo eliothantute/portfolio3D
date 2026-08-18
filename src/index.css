@@ -167,19 +167,19 @@
 
 .projects-orbit-stage {
   position: relative;
-  height: 560px;
+  height: 650px;
   perspective: 1200px;
   transform-style: preserve-3d;
+  overflow: visible;
 }
 
 .projects-orbit-slide {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(74vw, 620px);
-  transform: translate(-50%, -50%) translate3d(var(--orbit-x), 0, var(--orbit-z)) rotateY(var(--orbit-rotate)) scale(var(--orbit-scale));
+  width: min(58vw, 520px);
+  transform: translate(-50%, -50%);
   transform-style: preserve-3d;
-  transition: transform 620ms var(--ease-standard), opacity 620ms var(--ease-standard);
   will-change: transform;
 }
 
@@ -190,6 +190,10 @@
   background: rgba(255, 255, 255, 0.66);
   box-shadow: 0 16px 44px rgba(23, 33, 59, 0.1);
   transition: transform 360ms var(--ease-standard), box-shadow 360ms var(--ease-standard);
+}
+
+.projects-orbit-slide img {
+  aspect-ratio: 1 / 1;
 }
 
 .projects-orbit-slide .group:hover {
@@ -235,11 +239,21 @@
 
 @media (min-width: 1024px) {
   .projects-orbit-stage {
-    height: 660px;
+    height: 680px;
   }
 
   .projects-orbit-slide {
-    width: min(54vw, 760px);
+    width: min(48vw, 560px);
+  }
+}
+
+@media (max-width: 767px) {
+  .projects-orbit-stage {
+    height: 560px;
+  }
+
+  .projects-orbit-slide {
+    width: min(72vw, 380px);
   }
 }
 
