@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { Project, Language } from '../types';
 
@@ -19,13 +19,6 @@ const cardHoverTransition = {
   type: 'spring' as const,
   stiffness: 260,
   damping: 20,
-};
-
-const getOrbitOffset = (index: number, activeIndex: number, total: number) => {
-  let offset = index - activeIndex;
-  if (offset > total / 2) offset -= total;
-  if (offset < -total / 2) offset += total;
-  return offset;
 };
 
 const renderStaggeredTitle = (text: string, baseDelay = 0) =>
@@ -58,24 +51,6 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
   onLeaveItem,
 }) => {
   const featuredProjects = useMemo(() => projects.slice(0, Math.min(6, projects.length)), [projects]);
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const lastWheelAt = useRef(0);
-
-  const handleCardClick = (project: Project, index: number) => {
-    setSelectedIdx(index);
-    onSelectProject(project);
-  };
-
-  const scrollProjects = (direction: number) => {
-    setSelectedIdx((current) => (current + direction + featuredProjects.length) % featuredProjects.length);
-  };
-
-  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    const now = Date.now();
-    if (now - lastWheelAt.current < 420 || Math.abs(event.deltaY) < 12) return;
-    lastWheelAt.current = now;
-    scrollProjects(event.deltaY > 0 ? 1 : -1);
-  };
 
   return (
     <section
@@ -97,52 +72,21 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
           </div>
         </div>
 
-        <div className="projects-orbit-shell" onWheel={handleWheel}>
-          <div className="projects-orbit-stage" aria-label={lang === 'fr' ? 'Carousel orbital des projets. Faites défiler pour changer de projet.' : 'Orbital project carousel. Scroll to change project.'}>
-          {featuredProjects.map((project, idx) => {
-            const offset = getOrbitOffset(idx, selectedIdx, featuredProjects.length);
-            const visible = Math.abs(offset) <= 2;
-            const angle = offset * 0.58;
-            const x = Math.sin(angle) * 330;
-            const z = Math.cos(angle) * 260 - 260;
-            const rotationY = -angle * 0.72;
-            const scale = offset === 0 ? 1 : Math.max(0.62, 1 - Math.abs(offset) * 0.13);
-
-            return visible ? (
-            <div
-              className="projects-orbit-slide"
-              key={`${project.id}-${idx}`}
-              style={{
-                '--orbit-x': `${x}px`,
-                '--orbit-z': `${z}px`,
-                '--orbit-rotate': `${rotationY}rad`,
-                '--orbit-scale': scale,
-                zIndex: 10 - Math.abs(offset),
-              } as React.CSSProperties}
-              onClick={() => {
-                if (offset !== 0) setSelectedIdx(idx);
-              }}
-            >
+        <div className="projects-grid">
+          {featuredProjects.map((project, idx) => (
+            <div key={`${project.id}-${idx}`}>
               <ProjectCard
                 project={project}
                 lang={lang}
-                isSelected={idx === selectedIdx}
                 onHover={() => {
                   onHoverItem?.(lang === 'fr' ? 'VOIR LE PROJET' : 'VIEW PROJECT');
                 }}
                 onLeave={onLeaveItem}
-                onClick={() => handleCardClick(project, idx)}
+                onClick={() => onSelectProject(project)}
                 index={idx}
               />
             </div>
-            ) : null;
-          })}
-          </div>
-          <div className="projects-carousel-controls">
-            <button type="button" className="projects-carousel-arrow" onClick={() => scrollProjects(-1)} aria-label={lang === 'fr' ? 'Projets précédents' : 'Previous projects'}>←</button>
-            <span className="projects-carousel-caption">{lang === 'fr' ? 'Faire défiler pour explorer' : 'Scroll to explore'}</span>
-            <button type="button" className="projects-carousel-arrow" onClick={() => scrollProjects(1)} aria-label={lang === 'fr' ? 'Projets suivants' : 'Next projects'}>→</button>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -152,7 +96,6 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
 interface ProjectCardProps {
   project: Project;
   lang: Language;
-  isSelected: boolean;
   onHover: () => void;
   onLeave?: () => void;
   onClick: () => void;
@@ -162,7 +105,6 @@ interface ProjectCardProps {
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   lang,
-  isSelected,
   onHover,
   onLeave,
   onClick,
@@ -222,9 +164,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
         <h3 className="flex items-baseline gap-3 text-[2rem] font-medium leading-none tracking-tight text-[#15161a] transition-[transform,opacity] duration-500 ease-[var(--ease-standard)] group-hover:-translate-y-0.5 group-hover:translate-x-4 sm:text-[3.15rem]">
           <span
-            className={`text-[2rem] leading-none transition-all duration-300 ease-[var(--ease-standard)] sm:text-[3rem] ${
-              isSelected ? 'opacity-100' : 'opacity-25 group-hover:opacity-65'
-            }`}
+            className="text-[2rem] leading-none opacity-100 transition-all duration-300 ease-[var(--ease-standard)] sm:text-[3rem]"
           >
             →
           </span>
