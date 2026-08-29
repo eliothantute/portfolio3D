@@ -138,13 +138,15 @@ export const Background3D: React.FC<Background3DProps> = ({ analyserRef }) => {
   return (
     <div className="pointer-events-none fixed inset-0 z-0 h-screen w-screen overflow-hidden">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 50 }}
+        camera={{ position: [0, 0, 6], fov: 48 }}
         dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
       >
-        <ambientLight intensity={0.6} />
+        <ambientLight intensity={0.7} />
         <SpaceWorldParticles />
-        <AudioSphere analyserRef={analyserRef} quality="high" />
+        <group position={[0, 0.1, -4.5]} scale={1.25}>
+          <AudioSphere analyserRef={analyserRef} quality="high" />
+        </group>
       </Canvas>
     </div>
   );

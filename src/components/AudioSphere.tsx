@@ -380,11 +380,11 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
         <points ref={pointsPrimaryRef} geometry={primaryGeometry}>
           <pointsMaterial
             ref={primaryMaterialRef}
-            color="#0a0a0a"
-            size={0.016}
+            color="#0066ff"
+            size={0.012}
             sizeAttenuation
             transparent
-            opacity={0.7}
+            opacity={0.35}
             blending={THREE.NormalBlending}
             depthWrite={false}
           />
@@ -393,11 +393,11 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
         <points ref={pointsSecondaryRef} geometry={secondaryGeometry}>
           <pointsMaterial
             ref={secondaryMaterialRef}
-            color="#161616"
-            size={0.008}
+            color="#6366f1"
+            size={0.007}
             sizeAttenuation
             transparent
-            opacity={0.3}
+            opacity={0.22}
             depthWrite={false}
           />
         </points>
@@ -405,11 +405,11 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
         <points ref={pointsHaloRef} geometry={haloGeometry}>
           <pointsMaterial
             ref={haloMaterialRef}
-            color="#1f1f1f"
-            size={0.0043}
+            color="#93c5fd"
+            size={0.004}
             sizeAttenuation
             transparent
-            opacity={0.08}
+            opacity={0.12}
             blending={THREE.NormalBlending}
             depthWrite={false}
           />
