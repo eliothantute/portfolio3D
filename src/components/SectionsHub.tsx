@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
-import { skillsCategories } from '../data/projects';
 import { InteractiveText } from './InteractiveText';
 import { VelocityCarousel } from './VelocityCarousel';
+import { SkillsVelocityCarousel } from './SkillsVelocityCarousel';
 import { Resume3D } from './Resume3D';
 import { ContactSection } from './ContactSection';
 
@@ -37,6 +37,21 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     }));
   };
 
+  const handleSelectSkill = (skillType: SkillType) => {
+    setSelectedSkillFilter(skillType);
+    setOpenSections((prev) => ({
+      ...prev,
+      projects: true,
+    }));
+    // Scroll to projects section smoothly
+    setTimeout(() => {
+      const el = document.getElementById('projects');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
+  };
+
   // Filtered projects according to active skill type
   const filteredProjects = projects.filter((p) => {
     if (selectedSkillFilter === 'all') return true;
@@ -51,8 +66,8 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       title: lang === 'fr' ? 'Compétences & Stack' : 'Skills & Stack',
       desc:
         lang === 'fr'
-          ? 'Front-End, Design UI/UX et Applications & IA présentés directement'
-          : 'Front-End, UI/UX Design and Applications & AI presented directly',
+          ? 'Front-End, Design UI/UX et Applications & IA en carrousel 3D'
+          : 'Front-End, UI/UX Design and Applications & AI in 3D carousel',
     },
     {
       key: 'projects',
@@ -141,86 +156,15 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                     transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden pt-8"
                   >
-                    {/* SECTION 01: DIRECT SKILLS PRESENTATION */}
+                    {/* SECTION 01: 3D SKILLS VELOCITY CAROUSEL (Identical in style to Project Cards) */}
                     {sec.key === 'skills' && (
-                      <div className="flex flex-col gap-8 pb-6">
-                        <div className="grid gap-6 md:grid-cols-3">
-                          {skillsCategories.map((cat) => {
-                            const isSelected = selectedSkillFilter === cat.type;
-
-                            return (
-                              <motion.div
-                                key={cat.type}
-                                whileHover={{ y: -6, scale: 1.02 }}
-                                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                onClick={() => {
-                                  setSelectedSkillFilter(cat.type);
-                                  // Open projects section if closed
-                                  setOpenSections((prev) => ({ ...prev, projects: true }));
-                                }}
-                                className={`sneaks-card relative flex flex-col justify-between rounded-3xl p-6 cursor-pointer border transition-all duration-300 ${
-                                  isSelected
-                                    ? 'border-zinc-950 bg-white shadow-xl ring-2 ring-zinc-950/10'
-                                    : 'border-zinc-200/80 bg-zinc-50/50 hover:bg-white hover:border-zinc-300 shadow-sm'
-                                }`}
-                              >
-                                <div>
-                                  {/* Header Badge */}
-                                  <div className="flex items-center justify-between">
-                                    <span className="rounded-full bg-zinc-900 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white">
-                                      {cat.type === 'frontend'
-                                        ? 'FRONT-END'
-                                        : cat.type === 'design'
-                                        ? 'DESIGN'
-                                        : 'APP'}
-                                    </span>
-                                    <span className="font-mono text-xs font-semibold text-zinc-400">
-                                      {cat.projectIds.length} {lang === 'fr' ? 'projets' : 'projects'}
-                                    </span>
-                                  </div>
-
-                                  {/* Title & Description */}
-                                  <h3 className="font-display mt-4 text-2xl font-bold text-zinc-950">
-                                    {cat.title[lang]}
-                                  </h3>
-                                  <p className="mt-1 font-mono text-xs font-semibold text-blue-600">
-                                    {cat.subtitle[lang]}
-                                  </p>
-                                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-zinc-600">
-                                    {cat.description[lang]}
-                                  </p>
-                                </div>
-
-                                {/* Skills Tags List */}
-                                <div className="mt-6">
-                                  <div className="flex flex-wrap gap-1.5 border-t border-zinc-200/80 pt-4">
-                                    {cat.skills.map((skill, sIdx) => (
-                                      <span
-                                        key={sIdx}
-                                        className="rounded-lg bg-zinc-100 px-2.5 py-1 font-mono text-[10px] font-medium text-zinc-800"
-                                      >
-                                        {skill}
-                                      </span>
-                                    ))}
-                                  </div>
-
-                                  {/* Action CTA: Filter projects */}
-                                  <button
-                                    type="button"
-                                    className="mt-5 inline-flex w-full items-center justify-between rounded-xl bg-zinc-950 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-blue-600"
-                                  >
-                                    <span>
-                                      {lang === 'fr'
-                                        ? `Voir les projets ${cat.type.toUpperCase()}`
-                                        : `View ${cat.type.toUpperCase()} Projects`}
-                                    </span>
-                                    <span>→</span>
-                                  </button>
-                                </div>
-                              </motion.div>
-                            );
-                          })}
-                        </div>
+                      <div className="flex flex-col pb-6">
+                        <SkillsVelocityCarousel
+                          lang={lang}
+                          onSelectSkill={handleSelectSkill}
+                          onHoverItem={onHoverItem}
+                          onLeaveItem={onLeaveItem}
+                        />
                       </div>
                     )}
 
