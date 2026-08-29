@@ -15,7 +15,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Carte interactive WebGL/Three.js présentant les réalisations d'architecture intérieure et de joaillerie de prestige à travers le monde.",
       longDescription: "Refonte complète de l'expérience de découverte des projets de l'Atelier Berger. Au lieu d'une grille classique, les visiteurs explorent un globe planétaire interactif en 3D généré procéduralement avec des lumières volumétriques et des orbites lumineuses géolocalisées.",
       year: '2026',
-      category: 'Prototype IA & WebGL 3D',
+      category: 'Front-End // WebGL 3D',
+      skillType: 'frontend',
       role: ['Direction Artificielle IA', 'Architecture Three.js', 'UI/UX Design', 'Intégration React'],
       stack: ['React 19', 'Three.js', 'React Globe GL', 'Tailwind CSS', 'Vite', 'Motion'],
       objective: "Sublimer le rayonnement international de l'agence à travers une navigation spatiale intuitive et mémorable.",
@@ -40,7 +41,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Intégration front-end fidèle d'une maquette Figma conçue par le designer UI Dylan Rambinaising.",
       longDescription: "Développement complet du site Elora à partir d'une maquette Figma détaillée, réalisée par le designer UI Dylan Rambinaising. Un travail de collaboration étroite entre design et développement pour retranscrire fidèlement chaque interaction, espacement et micro-détail visuel de la maquette dans une expérience web performante.",
       year: '2026',
-      category: 'Intégration Web & Collaboration Design',
+      category: 'Design // Figma vers Code',
+      skillType: 'design',
       role: ['Développement Front-End', 'Intégration Figma vers Code', 'Responsive Design'],
       stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Figma'],
       objective: "Traduire fidèlement une maquette Figma en un site web réactif et performant, en étroite collaboration avec le designer UI.",
@@ -61,7 +63,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Site vitrine pour un agent vocal IA souverain français capable de piloter un ordinateur par la voix.",
       longDescription: "Création de l'identité visuelle et intégration front-end du site NARI, un agent vocal autonome orchestrant plusieurs IA. Direction artistique spatiale et sobre (fond galactique, typographie condensée) pour incarner une technologie souveraine française premium, avec structure d'offres mensuelle et à vie.",
       year: '2026',
-      category: 'Brand Design & Landing Page SaaS',
+      category: 'Design // Brand & UI/UX',
+      skillType: 'design',
       role: ['Brand Design', 'Développement Front-End', 'UI/UX'],
       stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
       objective: "Traduire la promesse d'une IA vocale souveraine et premium en une expérience web sobre et crédible.",
@@ -82,7 +85,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Application mobile interactive pour localiser instantanément les tables de tennis de table à Paris avec météo en temps réel.",
       longDescription: "Ping Paris résout la frustration des joueurs urbains en agrégeant l'ensemble des tables de ping-pong de la capitale sur une carte dynamique Leaflet synchronisée avec l'API Open-Meteo pour anticiper le vent et la pluie avant chaque partie.",
       year: '2026',
-      category: 'Application Mobile & PWA',
+      category: 'App // Mobile & PWA',
+      skillType: 'app',
       role: ['Product Design', 'Développement Front-End', 'Intégration API Cartographique'],
       stack: ['React', 'Leaflet Map', 'Open-Meteo API', 'PWA', 'Tailwind CSS', 'Geolocation'],
       objective: "Offrir un utilitaire urbain ultra-rapide, géolocalisé et consultable directement sur smartphone en plein air.",
@@ -105,7 +109,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Site vitrine premium pour un logiciel desktop de prospection multicanale WhatsApp & SMS, avec simulateur d'interface intégré.",
       longDescription: "Conception de l'identité de marque et développement front-end complet de la landing page Hazi Whatsapp. Le site met en scène un simulateur d'interface desktop interactif directement dans le navigateur, une esthétique cyber-green immersive et une structure de conversion pensée pour une offre de licence à vie.",
       year: '2026',
-      category: 'Brand Design & Landing Page SaaS',
+      category: 'App // Logiciel Desktop & IA',
+      skillType: 'app',
       role: ['Brand Design', 'Développement Front-End', 'UI/UX', 'Stratégie de Conversion'],
       stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
       objective: "Installer une identité de marque forte et crédible pour transformer les visiteurs en acheteurs de licence.",
@@ -128,7 +133,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "WebGL/Three.js interactive experience showcasing luxury interior architecture and high jewellery projects worldwide.",
       longDescription: "A complete redesign of Atelier Berger's portfolio showcase. Replacing standard grids with a live procedural 3D planetary globe featuring volumetric lighting and geolocated orbital glows.",
       year: '2026',
-      category: 'AI Prototype & WebGL 3D',
+      category: 'Front-End // WebGL 3D',
+      skillType: 'frontend',
       role: ['AI Art Direction', 'Three.js Engineering', 'UI/UX Design', 'React Integration'],
       stack: ['React 19', 'Three.js', 'React Globe GL', 'Tailwind CSS', 'Vite', 'Motion'],
       objective: "Elevate the agency's global prestige through intuitive, cinematic spatial navigation.",
@@ -153,7 +159,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Pixel-faithful front-end build of a Figma design crafted by UI designer Dylan Rambinaising.",
       longDescription: "Full development of the Elora website from a detailed Figma design created by UI designer Dylan Rambinaising. A close collaboration between design and development to faithfully translate every interaction, spacing rule, and visual micro-detail into a performant web experience.",
       year: '2026',
-      category: 'Web Integration & Design Collaboration',
+      category: 'Design // Figma to Code',
+      skillType: 'design',
       role: ['Front-End Development', 'Figma-to-Code Integration', 'Responsive Design'],
       stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Figma'],
       objective: "Faithfully translate a Figma design into a responsive, high-performance website in close collaboration with the UI designer.",
@@ -174,7 +181,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Showcase site for a sovereign French voice AI agent able to operate a computer through voice commands.",
       longDescription: "Visual identity creation and front-end integration for NARI, an autonomous voice agent orchestrating multiple AIs. A sober, spatial art direction (galaxy background, condensed typography) embodies a premium, sovereign French technology, paired with a monthly and lifetime pricing structure.",
       year: '2026',
-      category: 'Brand Design & SaaS Landing Page',
+      category: 'Design // Brand & UI/UX',
+      skillType: 'design',
       role: ['Brand Design', 'Front-End Development', 'UI/UX'],
       stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
       objective: "Translate the promise of a premium, sovereign voice AI into a sober and credible web experience.",
@@ -195,7 +203,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Interactive mobile app to instantly locate outdoor ping-pong tables across Paris with live wind/rain data.",
       longDescription: "Ping Paris solves urban players' frustration by mapping all public table tennis spots on a Leaflet canvas synchronized with Open-Meteo live forecasts.",
       year: '2026',
-      category: 'Mobile App & PWA',
+      category: 'App // Mobile & PWA',
+      skillType: 'app',
       role: ['Product Design', 'Front-End Development', 'Mapping API Integration'],
       stack: ['React', 'Leaflet Map', 'Open-Meteo API', 'PWA', 'Tailwind CSS', 'Geolocation'],
       objective: "Provide an ultra-fast outdoor utility accessible directly from any smartphone.",
@@ -218,7 +227,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       description: "Premium showcase site for a multichannel WhatsApp & SMS prospecting desktop software, featuring an embedded interface simulator.",
       longDescription: "Brand identity design and full front-end development of the Hazi Whatsapp landing page. The site features an interactive desktop interface simulator running directly in the browser, an immersive cyber-green aesthetic, and a conversion-driven structure built around a lifetime license offer.",
       year: '2026',
-      category: 'Brand Design & SaaS Landing Page',
+      category: 'App // Desktop Software & AI',
+      skillType: 'app',
       role: ['Brand Design', 'Front-End Development', 'UI/UX', 'Conversion Strategy'],
       stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
       objective: "Establish a strong, credible brand identity to convert visitors into lifetime license buyers.",
@@ -248,55 +258,55 @@ export interface ProfileContent {
 
 export const profileData: Record<'fr' | 'en', ProfileContent> = {
   fr: {
-    name: 'Eliot',
+    name: 'Eliot Hantute',
     role: 'Creative Front-End Developer & UI Designer',
-    badge: 'AI-Augmented Development // Creative Studio',
+    badge: 'Disponible pour missions & CDI',
     heroPitch:
-      'Spécialisé React, Tailwind et expériences 3D (R3F). Je combine sens du design, intégration front et flux de développement assistés par IA (applications agentiques) pour concevoir et déployer des produits modernes, rapidement.',
+      "Je conçois et développe des expériences web modernes, immersives et ultra-rapides, alliant React, Three.js et intégration d'IA générative.",
     heroHighlight: [
       'React & Three.js / R3F',
-      'AI-Augmented Engineering',
+      'Développement Assisté par IA',
       'UI/UX & Design Systems',
-      'Full-Lifecycle Delivery'
+      'Intégration & Déploiement Continu'
     ],
-    aboutTitle: 'Creative Developer & AI-Augmented Front-End',
+    aboutTitle: 'Développeur Créatif & Front-End Augmenté par l’IA',
     aboutParagraph1:
-      'Basé à Paris, j’allie direction artistique, sens du détail et flux de développement assistés par IA pour concevoir des expériences web immersives, performantes et immédiatement déployables.',
+      'Basé à Paris, je combine direction artistique, rigueur du design et flux d’ingénierie augmentés par l’IA pour concevoir des expériences web immersives, performantes et prêtes pour la production.',
     aboutParagraph2:
-      'De la maquette Figma au code de production, j’orchestre les outils IA modernes (Gemini, Claude, Antigravity) pour itérer 3× plus vite tout en maintenant une exigence intransigeante de qualité de code.',
+      'Du design system Figma au code de production, j’orchestre les outils IA de dernière génération (Gemini, Claude, Antigravity) pour itérer 3× plus vite tout en maintenant des standards de code irréprochables.',
     pillars: [
       {
         id: 'creative-dev',
-        title: 'Creative Developer',
-        subtitle: '3D Web, R3F & micro-interactions',
+        title: 'Front-End Créatif',
+        subtitle: 'Web 3D, R3F & micro-interactions',
         description:
-          'Le combo React 19 + Tailwind CSS + Three.js / React Three Fiber (R3F) pour concevoir des expériences spatiales, des shaders immersifs et un design interactif d’exception.',
+          'Maîtrise du trio React 19 + Tailwind CSS + Three.js / React Three Fiber (R3F) pour concevoir des scènes spatiales, shaders et animations interactives fluides.',
         highlight: 'React 19 • Three.js / R3F • Motion'
       },
       {
         id: 'ai-augmented',
-        title: 'AI-Augmented Development',
-        subtitle: 'Prototypage & livraison 3× plus rapides',
+        title: 'Design UI/UX & Systèmes',
+        subtitle: 'De Figma au code haute fidélité',
         description:
-          'Maîtrise du tooling IA moderne (Claude Code, Gemini, Antigravity, architecture d’agents) pour prototyper, itérer et livrer rapidement sans aucun compromis sur la rigueur du code.',
-        highlight: 'Claude Code • Gemini • Agentic Tooling'
+          'Direction artistique, typographie, design systems et intégration fidèle de maquettes Figma avec attention extrême aux détails et micro-animations.',
+        highlight: 'Figma → Code • Design Systems • UI/UX'
       },
       {
         id: 'full-lifecycle',
-        title: 'Full-Lifecycle Front-End',
-        subtitle: 'De la maquette à la mise en production',
+        title: 'Applications & IA',
+        subtitle: 'PWA, agents autonomes & cloud',
         description:
-          'Prise en charge de la chaîne complète : UI/UX, prototypage haute fidélité, intégration front-end réactive, CI/CD et déploiement continu en production (Vercel, Netlify).',
-        highlight: 'Figma → Code → CI/CD & Vercel'
+          'Applications web complètes, PWA hors-ligne, orchestration de modèles LLM et déploiement continu à haute disponibilité sur Vercel.',
+        highlight: 'PWA • LLMs & Agents • CI/CD Vercel'
       }
     ]
   },
   en: {
-    name: 'Eliot',
+    name: 'Eliot Hantute',
     role: 'Creative Front-End Developer & UI Designer',
-    badge: 'AI-Augmented Development // Creative Studio',
+    badge: 'Available for Missions & Full-Time',
     heroPitch:
-      'Specialized in React, Tailwind and 3D experiences (R3F). I combine design sensibility, front-end integration, and AI-augmented workflows (agentic architectures) to design and ship modern products, fast.',
+      'I craft modern, immersive, high-performance web applications fusing React, Three.js, and generative AI workflows.',
     heroHighlight: [
       'React & Three.js / R3F',
       'AI-Augmented Engineering',
@@ -311,31 +321,67 @@ export const profileData: Record<'fr' | 'en', ProfileContent> = {
     pillars: [
       {
         id: 'creative-dev',
-        title: 'Creative Developer',
+        title: 'Creative Front-End',
         subtitle: '3D Web, R3F & micro-interactions',
         description:
-          'The powerhouse trio of React 19 + Tailwind CSS + Three.js / React Three Fiber (R3F) to deliver spatial experiences, custom shaders, and polished interactive motion.',
+          'Mastery of React 19 + Tailwind CSS + Three.js / React Three Fiber (R3F) to deliver spatial experiences, custom shaders, and polished interactive motion.',
         highlight: 'React 19 • Three.js / R3F • Motion'
       },
       {
         id: 'ai-augmented',
-        title: 'AI-Augmented Development',
-        subtitle: '3× faster prototyping & shipping',
+        title: 'UI/UX Design & Systems',
+        subtitle: 'From Figma to high-fidelity code',
         description:
-          'Mastery of modern AI-assisted workflows (Claude Code, Gemini, Antigravity, agentic architectures) to prototype, iterate, and ship at pace without sacrificing code quality.',
-        highlight: 'Claude Code • Gemini • Agentic Tooling'
+          'Art direction, typography, design systems, and pixel-perfect Figma integration with extreme care for micro-interactions.',
+        highlight: 'Figma → Code • Design Systems • UI/UX'
       },
       {
         id: 'full-lifecycle',
-        title: 'Full-Lifecycle Front-End',
-        subtitle: 'From design systems to production',
+        title: 'Applications & AI',
+        subtitle: 'PWA, autonomous agents & cloud',
         description:
-          'End-to-end product delivery: UI/UX craft, hi-fi prototyping, responsive front-end integration, automated CI/CD, and zero-downtime deployment on Vercel/Netlify.',
-        highlight: 'Figma → Code → CI/CD & Vercel'
+          'Full web applications, offline PWAs, LLM orchestration, and continuous high-availability deployment on Vercel.',
+        highlight: 'PWA • LLMs & Agents • CI/CD Vercel'
       }
     ]
   }
 };
+
+export const skillsCategories = [
+  {
+    type: 'frontend' as const,
+    title: { fr: 'Front-End & 3D', en: 'Front-End & 3D' },
+    subtitle: { fr: 'React 19, Three.js, R3F & Motion', en: 'React 19, Three.js, R3F & Motion' },
+    description: {
+      fr: 'Développement d’interfaces immersives, animations fluides au 60 FPS, WebGL, Three.js et composants réactifs modernes.',
+      en: 'Immersive UI engineering, smooth 60 FPS animations, WebGL, Three.js and modern reactive components.'
+    },
+    skills: ['React 19', 'TypeScript', 'Three.js / R3F', 'Tailwind CSS', 'Framer Motion', 'Vite / Next.js', 'WebGL Shaders'],
+    projectIds: ['atelier-berger']
+  },
+  {
+    type: 'design' as const,
+    title: { fr: 'Design & UI/UX', en: 'Design & UI/UX' },
+    subtitle: { fr: 'Figma, Design Systems & DA', en: 'Figma, Design Systems & Art Direction' },
+    description: {
+      fr: 'Direction artistique contemporaine, conception de design systems scalables, prototypage Figma haute fidélité et intégration pixel-perfect.',
+      en: 'Contemporary art direction, scalable design systems, high-fidelity Figma prototyping and pixel-perfect integration.'
+    },
+    skills: ['UI/UX Design', 'Figma vers Code', 'Design Systems', 'Micro-interactions', 'Typographie', 'Wireframing', 'Brand Identity'],
+    projectIds: ['elora', 'nari-os']
+  },
+  {
+    type: 'app' as const,
+    title: { fr: 'Applications & IA', en: 'Applications & AI' },
+    subtitle: { fr: 'PWA, Logiciels & Agents IA', en: 'PWA, Software & AI Agents' },
+    description: {
+      fr: 'Applications web complètes, PWA géolocalisées, intégration de modèles LLMs (Claude, Gemini), agents autonomes et déploiement cloud CI/CD.',
+      en: 'Full-stack web applications, geolocated PWAs, LLM integration (Claude, Gemini), autonomous agents and CI/CD cloud deployment.'
+    },
+    skills: ['PWA & Mobile', 'APIs & Geolocation', 'LLMs & Agents IA', 'Claude Code / Antigravity', 'CI/CD & Vercel', 'Performance Optimization'],
+    projectIds: ['ping-paris', 'hazi-whatsapp']
+  }
+];
 
 export const stackCategoriesData: Record<'fr' | 'en', StackCategory[]> = {
   fr: [
@@ -461,4 +507,3 @@ export const skillsList = [
   { name: 'TypeScript', level: '90%', cat: 'Type Safety' },
   { name: 'CI/CD & Vercel', level: '92%', cat: 'Deployment & Ops' }
 ];
-

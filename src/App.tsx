@@ -8,11 +8,8 @@ import { CustomCursor } from './components/CustomCursor';
 import { Background3D } from './components/Background3D';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { ProjectCards } from './components/ProjectCards';
+import { SectionsHub } from './components/SectionsHub';
 import { CinematicVideoSection } from './components/CinematicVideoSection';
-import { AboutSection } from './components/AboutSection';
-import { Resume3D } from './components/Resume3D';
-import { ContactSection } from './components/ContactSection';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProjectModal } from './components/ProjectModal';
 
@@ -107,34 +104,18 @@ export default function App() {
           onLeaveItem={handleLeaveItem}
         />
 
+        {/* Hero Section */}
         <Hero
           lang={lang}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
 
-        <ProjectCards
+        {/* Sections Hub: Accordion / Sliding Section Titles with Direct Skills and Filtered Projects */}
+        <SectionsHub
           projects={currentProjects}
           lang={lang}
           onSelectProject={(project) => setSelectedProject(project)}
-          onHoverItem={handleHoverItem}
-          onLeaveItem={handleLeaveItem}
-        />
-
-        <AboutSection
-          lang={lang}
-          onHoverItem={handleHoverItem}
-          onLeaveItem={handleLeaveItem}
-        />
-
-        <Resume3D
-          lang={lang}
-          onHoverItem={handleHoverItem}
-          onLeaveItem={handleLeaveItem}
-        />
-
-        <ContactSection
-          lang={lang}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
@@ -161,4 +142,3 @@ export default function App() {
     </div>
   );
 }
-

@@ -1,3 +1,5 @@
+export type SkillType = 'all' | 'frontend' | 'design' | 'app';
+
 export interface Project {
   id: string;
   title: string;
@@ -7,6 +9,7 @@ export interface Project {
   longDescription: string;
   year: string;
   category: string;
+  skillType?: 'frontend' | 'design' | 'app';
   role: string[];
   stack: string[];
   objective: string;
@@ -45,4 +48,3 @@ export interface CursorContextType {
   isHovered: boolean;
   setIsHovered: (hovered: boolean) => void;
 }
-
