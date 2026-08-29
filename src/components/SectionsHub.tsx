@@ -24,8 +24,8 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 }) => {
   const [selectedSkillFilter, setSelectedSkillFilter] = useState<SkillType>('all');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    skills: true,
-    projects: true,
+    skills: false,
+    projects: false,
     cv: false,
     contact: false,
   });
