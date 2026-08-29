@@ -24,7 +24,6 @@ const SpaceWorldParticles: React.FC = () => {
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
-      // Cylindrical / Tunnel Distribution with deep Z
       const radius = 3 + Math.random() * 18;
       const theta = Math.random() * Math.PI * 2;
 
@@ -32,14 +31,13 @@ const SpaceWorldParticles: React.FC = () => {
       pos[i3 + 1] = Math.sin(theta) * radius;
       pos[i3 + 2] = (Math.random() - 0.5) * 60;
 
-      // Clean, subtle monochrome & periwinkle particle hues
       const isAccent = Math.random() > 0.85;
       if (isAccent) {
-        col[i3] = 0.0;     // R (electric blue)
+        col[i3] = 0.0;     // R (electric blue accent)
         col[i3 + 1] = 0.4; // G
         col[i3 + 2] = 1.0; // B
       } else {
-        const val = 0.6 + Math.random() * 0.35;
+        const val = 0.5 + Math.random() * 0.4;
         col[i3] = val;
         col[i3 + 1] = val;
         col[i3 + 2] = val;
@@ -69,15 +67,12 @@ const SpaceWorldParticles: React.FC = () => {
   }, []);
 
   useFrame((state, delta) => {
-    // Smooth mouse interpolation
     mouse.current.x += (mouse.current.targetX - mouse.current.x) * 0.05;
     mouse.current.y += (mouse.current.targetY - mouse.current.y) * 0.05;
 
-    // 3D Scroll Plunge: Fly forward through particles as user scrolls
     const scrollTargetZ = scrollY.current * 0.015;
     state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, 6 - (scrollTargetZ % 30), 0.08);
 
-    // Parallax Camera Orbit
     state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, mouse.current.x * 0.8, 0.05);
     state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, -mouse.current.y * 0.8, 0.05);
     state.camera.lookAt(0, 0, state.camera.position.z - 10);
@@ -120,15 +115,15 @@ const SpaceWorldParticles: React.FC = () => {
         />
       </points>
 
-      {/* Subtle Floating Dimensional Portal Rings in Deep Space */}
+      {/* Dimensional Portal Rings */}
       <mesh ref={ringRef1} position={[0, 0, -8]}>
         <torusGeometry args={[5.5, 0.02, 16, 100]} />
-        <meshBasicMaterial color="#0066ff" transparent opacity={0.18} />
+        <meshBasicMaterial color="#09090b" transparent opacity={0.16} />
       </mesh>
 
       <mesh ref={ringRef2} position={[0, 0, -16]}>
         <torusGeometry args={[9, 0.015, 16, 100]} />
-        <meshBasicMaterial color="#71717a" transparent opacity={0.12} />
+        <meshBasicMaterial color="#27272a" transparent opacity={0.12} />
       </mesh>
     </group>
   );
@@ -144,7 +139,8 @@ export const Background3D: React.FC<Background3DProps> = ({ analyserRef }) => {
       >
         <ambientLight intensity={0.7} />
         <SpaceWorldParticles />
-        <group position={[0, 0.1, -4.5]} scale={1.25}>
+        {/* Prominent, highly visible black 3D organic sphere */}
+        <group position={[0, 0.1, -2.4]} scale={1.42}>
           <AudioSphere analyserRef={analyserRef} quality="high" />
         </group>
       </Canvas>

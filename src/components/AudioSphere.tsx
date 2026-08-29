@@ -8,10 +8,10 @@ interface AudioSphereProps {
   quality?: 'high' | 'low';
 }
 
-const BASE_RADIUS = 1.38;
+const BASE_RADIUS = 1.42;
 const QUALITY_PRESETS = {
-  high: { particleCount: 22000, haloParticleCount: 7000 },
-  low: { particleCount: 10000, haloParticleCount: 3000 },
+  high: { particleCount: 24000, haloParticleCount: 8000 },
+  low: { particleCount: 12000, haloParticleCount: 4000 },
 } as const;
 
 // Per-particle initial polar coordinates & random phase seeds
@@ -28,8 +28,8 @@ const createSphereFields = (count: number) => {
     y[i] = yi;
     radiusXZ[i] = Math.sqrt(Math.max(0, 1 - yi * yi));
     theta0[i] = i * goldenAngle;
-    seedA[i] = Math.sin(i * 0.137) * 4.5 + Math.cos(i * 0.311) * 3.2;
-    seedB[i] = Math.cos(i * 0.219) * 5.1 + Math.sin(i * 0.473) * 2.8;
+    seedA[i] = Math.sin(i * 0.173) * 5.2 + Math.cos(i * 0.381) * 4.1;
+    seedB[i] = Math.cos(i * 0.247) * 5.8 + Math.sin(i * 0.513) * 3.4;
   }
 
   return { theta0, y, radiusXZ, seedA, seedB };
@@ -156,8 +156,8 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
 
     const beatDetected = subEnergyRef.current > 0.19 && subDelta > 0.009 && beatCooldownRef.current <= 0;
     if (beatDetected) {
-      kickPulseRef.current = Math.min(1.2, kickPulseRef.current + 0.55);
-      beatCooldownRef.current = 0.15;
+      kickPulseRef.current = Math.min(1.2, kickPulseRef.current + 0.65);
+      beatCooldownRef.current = 0.14;
     } else {
       kickPulseRef.current = THREE.MathUtils.lerp(kickPulseRef.current, 0, 1 - Math.exp(-delta * 9.5));
     }
@@ -177,11 +177,11 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
     );
     clickImpulseRef.current = Math.max(0, clickImpulseRef.current - delta * 2.8);
 
-    const kickEnergy = THREE.MathUtils.clamp(subEnergyRef.current * 2 + kickPulseRef.current * 1, 0, 2);
-    const dragBoost = isDraggingRef.current ? 0.35 : 0;
+    const kickEnergy = THREE.MathUtils.clamp(subEnergyRef.current * 2.2 + kickPulseRef.current * 1.2, 0, 2);
+    const dragBoost = isDraggingRef.current ? 0.45 : 0;
 
-    const dragX = THREE.MathUtils.clamp(state.pointer.x * 2.1, -2.4, 2.4);
-    const dragY = THREE.MathUtils.clamp(state.pointer.y * 1.45, -1.5, 1.5);
+    const dragX = THREE.MathUtils.clamp(state.pointer.x * 2.3, -2.6, 2.6);
+    const dragY = THREE.MathUtils.clamp(state.pointer.y * 1.6, -1.8, 1.8);
     const settleFactor = isDraggingRef.current ? 1 - Math.exp(-delta * 16) : 1 - Math.exp(-delta * 4.5);
 
     groupTargetXRef.current = THREE.MathUtils.lerp(
@@ -197,29 +197,31 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
 
     const t = state.clock.elapsedTime;
 
-    // Organic 3D wandering & multi-axis rotation
+    // Highly active organic tumbling & multi-axis 3D motion
     if (groupRef.current) {
-      // Natural organic drift wandering on X/Y/Z
-      const organicWanderX = Math.sin(t * 0.55) * 0.18 + Math.cos(t * 0.28) * 0.12;
-      const organicWanderY = Math.cos(t * 0.65) * 0.15 + Math.sin(t * 0.35) * 0.08;
+      // Dynamic wandering across 3D coordinates
+      const organicWanderX = Math.sin(t * 0.75) * 0.28 + Math.cos(t * 0.38) * 0.16;
+      const organicWanderY = Math.cos(t * 0.85) * 0.22 + Math.sin(t * 0.45) * 0.14;
+      const organicWanderZ = Math.sin(t * 0.6) * 0.2;
 
       groupRef.current.position.x = groupTargetXRef.current + organicWanderX;
       groupRef.current.position.y = groupTargetYRef.current + organicWanderY;
+      groupRef.current.position.z = organicWanderZ;
 
-      // Organic tumbling rotation
-      const spinSpeed = 0.35 + kickEnergy * 0.4 + hoverStrengthRef.current * 0.3 + dragBoost;
-      groupRef.current.rotation.y += delta * (spinSpeed + Math.sin(t * 0.4) * 0.08);
-      groupRef.current.rotation.x += delta * (0.22 + Math.cos(t * 0.5) * 0.06 + kickEnergy * 0.1);
-      groupRef.current.rotation.z += delta * (0.12 + Math.sin(t * 0.3) * 0.04);
+      // Active tumbling rotations on X/Y/Z
+      const spinSpeed = 0.55 + kickEnergy * 0.5 + hoverStrengthRef.current * 0.35 + dragBoost;
+      groupRef.current.rotation.y += delta * (spinSpeed + Math.sin(t * 0.6) * 0.18);
+      groupRef.current.rotation.x += delta * (0.35 + Math.cos(t * 0.7) * 0.12 + kickEnergy * 0.15);
+      groupRef.current.rotation.z += delta * (0.2 + Math.sin(t * 0.5) * 0.08);
 
-      // Organic breathing scale pulsation
-      const organicBreath = Math.sin(t * 1.2) * 0.04 + Math.cos(t * 0.7) * 0.025;
+      // Living organic pulsation scale
+      const organicBreath = Math.sin(t * 1.5) * 0.07 + Math.cos(t * 0.9) * 0.04;
       const targetScale =
         1
         + organicBreath
-        + kickPulseRef.current * 0.24
-        - retractPulseRef.current * 0.1
-        + subEnergyRef.current * 0.08;
+        + kickPulseRef.current * 0.28
+        - retractPulseRef.current * 0.12
+        + subEnergyRef.current * 0.1;
 
       groupScaleRef.current = THREE.MathUtils.lerp(
         groupScaleRef.current,
@@ -233,8 +235,8 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
     const secondaryAttr = pointsSecondaryRef.current?.geometry.attributes.position as THREE.BufferAttribute | undefined;
     const haloAttr = pointsHaloRef.current?.geometry.attributes.position as THREE.BufferAttribute | undefined;
 
-    // Fluid organic particle dynamics
-    const flowRotation = t * (0.12 + kickEnergy * 0.08);
+    // Fast dynamic vortex flow
+    const flowRotation = t * (0.22 + kickEnergy * 0.15);
 
     if (primaryAttr && secondaryAttr) {
       const primary = primaryAttr.array as Float32Array;
@@ -247,47 +249,44 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
         const sA = fields.seedA[i];
         const sB = fields.seedB[i];
 
-        // Multi-frequency organic flow orbital angles
+        // Dynamic swirling angle
         const theta =
           fields.theta0[i]
-          + flowRotation * (0.8 + 0.4 * Math.sin(sA + t * 0.4))
-          + Math.sin(flowRotation * 0.6 + y0 * 3.2 + sB) * 0.28
-          + Math.cos(t * 0.8 + y0 * 4.5) * 0.12;
+          + flowRotation * (1.0 + 0.6 * Math.sin(sA + t * 0.7))
+          + Math.sin(flowRotation * 0.8 + y0 * 3.8 + sB) * 0.45
+          + Math.cos(t * 1.2 + y0 * 5.2) * 0.22;
 
         const dx = Math.cos(theta) * rXZ0;
         const dy = y0;
         const dz = Math.sin(theta) * rXZ0;
 
-        // Multi-layer organic sinusoidal noise waves (constantly alive & deforming)
-        const wave1 = Math.sin(dx * 3.4 + dz * 2.8 + t * 1.8 + sA * 0.1) * 0.14;
-        const wave2 = Math.cos(dy * 4.2 - dx * 2.5 + t * 1.5 + sB * 0.1) * 0.11;
-        const wave3 = Math.sin((dx + dy + dz) * 5.2 - t * 2.2) * 0.08;
-        const wave4 = Math.cos(dz * 6.5 + t * 2.8 + i * 0.0004) * 0.05;
+        // High-energy organic harmonic waves (dramatic deformation)
+        const wave1 = Math.sin(dx * 4.2 + dz * 3.6 + t * 2.8 + sA * 0.15) * 0.26;
+        const wave2 = Math.cos(dy * 5.2 - dx * 3.2 + t * 2.3 + sB * 0.15) * 0.2;
+        const wave3 = Math.sin((dx + dy + dz) * 6.5 - t * 3.4) * 0.15;
+        const wave4 = Math.cos(dz * 8.2 + t * 4.1 + i * 0.0006) * 0.1;
 
-        // Plasma turbulence spikes
-        const plasmaTurbulence =
-          Math.sin(dx * 8.2 + t * 3.4 + sA)
-          * Math.cos(dy * 7.5 - t * 2.9 + sB)
-          * 0.07;
+        // Solar flare & plasma tendrils
+        const plasmaTendrils =
+          Math.sin(dx * 9.5 + t * 4.8 + sA)
+          * Math.cos(dy * 8.8 - t * 4.2 + sB)
+          * (0.16 + subEnergyRef.current * 0.12);
 
-        // Total organic radius deformation
-        const audioAmp = 1 + subEnergyRef.current * 0.8 + kickEnergy * 0.6 + kickPulseRef.current * 1.2;
-        const totalDeform = (wave1 + wave2 + wave3 + wave4 + plasmaTurbulence) * audioAmp;
-
+        const totalDeform = (wave1 + wave2 + wave3 + wave4 + plasmaTendrils) * (1 + kickPulseRef.current * 0.8);
         const radial = BASE_RADIUS + totalDeform;
 
-        // Organic micro-swirl vortex
-        const swirlX = Math.sin(t * 1.6 + sA) * 0.022;
-        const swirlY = Math.cos(t * 1.4 + sB) * 0.022;
-        const swirlZ = Math.sin(t * 1.8 + sA + sB) * 0.022;
+        // Swirling micro-vortex currents
+        const swirlX = Math.sin(t * 2.4 + sA) * 0.045;
+        const swirlY = Math.cos(t * 2.1 + sB) * 0.045;
+        const swirlZ = Math.sin(t * 2.6 + sA + sB) * 0.045;
 
         primary[ix] = dx * radial + swirlX;
         primary[ix + 1] = dy * radial + swirlY;
         primary[ix + 2] = dz * radial + swirlZ;
 
-        // Concentric inner aura shell with dynamic phase shift
-        const innerOffset = Math.sin(t * 1.6 + y0 * 4.0 + sA * 0.2) * 0.06;
-        const innerRadius = (radial - 0.08 + innerOffset) * 0.94;
+        // Concentric secondary dark core
+        const innerOffset = Math.sin(t * 2.2 + y0 * 5.0 + sA * 0.3) * 0.09;
+        const innerRadius = (radial - 0.12 + innerOffset) * 0.92;
 
         secondary[ix] = dx * innerRadius;
         secondary[ix + 1] = dy * innerRadius;
@@ -310,16 +309,15 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
 
         const haloTheta =
           haloFields.theta0[i]
-          + flowRotation * 0.75
-          + Math.sin(t * 0.9 + y0 * 2.8 + sA) * 0.24;
+          + flowRotation * 0.85
+          + Math.sin(t * 1.4 + y0 * 3.4 + sA) * 0.38;
 
         const dx = Math.cos(haloTheta) * rXZ0;
         const dy = y0;
         const dz = Math.sin(haloTheta) * rXZ0;
 
-        // Outer stardust halo organic breathing wave
-        const haloBreath = Math.sin(t * 1.4 + sB + y0 * 3.5) * 0.16 + Math.cos(t * 1.9 + sA) * 0.09;
-        const haloRadius = BASE_RADIUS * 1.22 + haloBreath;
+        const haloBreath = Math.sin(t * 2.0 + sB + y0 * 4.2) * 0.28 + Math.cos(t * 2.6 + sA) * 0.16;
+        const haloRadius = BASE_RADIUS * 1.28 + haloBreath;
 
         halo[ix] = dx * haloRadius;
         halo[ix + 1] = dy * haloRadius;
@@ -330,68 +328,71 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
     }
 
     if (primaryMaterialRef.current) {
-      const pulseSize = 0.013 + Math.sin(t * 1.5) * 0.0015 + kickEnergy * 0.006;
-      const pulseOpacity = 0.38 + Math.sin(t * 1.2) * 0.05 + kickEnergy * 0.15;
+      const pulseSize = 0.022 + Math.sin(t * 2.0) * 0.003 + kickEnergy * 0.008;
+      const pulseOpacity = 0.86 + Math.sin(t * 1.5) * 0.08 + kickEnergy * 0.1;
       primaryMaterialRef.current.size = pulseSize;
-      primaryMaterialRef.current.opacity = pulseOpacity;
+      primaryMaterialRef.current.opacity = Math.min(0.98, pulseOpacity);
     }
 
     if (secondaryMaterialRef.current) {
-      const pulseSize = 0.008 + Math.cos(t * 1.4) * 0.001 + kickEnergy * 0.003;
-      const pulseOpacity = 0.24 + Math.cos(t * 1.6) * 0.04 + kickEnergy * 0.08;
+      const pulseSize = 0.014 + Math.cos(t * 1.8) * 0.002 + kickEnergy * 0.005;
+      const pulseOpacity = 0.68 + Math.cos(t * 1.7) * 0.07 + kickEnergy * 0.1;
       secondaryMaterialRef.current.size = pulseSize;
-      secondaryMaterialRef.current.opacity = pulseOpacity;
+      secondaryMaterialRef.current.opacity = Math.min(0.85, pulseOpacity);
     }
 
     if (haloMaterialRef.current) {
-      const pulseSize = 0.0045 + Math.sin(t * 1.8) * 0.0008 + kickEnergy * 0.002;
-      const pulseOpacity = 0.14 + Math.sin(t * 1.4) * 0.03 + kickEnergy * 0.06;
+      const pulseSize = 0.0085 + Math.sin(t * 2.2) * 0.0015 + kickEnergy * 0.003;
+      const pulseOpacity = 0.38 + Math.sin(t * 1.8) * 0.06 + kickEnergy * 0.1;
       haloMaterialRef.current.size = pulseSize;
-      haloMaterialRef.current.opacity = pulseOpacity;
+      haloMaterialRef.current.opacity = Math.min(0.55, pulseOpacity);
     }
 
     if (hitAreaRef.current) {
-      const targetScale = 1.05 + hoverStrengthRef.current * 0.04 + clickImpulseRef.current * 0.05;
+      const targetScale = 1.08 + hoverStrengthRef.current * 0.05 + clickImpulseRef.current * 0.06;
       hitAreaRef.current.scale.setScalar(targetScale);
     }
   });
 
   return (
-    <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.65}>
+    <Float speed={2.0} rotationIntensity={0.5} floatIntensity={0.9}>
       <group ref={groupRef}>
+        {/* Primary Deep Black Particle Core */}
         <points ref={pointsPrimaryRef} geometry={primaryGeometry}>
           <pointsMaterial
             ref={primaryMaterialRef}
-            color="#0066ff"
-            size={0.013}
+            color="#09090b"
+            size={0.022}
             sizeAttenuation
             transparent
-            opacity={0.38}
+            opacity={0.88}
             blending={THREE.NormalBlending}
             depthWrite={false}
           />
         </points>
 
+        {/* Secondary Dark Onyx / Charcoal Shell */}
         <points ref={pointsSecondaryRef} geometry={secondaryGeometry}>
           <pointsMaterial
             ref={secondaryMaterialRef}
-            color="#6366f1"
-            size={0.008}
+            color="#27272a"
+            size={0.014}
             sizeAttenuation
             transparent
-            opacity={0.24}
+            opacity={0.72}
             depthWrite={false}
           />
         </points>
 
+        {/* Outer Dark Smoke / Stardust Halo */}
         <points ref={pointsHaloRef} geometry={haloGeometry}>
           <pointsMaterial
             ref={haloMaterialRef}
-            color="#38bdf8"
-            size={0.0045}
+            color="#52525b"
+            size={0.0085}
             sizeAttenuation
             transparent
-            opacity={0.14}
+            opacity={0.42}
             blending={THREE.NormalBlending}
             depthWrite={false}
           />
@@ -404,7 +405,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
         >
-          <sphereGeometry args={[BASE_RADIUS * 1.08, 36, 36]} />
+          <sphereGeometry args={[BASE_RADIUS * 1.15, 36, 36]} />
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
       </group>
