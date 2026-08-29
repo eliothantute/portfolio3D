@@ -1,16 +1,22 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { projectsData } from './data/projects';
 import { Project, Language } from './types';
 import { CustomCursor } from './components/CustomCursor';
 import { Background3D } from './components/Background3D';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { CinematicVideoSection } from './components/CinematicVideoSection';
 import { ProjectCards } from './components/ProjectCards';
+import { CinematicVideoSection } from './components/CinematicVideoSection';
 import { AboutSection } from './components/AboutSection';
+import { Resume3D } from './components/Resume3D';
 import { ContactSection } from './components/ContactSection';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProjectModal } from './components/ProjectModal';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const [lang, setLang] = useState<Language>('fr');
@@ -18,10 +24,32 @@ export default function App() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isIntroActive, setIsIntroActive] = useState(true);
   const analyserRef = useRef<AnalyserNode | null>(null);
 
   const currentProjects = projectsData[lang];
+
+  useEffect(() => {
+    // Initialize Lenis Smooth Scroll with GSAP Ticker synchronization
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const updateTicker = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(updateTicker);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      gsap.ticker.remove(updateTicker);
+      lenis.destroy();
+    };
+  }, []);
 
   const handleHoverItem = (text: string) => {
     setCursorText(text);
@@ -34,37 +62,18 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-white text-slate-900 selection:bg-slate-900 selection:text-white">
-      <div className="site-aurora site-aurora-primary" />
-      <div className="site-aurora site-aurora-secondary" />
-      <div className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(255,255,255,0.32)_0%,transparent_14%,transparent_86%,rgba(255,255,255,0.24)_100%)]" />
-
+    <div className="relative min-h-screen overflow-x-hidden bg-[#fafafa] text-zinc-950 selection:bg-zinc-950 selection:text-white">
       {/* Curseur Magnétique Custom */}
       <CustomCursor cursorText={cursorText} isHovered={isHovered} />
 
       {/* Arrière-Plan Three.js Cinématique */}
       <Background3D
         analyserRef={analyserRef}
-        isIntroActive={isIntroActive}
+        isIntroActive={false}
       />
 
-      {isIntroActive && (
-        <div className="landing-intro-controls">
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/60">
-            Explore the terrarium
-          </p>
-          <button
-            type="button"
-            onClick={() => setIsIntroActive(false)}
-            className="landing-enter-button"
-          >
-            Entrer dans le portfolio
-          </button>
-        </div>
-      )}
-
-      <section className="sr-only" aria-label={lang === 'fr' ? 'Résumé des projets principaux' : 'Primary projects summary'}>
-        <h1>{lang === 'fr' ? 'Portfolio UI et développement front-end de Eliot Lab' : 'UI design and front-end portfolio by Eliot Lab'}</h1>
+      <section className="sr-only" aria-label={lang === 'fr' ? 'Résumé du profil et des projets' : 'Profile and projects summary'}>
+        <h1>{lang === 'fr' ? 'Eliot — Creative Front-End Developer & UI Designer | React, Three.js & AI-Augmented Development' : 'Eliot — Creative Front-End Developer & UI Designer | React, Three.js & AI-Augmented Development'}</h1>
         <ul>
           {currentProjects.slice(0, 8).map((project) => (
             <li key={`seo-${project.id}`}>
@@ -113,6 +122,12 @@ export default function App() {
         />
 
         <AboutSection
+          lang={lang}
+          onHoverItem={handleHoverItem}
+          onLeaveItem={handleLeaveItem}
+        />
+
+        <Resume3D
           lang={lang}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}

@@ -1,39 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { Project, Language } from '../types';
-
-const cardRevealVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.65,
-      delay: index * 0.12, // 120ms between cards; adjust this for a faster/slower cascade.
-      ease: [0.22, 0.61, 0.36, 1],
-    },
-  }),
-};
-
-const cardHoverTransition = {
-  type: 'spring' as const,
-  stiffness: 260,
-  damping: 20,
-};
-
-const renderStaggeredTitle = (text: string, baseDelay = 0) =>
-  text.split('').map((character, index) => (
-    <span
-      key={`${text}-${index}`}
-      className="project-title-char reveal-title-char"
-      style={{
-        '--reveal-delay': `${baseDelay + index * 0.035}s`,
-        transitionDelay: `${index * 28}ms`,
-      } as React.CSSProperties}
-    >
-      {character === ' ' ? '\u00A0' : character}
-    </span>
-  ));
+import { InteractiveText } from './InteractiveText';
 
 interface ProjectCardsProps {
   projects: Project[];
@@ -43,6 +11,26 @@ interface ProjectCardsProps {
   onLeaveItem?: () => void;
 }
 
+const card3DVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 60,
+    rotateX: 14,
+    scale: 0.94,
+  },
+  visible: (idx: number) => ({
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      delay: idx * 0.12,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};
+
 export const ProjectCards: React.FC<ProjectCardsProps> = ({
   projects,
   lang,
@@ -50,135 +38,111 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
   onHoverItem,
   onLeaveItem,
 }) => {
-  const featuredProjects = useMemo(() => projects.slice(0, Math.min(8, projects.length)), [projects]);
-
   return (
     <section
       id="projects"
-      className="relative z-10 overflow-hidden border-t border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f4f7fd_100%)] py-16 sm:py-20"
+      className="relative z-10 mx-auto max-w-7xl px-4 py-28 sm:px-8 lg:px-12"
+      aria-label={lang === 'fr' ? 'Projets sélectionnés' : 'Featured projects'}
     >
-      <div className="mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-10">
-        <div className="mb-10 flex items-end justify-between gap-6 sm:mb-12">
-          <div>
-            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-600">Selected Work</span>
-            <h2
-              className="font-display text-4xl leading-none tracking-tight text-[#111216] sm:text-6xl"
-              aria-label={lang === 'fr' ? 'Projets' : 'Projects'}
-            >
-              <span className="inline-flex flex-wrap">
-                {renderStaggeredTitle(lang === 'fr' ? 'Projets' : 'Projects', 0.08)}
-              </span>
-            </h2>
-          </div>
+      {/* Section Header with 3D Reveal */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-14 flex flex-col items-start justify-between gap-4 border-b border-zinc-200 pb-8 sm:flex-row sm:items-end"
+      >
+        <div>
+          <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
+            {lang === 'fr' ? 'Projets Récents // 2026' : 'Selected Work // 2026'}
+          </span>
+          <h2 className="font-display mt-2 text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl">
+            <InteractiveText
+              text={lang === 'fr' ? 'Réalisations & Prototypes' : 'Featured Projects'}
+              hoverColor="#0066ff"
+            />
+          </h2>
         </div>
+        <p className="max-w-md text-sm text-zinc-500 sm:text-right">
+          {lang === 'fr'
+            ? 'Applications React, intégrations 3D et projets assistés par IA conçus avec précision.'
+            : 'React apps, 3D experiences and AI-augmented projects built with precision.'}
+        </p>
+      </motion.div>
 
-        <div className="projects-grid">
-          {featuredProjects.map((project, idx) => (
-            <div key={`${project.id}-${idx}`}>
-              <ProjectCard
-                project={project}
-                lang={lang}
-                onHover={() => {
-                  onHoverItem?.(lang === 'fr' ? 'VOIR LE PROJET' : 'VIEW PROJECT');
-                }}
-                onLeave={onLeaveItem}
-                onClick={() => onSelectProject(project)}
-                index={idx}
+      {/* Projects Grid with 3D Perspective Stagger */}
+      <div className="grid gap-8 md:grid-cols-2 [perspective:1200px]">
+        {projects.map((project, idx) => (
+          <motion.article
+            key={`${project.id}-${idx}`}
+            custom={idx}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={card3DVariants}
+            onClick={() => onSelectProject(project)}
+            onMouseEnter={() =>
+              onHoverItem?.(lang === 'fr' ? 'VOIR LE PROJET' : 'VIEW PROJECT')
+            }
+            onMouseLeave={onLeaveItem}
+            className="sneaks-card group flex cursor-pointer flex-col justify-between rounded-3xl p-5 sm:p-6 [transform-style:preserve-3d]"
+          >
+            {/* Project Image Container */}
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-zinc-100">
+              <img
+                src={project.image}
+                alt={project.title}
+                className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+              {/* Top Category Badge */}
+              <div className="absolute left-3.5 top-3.5 flex items-center gap-2">
+                <span className="rounded-full bg-white/95 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-800 shadow-sm backdrop-blur-md">
+                  {project.category}
+                </span>
+              </div>
+
+              {/* Status Pill on bottom hover */}
+              <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-center justify-between text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span className="font-mono text-xs font-medium">{project.status}</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-zinc-950 font-bold shadow-md transition-transform group-hover:scale-110">
+                  ↗
+                </span>
+              </div>
             </div>
-          ))}
-        </div>
+
+            {/* Project Details */}
+            <div className="mt-5 flex flex-col justify-between">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-display text-2xl font-bold tracking-tight text-zinc-950 transition-colors group-hover:text-blue-600">
+                    {project.title}
+                  </h3>
+                  <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-zinc-600">
+                    {project.subtitle}
+                  </p>
+                </div>
+                <span className="font-mono text-xs font-semibold text-zinc-400">
+                  {project.year}
+                </span>
+              </div>
+
+              {/* Tech Stack Pills */}
+              <div className="mt-4 flex flex-wrap gap-1.5 border-t border-zinc-100 pt-3.5">
+                {project.stack.slice(0, 4).map((tech, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className="rounded-lg bg-zinc-100 px-2.5 py-1 font-mono text-[10px] font-medium text-zinc-700 transition-colors group-hover:bg-zinc-200/80"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.article>
+        ))}
       </div>
     </section>
-  );
-};
-
-interface ProjectCardProps {
-  project: Project;
-  lang: Language;
-  onHover: () => void;
-  onLeave?: () => void;
-  onClick: () => void;
-  index: number;
-}
-
-export const ProjectCard: React.FC<ProjectCardProps> = ({
-  project,
-  lang,
-  onHover,
-  onLeave,
-  onClick,
-  index,
-}) => {
-  const meta = `${project.stack.slice(0, 4).join(' • ')}`;
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.article
-      custom={index}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.18 }}
-      variants={cardRevealVariants}
-      whileHover={{
-        scale: 1.035,
-        boxShadow: '0 26px 60px rgba(23, 33, 59, 0.18)',
-      }}
-      transition={cardHoverTransition}
-      onMouseEnter={() => {
-        setIsHovered(true);
-        onHover();
-      }}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        onLeave?.();
-      }}
-      onClick={onClick}
-      className="group cursor-pointer rounded-[26px]"
-    >
-      <div className="relative overflow-hidden rounded-[26px] bg-slate-100">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="aspect-[16/10] h-full w-full object-cover transition-[transform,filter] duration-700 ease-[var(--ease-standard)] group-hover:scale-[1.14] group-hover:-translate-y-2 group-hover:rotate-[-1deg] group-hover:saturate-110 group-hover:contrast-105"
-        />
-        {project.video && (
-          <video
-            src={project.video}
-            muted
-            loop
-            autoPlay={isHovered}
-            playsInline
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 aspect-[16/10] h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          />
-        )}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(15,23,42,0.08)_56%,rgba(15,23,42,0.34)_100%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-        <div className="absolute inset-x-0 bottom-0 h-24 translate-y-5 bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.14)_18%,rgba(255,255,255,0.02)_100%)] opacity-0 blur-[2px] transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100" />
-        <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10" />
-      </div>
-
-      <div className="mt-4 sm:mt-5">
-        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-600 opacity-80 transition-[transform,opacity] duration-300 group-hover:-translate-y-0.5 group-hover:opacity-100">
-          {meta}
-        </div>
-        <h3 className="flex items-baseline gap-3 text-[2rem] font-medium leading-none tracking-tight text-[#15161a] transition-[transform,opacity] duration-500 ease-[var(--ease-standard)] group-hover:-translate-y-0.5 group-hover:translate-x-4 sm:text-[3.15rem]">
-          <span
-            className="text-[2rem] leading-none opacity-100 transition-all duration-300 ease-[var(--ease-standard)] sm:text-[3rem]"
-          >
-            →
-          </span>
-          <span aria-label={project.title} className="inline-flex flex-wrap group-hover:tracking-[0.05em]">
-            {renderStaggeredTitle(project.title, 0.02)}
-          </span>
-        </h3>
-        <p className="mt-3 max-w-[90%] text-sm text-slate-600 sm:text-[15px]">
-          {lang === 'fr' ? project.subtitle : project.subtitle}
-        </p>
-        <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500">
-          {project.year} • {project.status}
-        </div>
-      </div>
-    </motion.article>
   );
 };

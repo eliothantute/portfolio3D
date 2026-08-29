@@ -1,4 +1,4 @@
-import { Project } from '../types';
+import { Project, StackCategory, ProfilePillar } from '../types';
 import pingParisImg from '../assets/images/regenerated_image_1782446553640.png';
 import atelierBergerBlueImg from '../assets/images/image_069-1-1.jpg';
 import eloraImg from '../assets/images/hero.png';
@@ -234,12 +234,231 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
   ]
 };
 
+export interface ProfileContent {
+  name: string;
+  role: string;
+  badge: string;
+  heroPitch: string;
+  heroHighlight: string[];
+  aboutTitle: string;
+  aboutParagraph1: string;
+  aboutParagraph2: string;
+  pillars: ProfilePillar[];
+}
+
+export const profileData: Record<'fr' | 'en', ProfileContent> = {
+  fr: {
+    name: 'Eliot',
+    role: 'Creative Front-End Developer & UI Designer',
+    badge: 'AI-Augmented Development // Creative Studio',
+    heroPitch:
+      'Spécialisé React, Tailwind et expériences 3D (R3F). Je combine sens du design, intégration front et flux de développement assistés par IA (applications agentiques) pour concevoir et déployer des produits modernes, rapidement.',
+    heroHighlight: [
+      'React & Three.js / R3F',
+      'AI-Augmented Engineering',
+      'UI/UX & Design Systems',
+      'Full-Lifecycle Delivery'
+    ],
+    aboutTitle: 'Creative Developer & AI-Augmented Front-End',
+    aboutParagraph1:
+      'Basé à Paris, j’allie direction artistique, sens du détail et flux de développement assistés par IA pour concevoir des expériences web immersives, performantes et immédiatement déployables.',
+    aboutParagraph2:
+      'De la maquette Figma au code de production, j’orchestre les outils IA modernes (Gemini, Claude, Antigravity) pour itérer 3× plus vite tout en maintenant une exigence intransigeante de qualité de code.',
+    pillars: [
+      {
+        id: 'creative-dev',
+        title: 'Creative Developer',
+        subtitle: '3D Web, R3F & micro-interactions',
+        description:
+          'Le combo React 19 + Tailwind CSS + Three.js / React Three Fiber (R3F) pour concevoir des expériences spatiales, des shaders immersifs et un design interactif d’exception.',
+        highlight: 'React 19 • Three.js / R3F • Motion'
+      },
+      {
+        id: 'ai-augmented',
+        title: 'AI-Augmented Development',
+        subtitle: 'Prototypage & livraison 3× plus rapides',
+        description:
+          'Maîtrise du tooling IA moderne (Claude Code, Gemini, Antigravity, architecture d’agents) pour prototyper, itérer et livrer rapidement sans aucun compromis sur la rigueur du code.',
+        highlight: 'Claude Code • Gemini • Agentic Tooling'
+      },
+      {
+        id: 'full-lifecycle',
+        title: 'Full-Lifecycle Front-End',
+        subtitle: 'De la maquette à la mise en production',
+        description:
+          'Prise en charge de la chaîne complète : UI/UX, prototypage haute fidélité, intégration front-end réactive, CI/CD et déploiement continu en production (Vercel, Netlify).',
+        highlight: 'Figma → Code → CI/CD & Vercel'
+      }
+    ]
+  },
+  en: {
+    name: 'Eliot',
+    role: 'Creative Front-End Developer & UI Designer',
+    badge: 'AI-Augmented Development // Creative Studio',
+    heroPitch:
+      'Specialized in React, Tailwind and 3D experiences (R3F). I combine design sensibility, front-end integration, and AI-augmented workflows (agentic architectures) to design and ship modern products, fast.',
+    heroHighlight: [
+      'React & Three.js / R3F',
+      'AI-Augmented Engineering',
+      'UI/UX & Design Systems',
+      'Full-Lifecycle Delivery'
+    ],
+    aboutTitle: 'Creative Developer & AI-Augmented Front-End',
+    aboutParagraph1:
+      'Based in Paris, I bridge art direction, detail-oriented design, and AI-augmented engineering workflows to build immersive, performant, and production-ready web experiences.',
+    aboutParagraph2:
+      'From Figma design systems to production-grade code, I orchestrate modern AI tooling (Gemini, Claude, Antigravity) to iterate 3× faster while maintaining uncompromising standards of code quality.',
+    pillars: [
+      {
+        id: 'creative-dev',
+        title: 'Creative Developer',
+        subtitle: '3D Web, R3F & micro-interactions',
+        description:
+          'The powerhouse trio of React 19 + Tailwind CSS + Three.js / React Three Fiber (R3F) to deliver spatial experiences, custom shaders, and polished interactive motion.',
+        highlight: 'React 19 • Three.js / R3F • Motion'
+      },
+      {
+        id: 'ai-augmented',
+        title: 'AI-Augmented Development',
+        subtitle: '3× faster prototyping & shipping',
+        description:
+          'Mastery of modern AI-assisted workflows (Claude Code, Gemini, Antigravity, agentic architectures) to prototype, iterate, and ship at pace without sacrificing code quality.',
+        highlight: 'Claude Code • Gemini • Agentic Tooling'
+      },
+      {
+        id: 'full-lifecycle',
+        title: 'Full-Lifecycle Front-End',
+        subtitle: 'From design systems to production',
+        description:
+          'End-to-end product delivery: UI/UX craft, hi-fi prototyping, responsive front-end integration, automated CI/CD, and zero-downtime deployment on Vercel/Netlify.',
+        highlight: 'Figma → Code → CI/CD & Vercel'
+      }
+    ]
+  }
+};
+
+export const stackCategoriesData: Record<'fr' | 'en', StackCategory[]> = {
+  fr: [
+    {
+      id: 'frontend-creative',
+      name: 'Front-End & Creative',
+      tag: 'Core Technologies',
+      description: 'Développement d’interfaces réactives, animations soignées et scènes 3D interactives.',
+      skills: [
+        'React',
+        'Vite',
+        'Tailwind CSS',
+        'Three.js / React Three Fiber (R3F)',
+        'HTML5 & CSS3',
+        'JavaScript / TypeScript'
+      ]
+    },
+    {
+      id: 'ai-agentic',
+      name: 'IA & Applications agentiques',
+      tag: 'AI-Augmented Power',
+      description: 'Intégration de modèles fondateurs, agents autonomes et flux de code augmentés.',
+      skills: [
+        'Intégration de LLMs (Gemini, Claude)',
+        'Architecture d’agents',
+        'Prototypage assisté par IA',
+        'Tooling IA (Claude Code, Antigravity)',
+        'Prompt Engineering & Orchestration'
+      ]
+    },
+    {
+      id: 'design-prototyping',
+      name: 'Design & Prototypage',
+      tag: 'Visual Craft',
+      description: 'Direction artistique, ergonomie utilisateur, design systems et maquettes haute fidélité.',
+      skills: [
+        'UI/UX Design',
+        'Design Systems',
+        'Antigravity',
+        'Figma',
+        'Micro-interactions',
+        'Wireframing & Spécifications'
+      ]
+    },
+    {
+      id: 'workflow-deployment',
+      name: 'Workflow & Déploiement',
+      tag: 'Production Ready',
+      description: 'Outillage professionnel, intégration continue et déploiement cloud haute disponibilité.',
+      skills: [
+        'Git / GitHub',
+        'VS Code',
+        'CI/CD Pipelines',
+        'Déploiement web (Vercel, Netlify...)',
+        'Optimisation & Performance (Lighthouse)'
+      ]
+    }
+  ],
+  en: [
+    {
+      id: 'frontend-creative',
+      name: 'Front-End & Creative',
+      tag: 'Core Technologies',
+      description: 'Responsive UI engineering, fluid motion, and interactive 3D spatial scenes.',
+      skills: [
+        'React',
+        'Vite',
+        'Tailwind CSS',
+        'Three.js / React Three Fiber (R3F)',
+        'HTML5 & CSS3',
+        'JavaScript / TypeScript'
+      ]
+    },
+    {
+      id: 'ai-agentic',
+      name: 'AI & Agentic Systems',
+      tag: 'AI-Augmented Power',
+      description: 'Foundation model integration, autonomous agent architectures, and augmented code flows.',
+      skills: [
+        'LLM Integration (Gemini, Claude)',
+        'Agent Architecture',
+        'AI-Assisted Prototyping',
+        'AI Tooling (Claude Code, Antigravity)',
+        'Prompt Engineering & Orchestration'
+      ]
+    },
+    {
+      id: 'design-prototyping',
+      name: 'Design & Prototyping',
+      tag: 'Visual Craft',
+      description: 'Art direction, user experience, scalable design systems, and high-fidelity prototypes.',
+      skills: [
+        'UI/UX Design',
+        'Design Systems',
+        'Antigravity',
+        'Figma',
+        'Micro-interactions',
+        'Wireframing & Spec Design'
+      ]
+    },
+    {
+      id: 'workflow-deployment',
+      name: 'Workflow & Deployment',
+      tag: 'Production Ready',
+      description: 'Modern developer tooling, continuous integration, and scalable cloud deployment.',
+      skills: [
+        'Git / GitHub',
+        'VS Code',
+        'CI/CD Pipelines',
+        'Web Deployment (Vercel, Netlify...)',
+        'Performance & Auditing (Lighthouse)'
+      ]
+    }
+  ]
+};
+
 export const skillsList = [
-  { name: 'Three.js / WebGL', level: '95%', cat: '3D & Shaders' },
-  { name: 'React 19 / Next.js', level: '95%', cat: 'Core Architecture' },
-  { name: 'Tailwind CSS', level: '98%', cat: 'UI Craftsmanship' },
-  { name: 'GSAP & Motion', level: '92%', cat: 'Cinematic Animation' },
+  { name: 'React 19 / Vite', level: '96%', cat: 'Core Front-End' },
+  { name: 'Three.js / R3F', level: '94%', cat: '3D Web & Shaders' },
+  { name: 'Tailwind CSS', level: '98%', cat: 'UI Craft & Systems' },
+  { name: 'AI Tooling & LLMs', level: '95%', cat: 'Agentic Workflows' },
+  { name: 'UI/UX & Figma', level: '92%', cat: 'Product Design' },
   { name: 'TypeScript', level: '90%', cat: 'Type Safety' },
-  { name: 'Web Audio API', level: '88%', cat: 'Sound Design' },
-  { name: 'UI/UX Architecture', level: '94%', cat: 'Active Theory Vibe' }
+  { name: 'CI/CD & Vercel', level: '92%', cat: 'Deployment & Ops' }
 ];
+

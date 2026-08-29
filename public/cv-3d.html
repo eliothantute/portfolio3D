@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="fr" class="bg-[#09090b] text-[#fafafa]">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV 3D Interactif — Eliot Hantute</title>
+  <meta name="description" content="Visionneuse 3D interactive du Curriculum Vitae d'Eliot Hantute, UI Designer & Développeur Front-End." />
+
+  <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Three.js & OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 50% 30%, #18181b 0%, #09090b 70%, #040406 100%);
+      user-select: none;
+    }
+
+    .font-display {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    #webgl-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .glass-panel {
+      background: rgba(18, 18, 22, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .hud-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .hud-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .hud-btn.active {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #09090b;
+    }
+
+    .primary-download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.35rem;
+      border-radius: 9999px;
+      background: #0066ff;
+      border: 1px solid #388bfd;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 20px rgba(0, 102, 255, 0.4);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .primary-download-btn:hover {
+      background: #1a75ff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 102, 255, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- WebGL 3D Canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Top Floating Header -->
+  <header class="fixed left-0 right-0 top-5 z-20 flex justify-between items-center px-6 sm:px-10 pointer-events-none">
+    <div class="pointer-events-auto">
+      <a href="/" class="glass-panel flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-mono font-medium text-white/80 hover:text-white transition-colors">
+        <span>←</span>
+        <span>RETOUR AU PORTFOLIO</span>
+      </a>
+    </div>
+
+    <div class="glass-panel pointer-events-auto hidden sm:flex items-center gap-3 rounded-full px-5 py-2">
+      <span class="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <span class="font-mono text-xs font-semibold text-white/90">
+        CV 3D // ELIOT HANTUTE
+      </span>
+    </div>
+
+    <div class="pointer-events-auto flex items-center gap-3">
+      <a href="/CV_Eliot_Hantute.pdf" download="CV_Eliot_Hantute.pdf" class="primary-download-btn">
+        <span>TÉLÉCHARGER LE PDF (A4)</span>
+        <span>↓</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Bottom Floating HUD & Controls -->
+  <footer class="fixed bottom-6 left-0 right-0 z-20 flex flex-col items-center gap-3 px-4 pointer-events-none">
+    <div class="glass-panel pointer-events-auto flex flex-wrap items-center justify-center gap-2 rounded-full p-1.5 shadow-2xl">
+      <button id="btn-front" class="hud-btn active" onclick="setView('front')">Vue Face</button>
+      <button id="btn-iso" class="hud-btn" onclick="setView('iso')">Vue 3D Iso</button>
+      <button id="btn-back" class="hud-btn" onclick="setView('back')">Vue Dos</button>
+      <div class="h-4 w-px bg-white/15 mx-1 hidden sm:block"></div>
+      <button id="btn-autorotate" class="hud-btn" onclick="toggleAutoRotate()">Auto-Rotation: ON</button>
+      <button id="btn-reset" class="hud-btn" onclick="resetCamera()">Réinitialiser</button>
+    </div>
+
+    <div class="pointer-events-auto text-center">
+      <span class="font-mono text-[11px] text-white/40 tracking-wider">
+        🖱️ Clic gauche pour tourner • Molette pour zoomer • Clic droit pour déplacer
+      </span>
+    </div>
+  </footer>
+
+  <!-- 3D Application Script -->
+  <script>
+    let scene, camera, renderer, controls;
+    let paperMesh, ambientParticles;
+    let isAutoRotating = true;
+    let targetCameraPos = { x: 0, y: 0, z: 7.2 };
+    let targetLookAt = { x: 0, y: 0, z: 0 };
+
+    // 1. Generate High-Definition 2D Canvas Texture of Eliot Hantute's CV
+    function createCVTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 2048;
+      canvas.height = 2896; // ~A4 Ratio (1:1.414)
+      const ctx = canvas.getContext('2d');
+
+      // Background White Paper
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const marginX = 140;
+      const colDividerX = 720;
+      const rightColX = 780;
+      const rightColWidth = canvas.width - rightColX - marginX;
+
+      // Vertical Divider
+      ctx.strokeStyle = '#e4e4e7';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(colDividerX, 140);
+      ctx.lineTo(colDividerX, canvas.height - 140);
+      ctx.stroke();
+
+      // ================= LEFT COLUMN =================
+      let leftY = 220;
+
+      // Header Left: Name
+      ctx.fillStyle = '#09090b';
+      ctx.font = '900 82px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('ELIOT', marginX, leftY);
+      leftY += 86;
+      ctx.fillText('HANTUTE', marginX, leftY);
+
+      leftY += 60;
+      ctx.fillStyle = '#52525b';
+      ctx.font = '700 28px "JetBrains Mono", monospace';
+      ctx.fillText('UI DESIGNER &', marginX, leftY);
+      leftY += 36;
+      ctx.fillText('FRONT-END DEVELOPER', marginX, leftY);
+      leftY += 36;
+      ctx.fillStyle = '#0066ff';
+      ctx.font = '700 26px "JetBrains Mono", monospace';
+      ctx.fillText('JUNIOR', marginX, leftY);
+
+      // Section Divider
+      leftY += 60;
+      ctx.strokeStyle = '#e4e4e7';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(marginX, leftY);
+      ctx.lineTo(colDividerX - 50, leftY);
+      ctx.stroke();
+
+      // CONTACT
+      leftY += 60;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 26px "JetBrains Mono", monospace';
+      ctx.fillText('CONTACT', marginX, leftY);
+
+      const contactItems = [
+        { icon: '📍', text: 'Paris, France' },
+        { icon: '✉️', text: 'eliot.hantute@gmail.com' },
+        { icon: '📞', text: '+33 7 75 03 68 75' },
+        { icon: '🌐', text: 'eliotlab.fr' }
+      ];
+
+      leftY += 50;
+      ctx.font = '500 25px "Inter", sans-serif';
+      ctx.fillStyle = '#27272a';
+      contactItems.forEach(item => {
+        ctx.fillText(`${item.icon}  ${item.text}`, marginX, leftY);
+        leftY += 44;
+      });
+
+      // Section Divider
+      leftY += 30;
+      ctx.strokeStyle = '#e4e4e7';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(marginX, leftY);
+      ctx.lineTo(colDividerX - 50, leftY);
+      ctx.stroke();
+
+      // COMPETENCES
+      leftY += 60;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 26px "JetBrains Mono", monospace';
+      ctx.fillText('COMPÉTENCES', marginX, leftY);
+
+      const skillCategories = [
+        {
+          title: 'UI / UX DESIGN',
+          skills: ['Figma', 'Framer', 'Prototypage', 'Design System', 'Photoshop', 'Illustrator']
+        },
+        {
+          title: 'DÉVELOPPEMENT',
+          skills: ['React', 'Next.js', 'Three.js', 'Tailwind CSS', 'JavaScript', 'HTML5 / CSS3']
+        },
+        {
+          title: 'SOFT SKILLS',
+          skills: ['Créativité', 'Autonomie', 'Initiative', 'Travail en équipe', 'Adaptabilité']
+        }
+      ];
+
+      leftY += 50;
+      skillCategories.forEach(cat => {
+        ctx.fillStyle = '#71717a';
+        ctx.font = '700 21px "JetBrains Mono", monospace';
+        ctx.fillText(cat.title, marginX, leftY);
+        leftY += 36;
+
+        let rowX = marginX;
+        cat.skills.forEach(skill => {
+          ctx.font = '600 21px "Inter", sans-serif';
+          const textMetrics = ctx.measureText(skill);
+          const pillWidth = textMetrics.width + 24;
+
+          if (rowX + pillWidth > colDividerX - 50) {
+            rowX = marginX;
+            leftY += 46;
+          }
+
+          // Pill Background
+          ctx.fillStyle = '#f4f4f5';
+          ctx.strokeStyle = '#e4e4e7';
+          ctx.lineWidth = 1.5;
+          roundRect(ctx, rowX, leftY - 26, pillWidth, 36, 8, true, true);
+
+          // Pill Text
+          ctx.fillStyle = '#18181b';
+          ctx.fillText(skill, rowX + 12, leftY - 2);
+
+          rowX += pillWidth + 10;
+        });
+
+        leftY += 60;
+      });
+
+      // Section Divider
+      leftY += 10;
+      ctx.strokeStyle = '#e4e4e7';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(marginX, leftY);
+      ctx.lineTo(colDividerX - 50, leftY);
+      ctx.stroke();
+
+      // LANGUES
+      leftY += 60;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 26px "JetBrains Mono", monospace';
+      ctx.fillText('LANGUES', marginX, leftY);
+
+      const languages = [
+        { lang: 'Français', level: 'Natif' },
+        { lang: 'Anglais', level: 'Avancé (C1)' },
+        { lang: 'Italien', level: 'Débutant (A2)' }
+      ];
+
+      leftY += 50;
+      languages.forEach(l => {
+        ctx.font = '600 24px "Inter", sans-serif';
+        ctx.fillStyle = '#18181b';
+        ctx.fillText(l.lang, marginX, leftY);
+
+        ctx.font = '500 22px "Inter", sans-serif';
+        ctx.fillStyle = '#71717a';
+        ctx.fillText(l.level, colDividerX - 190, leftY);
+        leftY += 42;
+      });
+
+      // ================= RIGHT COLUMN =================
+      let rightY = 220;
+
+      // PROFIL
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 32px "JetBrains Mono", monospace';
+      ctx.fillText('PROFIL', rightColX, rightY);
+
+      rightY += 48;
+      const profileText = "Designer UI & développeur front-end, je conçois des interfaces sur Figma et je les développe moi-même avec React, Next.js et Three.js — du wireframe à la mise en production. J'aime particulièrement les expériences web immersives et interactives (3D, animations, micro-interactions), et j'accorde autant d'importance à l'esthétique qu'à la robustesse technique. Autonome, curieux et à l'aise en environnement agile, je recherche aujourd'hui un poste de UI Designer pour mettre cette double compétence design/développement au service de projets ambitieux.";
+      
+      rightY = wrapText(ctx, profileText, rightColX, rightY, rightColWidth, 26, 40, '#3f3f46');
+
+      // Section Divider
+      rightY += 35;
+      ctx.strokeStyle = '#e4e4e7';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(rightColX, rightY);
+      ctx.lineTo(canvas.width - marginX, rightY);
+      ctx.stroke();
+
+      // EXPÉRIENCES PROFESSIONNELLES
+      rightY += 60;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 32px "JetBrains Mono", monospace';
+      ctx.fillText('EXPÉRIENCES PROFESSIONNELLES', rightColX, rightY);
+
+      const experiences = [
+        {
+          role: 'UI Designer',
+          company: "L'Atelier Berger · Freelance",
+          period: '2026 — Présent',
+          bullets: [
+            "Conception et développement d'une expérience web 3D interactive pour la refonte du site vitrine.",
+            "Globe 3D interactif avec navigation dynamique et animations fluides (React, Three.js).",
+            "Maquettes UI/UX sur Figma, intégration pixel-perfect en React."
+          ]
+        },
+        {
+          role: 'UI Designer',
+          company: "Ping Paris · Freelance",
+          period: '2026',
+          bullets: [
+            "Application web de géolocalisation des tables de ping-pong à Paris.",
+            "UX/UI complète : wireframes, prototypes haute-fidélité sur Figma.",
+            "Développement responsive et performant avec Next.js et Tailwind CSS."
+          ]
+        },
+        {
+          role: 'UI Designer & Graphiste & Community Manager',
+          company: "Centre de Neuro-Pédagogie de Strasbourg · Mission",
+          period: '2025',
+          bullets: [
+            "Refonte et modernisation du site vitrine (HTML5, CSS3, JavaScript, Framer).",
+            "Optimisation SEO on-page, déploiement et configuration DNS."
+          ]
+        },
+        {
+          role: 'Web Designer',
+          company: "Le Comité du Souvenir Français · Freelance",
+          period: '2025',
+          bullets: [
+            "Prototypes haute-fidélité sur Figma et Framer.",
+            "Mise en ligne avec stratégie DNS et déploiement."
+          ]
+        }
+      ];
+
+      rightY += 50;
+      experiences.forEach(exp => {
+        // Role & Period
+        ctx.fillStyle = '#09090b';
+        ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(exp.role, rightColX, rightY);
+
+        // Period Badge
+        ctx.font = '600 20px "JetBrains Mono", monospace';
+        const pMetrics = ctx.measureText(exp.period);
+        const pWidth = pMetrics.width + 24;
+        const pX = canvas.width - marginX - pWidth;
+        
+        ctx.fillStyle = '#f4f4f5';
+        ctx.strokeStyle = '#e4e4e7';
+        roundRect(ctx, pX, rightY - 24, pWidth, 32, 6, true, true);
+        ctx.fillStyle = '#52525b';
+        ctx.fillText(exp.period, pX + 12, rightY - 2);
+
+        // Company
+        rightY += 34;
+        ctx.fillStyle = '#71717a';
+        ctx.font = '500 22px "Inter", sans-serif';
+        ctx.fillText(exp.company, rightColX, rightY);
+
+        // Bullets
+        rightY += 34;
+        exp.bullets.forEach(bullet => {
+          ctx.fillStyle = '#0066ff';
+          ctx.font = '700 20px "Inter", sans-serif';
+          ctx.fillText('▪', rightColX + 8, rightY);
+
+          rightY = wrapText(ctx, bullet, rightColX + 32, rightY, rightColWidth - 40, 22, 34, '#3f3f46');
+          rightY += 8;
+        });
+
+        rightY += 20;
+      });
+
+      // Section Divider
+      rightY += 10;
+      ctx.strokeStyle = '#e4e4e7';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(rightColX, rightY);
+      ctx.lineTo(canvas.width - marginX, rightY);
+      ctx.stroke();
+
+      // FORMATIONS
+      rightY += 60;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 32px "JetBrains Mono", monospace';
+      ctx.fillText('FORMATIONS', rightColX, rightY);
+
+      const formations = [
+        {
+          title: 'PRODUCT DESIGNER',
+          year: '2026',
+          school: 'OpenClassrooms',
+          desc: 'RNCP Niv. 6 (Bac+3/4) — En cours'
+        },
+        {
+          title: 'BUT INFORMATION-COMMUNICATION',
+          year: '2025',
+          school: 'IUT Haguenau / Univ. Strasbourg',
+          desc: 'Stratégie de Communication Digitale'
+        },
+        {
+          title: 'PRODUCTION SONORE & POST-PRODUCTION',
+          year: '2017',
+          school: 'Recording Arts of Canada — Montréal',
+          desc: 'Audio Engineering & Sound Design'
+        },
+        {
+          title: 'BACCALAURÉAT STD2A',
+          year: '2015',
+          school: 'Paris 6e',
+          desc: 'Design & Arts Appliqués'
+        }
+      ];
+
+      rightY += 50;
+      const fColW = (rightColWidth - 30) / 2;
+      const fStartY = rightY;
+
+      formations.forEach((f, idx) => {
+        const isCol2 = idx % 2 === 1;
+        const isRow2 = idx >= 2;
+        const x = isCol2 ? rightColX + fColW + 30 : rightColX;
+        const y = isRow2 ? fStartY + 140 : fStartY;
+
+        // Card Outline
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#e4e4e7';
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, x, y - 28, fColW, 115, 12, true, true);
+
+        // Title & Year
+        ctx.fillStyle = '#09090b';
+        ctx.font = '800 20px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(f.title, x + 16, y);
+
+        ctx.fillStyle = '#71717a';
+        ctx.font = '600 18px "JetBrains Mono", monospace';
+        ctx.fillText(f.year, x + fColW - 65, y);
+
+        // School
+        ctx.fillStyle = '#52525b';
+        ctx.font = '500 19px "Inter", sans-serif';
+        ctx.fillText(f.school, x + 16, y + 32);
+
+        // Desc
+        ctx.fillStyle = '#a1a1aa';
+        ctx.font = '400 18px "Inter", sans-serif';
+        ctx.fillText(f.desc, x + 16, y + 62);
+      });
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Helper: Round Rectangle on Canvas
+    function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    // Helper: Text Wrapping on Canvas
+    function wrapText(ctx, text, x, y, maxWidth, fontSize, lineHeight, color) {
+      ctx.fillStyle = color;
+      ctx.font = `400 ${fontSize}px "Inter", sans-serif`;
+      const words = text.split(' ');
+      let line = '';
+      let curY = y;
+
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          ctx.fillText(line, x, curY);
+          line = words[n] + ' ';
+          curY += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, x, curY);
+      return curY;
+    }
+
+    // 2. Generate Back Texture for 3D CV
+    function createBackTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 1448;
+      const ctx = canvas.getContext('2d');
+
+      // Gradient Dark Back
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#111319');
+      grad.addColorStop(1, '#08090d');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Geometric Grid Lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 80) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 80) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      // Center Brand Badge
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 64px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('ELIOT LAB', canvas.width / 2, canvas.height / 2 - 30);
+
+      ctx.fillStyle = '#0066ff';
+      ctx.font = '700 24px "JetBrains Mono", monospace';
+      ctx.fillText('OFFICIAL 3D CURRICULUM VITAE', canvas.width / 2, canvas.height / 2 + 25);
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '500 20px "Inter", sans-serif';
+      ctx.fillText('© 2026 Eliot Hantute • Paris, France', canvas.width / 2, canvas.height / 2 + 65);
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // 3. Initialize Three.js Scene
+    function init() {
+      const container = document.getElementById('webgl-canvas');
+
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(targetCameraPos.x, targetCameraPos.y, targetCameraPos.z);
+
+      renderer = new THREE.WebGLRenderer({ canvas: container, antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxDistance = 14;
+      controls.minDistance = 2.5;
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+      scene.add(ambientLight);
+
+      const mainLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      mainLight.position.set(5, 8, 7);
+      mainLight.castShadow = true;
+      mainLight.shadow.mapSize.width = 2048;
+      mainLight.shadow.mapSize.height = 2048;
+      scene.add(mainLight);
+
+      const fillLight = new THREE.DirectionalLight(0x90c0ff, 0.5);
+      fillLight.position.set(-6, -2, 4);
+      scene.add(fillLight);
+
+      const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
+      backLight.position.set(0, 4, -6);
+      scene.add(backLight);
+
+      // Create 3D Paper Document
+      const frontTex = createCVTexture();
+      frontTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      const backTex = createBackTexture();
+      backTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+      const paperWidth = 4.2;
+      const paperHeight = 5.94; // A4 Aspect Ratio
+      const paperDepth = 0.03;
+
+      const geometry = new THREE.BoxGeometry(paperWidth, paperHeight, paperDepth);
+      const edgeMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 });
+
+      const materials = [
+        edgeMaterial, // right
+        edgeMaterial, // left
+        edgeMaterial, // top
+        edgeMaterial, // bottom
+        new THREE.MeshStandardMaterial({
+          map: frontTex,
+          roughness: 0.35,
+          metalness: 0.05,
+        }), // front
+        new THREE.MeshStandardMaterial({
+          map: backTex,
+          roughness: 0.4,
+          metalness: 0.1,
+        })  // back
+      ];
+
+      paperMesh = new THREE.Mesh(geometry, materials);
+      paperMesh.castShadow = true;
+      paperMesh.receiveShadow = true;
+      scene.add(paperMesh);
+
+      // Ambient Floor Shadow Plane
+      const shadowPlaneGeo = new THREE.PlaneGeometry(12, 12);
+      const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.35 });
+      const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+      shadowPlane.position.y = -3.4;
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.receiveShadow = true;
+      scene.add(shadowPlane);
+
+      // Floating Dust Particles
+      const particleCount = 600;
+      const particleGeo = new THREE.BufferGeometry();
+      const pPositions = new Float32Array(particleCount * 3);
+
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        pPositions[i] = (Math.random() - 0.5) * 16;
+        pPositions[i + 1] = (Math.random() - 0.5) * 16;
+        pPositions[i + 2] = (Math.random() - 0.5) * 16;
+      }
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        size: 0.04,
+        color: 0x0066ff,
+        transparent: true,
+        opacity: 0.45,
+      });
+
+      ambientParticles = new THREE.Points(particleGeo, particleMat);
+      scene.add(ambientParticles);
+
+      window.addEventListener('resize', onWindowResize);
+      
+      // Stop auto-rotation when user interacts manually
+      controls.addEventListener('start', () => {
+        isAutoRotating = false;
+        updateHUDButtons();
+      });
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    // Set Predefined Camera Views
+    function setView(view) {
+      isAutoRotating = false;
+      document.querySelectorAll('.hud-btn').forEach(btn => btn.classList.remove('active'));
+
+      if (view === 'front') {
+        document.getElementById('btn-front').classList.add('active');
+        targetCameraPos = { x: 0, y: 0, z: 7.2 };
+      } else if (view === 'iso') {
+        document.getElementById('btn-iso').classList.add('active');
+        targetCameraPos = { x: 4.8, y: 2.2, z: 6.2 };
+      } else if (view === 'back') {
+        document.getElementById('btn-back').classList.add('active');
+        targetCameraPos = { x: 0, y: 0, z: -7.2 };
+      }
+    }
+
+    function toggleAutoRotate() {
+      isAutoRotating = !isAutoRotating;
+      updateHUDButtons();
+    }
+
+    function updateHUDButtons() {
+      const btn = document.getElementById('btn-autorotate');
+      if (btn) {
+        btn.textContent = `Auto-Rotation: ${isAutoRotating ? 'ON' : 'OFF'}`;
+        if (isAutoRotating) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+    }
+
+    function resetCamera() {
+      setView('front');
+    }
+
+    // Animation Loop
+    function animate(time) {
+      requestAnimationFrame(animate);
+
+      // Smooth Camera LERP
+      camera.position.x += (targetCameraPos.x - camera.position.x) * 0.06;
+      camera.position.y += (targetCameraPos.y - camera.position.y) * 0.06;
+      camera.position.z += (targetCameraPos.z - camera.position.z) * 0.06;
+
+      if (paperMesh) {
+        // Floating Sinusoidal Breathing
+        paperMesh.position.y = Math.sin(time * 0.0015) * 0.08;
+
+        if (isAutoRotating) {
+          paperMesh.rotation.y = Math.sin(time * 0.0008) * 0.35;
+          paperMesh.rotation.x = Math.cos(time * 0.001) * 0.04;
+        }
+      }
+
+      if (ambientParticles) {
+        ambientParticles.rotation.y += 0.0005;
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // Start
+    init();
+    animate(0);
+  </script>
+</body>
+</html>

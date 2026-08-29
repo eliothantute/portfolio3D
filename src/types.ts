@@ -23,9 +23,26 @@ export interface Project {
 
 export type Language = 'fr' | 'en';
 
+export interface StackCategory {
+  id: string;
+  name: string;
+  description: string;
+  skills: string[];
+  tag: string;
+}
+
+export interface ProfilePillar {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  highlight: string;
+}
+
 export interface CursorContextType {
   cursorText: string;
   setCursorText: (text: string) => void;
   isHovered: boolean;
   setIsHovered: (hovered: boolean) => void;
 }
+

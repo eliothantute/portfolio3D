@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Language } from '../types';
+import { InteractiveText } from './InteractiveText';
 
 interface ContactSectionProps {
   lang: Language;
@@ -17,56 +19,56 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ lang, onHoverIte
     navigator.clipboard.writeText(email);
     setCopied(true);
 
-    const btn = e.currentTarget;
-    const rect = btn.getBoundingClientRect();
-    const ripple = document.createElement('span');
-    ripple.className = 'absolute rounded-full pointer-events-none z-50 bg-[#a8b8e8] animate-ping';
-    ripple.style.left = `${e.clientX - rect.left - 20}px`;
-    ripple.style.top = `${e.clientY - rect.top - 20}px`;
-    ripple.style.width = '40px';
-    ripple.style.height = '40px';
-    btn.appendChild(ripple);
-
     setTimeout(() => {
-      ripple.remove();
       setCopied(false);
     }, 2500);
   };
 
   return (
-    <section id="contact" className="relative z-10 overflow-hidden border-t border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f7f9fd_42%,#ffffff_100%)] px-6 py-32 sm:px-16">
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-80 w-[min(75vw,900px)] -translate-x-1/2 bg-[radial-gradient(circle,rgba(145,171,255,0.2)_0%,rgba(145,171,255,0)_70%)] blur-2xl" />
-
-      <div className="relative z-10 mx-auto max-w-5xl text-center">
-        <span className="mb-5 inline-flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-slate-500">
-          <span className="h-px w-8 bg-slate-300" />
-          Contact
-          <span className="h-px w-8 bg-slate-300" />
+    <section
+      id="contact"
+      className="relative z-10 mx-auto max-w-7xl px-4 py-32 sm:px-8 lg:px-12 [perspective:1200px]"
+      aria-label={lang === 'fr' ? 'Contactez-moi' : 'Contact me'}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 50, rotateX: 12, scale: 0.95 }}
+        whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="sneaks-card mx-auto max-w-4xl rounded-[2.5rem] p-8 text-center sm:p-14 [transform-style:preserve-3d]"
+      >
+        <span className="mb-4 inline-block font-mono text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
+          Contact &amp; Collaboration
         </span>
 
-        <h2 className="font-display text-5xl font-black tracking-tight text-slate-900 sm:text-7xl">
-          {lang === 'fr' ? 'Construisons une interface qui marque.' : 'Let us build an interface that leaves a mark.'}
+        <h2 className="font-display text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
+          <InteractiveText
+            text={lang === 'fr' ? 'Construisons ensemble votre projet.' : 'Let’s build something great together.'}
+            hoverColor="#0066ff"
+          />
         </h2>
 
-        <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
+        <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg">
           {lang === 'fr'
-            ? "Direction UI, motion et développement front-end pour des expériences digitales premium."
-            : 'UI direction, motion and front-end craft for premium digital experiences.'}
+            ? 'Disponible pour des missions freelance, développement front-end React, intégration 3D et prototypage assisté par IA.'
+            : 'Available for freelance missions, React front-end development, 3D craft and AI-assisted prototyping.'}
         </p>
 
-        <div className="mt-12">
+        {/* 1-Click Email Copy Button */}
+        <div className="mt-9">
           <button
             onClick={handleCopyEmail}
-            onMouseEnter={() => onHoverItem?.('COPY')}
+            onMouseEnter={() => onHoverItem?.('COPIER EMAIL')}
             onMouseLeave={onLeaveItem}
-            className="lux-interactive inline-flex items-center gap-3 rounded-full border border-slate-300 bg-white px-8 py-4 font-mono text-sm uppercase tracking-[0.18em] text-slate-700 shadow-[0_12px_34px_rgba(23,33,59,0.08)] hover:border-slate-800 hover:bg-slate-900 hover:text-white"
+            className="sneaks-btn-primary px-8 py-4 text-base"
           >
-            <span>{copied ? (lang === 'fr' ? 'Email copié' : 'Email copied') : email}</span>
-            <span>↗</span>
+            <span>{copied ? (lang === 'fr' ? 'Email copié dans le presse-papier ✓' : 'Email copied to clipboard ✓') : email}</span>
+            <span>{copied ? '✓' : '↗'}</span>
           </button>
         </div>
 
-        <div className="mx-auto mt-16 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+        {/* Social Links */}
+        <div className="mx-auto mt-12 flex flex-wrap items-center justify-center gap-3">
           {[
             { name: 'GitHub', url: 'https://github.com/eliothantute' },
             { name: 'Instagram', url: 'https://www.instagram.com/zedenmusic' },
@@ -78,37 +80,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ lang, onHoverIte
               href={soc.url}
               target="_blank"
               rel="noreferrer"
-              onMouseEnter={() => onHoverItem?.('LINK')}
+              onMouseEnter={() => onHoverItem?.(soc.name.toUpperCase())}
               onMouseLeave={onLeaveItem}
-              className="lux-interactive rounded-full border border-slate-300 bg-white px-4 py-4 font-mono text-[11px] uppercase tracking-[0.16em] text-slate-600 hover:border-slate-800 hover:text-slate-900"
+              className="rounded-full border border-zinc-200 bg-zinc-50 px-4 py-2 text-xs font-semibold text-zinc-700 transition-all hover:border-zinc-900 hover:bg-white hover:text-zinc-950"
             >
-              {soc.name}
+              {soc.name} ↗
             </a>
           ))}
         </div>
 
-        <p className="mx-auto mt-12 max-w-2xl text-[10px] leading-relaxed text-slate-400">
-          Landing 3D based on{' '}
-          <a
-            href="https://sketchfab.com/3d-models/smol-ame-in-an-upcycled-terrarium-hololiveen-490ccce249d242188fda5ad3160a4b24"
-            target="_blank"
-            rel="noreferrer"
-            className="underline decoration-slate-300 underline-offset-2 hover:text-slate-600"
-          >
-            “Smol Ame in an Upcycled Terrarium”
-          </a>{' '}
-          by{' '}
-          <a
-            href="https://sketchfab.com/seafoam"
-            target="_blank"
-            rel="noreferrer"
-            className="underline decoration-slate-300 underline-offset-2 hover:text-slate-600"
-          >
-            Seafoam
-          </a>{' '}
-          under CC-BY-4.0.
+        <p className="mx-auto mt-14 font-mono text-xs text-zinc-400">
+          © 2026 Eliot Hantute • Creative Developer &amp; AI-Augmented Front-End • Paris, France
         </p>
-      </div>
+      </motion.div>
     </section>
   );
 };
