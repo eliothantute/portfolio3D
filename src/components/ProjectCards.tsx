@@ -1,8 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { Project, Language } from '../types';
 import { InteractiveText } from './InteractiveText';
-import { VelocityCarousel } from './VelocityCarousel';
 
 interface ProjectCardsProps {
   projects: Project[];
@@ -11,6 +10,26 @@ interface ProjectCardsProps {
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
+
+const card3DVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 60,
+    rotateX: 14,
+    scale: 0.94,
+  },
+  visible: (idx: number) => ({
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      delay: idx * 0.12,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};
 
 export const ProjectCards: React.FC<ProjectCardsProps> = ({
   projects,
@@ -31,7 +50,7 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-10 flex flex-col items-start justify-between gap-4 border-b border-zinc-200 pb-8 sm:flex-row sm:items-end"
+        className="mb-14 flex flex-col items-start justify-between gap-4 border-b border-zinc-200 pb-8 sm:flex-row sm:items-end"
       >
         <div>
           <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
@@ -46,19 +65,77 @@ export const ProjectCards: React.FC<ProjectCardsProps> = ({
         </div>
         <p className="max-w-md text-sm leading-relaxed text-zinc-500 sm:text-right">
           {lang === 'fr'
-            ? 'Glissez ou cliquez pour naviguer à travers les projets avec physique interactive Framer Velocity.'
-            : 'Drag or click to navigate through projects with interactive Framer Velocity physics.'}
+            ? 'Applications React, intégrations 3D et projets assistés par IA conçus avec précision.'
+            : 'React apps, 3D experiences and AI-augmented projects built with precision.'}
         </p>
       </motion.div>
 
-      {/* Framer Velocity Carousel */}
-      <VelocityCarousel
-        projects={projects}
-        lang={lang}
-        onSelectProject={onSelectProject}
-        onHoverItem={onHoverItem}
-        onLeaveItem={onLeaveItem}
-      />
+      {/* Projects Grid with 3D Perspective Stagger */}
+      <div className="grid gap-8 md:grid-cols-2 [perspective:1200px]">
+        {projects.map((project, idx) => (
+          <motion.article
+            key={`${project.id}-${idx}`}
+            custom={idx}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={card3DVariants}
+            onClick={() => onSelectProject(project)}
+            onMouseEnter={() =>
+              onHoverItem?.(lang === 'fr' ? 'VOIR LE PROJET' : 'VIEW PROJECT')
+            }
+            onMouseLeave={onLeaveItem}
+            className="sneaks-card group flex cursor-pointer flex-col justify-between rounded-3xl p-5 sm:p-6 [transform-style:preserve-3d]"
+          >
+            {/* Project Image Container (No Top Badges/Text as requested) */}
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-zinc-100">
+              <img
+                src={project.image}
+                alt={project.title}
+                className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+              {/* Status Pill on bottom hover */}
+              <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-center justify-between text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span className="font-mono text-xs font-medium">{project.status}</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-zinc-950 font-bold shadow-md transition-transform group-hover:scale-110">
+                  ↗
+                </span>
+              </div>
+            </div>
+
+            {/* Project Details */}
+            <div className="mt-5 flex flex-col justify-between">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-display text-2xl font-bold tracking-tight text-zinc-950 transition-colors group-hover:text-blue-600">
+                    {project.title}
+                  </h3>
+                  <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-zinc-600">
+                    {project.subtitle}
+                  </p>
+                </div>
+                <span className="font-mono text-xs font-semibold text-zinc-400">
+                  {project.year}
+                </span>
+              </div>
+
+              {/* Tech Stack Pills */}
+              <div className="mt-4 flex flex-wrap gap-1.5 border-t border-zinc-100 pt-3.5">
+                {project.stack.slice(0, 4).map((tech, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className="rounded-lg bg-zinc-100 px-2.5 py-1 font-mono text-[10px] font-medium text-zinc-700 transition-colors group-hover:bg-zinc-200/80"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.article>
+        ))}
+      </div>
     </section>
   );
 };
