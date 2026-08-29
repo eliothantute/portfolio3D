@@ -1,10 +1,9 @@
 import { Project } from '../types';
 import pingParisImg from '../assets/images/regenerated_image_1782446553640.png';
-import arcReflexImg from '../assets/images/arc-reflex-project.png';
-import zedenImg from '../assets/images/zeden-project.jpg';
-import ofissImg from '../assets/images/OFISS.png';
 import atelierBergerBlueImg from '../assets/images/image_069-1-1.jpg';
 import eloraImg from '../assets/images/hero.png';
+import haziImg from '../assets/images/hazi-project.png';
+import nariOsImg from '../assets/images/nari-os-project.png';
 
 export const projectsData: Record<'fr' | 'en', Project[]> = {
   fr: [
@@ -21,7 +20,7 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       stack: ['React 19', 'Three.js', 'React Globe GL', 'Tailwind CSS', 'Vite', 'Motion'],
       objective: "Sublimer le rayonnement international de l'agence à travers une navigation spatiale intuitive et mémorable.",
       status: 'Prototype fonctionnel déployé',
-      liveUrl: 'https://www.ateliersberger.com/',
+      liveUrl: 'https://globemap3-dberger.vercel.app/globe-react.html',
       githubUrl: 'https://github.com/eliothantute/Atelier-Berger-Carte-Interactive-',
       image: atelierBergerBlueImg,
       featured: true,
@@ -55,6 +54,27 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
+      id: 'nari-os',
+      title: 'NARI OS',
+      client: 'NARI',
+      subtitle: 'Landing Page Agent Vocal Autonome',
+      description: "Site vitrine pour un agent vocal IA souverain français capable de piloter un ordinateur par la voix.",
+      longDescription: "Création de l'identité visuelle et intégration front-end du site NARI, un agent vocal autonome orchestrant plusieurs IA. Direction artistique spatiale et sobre (fond galactique, typographie condensée) pour incarner une technologie souveraine française premium, avec structure d'offres mensuelle et à vie.",
+      year: '2026',
+      category: 'Brand Design & Landing Page SaaS',
+      role: ['Brand Design', 'Développement Front-End', 'UI/UX'],
+      stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
+      objective: "Traduire la promesse d'une IA vocale souveraine et premium en une expérience web sobre et crédible.",
+      status: 'En ligne',
+      liveUrl: 'https://nari-os-sigma.vercel.app/',
+      image: nariOsImg,
+      featured: false,
+      metrics: [
+        { label: 'Positionnement', value: '🇫🇷 Souverain' },
+        { label: 'Rôle', value: 'Brand + Front-End' }
+      ]
+    },
+    {
       id: 'ping-paris',
       title: 'Ping Paris',
       client: 'Projet Personnel / PWA',
@@ -78,65 +98,24 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
-      id: 'arc-reflex',
-      title: 'Arc Reflex',
-      client: 'Arc Reflex Client',
-      subtitle: 'Landing Page Premium & Identité',
-      description: "Refonte stratégique centrée sur la conversion, création du logotype et infrastructure SEO/DNS.",
-      longDescription: "Accompagnement digital complet à 360° : de la direction artistique initiale et la création du logotype jusqu'au déploiement technique optimisé, la configuration des enregistrements DNS et l'optimisation locale Google Business Profile.",
-      year: '2025',
-      category: 'Client Work & Branding',
-      role: ['Web Design', 'Identité Visuelle', 'Intégration HTML/Tailwind', 'Stratégie SEO'],
-      stack: ['HTML5', 'Tailwind CSS', 'JavaScript', 'Google Business', 'DNS/Cloudflare'],
-      objective: "Établir une autorité de marque instantanée et générer des contacts qualifiés.",
-      status: 'En ligne & Optimisé',
-      liveUrl: 'https://www.arc-reflex.com/',
-      image: arcReflexImg,
-      featured: false,
-      metrics: [
-        { label: 'Taux de Conversion', value: '+42%' },
-        { label: 'Vitesse de Chargement', value: '0.4s' }
-      ]
-    },
-    {
-      id: 'zeden-audiolab',
-      title: 'Zeden AudioLab',
-      client: 'Zeden Electronic Music',
-      subtitle: 'Expérience Vitrine Musicale & DJ',
-      description: "Site immersif avec lecteur audio réactif, visualiseur de fréquences et univers cyberpunk.",
-      longDescription: "Conception d'une plateforme d'exploration sonore pour le projet électronique Zeden. L'interface marie des codes bruts issus du hardware audio vintage et du design d'interface futuriste avec des interactions sonores tactiles.",
+      id: 'hazi-whatsapp',
+      title: 'Hazi Whatsapp',
+      client: 'Hazi',
+      subtitle: 'Landing Page Logiciel Desktop 3D Edition',
+      description: "Site vitrine premium pour un logiciel desktop de prospection multicanale WhatsApp & SMS, avec simulateur d'interface intégré.",
+      longDescription: "Conception de l'identité de marque et développement front-end complet de la landing page Hazi Whatsapp. Le site met en scène un simulateur d'interface desktop interactif directement dans le navigateur, une esthétique cyber-green immersive et une structure de conversion pensée pour une offre de licence à vie.",
       year: '2026',
-      category: 'Audio Visual Experience',
-      role: ['Sound Design', 'Creative Coding', 'UI Brutalisme'],
-      stack: ['Web Audio API', 'Canvas 2D', 'React', 'Motion', 'Tailwind CSS'],
-      objective: "Plonger l'auditeur dans l'univers sombre et cadencé des productions électroniques de l'artiste.",
-      status: 'Live Signal',
-      liveUrl: 'https://zeden-864496946830.europe-west2.run.app/',
-      image: zedenImg,
+      category: 'Brand Design & Landing Page SaaS',
+      role: ['Brand Design', 'Développement Front-End', 'UI/UX', 'Stratégie de Conversion'],
+      stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
+      objective: "Installer une identité de marque forte et crédible pour transformer les visiteurs en acheteurs de licence.",
+      status: 'En ligne',
+      liveUrl: 'https://www.haziapp.fr/',
+      image: haziImg,
       featured: true,
       metrics: [
-        { label: 'Latence Audio', value: 'Zero Buffer' },
-        { label: 'Ambiance', value: 'Dark Cyber' }
-      ]
-    },
-    {
-      id: 'ofiss',
-      title: 'OFISS Corworking Space',
-      client: 'Fictif',
-      subtitle: 'Espace Digital & Identité Architecturale',
-      description: "Vitrine interactive épurée conçue pour l'agence d'architecture et de design d'intérieur OFISS.",
-      longDescription: "Conception d'une expérience digitale sur-mesure pour OFISS, retranscrivant la pureté des lignes, la précision spatiale et le dialogue des matières propres à l'identité du studio.",
-      year: '2026',
-      category: 'Architecture & Design Showcase',
-      role: ['Direction Artistique', 'UI/UX Architecture', 'Développement Front-End'],
-      stack: ['React', 'Tailwind CSS', 'Motion', 'TypeScript', 'Vite'],
-      objective: "Traduire la rigueur architecturale et le raffinement visuel de l'agence sur le support digital.",
-      status: 'Projet Déployé',
-      liveUrl: 'https://www.figma.com/proto/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=28-4962&t=menLt33T2VzfGBdX-1',
-      image: ofissImg,
-      featured: true,
-      metrics: [
-        { label: 'Esthétique', value: 'Minimaliste' }
+        { label: 'Offre', value: 'Licence à vie' },
+        { label: 'Rôle', value: 'Brand + Front-End' }
       ]
     }
   ],
@@ -154,7 +133,7 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       stack: ['React 19', 'Three.js', 'React Globe GL', 'Tailwind CSS', 'Vite', 'Motion'],
       objective: "Elevate the agency's global prestige through intuitive, cinematic spatial navigation.",
       status: 'Deployed Functional Prototype',
-      liveUrl: 'https://www.ateliersberger.com/',
+      liveUrl: 'https://globemap3-dberger.vercel.app/globe-react.html',
       githubUrl: 'https://github.com/eliothantute/Atelier-Berger-Carte-Interactive-',
       image: atelierBergerBlueImg,
       featured: true,
@@ -188,6 +167,27 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
+      id: 'nari-os',
+      title: 'NARI OS',
+      client: 'NARI',
+      subtitle: 'Autonomous Voice Agent Landing Page',
+      description: "Showcase site for a sovereign French voice AI agent able to operate a computer through voice commands.",
+      longDescription: "Visual identity creation and front-end integration for NARI, an autonomous voice agent orchestrating multiple AIs. A sober, spatial art direction (galaxy background, condensed typography) embodies a premium, sovereign French technology, paired with a monthly and lifetime pricing structure.",
+      year: '2026',
+      category: 'Brand Design & SaaS Landing Page',
+      role: ['Brand Design', 'Front-End Development', 'UI/UX'],
+      stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
+      objective: "Translate the promise of a premium, sovereign voice AI into a sober and credible web experience.",
+      status: 'Live',
+      liveUrl: 'https://nari-os-sigma.vercel.app/',
+      image: nariOsImg,
+      featured: false,
+      metrics: [
+        { label: 'Positioning', value: '🇫🇷 Sovereign' },
+        { label: 'Role', value: 'Brand + Front-End' }
+      ]
+    },
+    {
       id: 'ping-paris',
       title: 'Ping Paris',
       client: 'Personal Project / PWA',
@@ -211,65 +211,24 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
-      id: 'arc-reflex',
-      title: 'Arc Reflex',
-      client: 'Arc Reflex Client Work',
-      subtitle: 'Conversion Landing Page & Branding',
-      description: "Strategic conversion-driven web redesign, logo identity creation, and full SEO/DNS infrastructure.",
-      longDescription: "End-to-end digital craftsmanship: from logotype design and visual identity to high-speed responsive deployment and DNS record optimization.",
-      year: '2025',
-      category: 'Client Work & Branding',
-      role: ['Web Design', 'Brand Identity', 'HTML/Tailwind Dev', 'SEO Strategy'],
-      stack: ['HTML5', 'Tailwind CSS', 'JavaScript', 'Google Business', 'DNS/Cloudflare'],
-      objective: "Establish immediate brand authority and drive qualified incoming leads.",
-      status: 'Live & Optimized',
-      liveUrl: 'https://www.arc-reflex.com/',
-      image: arcReflexImg,
-      featured: false,
-      metrics: [
-        { label: 'Conversion Lift', value: '+42%' },
-        { label: 'Load Speed', value: '0.4s' }
-      ]
-    },
-    {
-      id: 'zeden-audiolab',
-      title: 'Zeden AudioLab',
-      client: 'Zeden Electronic Music',
-      subtitle: 'Cyberpunk Musical Showcase',
-      description: "Immersive artist site featuring responsive audio player, frequency visualizer, and dark creative coding.",
-      longDescription: "An exploration into sound and interface design for electronic music artist Zeden. Blending raw brutalist hardware aesthetics with fluid micro-interactions.",
+      id: 'hazi-whatsapp',
+      title: 'Hazi Whatsapp',
+      client: 'Hazi',
+      subtitle: 'Desktop Software Landing Page, 3D Edition',
+      description: "Premium showcase site for a multichannel WhatsApp & SMS prospecting desktop software, featuring an embedded interface simulator.",
+      longDescription: "Brand identity design and full front-end development of the Hazi Whatsapp landing page. The site features an interactive desktop interface simulator running directly in the browser, an immersive cyber-green aesthetic, and a conversion-driven structure built around a lifetime license offer.",
       year: '2026',
-      category: 'Audio Visual Experience',
-      role: ['Sound Design', 'Creative Coding', 'Brutalist UI'],
-      stack: ['Web Audio API', 'Canvas 2D', 'React', 'Motion', 'Tailwind CSS'],
-      objective: "Immerse listeners in the dark, rhythmic universe of the producer's tracks.",
-      status: 'Live Signal',
-      liveUrl: 'https://zeden-864496946830.europe-west2.run.app/',
-      image: zedenImg,
+      category: 'Brand Design & SaaS Landing Page',
+      role: ['Brand Design', 'Front-End Development', 'UI/UX', 'Conversion Strategy'],
+      stack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
+      objective: "Establish a strong, credible brand identity to convert visitors into lifetime license buyers.",
+      status: 'Live',
+      liveUrl: 'https://www.haziapp.fr/',
+      image: haziImg,
       featured: true,
       metrics: [
-        { label: 'Audio Latency', value: 'Zero Buffer' },
-        { label: 'Vibe', value: 'Dark Cyber' }
-      ]
-    },
-    {
-      id: 'ofiss',
-      title: 'OFISS Coworking Space',
-      client: 'Fictive',
-      subtitle: 'Digital Space & Architectural Identity',
-      description: "Refined interactive showcase tailored for interior architecture and design agency OFISS.",
-      longDescription: "Crafting a bespoke digital experience for OFISS that reflects the studio's spatial precision, pure geometric lines, and dialogue between raw materials.",
-      year: '2026',
-      category: 'Branding & Design Showcase',
-      role: ['Art Direction', 'UI/UX Architecture', 'Front-End Development'],
-      stack: ['React', 'Tailwind CSS', 'Motion', 'TypeScript', 'Vite'],
-      objective: "Translate the agency's architectural rigor and visual elegance into a seamless web experience.",
-      status: 'Deployed Project',
-      liveUrl: 'https://www.figma.com/proto/bG8r0mx9G0fSMKoxQwXohe/moonlearning-UI-Principles?node-id=28-4962&t=menLt33T2VzfGBdX-1',
-      image: ofissImg,
-      featured: true,
-      metrics: [
-        { label: 'Aesthetics', value: 'Minimalist' }
+        { label: 'Offer', value: 'Lifetime License' },
+        { label: 'Role', value: 'Brand + Front-End' }
       ]
     }
   ]

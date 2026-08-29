@@ -66,7 +66,7 @@ export default function App() {
       <section className="sr-only" aria-label={lang === 'fr' ? 'Résumé des projets principaux' : 'Primary projects summary'}>
         <h1>{lang === 'fr' ? 'Portfolio UI et développement front-end de Eliot Lab' : 'UI design and front-end portfolio by Eliot Lab'}</h1>
         <ul>
-          {currentProjects.slice(0, 6).map((project) => (
+          {currentProjects.slice(0, 8).map((project) => (
             <li key={`seo-${project.id}`}>
               <h2>{project.title}</h2>
               <p>{project.subtitle}</p>
