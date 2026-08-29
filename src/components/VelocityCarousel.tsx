@@ -43,16 +43,16 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
 
   // Responsive Card Dimensions
   const cardSize = useMemo(() => {
-    if (isMobile) return clamp(containerWidth * 0.78, 260, 320);
-    if (isTablet) return clamp(containerWidth * 0.4, 320, 360);
-    return clamp(containerWidth * 0.3, 350, 400);
+    if (isMobile) return clamp(containerWidth * 0.76, 250, 320);
+    if (isTablet) return clamp(containerWidth * 0.38, 300, 350);
+    return clamp(containerWidth * 0.3, 340, 390);
   }, [containerWidth, isMobile, isTablet]);
 
-  // Generous Spacing between cards (no heavy cramped overlap)
+  // Generous Spacing between cards (cards clearly separated and distinct)
   const spacing = useMemo(() => {
-    if (isMobile) return cardSize * 1.06;
-    if (isTablet) return cardSize * 1.12;
-    return cardSize * 1.18;
+    if (isMobile) return cardSize * 1.08;
+    if (isTablet) return cardSize * 1.15;
+    return cardSize * 1.2;
   }, [cardSize, isMobile, isTablet]);
 
   const goTo = useCallback(
@@ -70,15 +70,15 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
     setActiveIndex((current) => (current === projects.length - 1 ? 0 : current + 1));
   }, [projects.length]);
 
-  // Auto-motion interval when user is not interacting
+  // Auto-motion continuous glide
   useEffect(() => {
     if (isUserInteracting || hoveredIndex !== null) return;
 
-    const autoMotionTimer = setInterval(() => {
+    const timer = setInterval(() => {
       next();
-    }, 3600);
+    }, 4000);
 
-    return () => clearInterval(autoMotionTimer);
+    return () => clearInterval(timer);
   }, [isUserInteracting, hoveredIndex, next]);
 
   const handleDragEnd = useCallback(
@@ -110,7 +110,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex w-full flex-col items-center justify-center overflow-hidden py-14 select-none"
+      className="relative flex w-full flex-col items-center justify-center overflow-hidden py-12 select-none"
       style={{ minHeight: cardSize + 160 }}
       onMouseEnter={() => setIsUserInteracting(true)}
       onMouseLeave={() => setIsUserInteracting(false)}
@@ -130,11 +130,8 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
           const distance = index - activeIndex;
           const absDistance = Math.abs(distance);
           const x = distance * spacing;
-          const scale = isActive ? 1 : hoveredIndex === index ? 0.94 : 0.88;
+          const scale = isActive ? 1 : hoveredIndex === index ? 0.93 : 0.86;
           const opacity = absDistance > 2 ? 0.45 : absDistance === 2 ? 0.75 : 1;
-
-          // Organic vertical floating offset for continuous motion
-          const floatY = isActive ? 0 : Math.sin(index * 1.4) * 6;
 
           return (
             <motion.div
@@ -157,13 +154,12 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
               }}
               animate={{
                 x,
-                y: floatY,
                 scale,
                 opacity,
                 zIndex: isActive ? 50 : 50 - absDistance,
               }}
               transition={{
-                duration: hoveredIndex === index ? 0.3 : 0.65,
+                duration: hoveredIndex === index ? 0.28 : 0.55,
                 ease: [0.16, 1, 0.3, 1],
               }}
               style={{
@@ -177,17 +173,17 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                 transformOrigin: 'center center',
                 borderRadius: 40,
                 border: `${isActive ? 9 : hoveredIndex === index ? 4 : 2.5}px solid ${
-                  isActive ? '#ffffff' : hoveredIndex === index ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.5)'
+                  isActive ? '#ffffff' : hoveredIndex === index ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)'
                 }`,
                 boxShadow: isActive
-                  ? '0 32px 90px rgba(0,0,0,0.32), 0 12px 32px rgba(0,0,0,0.18)'
+                  ? '0 28px 80px rgba(0,0,0,0.36), 0 10px 28px rgba(0,0,0,0.22)'
                   : hoveredIndex === index
-                  ? '0 18px 45px rgba(0,0,0,0.22)'
-                  : '0 8px 24px rgba(0,0,0,0.1)',
+                  ? '0 16px 40px rgba(0,0,0,0.22)'
+                  : '0 6px 20px rgba(0,0,0,0.1)',
               }}
               className="group overflow-hidden bg-zinc-800 cursor-pointer outline-none transition-shadow duration-500"
             >
-              {/* Project Background Image */}
+              {/* Project Background Image (Clean - No top text/badge) */}
               <img
                 src={project.image}
                 alt={project.title}
@@ -205,17 +201,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                 className="absolute inset-0"
               />
 
-              {/* Category Pill Top */}
-              <div className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10 flex items-center gap-2">
-                <span className="rounded-full bg-white/90 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-900 shadow-sm backdrop-blur-md">
-                  {project.category}
-                </span>
-                <span className="rounded-full bg-black/40 px-2.5 py-1 font-mono text-[10px] font-semibold text-white/80 backdrop-blur-md">
-                  {project.year}
-                </span>
-              </div>
-
-              {/* Active Card Content (Headline, Subtext, Pill Button) */}
+              {/* Active Card Content Flow (Headline, Subtext, Pill Button) */}
               {isActive && (
                 <motion.div
                   initial={{ opacity: 0, y: 14 }}
@@ -241,7 +227,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                     }}
                     className="mt-5 inline-flex items-center justify-center rounded-full bg-white px-7 py-2.5 font-sans text-xs sm:text-sm font-semibold text-zinc-950 shadow-md transition-all hover:bg-zinc-100 hover:scale-105 active:scale-95 cursor-pointer"
                   >
-                    <span>{lang === 'fr' ? 'Explorer' : 'Learn More'}</span>
+                    <span>{lang === 'fr' ? 'Explorer le projet' : 'Learn More'}</span>
                   </button>
                 </motion.div>
               )}
@@ -257,7 +243,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
             type="button"
             onClick={previous}
             aria-label="Previous project"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all hover:scale-105 hover:bg-zinc-950 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all hover:scale-105 hover:bg-zinc-950 hover:text-white cursor-pointer"
           >
             ←
           </button>
@@ -291,7 +277,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
             type="button"
             onClick={next}
             aria-label="Next project"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all hover:scale-105 hover:bg-zinc-950 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all hover:scale-105 hover:bg-zinc-950 hover:text-white cursor-pointer"
           >
             →
           </button>
