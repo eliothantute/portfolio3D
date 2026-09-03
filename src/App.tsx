@@ -109,6 +109,7 @@ export default function App() {
         {/* Hero Section */}
         <Hero
           lang={lang}
+          onOpenContact={() => setIsContactOpen(true)}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />

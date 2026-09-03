@@ -6,11 +6,12 @@ import { InteractiveText } from './InteractiveText';
 
 interface HeroProps {
   lang: Language;
+  onOpenContact?: () => void;
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ lang, onHoverItem, onLeaveItem }) => {
+export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, onLeaveItem }) => {
   const profile = profileData[lang];
 
   return (
@@ -74,31 +75,41 @@ export const Hero: React.FC<HeroProps> = ({ lang, onHoverItem, onLeaveItem }) =>
           {profile.heroPitch}
         </motion.h2>
 
-        {/* Clean Action Buttons */}
+        {/* Two Highlighted Action Buttons: Explorer les projets & Me contacter */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-3.5"
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
         >
+          {/* Highlighted Contact Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (onOpenContact) {
+                onOpenContact();
+              } else {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            onMouseEnter={() => onHoverItem?.('ME CONTACTER')}
+            onMouseLeave={onLeaveItem}
+            className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-zinc-950 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-zinc-950/20 transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer ring-2 ring-zinc-950 ring-offset-2 ring-offset-[#fafafa]"
+          >
+            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>{lang === 'fr' ? 'Me contacter' : 'Get in touch'}</span>
+            <span className="text-zinc-400 group-hover:text-white transition-colors">↗</span>
+          </button>
+
+          {/* Explore Projects Button */}
           <a
             href="#projects"
             onMouseEnter={() => onHoverItem?.('PROJETS')}
             onMouseLeave={onLeaveItem}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-950 px-8 py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-300 bg-white/95 px-7 py-3.5 text-sm font-bold text-zinc-900 shadow-sm backdrop-blur-sm transition-all hover:border-zinc-900 hover:bg-white hover:scale-105 active:scale-95 cursor-pointer"
           >
             <span>{lang === 'fr' ? 'Explorer les projets' : 'Explore Projects'}</span>
             <span>↓</span>
-          </a>
-
-          <a
-            href="#cv"
-            onMouseEnter={() => onHoverItem?.('CV 3D')}
-            onMouseLeave={onLeaveItem}
-            className="sneaks-btn-secondary"
-          >
-            <span>{lang === 'fr' ? 'Télécharger mon CV' : 'Download Resume'}</span>
-            <span>↗</span>
           </a>
         </motion.div>
 
