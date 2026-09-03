@@ -12,6 +12,7 @@ interface SectionsHubProps {
   projects: Project[];
   lang: Language;
   onSelectProject: (project: Project) => void;
+  onOpenContact?: () => void;
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
@@ -20,6 +21,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   projects,
   lang,
   onSelectProject,
+  onOpenContact,
   onHoverItem,
   onLeaveItem,
 }) => {
@@ -220,6 +222,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                     {sec.key === 'services' && (
                       <ServicesSection
                         lang={lang}
+                        onOpenContact={onOpenContact}
                         onHoverItem={onHoverItem}
                         onLeaveItem={onLeaveItem}
                       />

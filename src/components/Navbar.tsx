@@ -6,6 +6,7 @@ interface NavbarProps {
   setLang: (lang: Language) => void;
   isMuted: boolean;
   toggleAudio: () => void;
+  onOpenContact?: () => void;
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
@@ -15,6 +16,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setLang,
   isMuted,
   toggleAudio,
+  onOpenContact,
   onHoverItem,
   onLeaveItem,
 }) => {
@@ -93,14 +95,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             {lang.toUpperCase()}
           </button>
 
-          <a
-            href="#contact"
+          <button
+            type="button"
+            onClick={() => {
+              if (onOpenContact) {
+                onOpenContact();
+              } else {
+                const el = document.getElementById('contact');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             onMouseEnter={() => onHoverItem?.('CONTACT')}
             onMouseLeave={onLeaveItem}
             className="inline-flex h-8 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-semibold text-white shadow-sm transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer"
           >
             Contact
-          </a>
+          </button>
         </div>
       </div>
     </header>

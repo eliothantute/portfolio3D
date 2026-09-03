@@ -38,9 +38,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ lang, onHoverIte
   };
 
   return (
-    <section
-      id="contact"
-      className="relative z-10 mx-auto max-w-7xl px-4 py-32 sm:px-8 lg:px-12 [perspective:1200px]"
+    <div
+      id="contact-inner"
+      className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:px-12 [perspective:1200px]"
       aria-label={lang === 'fr' ? 'Contactez-moi' : 'Contact me'}
     >
       <motion.div
@@ -143,6 +143,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ lang, onHoverIte
           © 2026 Eliot Hantute • Creative Developer &amp; AI-Augmented Front-End • Paris, France
         </p>
       </motion.div>
-    </section>
+    </div>
   );
 };

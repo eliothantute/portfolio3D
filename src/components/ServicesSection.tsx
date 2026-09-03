@@ -5,6 +5,7 @@ import { InteractiveText } from './InteractiveText';
 
 interface ServicesSectionProps {
   lang: Language;
+  onOpenContact?: () => void;
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
@@ -150,6 +151,7 @@ const SERVICES: ServiceItem[] = [
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({
   lang,
+  onOpenContact,
   onHoverItem,
   onLeaveItem,
 }) => {
@@ -226,13 +228,20 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
 
             {/* Bottom Action Button */}
             <div className="mt-6 pt-4 border-t border-zinc-100 flex items-center justify-between">
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 font-mono text-xs font-bold text-zinc-900 hover:text-blue-600 transition-colors"
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenContact) {
+                    onOpenContact();
+                  } else {
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="inline-flex items-center gap-2 font-mono text-xs font-bold text-zinc-900 hover:text-blue-600 transition-colors cursor-pointer"
               >
                 <span>{lang === 'fr' ? 'Démarrer ce projet' : 'Start this project'}</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </a>
+              </button>
               <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                 DISPO 2026
               </span>

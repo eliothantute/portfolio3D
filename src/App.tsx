@@ -11,6 +11,7 @@ import { Hero } from './components/Hero';
 import { SectionsHub } from './components/SectionsHub';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProjectModal } from './components/ProjectModal';
+import { ContactModal } from './components/ContactModal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +21,7 @@ export default function App() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const analyserRef = useRef<AnalyserNode | null>(null);
 
   const currentProjects = projectsData[lang];
@@ -99,6 +101,7 @@ export default function App() {
           setLang={setLang}
           isMuted={isMuted}
           toggleAudio={() => setIsMuted(!isMuted)}
+          onOpenContact={() => setIsContactOpen(true)}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
@@ -115,6 +118,7 @@ export default function App() {
           projects={currentProjects}
           lang={lang}
           onSelectProject={(project) => setSelectedProject(project)}
+          onOpenContact={() => setIsContactOpen(true)}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
@@ -132,6 +136,15 @@ export default function App() {
           project={selectedProject}
           lang={lang}
           onClose={() => setSelectedProject(null)}
+          onHoverItem={handleHoverItem}
+          onLeaveItem={handleLeaveItem}
+        />
+
+        {/* Direct Contact Modal with Instant Access */}
+        <ContactModal
+          isOpen={isContactOpen}
+          onClose={() => setIsContactOpen(false)}
+          lang={lang}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
