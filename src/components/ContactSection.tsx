@@ -10,17 +10,30 @@ interface ContactSectionProps {
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ lang, onHoverItem, onLeaveItem }) => {
-  const [copied, setCopied] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
 
   const email = 'Eliot.Hantute@gmail.com';
+  const phone = '+33 7 75 03 68 75';
+  const phoneTel = '+33775036875';
 
-  const handleCopyEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCopyEmail = (e: React.MouseEvent) => {
     e.preventDefault();
     navigator.clipboard.writeText(email);
-    setCopied(true);
+    setCopiedEmail(true);
 
     setTimeout(() => {
-      setCopied(false);
+      setCopiedEmail(false);
+    }, 2500);
+  };
+
+  const handleCopyPhone = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(phone);
+    setCopiedPhone(true);
+
+    setTimeout(() => {
+      setCopiedPhone(false);
     }, 2500);
   };
 
@@ -54,18 +67,55 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ lang, onHoverIte
             : 'Available for freelance missions, React front-end development, 3D craft and AI-assisted prototyping.'}
         </p>
 
-        {/* 1-Click Email Copy Button */}
-        <div className="mt-9">
+        {/* Dual Direct Contact Actions: Email + Phone */}
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* Email Button with 1-click Copy */}
           <button
+            type="button"
             onClick={handleCopyEmail}
             onMouseEnter={() => onHoverItem?.('COPIER EMAIL')}
             onMouseLeave={onLeaveItem}
-            className="sneaks-btn-primary px-8 py-4 text-base"
+            className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-zinc-950 px-8 py-4 text-sm sm:text-base font-bold text-white shadow-lg transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer"
           >
-            <span>{copied ? (lang === 'fr' ? 'Email copié dans le presse-papier ✓' : 'Email copied to clipboard ✓') : email}</span>
-            <span>{copied ? '✓' : '↗'}</span>
+            <span>✉️</span>
+            <span>{copiedEmail ? (lang === 'fr' ? 'Email copié ✓' : 'Email copied ✓') : email}</span>
+            <span className="text-zinc-400 group-hover:text-white transition-colors">{copiedEmail ? '✓' : '↗'}</span>
           </button>
+
+          {/* Phone Button: Direct Call + Copy */}
+          <div className="flex w-full sm:w-auto items-center gap-2">
+            <a
+              href={`tel:${phoneTel}`}
+              onMouseEnter={() => onHoverItem?.('APPELER')}
+              onMouseLeave={onLeaveItem}
+              className="flex flex-1 sm:flex-initial items-center justify-center gap-2.5 rounded-full border border-zinc-300 bg-white px-7 py-4 text-sm sm:text-base font-bold text-zinc-900 shadow-sm transition-all hover:border-zinc-900 hover:bg-zinc-50 hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span>📞</span>
+              <span>{phone}</span>
+              <span className="font-mono text-xs text-blue-600">
+                {lang === 'fr' ? 'Appeler' : 'Call'}
+              </span>
+            </a>
+
+            <button
+              type="button"
+              onClick={handleCopyPhone}
+              onMouseEnter={() => onHoverItem?.('COPIER TEL')}
+              onMouseLeave={onLeaveItem}
+              title={lang === 'fr' ? 'Copier le numéro' : 'Copy phone number'}
+              aria-label={lang === 'fr' ? 'Copier le numéro' : 'Copy phone number'}
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-300 bg-white text-zinc-700 shadow-sm transition-all hover:border-zinc-900 hover:bg-zinc-950 hover:text-white hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span className="font-mono text-xs">{copiedPhone ? '✓' : '📋'}</span>
+            </button>
+          </div>
         </div>
+
+        {copiedPhone && (
+          <p className="mt-3 font-mono text-xs text-emerald-600 font-semibold animate-pulse">
+            {lang === 'fr' ? 'Numéro de téléphone copié dans le presse-papier ✓' : 'Phone number copied to clipboard ✓'}
+          </p>
+        )}
 
         {/* Social Links */}
         <div className="mx-auto mt-12 flex flex-wrap items-center justify-center gap-3">
