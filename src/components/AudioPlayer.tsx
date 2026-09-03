@@ -288,11 +288,9 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   return (
     <div
-      onMouseEnter={() => onHoverItem?.('PLAY')}
+      onMouseEnter={() => onHoverItem?.(isPlaying ? 'PAUSE' : 'PLAY')}
       onMouseLeave={onLeaveItem}
-      className={`fixed bottom-8 left-8 z-40 transition-all duration-500 rounded-2xl border border-white/15 bg-[#0a0a0a]/90 backdrop-blur-md overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${
-        expanded ? 'w-80 p-5' : 'w-auto p-3 sm:p-4'
-      }`}
+      className="fixed bottom-5 left-5 z-40 inline-flex items-center gap-2.5 rounded-full border border-zinc-200/90 bg-white/95 px-3 py-1.5 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-zinc-300 hover:shadow-md"
     >
       <audio
         ref={audioRef}
@@ -301,130 +299,44 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         className="absolute w-0 h-0 opacity-0 pointer-events-none"
       />
 
-      <div className="flex items-center gap-4">
-        <button
-          onClick={togglePlay}
-          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-            isPlaying
-              ? 'bg-[#ff571a] text-black shadow-[0_0_20px_rgba(255,87,26,0.8)] scale-105'
-              : 'bg-white/10 text-white hover:bg-white/20'
-          }`}
-          aria-label={isPlaying ? 'Pause Audio' : 'Play Audio'}
-        >
-          <span className="text-xs font-mono font-bold">{isPlaying ? '■' : '▶'}</span>
-        </button>
+      {/* Mini Play / Pause Button */}
+      <button
+        onClick={togglePlay}
+        aria-label={isPlaying ? 'Pause Audio' : 'Play Audio'}
+        className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-950 text-white transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer shadow-xs"
+      >
+        <span className="text-[9px] leading-none ml-0.5">{isPlaying ? '❚❚' : '▶'}</span>
+      </button>
 
-        <div
-          onClick={() => setExpanded(!expanded)}
-          className="flex items-end gap-[3px] h-6 cursor-pointer select-none px-1"
-        >
-          {bars.map((height, i) => (
-            <span
-              key={i}
-              className="w-1 rounded-t transition-all duration-100 ease-out"
-              style={{
-                height: isPlaying ? `${height}%` : '20%',
-                backgroundColor: isPlaying ? (i % 3 === 0 ? '#ff571a' : '#ffffff') : '#444444',
-                opacity: isPlaying ? 0.9 : 0.4,
-              }}
-            />
-          ))}
-        </div>
+      {/* Mini Equalizer Animated Bars */}
+      <button
+        type="button"
+        onClick={togglePlay}
+        aria-label="Toggle Audio"
+        className="flex items-end gap-[2px] h-3 cursor-pointer select-none px-0.5 border-none bg-transparent"
+      >
+        {bars.slice(0, 4).map((height, i) => (
+          <span
+            key={i}
+            className="w-[2px] rounded-full transition-all duration-100 ease-out"
+            style={{
+              height: isPlaying ? `${Math.max(25, height)}%` : '25%',
+              backgroundColor: isPlaying ? '#0066ff' : '#d4d4d8',
+            }}
+          />
+        ))}
+      </button>
 
-        <div
-          onClick={() => setExpanded(!expanded)}
-          className="hidden sm:flex flex-col cursor-pointer select-none max-w-[140px]"
-        >
-          <span className="font-mono text-[9px] uppercase tracking-widest text-[#ff571a] font-bold">
-            {isPlaying ? '● LIVE_SIGNAL' : streamReady ? 'AUDIO_STANDBY' : 'STREAM_LOAD'}
-          </span>
-          <span className="font-mono text-[10px] text-white/80 truncate font-medium">{trackName}</span>
-        </div>
-
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="text-white/40 hover:text-white transition-colors ml-auto text-xs"
-        >
-          {expanded ? '▼' : '▲'}
-        </button>
-      </div>
-
-      <div className="mt-3">
-        <input
-          type="range"
-          min={0}
-          max={duration || 0}
-          step={0.05}
-          value={Math.min(currentTime, duration || currentTime)}
-          onChange={(e) => handleSeek(Number(e.target.value))}
-          className="w-full cursor-pointer accent-[#ff571a]"
-          aria-label={lang === 'fr' ? 'Avancer dans la piste' : 'Seek audio track'}
-        />
-      </div>
-
-      {expanded && (
-        <div className="mt-4 pt-4 border-t border-white/10 space-y-3 font-mono text-xs animate-fadeIn">
-          <div className="space-y-1">
-            <input
-              type="range"
-              min={0}
-              max={duration || 0}
-              step={0.05}
-              value={Math.min(currentTime, duration || currentTime)}
-              onChange={(e) => handleSeek(Number(e.target.value))}
-              className="w-full cursor-pointer accent-[#ff571a]"
-              aria-label={lang === 'fr' ? 'Avancer dans la piste' : 'Seek audio track'}
-            />
-            <div className="flex justify-between text-[10px] text-white/65">
-              <span>{formatTime(currentTime)}</span>
-              <span>{formatTime(duration)}</span>
-            </div>
-            <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full bg-[#ff571a] transition-[width] duration-250"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-between text-[10px] text-white/60">
-            <span>SOUND_LAB // ZEDEN</span>
-            <span>44.1 kHz</span>
-          </div>
-
-          <p className="text-[11px] text-white/70 font-light leading-relaxed">
-            {lang === 'fr'
-              ? 'Lecture directe SoundCloud (stream API) avec analyse fréquentielle temps réel pour la sphère 3D.'
-              : 'Direct SoundCloud playback (stream API) with real-time frequency analysis for the 3D sphere.'}
-          </p>
-
-          {streamError && (
-            <p className="text-[10px] text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded px-2 py-1">
-              {streamError}
-            </p>
-          )}
-
-          <div className="flex gap-2 pt-1">
-            <a
-              href="https://open.spotify.com/intl-fr/artist/77sTx1uwPp7N9KlNPPGH49"
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-center py-2 rounded text-[10px] uppercase font-bold hover:bg-emerald-500 hover:text-black transition-all"
-            >
-              Spotify ↗
-            </a>
-
-            <a
-              href={SOUNDCLOUD_TRACK_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="flex-1 bg-[#ff571a]/10 border border-[#ff571a]/30 text-[#ff571a] text-center py-2 rounded text-[10px] uppercase font-bold hover:bg-[#ff571a] hover:text-black transition-all"
-            >
-              SoundCloud ↗
-            </a>
-          </div>
-        </div>
-      )}
+      {/* Discrete Track Title & Source Link */}
+      <a
+        href={SOUNDCLOUD_TRACK_URL}
+        target="_blank"
+        rel="noreferrer"
+        title="Écouter sur SoundCloud ↗"
+        className="font-mono text-[10px] font-semibold tracking-wider text-zinc-700 hover:text-blue-600 transition-colors select-none"
+      >
+        {isPlaying ? 'ZEDEN' : 'AUDIO'}
+      </a>
     </div>
   );
 };

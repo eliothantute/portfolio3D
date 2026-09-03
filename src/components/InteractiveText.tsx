@@ -16,40 +16,48 @@ export const InteractiveText: React.FC<InteractiveTextProps> = ({
 }) => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const letters = text.split('');
+  // Split into words so that words never break mid-word across line wraps
+  const words = text.split(' ');
+  let charCounter = 0;
 
   return (
-    <Component className={`inline-flex flex-wrap ${className}`}>
-      {letters.map((char, index) => {
-        const isHovered = hoveredIdx === index;
-        const isNeighbor = hoveredIdx !== null && Math.abs(hoveredIdx - index) === 1;
+    <Component className={`inline-flex flex-wrap items-baseline gap-x-[0.28em] ${className}`}>
+      {words.map((word, wordIdx) => {
+        const wordChars = word.split('');
 
         return (
-          <motion.span
-            key={`${char}-${index}`}
-            onMouseEnter={() => setHoveredIdx(index)}
-            onMouseLeave={() => setHoveredIdx(null)}
-            animate={{
-              y: isHovered ? -8 : isNeighbor ? -3 : 0,
-              scale: isHovered ? 1.12 : isNeighbor ? 1.04 : 1,
-              rotate: isHovered ? (index % 2 === 0 ? -3 : 3) : 0,
-              color: isHovered ? hoverColor : 'inherit',
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 400,
-              damping: 18,
-            }}
-            className="inline-block cursor-pointer select-none transition-colors duration-200"
-            style={{
-              display: char === ' ' ? 'inline' : 'inline-block',
-              whiteSpace: 'pre',
-            }}
-          >
-            {char === ' ' ? '\u00A0' : char}
-          </motion.span>
+          <span key={`w-${wordIdx}-${word}`} className="inline-block whitespace-nowrap">
+            {wordChars.map((char) => {
+              const index = charCounter++;
+              const isHovered = hoveredIdx === index;
+              const isNeighbor = hoveredIdx !== null && Math.abs(hoveredIdx - index) === 1;
+
+              return (
+                <motion.span
+                  key={`c-${index}-${char}`}
+                  onMouseEnter={() => setHoveredIdx(index)}
+                  onMouseLeave={() => setHoveredIdx(null)}
+                  animate={{
+                    y: isHovered ? -8 : isNeighbor ? -3 : 0,
+                    scale: isHovered ? 1.12 : isNeighbor ? 1.04 : 1,
+                    rotate: isHovered ? (index % 2 === 0 ? -3 : 3) : 0,
+                    color: isHovered ? hoverColor : 'inherit',
+                  }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 400,
+                    damping: 18,
+                  }}
+                  className="inline-block cursor-pointer select-none transition-colors duration-200"
+                >
+                  {char}
+                </motion.span>
+              );
+            })}
+          </span>
         );
       })}
     </Component>
   );
 };
+

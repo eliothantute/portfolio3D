@@ -122,6 +122,54 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'Offre', value: 'Licence à vie' },
         { label: 'Rôle', value: 'Brand + Front-End' }
       ]
+    },
+    {
+      id: 'motion-study',
+      title: 'Motion Study',
+      client: 'Composition & Motion',
+      subtitle: 'Composition Musicale & Rythme Cinématique',
+      description: "Rythme cinématique, chorégraphie lumineuse et tension architecturale au service d'une composition sonore immersive.",
+      longDescription: "Création sonore originale et composition musicale synchronisée sur une étude de mouvement en grand format. Exploration de textures électroniques, de rythmes minimaux et d'une ambiance cinématique spatiale.",
+      year: '2026',
+      category: 'Composition Musicale // Sound Design',
+      skillType: 'music',
+      role: ['Composition Musicale', 'Sound Design', 'Production Sonore', 'Direction Artistique'],
+      stack: ['Production Audio', 'Sound Design', 'Cinematic Scoring', 'Ableton / DAW'],
+      objective: "Composer une œuvre sonore cinématique et immersive synchronisée avec des mouvements visuels de haute précision.",
+      status: 'Vidéo YouTube disponible',
+      liveUrl: 'https://www.youtube.com/watch?v=p_tCq55WbfA',
+      youtubeId: 'p_tCq55WbfA',
+      image: 'https://img.youtube.com/vi/p_tCq55WbfA/maxresdefault.jpg',
+      featured: true,
+      metrics: [
+        { label: 'Format', value: '4K Vidéo' },
+        { label: 'Plateforme', value: 'YouTube' },
+        { label: 'Style', value: 'Cinematic' }
+      ]
+    },
+    {
+      id: 'spatial-flow',
+      title: 'Spatial Flow',
+      client: 'Showcase Éditorial',
+      subtitle: 'Composition Musicale & Ambiance Immersive',
+      description: "Une seconde séquence pensée comme un showcase éditorial immersif avec une texture musicale enveloppante.",
+      longDescription: "Production sonore atmosphérique alliant nappes harmoniques synthétiques et progressions dynamiques pour enrichir l'expérience visuelle d'un showcase éditorial.",
+      year: '2026',
+      category: 'Composition Musicale // Sound Design',
+      skillType: 'music',
+      role: ['Composition Musicale', 'Arrangements', 'Mixage', 'Atmosphère'],
+      stack: ['Synthèse Sonore', 'Spatial Audio', 'Soundtrack', 'Mastering'],
+      objective: "Développer une signature sonore organique et moderne qui porte la narration spatiale.",
+      status: 'Vidéo YouTube disponible',
+      liveUrl: 'https://www.youtube.com/watch?v=066sAQYrylw',
+      youtubeId: '066sAQYrylw',
+      image: 'https://img.youtube.com/vi/066sAQYrylw/maxresdefault.jpg',
+      featured: false,
+      metrics: [
+        { label: 'Format', value: 'HD Vidéo' },
+        { label: 'Plateforme', value: 'YouTube' },
+        { label: 'Type', value: 'Ambient' }
+      ]
     }
   ],
   en: [
@@ -240,6 +288,54 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'Offer', value: 'Lifetime License' },
         { label: 'Role', value: 'Brand + Front-End' }
       ]
+    },
+    {
+      id: 'motion-study',
+      title: 'Motion Study',
+      client: 'Composition & Motion',
+      subtitle: 'Music Composition & Cinematic Rhythm',
+      description: 'Cinematic pacing, light choreography, and architectural tension driving an immersive sound composition.',
+      longDescription: 'Original music score and sound design synchronized to a large-format motion study. Exploring electronic textures, minimal rhythms, and spatial cinematic atmosphere.',
+      year: '2026',
+      category: 'Music Composition // Sound Design',
+      skillType: 'music',
+      role: ['Music Composition', 'Sound Design', 'Audio Production', 'Art Direction'],
+      stack: ['Audio Production', 'Sound Design', 'Cinematic Scoring', 'Ableton / DAW'],
+      objective: 'Score an immersive cinematic piece synchronized with precision visual motion.',
+      status: 'YouTube Video Available',
+      liveUrl: 'https://www.youtube.com/watch?v=p_tCq55WbfA',
+      youtubeId: 'p_tCq55WbfA',
+      image: 'https://img.youtube.com/vi/p_tCq55WbfA/maxresdefault.jpg',
+      featured: true,
+      metrics: [
+        { label: 'Format', value: '4K Video' },
+        { label: 'Platform', value: 'YouTube' },
+        { label: 'Style', value: 'Cinematic' }
+      ]
+    },
+    {
+      id: 'spatial-flow',
+      title: 'Spatial Flow',
+      client: 'Editorial Showcase',
+      subtitle: 'Music Composition & Immersive Flow',
+      description: 'A second sequence conceived as an immersive editorial showcase with enveloping musical atmosphere.',
+      longDescription: 'Atmospheric audio production blending synthetic harmonic pads and dynamic progressions to elevate the visual narrative of an editorial showcase.',
+      year: '2026',
+      category: 'Music Composition // Sound Design',
+      skillType: 'music',
+      role: ['Music Composition', 'Arranging', 'Mixing', 'Atmosphere'],
+      stack: ['Sound Synthesis', 'Spatial Audio', 'Soundtrack', 'Mastering'],
+      objective: 'Develop an organic, modern audio identity to drive spatial storytelling.',
+      status: 'YouTube Video Available',
+      liveUrl: 'https://www.youtube.com/watch?v=066sAQYrylw',
+      youtubeId: '066sAQYrylw',
+      image: 'https://img.youtube.com/vi/066sAQYrylw/maxresdefault.jpg',
+      featured: false,
+      metrics: [
+        { label: 'Format', value: 'HD Video' },
+        { label: 'Platform', value: 'YouTube' },
+        { label: 'Type', value: 'Ambient' }
+      ]
     }
   ]
 };
@@ -262,7 +358,7 @@ export const profileData: Record<'fr' | 'en', ProfileContent> = {
     role: 'Creative Front-End Developer & UI Designer',
     badge: 'Disponible pour missions & CDI',
     heroPitch:
-      "Je conçois et développe des expériences web modernes, immersives et ultra-rapides, alliant React, Three.js et intégration d'IA générative.",
+      "J'aime concevoir des interfaces soignées, des sites vitrines et des landing pages captivantes, sublimés par des animations fluides et de la 3D interactive.",
     heroHighlight: [
       'React & Three.js / R3F',
       'Développement Assisté par IA',
@@ -306,7 +402,7 @@ export const profileData: Record<'fr' | 'en', ProfileContent> = {
     role: 'Creative Front-End Developer & UI Designer',
     badge: 'Available for Missions & Full-Time',
     heroPitch:
-      'I craft modern, immersive, high-performance web applications fusing React, Three.js, and generative AI workflows.',
+      'I love crafting polished interfaces, showcase websites, and immersive landing pages brought to life with fluid animations and interactive 3D.',
     heroHighlight: [
       'React & Three.js / R3F',
       'AI-Augmented Engineering',
@@ -380,6 +476,17 @@ export const skillsCategories = [
     },
     skills: ['PWA & Mobile', 'APIs & Geolocation', 'LLMs & Agents IA', 'Claude Code / Antigravity', 'CI/CD & Vercel', 'Performance Optimization'],
     projectIds: ['ping-paris', 'hazi-whatsapp']
+  },
+  {
+    type: 'music' as const,
+    title: { fr: 'Composition Musicale', en: 'Music Composition' },
+    subtitle: { fr: 'Sound Design & Musique à l’Image', en: 'Sound Design & Scoring' },
+    description: {
+      fr: 'Composition originale, paysages sonores immersifs, arrangements cinématiques et synchronisation sur créations visuelles.',
+      en: 'Original composition, immersive soundscapes, cinematic arrangements and scoring synchronized to visual motion.'
+    },
+    skills: ['Sound Design', 'Composition Musicale', 'Production Sonore', 'Arrangements', 'Mixage & Mastering', 'Atmosphère & Synthèse'],
+    projectIds: ['motion-study', 'spatial-flow']
   }
 ];
 

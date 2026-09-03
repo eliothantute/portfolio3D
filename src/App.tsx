@@ -9,7 +9,6 @@ import { Background3D } from './components/Background3D';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SectionsHub } from './components/SectionsHub';
-import { CinematicVideoSection } from './components/CinematicVideoSection';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProjectModal } from './components/ProjectModal';
 
@@ -128,8 +127,6 @@ export default function App() {
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
-
-        <CinematicVideoSection lang={lang} />
 
         <ProjectModal
           project={selectedProject}

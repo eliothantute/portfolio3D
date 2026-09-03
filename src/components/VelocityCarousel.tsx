@@ -247,6 +247,14 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                   />
                 )}
 
+                {/* YouTube Video Indicator Badge */}
+                {project.youtubeId && (
+                  <div className="absolute left-6 top-6 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-red-600/90 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-md">
+                    <span>▶</span>
+                    <span>YOUTUBE</span>
+                  </div>
+                )}
+
                 {/* Active Card Content (Centered Title, Description, White Pill Button) */}
                 {isActive && (
                   <motion.div

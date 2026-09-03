@@ -162,29 +162,37 @@
     let isAutoRotating = true;
     let targetCameraPos = { x: 0, y: 0, z: 7.2 };
     let targetLookAt = { x: 0, y: 0, z: 0 };
+    let frontTex, backTex;
 
-    // 1. Generate High-Definition 2D Canvas Texture of Eliot Hantute's CV
+    // 1. Generate Ultra High-Definition (4K Retina) 2D Canvas Texture of Eliot Hantute's CV
     function createCVTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 2048;
-      canvas.height = 2896; // ~A4 Ratio (1:1.414)
+      // 4K physical canvas (4096 x 5792) for pin-sharp vector typography
+      canvas.width = 4096;
+      canvas.height = 5792; // A4 Ratio (1:1.414)
       const ctx = canvas.getContext('2d');
 
-      // Background White Paper
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      // 2x coordinate scaling so all positions map with native subpixel retina fidelity
+      ctx.scale(2, 2);
+
+      // Background Crisp White Fine-Art Paper
       ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, 2048, 2896);
 
       const marginX = 140;
       const colDividerX = 720;
       const rightColX = 780;
-      const rightColWidth = canvas.width - rightColX - marginX;
+      const rightColWidth = 2048 - rightColX - marginX;
 
       // Vertical Divider
       ctx.strokeStyle = '#e4e4e7';
       ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.moveTo(colDividerX, 140);
-      ctx.lineTo(colDividerX, canvas.height - 140);
+      ctx.lineTo(colDividerX, 2896 - 140);
       ctx.stroke();
 
       // ================= LEFT COLUMN =================
@@ -192,20 +200,20 @@
 
       // Header Left: Name
       ctx.fillStyle = '#09090b';
-      ctx.font = '900 82px "Plus Jakarta Sans", sans-serif';
+      ctx.font = '900 84px "Plus Jakarta Sans", sans-serif';
       ctx.fillText('ELIOT', marginX, leftY);
-      leftY += 86;
+      leftY += 88;
       ctx.fillText('HANTUTE', marginX, leftY);
 
       leftY += 60;
       ctx.fillStyle = '#52525b';
       ctx.font = '700 28px "JetBrains Mono", monospace';
       ctx.fillText('UI DESIGNER &', marginX, leftY);
-      leftY += 36;
+      leftY += 38;
       ctx.fillText('FRONT-END DEVELOPER', marginX, leftY);
-      leftY += 36;
+      leftY += 38;
       ctx.fillStyle = '#0066ff';
-      ctx.font = '700 26px "JetBrains Mono", monospace';
+      ctx.font = '700 27px "JetBrains Mono", monospace';
       ctx.fillText('JUNIOR', marginX, leftY);
 
       // Section Divider
@@ -230,12 +238,12 @@
         { icon: '🌐', text: 'eliotlab.fr' }
       ];
 
-      leftY += 50;
-      ctx.font = '500 25px "Inter", sans-serif';
-      ctx.fillStyle = '#27272a';
+      leftY += 52;
+      ctx.font = '600 25px "Inter", sans-serif';
+      ctx.fillStyle = '#18181b';
       contactItems.forEach(item => {
         ctx.fillText(`${item.icon}  ${item.text}`, marginX, leftY);
-        leftY += 44;
+        leftY += 46;
       });
 
       // Section Divider
@@ -270,10 +278,10 @@
 
       leftY += 50;
       skillCategories.forEach(cat => {
-        ctx.fillStyle = '#71717a';
-        ctx.font = '700 21px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#52525b';
+        ctx.font = '700 22px "JetBrains Mono", monospace';
         ctx.fillText(cat.title, marginX, leftY);
-        leftY += 36;
+        leftY += 38;
 
         let rowX = marginX;
         cat.skills.forEach(skill => {
@@ -288,7 +296,7 @@
 
           // Pill Background
           ctx.fillStyle = '#f4f4f5';
-          ctx.strokeStyle = '#e4e4e7';
+          ctx.strokeStyle = '#d4d4d8';
           ctx.lineWidth = 1.5;
           roundRect(ctx, rowX, leftY - 26, pillWidth, 36, 8, true, true);
 
@@ -325,14 +333,14 @@
 
       leftY += 50;
       languages.forEach(l => {
-        ctx.font = '600 24px "Inter", sans-serif';
+        ctx.font = '700 24px "Inter", sans-serif';
         ctx.fillStyle = '#18181b';
         ctx.fillText(l.lang, marginX, leftY);
 
-        ctx.font = '500 22px "Inter", sans-serif';
-        ctx.fillStyle = '#71717a';
+        ctx.font = '600 22px "Inter", sans-serif';
+        ctx.fillStyle = '#52525b';
         ctx.fillText(l.level, colDividerX - 190, leftY);
-        leftY += 42;
+        leftY += 44;
       });
 
       // ================= RIGHT COLUMN =================
@@ -346,7 +354,7 @@
       rightY += 48;
       const profileText = "Designer UI & développeur front-end, je conçois des interfaces sur Figma et je les développe moi-même avec React, Next.js et Three.js — du wireframe à la mise en production. J'aime particulièrement les expériences web immersives et interactives (3D, animations, micro-interactions), et j'accorde autant d'importance à l'esthétique qu'à la robustesse technique. Autonome, curieux et à l'aise en environnement agile, je recherche aujourd'hui un poste de UI Designer pour mettre cette double compétence design/développement au service de projets ambitieux.";
       
-      rightY = wrapText(ctx, profileText, rightColX, rightY, rightColWidth, 26, 40, '#3f3f46');
+      rightY = wrapText(ctx, profileText, rightColX, rightY, rightColWidth, 26, 42, '#27272a');
 
       // Section Divider
       rightY += 35;
@@ -354,7 +362,7 @@
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(rightColX, rightY);
-      ctx.lineTo(canvas.width - marginX, rightY);
+      ctx.lineTo(2048 - marginX, rightY);
       ctx.stroke();
 
       // EXPÉRIENCES PROFESSIONNELLES
@@ -412,31 +420,31 @@
         ctx.fillText(exp.role, rightColX, rightY);
 
         // Period Badge
-        ctx.font = '600 20px "JetBrains Mono", monospace';
+        ctx.font = '700 20px "JetBrains Mono", monospace';
         const pMetrics = ctx.measureText(exp.period);
         const pWidth = pMetrics.width + 24;
-        const pX = canvas.width - marginX - pWidth;
+        const pX = 2048 - marginX - pWidth;
         
         ctx.fillStyle = '#f4f4f5';
-        ctx.strokeStyle = '#e4e4e7';
+        ctx.strokeStyle = '#d4d4d8';
         roundRect(ctx, pX, rightY - 24, pWidth, 32, 6, true, true);
-        ctx.fillStyle = '#52525b';
+        ctx.fillStyle = '#27272a';
         ctx.fillText(exp.period, pX + 12, rightY - 2);
 
         // Company
         rightY += 34;
-        ctx.fillStyle = '#71717a';
-        ctx.font = '500 22px "Inter", sans-serif';
+        ctx.fillStyle = '#3f3f46';
+        ctx.font = '600 23px "Inter", sans-serif';
         ctx.fillText(exp.company, rightColX, rightY);
 
         // Bullets
         rightY += 34;
         exp.bullets.forEach(bullet => {
           ctx.fillStyle = '#0066ff';
-          ctx.font = '700 20px "Inter", sans-serif';
+          ctx.font = '800 22px "Inter", sans-serif';
           ctx.fillText('▪', rightColX + 8, rightY);
 
-          rightY = wrapText(ctx, bullet, rightColX + 32, rightY, rightColWidth - 40, 22, 34, '#3f3f46');
+          rightY = wrapText(ctx, bullet, rightColX + 32, rightY, rightColWidth - 40, 22, 34, '#27272a');
           rightY += 8;
         });
 
@@ -449,7 +457,7 @@
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(rightColX, rightY);
-      ctx.lineTo(canvas.width - marginX, rightY);
+      ctx.lineTo(2048 - marginX, rightY);
       ctx.stroke();
 
       // FORMATIONS
@@ -497,7 +505,7 @@
 
         // Card Outline
         ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#e4e4e7';
+        ctx.strokeStyle = '#d4d4d8';
         ctx.lineWidth = 1.5;
         roundRect(ctx, x, y - 28, fColW, 115, 12, true, true);
 
@@ -506,22 +514,26 @@
         ctx.font = '800 20px "Plus Jakarta Sans", sans-serif';
         ctx.fillText(f.title, x + 16, y);
 
-        ctx.fillStyle = '#71717a';
-        ctx.font = '600 18px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#52525b';
+        ctx.font = '700 18px "JetBrains Mono", monospace';
         ctx.fillText(f.year, x + fColW - 65, y);
 
         // School
-        ctx.fillStyle = '#52525b';
-        ctx.font = '500 19px "Inter", sans-serif';
+        ctx.fillStyle = '#27272a';
+        ctx.font = '600 19px "Inter", sans-serif';
         ctx.fillText(f.school, x + 16, y + 32);
 
         // Desc
-        ctx.fillStyle = '#a1a1aa';
-        ctx.font = '400 18px "Inter", sans-serif';
+        ctx.fillStyle = '#52525b';
+        ctx.font = '500 18px "Inter", sans-serif';
         ctx.fillText(f.desc, x + 16, y + 62);
       });
 
-      return new THREE.CanvasTexture(canvas);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.generateMipmaps = true;
+      tex.minFilter = THREE.LinearMipmapLinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      return tex;
     }
 
     // Helper: Round Rectangle on Canvas
@@ -544,7 +556,7 @@
     // Helper: Text Wrapping on Canvas
     function wrapText(ctx, text, x, y, maxWidth, fontSize, lineHeight, color) {
       ctx.fillStyle = color;
-      ctx.font = `400 ${fontSize}px "Inter", sans-serif`;
+      ctx.font = `500 ${fontSize}px "Inter", sans-serif`;
       const words = text.split(' ');
       let line = '';
       let curY = y;
@@ -567,30 +579,34 @@
     // 2. Generate Back Texture for 3D CV
     function createBackTexture() {
       const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 1448;
+      canvas.width = 2048;
+      canvas.height = 2896;
       const ctx = canvas.getContext('2d');
 
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.scale(2, 2);
+
       // Gradient Dark Back
-      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      const grad = ctx.createLinearGradient(0, 0, 1024, 1448);
       grad.addColorStop(0, '#111319');
       grad.addColorStop(1, '#08090d');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, 1024, 1448);
 
       // Geometric Grid Lines
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
       ctx.lineWidth = 1;
-      for (let x = 0; x < canvas.width; x += 80) {
+      for (let x = 0; x < 1024; x += 80) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        ctx.lineTo(x, 1448);
         ctx.stroke();
       }
-      for (let y = 0; y < canvas.height; y += 80) {
+      for (let y = 0; y < 1448; y += 80) {
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
+        ctx.lineTo(1024, y);
         ctx.stroke();
       }
 
@@ -598,17 +614,21 @@
       ctx.fillStyle = '#ffffff';
       ctx.font = '900 64px "Plus Jakarta Sans", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('ELIOT LAB', canvas.width / 2, canvas.height / 2 - 30);
+      ctx.fillText('ELIOT LAB', 512, 724 - 30);
 
       ctx.fillStyle = '#0066ff';
       ctx.font = '700 24px "JetBrains Mono", monospace';
-      ctx.fillText('OFFICIAL 3D CURRICULUM VITAE', canvas.width / 2, canvas.height / 2 + 25);
+      ctx.fillText('OFFICIAL 3D CURRICULUM VITAE', 512, 724 + 25);
 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
       ctx.font = '500 20px "Inter", sans-serif';
-      ctx.fillText('© 2026 Eliot Hantute • Paris, France', canvas.width / 2, canvas.height / 2 + 65);
+      ctx.fillText('© 2026 Eliot Hantute • Paris, France', 512, 724 + 65);
 
-      return new THREE.CanvasTexture(canvas);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.generateMipmaps = true;
+      tex.minFilter = THREE.LinearMipmapLinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      return tex;
     }
 
     // 3. Initialize Three.js Scene
@@ -633,36 +653,36 @@
       controls.minDistance = 2.5;
 
       // Lighting
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
       scene.add(ambientLight);
 
-      const mainLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      const mainLight = new THREE.DirectionalLight(0xffffff, 0.85);
       mainLight.position.set(5, 8, 7);
       mainLight.castShadow = true;
       mainLight.shadow.mapSize.width = 2048;
       mainLight.shadow.mapSize.height = 2048;
       scene.add(mainLight);
 
-      const fillLight = new THREE.DirectionalLight(0x90c0ff, 0.5);
+      const fillLight = new THREE.DirectionalLight(0x90c0ff, 0.4);
       fillLight.position.set(-6, -2, 4);
       scene.add(fillLight);
 
-      const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
+      const backLight = new THREE.DirectionalLight(0xffffff, 0.35);
       backLight.position.set(0, 4, -6);
       scene.add(backLight);
 
-      // Create 3D Paper Document
-      const frontTex = createCVTexture();
-      frontTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-      const backTex = createBackTexture();
-      backTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      // Create 3D Paper Document with Ultra-Sharp Matte Material
+      frontTex = createCVTexture();
+      frontTex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+      backTex = createBackTexture();
+      backTex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
 
       const paperWidth = 4.2;
       const paperHeight = 5.94; // A4 Aspect Ratio
       const paperDepth = 0.03;
 
       const geometry = new THREE.BoxGeometry(paperWidth, paperHeight, paperDepth);
-      const edgeMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 });
+      const edgeMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95 });
 
       const materials = [
         edgeMaterial, // right
@@ -671,13 +691,13 @@
         edgeMaterial, // bottom
         new THREE.MeshStandardMaterial({
           map: frontTex,
-          roughness: 0.35,
-          metalness: 0.05,
+          roughness: 0.95,
+          metalness: 0.0,
         }), // front
         new THREE.MeshStandardMaterial({
           map: backTex,
-          roughness: 0.4,
-          metalness: 0.1,
+          roughness: 0.6,
+          metalness: 0.05,
         })  // back
       ];
 
@@ -695,23 +715,23 @@
       shadowPlane.receiveShadow = true;
       scene.add(shadowPlane);
 
-      // Floating Dust Particles
-      const particleCount = 600;
+      // Floating Dust Particles (Positioned strictly in background so they never intersect front text)
+      const particleCount = 400;
       const particleGeo = new THREE.BufferGeometry();
       const pPositions = new Float32Array(particleCount * 3);
 
       for (let i = 0; i < particleCount * 3; i += 3) {
-        pPositions[i] = (Math.random() - 0.5) * 16;
-        pPositions[i + 1] = (Math.random() - 0.5) * 16;
-        pPositions[i + 2] = (Math.random() - 0.5) * 16;
+        pPositions[i] = (Math.random() - 0.5) * 18;
+        pPositions[i + 1] = (Math.random() - 0.5) * 18;
+        pPositions[i + 2] = -1.5 - Math.random() * 10;
       }
       particleGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
 
       const particleMat = new THREE.PointsMaterial({
-        size: 0.04,
+        size: 0.035,
         color: 0x0066ff,
         transparent: true,
-        opacity: 0.45,
+        opacity: 0.35,
       });
 
       ambientParticles = new THREE.Points(particleGeo, particleMat);
@@ -724,6 +744,18 @@
         isAutoRotating = false;
         updateHUDButtons();
       });
+
+      // Reload texture once web fonts finish loading for perfect vector rendering
+      if (document.fonts) {
+        document.fonts.ready.then(() => {
+          if (paperMesh && paperMesh.material && paperMesh.material[4]) {
+            const updatedFrontTex = createCVTexture();
+            updatedFrontTex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 16);
+            paperMesh.material[4].map = updatedFrontTex;
+            paperMesh.material[4].needsUpdate = true;
+          }
+        });
+      }
     }
 
     function onWindowResize() {

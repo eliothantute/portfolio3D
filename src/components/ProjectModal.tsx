@@ -33,7 +33,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   if (!project) return null;
 
   const primaryServices = project.role.slice(0, 4);
-  const projectActionLabel = lang === 'fr' ? 'Lancer le projet' : 'Launch project';
+  const projectActionLabel = project.youtubeId
+    ? (lang === 'fr' ? 'Ouvrir sur YouTube' : 'Watch on YouTube')
+    : (lang === 'fr' ? 'Lancer le projet' : 'Launch project');
 
   return (
     <div
@@ -116,11 +118,13 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       href={project.liveUrl}
                       target="_blank"
                       rel="noreferrer"
-                      onMouseEnter={() => onHoverItem?.('LIVE')}
+                      onMouseEnter={() => onHoverItem?.(project.youtubeId ? 'YOUTUBE' : 'LIVE')}
                       onMouseLeave={onLeaveItem}
                       className="block text-white/75 transition-colors hover:text-white"
                     >
-                      {lang === 'fr' ? 'Site live' : 'Live website'}
+                      {project.youtubeId
+                        ? (lang === 'fr' ? 'Vidéo YouTube ↗' : 'YouTube Video ↗')
+                        : (lang === 'fr' ? 'Site live' : 'Live website')}
                     </a>
                   )}
                   {project.githubUrl && (
@@ -147,21 +151,33 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               onMouseLeave={onLeaveItem}
               className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white px-5 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-[#10131a] transition-all hover:bg-slate-200"
             >
-              <span className="inline-block h-2 w-2 rounded-full bg-[#ff7a3f]" />
+              <span className={`inline-block h-2 w-2 rounded-full ${project.youtubeId ? 'bg-red-500' : 'bg-[#ff7a3f]'}`} />
               <span>{projectActionLabel}</span>
             </a>
           </div>
 
           <div className="space-y-5">
-            <div className="relative overflow-hidden rounded-[1.7rem] border border-white/10 bg-black/30 shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
-              <div className="relative aspect-[16/10] sm:aspect-[16/9]">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="h-full w-full object-cover"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,24,0.06)_0%,rgba(7,11,24,0.46)_100%)]" />
-              </div>
+            <div className="relative overflow-hidden rounded-[1.7rem] border border-white/10 bg-black/40 shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
+              {project.youtubeId ? (
+                <div className="relative aspect-[16/9] w-full">
+                  <iframe
+                    className="absolute inset-0 h-full w-full"
+                    src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+                    title={project.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <div className="relative aspect-[16/10] sm:aspect-[16/9]">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,24,0.06)_0%,rgba(7,11,24,0.46)_100%)]" />
+                </div>
+              )}
             </div>
 
             <div className="flex items-center justify-end gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#ff7a3f]">

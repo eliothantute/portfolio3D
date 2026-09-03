@@ -1,4 +1,4 @@
-export type SkillType = 'all' | 'frontend' | 'design' | 'app';
+export type SkillType = 'all' | 'frontend' | 'design' | 'app' | 'music';
 
 export interface Project {
   id: string;
@@ -9,13 +9,14 @@ export interface Project {
   longDescription: string;
   year: string;
   category: string;
-  skillType?: 'frontend' | 'design' | 'app';
+  skillType?: 'frontend' | 'design' | 'app' | 'music';
   role: string[];
   stack: string[];
   objective: string;
   status: string;
   liveUrl?: string;
   githubUrl?: string;
+  youtubeId?: string;
   image: string;
   video?: string;
   featured?: boolean;

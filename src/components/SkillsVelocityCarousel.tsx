@@ -75,6 +75,27 @@ const skillVisuals = {
       </div>
     ),
   },
+  music: {
+    bgGradient: 'from-purple-950 via-zinc-950 to-black',
+    accentColor: '#a855f7',
+    badgeText: '04 // SOUND DESIGN & COMPOSITION',
+    glowColor: 'rgba(168, 85, 247, 0.35)',
+    graphicCode: (
+      <div className="absolute inset-0 flex items-center justify-center overflow-hidden opacity-30 pointer-events-none">
+        <div className="flex items-center gap-1.5 h-20">
+          <div className="w-2 h-10 bg-purple-400 rounded-full animate-pulse" />
+          <div className="w-2 h-16 bg-fuchsia-400 rounded-full animate-pulse [animation-delay:150ms]" />
+          <div className="w-2 h-12 bg-purple-300 rounded-full animate-pulse [animation-delay:300ms]" />
+          <div className="w-2 h-20 bg-violet-400 rounded-full animate-pulse [animation-delay:450ms]" />
+          <div className="w-2 h-14 bg-purple-400 rounded-full animate-pulse [animation-delay:200ms]" />
+          <div className="w-2 h-8 bg-fuchsia-300 rounded-full animate-pulse [animation-delay:350ms]" />
+        </div>
+        <div className="absolute font-mono text-[11px] text-purple-300 font-bold tracking-widest uppercase mt-28">
+          ♪ SOUNDTRACK &amp; AUDIO
+        </div>
+      </div>
+    ),
+  },
 };
 
 export const SkillsVelocityCarousel: React.FC<SkillsVelocityCarouselProps> = ({

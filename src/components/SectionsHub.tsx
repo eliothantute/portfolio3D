@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
+import { ServicesSection } from './ServicesSection';
 import { VelocityCarousel } from './VelocityCarousel';
 import { SkillsVelocityCarousel } from './SkillsVelocityCarousel';
 import { Resume3D } from './Resume3D';
@@ -24,6 +25,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 }) => {
   const [selectedSkillFilter, setSelectedSkillFilter] = useState<SkillType>('all');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    services: false,
     skills: false,
     projects: false,
     cv: false,
@@ -60,9 +62,19 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 
   const sectionHeaders = [
     {
+      key: 'services',
+      id: 'services',
+      num: '01',
+      title: lang === 'fr' ? 'Services & Expertises' : 'Services & Solutions',
+      desc:
+        lang === 'fr'
+          ? 'Site vitrine, landing page, e-commerce, apps, 3D & logos'
+          : 'Showcase sites, landing pages, e-commerce, apps, 3D & brand logos',
+    },
+    {
       key: 'skills',
       id: 'skills',
-      num: '01',
+      num: '02',
       title: lang === 'fr' ? 'Compétences & Stack' : 'Skills & Stack',
       desc:
         lang === 'fr'
@@ -72,7 +84,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     {
       key: 'projects',
       id: 'projects',
-      num: '02',
+      num: '03',
       title: lang === 'fr' ? 'Projets & Réalisations' : 'Selected Projects',
       desc:
         lang === 'fr'
@@ -82,7 +94,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     {
       key: 'cv',
       id: 'cv',
-      num: '03',
+      num: '04',
       title: lang === 'fr' ? 'Curriculum Vitae 3D' : 'Curriculum Vitae 3D',
       desc:
         lang === 'fr'
@@ -92,7 +104,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     {
       key: 'contact',
       id: 'contact',
-      num: '04',
+      num: '05',
       title: lang === 'fr' ? 'Contact & Collaboration' : 'Contact & Inquiries',
       desc:
         lang === 'fr'
@@ -138,7 +150,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                   <motion.span
                     animate={{ rotate: isOpen ? 45 : 0 }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-950 font-mono text-lg shadow-sm transition-all group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white"
+                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-950 font-mono text-lg shadow-sm transition-all group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white cursor-pointer"
                   >
                     +
                   </motion.span>
@@ -156,7 +168,16 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                     transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden pt-8"
                   >
-                    {/* SECTION 01: 3D SKILLS VELOCITY CAROUSEL (Identical in style to Project Cards) */}
+                    {/* SECTION 01: SERVICES & SOLUTIONS */}
+                    {sec.key === 'services' && (
+                      <ServicesSection
+                        lang={lang}
+                        onHoverItem={onHoverItem}
+                        onLeaveItem={onLeaveItem}
+                      />
+                    )}
+
+                    {/* SECTION 02: 3D SKILLS VELOCITY CAROUSEL */}
                     {sec.key === 'skills' && (
                       <div className="flex flex-col pb-6">
                         <SkillsVelocityCarousel
@@ -221,6 +242,19 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             }`}
                           >
                             APP ({projects.filter((p) => p.skillType === 'app').length})
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setSelectedSkillFilter('music')}
+                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
+                              selectedSkillFilter === 'music'
+                                ? 'bg-purple-600 text-white shadow-md scale-105'
+                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                            }`}
+                          >
+                            {lang === 'fr' ? 'COMPOSITION MUSICALE' : 'MUSIC COMPOSITION'} (
+                            {projects.filter((p) => p.skillType === 'music').length})
                           </button>
                         </div>
 

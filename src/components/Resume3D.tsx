@@ -299,41 +299,41 @@ export const Resume3D: React.FC<Resume3DProps> = ({ lang, onHoverItem, onLeaveIt
                     </span>
                     <div className="mt-1.5 space-y-2">
                       <div>
-                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-900">
+                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-950">
                           <span>UI Designer — L’Atelier Berger</span>
-                          <span className="text-[8px] font-mono text-zinc-400">2026 — Présent</span>
+                          <span className="text-[8px] font-mono text-zinc-500 font-medium">2026 — Présent</span>
                         </div>
-                        <p className="text-[8.5px] text-zinc-500 line-clamp-1">
+                        <p className="text-[8.5px] text-zinc-600 line-clamp-1">
                           Globe 3D interactif avec navigation dynamique (React, Three.js).
                         </p>
                       </div>
 
                       <div>
-                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-900">
+                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-950">
                           <span>UI Designer — Ping Paris</span>
-                          <span className="text-[8px] font-mono text-zinc-400">2026</span>
+                          <span className="text-[8px] font-mono text-zinc-500 font-medium">2026</span>
                         </div>
-                        <p className="text-[8.5px] text-zinc-500 line-clamp-1">
+                        <p className="text-[8.5px] text-zinc-600 line-clamp-1">
                           Application web géolocalisation tables &amp; UI complète Figma.
                         </p>
                       </div>
 
                       <div>
-                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-900">
+                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-950">
                           <span>UI Designer — Neuro-Pédagogie</span>
-                          <span className="text-[8px] font-mono text-zinc-400">2025</span>
+                          <span className="text-[8px] font-mono text-zinc-500 font-medium">2025</span>
                         </div>
-                        <p className="text-[8.5px] text-zinc-500 line-clamp-1">
+                        <p className="text-[8.5px] text-zinc-600 line-clamp-1">
                           Refonte de site vitrine, SEO on-page &amp; intégration front.
                         </p>
                       </div>
 
                       <div>
-                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-900">
+                        <div className="flex items-center justify-between text-[9.5px] font-bold text-zinc-950">
                           <span>Web Designer — Souvenir Français</span>
-                          <span className="text-[8px] font-mono text-zinc-400">2025</span>
+                          <span className="text-[8px] font-mono text-zinc-500 font-medium">2025</span>
                         </div>
-                        <p className="text-[8.5px] text-zinc-500 line-clamp-1">
+                        <p className="text-[8.5px] text-zinc-600 line-clamp-1">
                           Prototypes haute-fidélité sur Figma &amp; Framer.
                         </p>
                       </div>
@@ -347,20 +347,20 @@ export const Resume3D: React.FC<Resume3DProps> = ({ lang, onHoverItem, onLeaveIt
                     </span>
                     <div className="mt-1 grid grid-cols-2 gap-1.5 text-[8.5px]">
                       <div className="rounded-lg bg-zinc-50 p-1.5 border border-zinc-100">
-                        <p className="font-bold text-zinc-900">Product Designer</p>
-                        <p className="text-[7.5px] text-zinc-400">OpenClassrooms 2026</p>
+                        <p className="font-bold text-zinc-950">Product Designer</p>
+                        <p className="text-[8px] text-zinc-500 font-medium">OpenClassrooms 2026</p>
                       </div>
                       <div className="rounded-lg bg-zinc-50 p-1.5 border border-zinc-100">
-                        <p className="font-bold text-zinc-900">BUT Info-Com</p>
-                        <p className="text-[7.5px] text-zinc-400">Univ. Strasbourg 2025</p>
+                        <p className="font-bold text-zinc-950">BUT Info-Com</p>
+                        <p className="text-[8px] text-zinc-500 font-medium">Univ. Strasbourg 2025</p>
                       </div>
                       <div className="rounded-lg bg-zinc-50 p-1.5 border border-zinc-100">
-                        <p className="font-bold text-zinc-900">Production Sonore</p>
-                        <p className="text-[7.5px] text-zinc-400">Montréal 2017</p>
+                        <p className="font-bold text-zinc-950">Production Sonore</p>
+                        <p className="text-[8px] text-zinc-500 font-medium">Montréal 2017</p>
                       </div>
                       <div className="rounded-lg bg-zinc-50 p-1.5 border border-zinc-100">
-                        <p className="font-bold text-zinc-900">STD2A</p>
-                        <p className="text-[7.5px] text-zinc-400">Paris 6e 2015</p>
+                        <p className="font-bold text-zinc-950">STD2A</p>
+                        <p className="text-[8px] text-zinc-500 font-medium">Paris 6e 2015</p>
                       </div>
                     </div>
                   </div>

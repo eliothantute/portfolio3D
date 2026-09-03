@@ -53,21 +53,21 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Navigation Links */}
         <nav className="hidden items-center gap-7 font-sans text-xs font-semibold text-zinc-600 md:flex">
           <a
+            href="#services"
+            onMouseEnter={() => onHoverItem?.('SERVICES')}
+            onMouseLeave={onLeaveItem}
+            className="transition-colors hover:text-zinc-950"
+          >
+            Services
+          </a>
+
+          <a
             href="#projects"
             onMouseEnter={() => onHoverItem?.('PROJETS')}
             onMouseLeave={onLeaveItem}
             className="transition-colors hover:text-zinc-950"
           >
             {lang === 'fr' ? 'Projets' : 'Work'}
-          </a>
-
-          <a
-            href="#about"
-            onMouseEnter={() => onHoverItem?.('PROFIL')}
-            onMouseLeave={onLeaveItem}
-            className="transition-colors hover:text-zinc-950"
-          >
-            {lang === 'fr' ? 'Profil' : 'About'}
           </a>
 
           <a
@@ -80,34 +80,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             {lang === 'fr' ? 'CV 3D ↗' : '3D CV ↗'}
           </a>
-
-          <a
-            href="#contact"
-            onMouseEnter={() => onHoverItem?.('CONTACT')}
-            onMouseLeave={onLeaveItem}
-            className="transition-colors hover:text-zinc-950"
-          >
-            Contact
-          </a>
         </nav>
 
         {/* Action Controls */}
         <div className="flex items-center gap-2">
           <button
-            onClick={toggleAudio}
-            onMouseEnter={() => onHoverItem?.('AUDIO')}
-            onMouseLeave={onLeaveItem}
-            className="inline-flex h-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-3 text-xs font-medium text-zinc-600 transition-all hover:border-zinc-300 hover:bg-white hover:text-zinc-950"
-            aria-label="Toggle Audio"
-          >
-            {isMuted ? 'Audio Off' : 'Audio On'}
-          </button>
-
-          <button
             onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
             onMouseEnter={() => onHoverItem?.('LANG')}
             onMouseLeave={onLeaveItem}
-            className="inline-flex h-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-3 font-mono text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-white hover:text-zinc-950"
+            className="inline-flex h-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-3 font-mono text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-white hover:text-zinc-950 cursor-pointer"
           >
             {lang.toUpperCase()}
           </button>
@@ -116,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             href="#contact"
             onMouseEnter={() => onHoverItem?.('CONTACT')}
             onMouseLeave={onLeaveItem}
-            className="inline-flex h-8 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-semibold text-white transition-all hover:bg-zinc-800"
+            className="inline-flex h-8 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-semibold text-white shadow-sm transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer"
           >
             Contact
           </a>
