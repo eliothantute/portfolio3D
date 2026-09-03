@@ -4,6 +4,8 @@ import atelierBergerBlueImg from '../assets/images/image_069-1-1.jpg';
 import eloraImg from '../assets/images/hero.png';
 import haziImg from '../assets/images/hazi-project.png';
 import nariOsImg from '../assets/images/nari-os-project.png';
+import aumParisImg from '../assets/aum-paris.jpg';
+import disfocusImg from '../assets/disfocus.jpg';
 
 export const projectsData: Record<'fr' | 'en', Project[]> = {
   fr: [
@@ -170,6 +172,53 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'Plateforme', value: 'YouTube' },
         { label: 'Type', value: 'Ambient' }
       ]
+    },
+    {
+      id: 'aum-paris',
+      title: 'AUM Paris',
+      client: 'AUM Paris',
+      subtitle: 'Boutique E-Commerce Cosmétique Bio & Soin d’Exception',
+      description: "Boutique en ligne moderne pour soins corporels bio d’exception avec panier tiroir, sélecteur multidevise et effets liquides.",
+      longDescription: "Conception et développement complet de la boutique e-commerce AUM Paris. Interface haut de gamme axée sur le Baume Sublime Baiser d’Été, intégrant un panier tiroir instantané, la prise en charge multilingue (FR, EN, ES, IT), des micro-interactions de déformation fluide au survol des produits et un tunnel de commande sans friction.",
+      year: '2026',
+      category: 'E-Commerce // Cosmétique de Luxe',
+      skillType: 'frontend',
+      role: ['Développement Front-End', 'UI/UX E-Commerce', 'Tunnel d\'Achat', 'Performance Web'],
+      stack: ['JavaScript (ES6+)', 'CSS3 Moderne', 'Panier Drawer', 'i18n Multi-langues', 'Vite', 'Vercel'],
+      objective: "Offrir une expérience d'achat en ligne digne d'une maison de luxe avec une vitesse de chargement instantanée et une ergonomie irréprochable.",
+      status: 'En ligne',
+      liveUrl: 'https://aum-paris.vercel.app/',
+      image: aumParisImg,
+      featured: true,
+      metrics: [
+        { label: 'Type', value: 'E-Commerce' },
+        { label: 'Langues', value: 'FR • EN • ES • IT' },
+        { label: 'Panier', value: 'Tiroir Instantané' }
+      ]
+    },
+    {
+      id: 'disfocus',
+      title: 'DISFOCUS',
+      client: 'DISFOCUS',
+      subtitle: 'Site Vitrine 3D Immersif pour Artiste & Producteur',
+      description: "Expérience web 3D cyberpunk avec shaders WebGL réactifs, lecteur SoundCloud intégré, archives vidéo et espace booking.",
+      longDescription: "Direction artistique et développement front-end du site vitrine de l'artiste et producteur électronique DISFOCUS. Univers sombre et électrisant propulsé par Three.js et des shaders GLSL personnalisés : distorsion glitch en temps réel, visualiseur audio interactif, intégration fluide du flux SoundCloud et grilles vidéo d'archives.",
+      year: '2026',
+      category: 'Site Vitrine // WebGL 3D & Musique',
+      skillType: 'frontend',
+      role: ['Direction Artistique', 'Développement Three.js / WebGL', 'Shaders GLSL', 'UI Cyberpunk'],
+      stack: ['Three.js', 'WebGL & Shaders GLSL', 'Audio Web API', 'GSAP', 'Vite', 'Vercel'],
+      objective: "Créer un univers visuel marquant et interactif à la hauteur de l'énergie scénique de l'artiste pour captiver les labels et bookers.",
+      status: 'En ligne',
+      liveUrl: 'https://disfocus.vercel.app/',
+      image: disfocusImg,
+      featured: true,
+      isThreeD: true,
+      metrics: [
+        { label: 'Moteur 3D', value: 'Three.js / GLSL' },
+        { label: 'Audio', value: 'Visualizer Réactif' },
+        { label: 'BPM', value: '125 — 175 BPM' }
+      ]
     }
   ],
   en: [
@@ -335,6 +384,53 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'Format', value: 'HD Video' },
         { label: 'Platform', value: 'YouTube' },
         { label: 'Type', value: 'Ambient' }
+      ]
+    },
+    {
+      id: 'aum-paris',
+      title: 'AUM Paris',
+      client: 'AUM Paris',
+      subtitle: 'Luxury Organic Skincare E-Commerce Store',
+      description: "Modern e-commerce showcase for luxury organic skincare with cart drawer, multi-currency selector and fluid visual interactions.",
+      longDescription: "Full design and front-end development of the AUM Paris e-commerce flagship. Premium aesthetic focused on organic luxury skincare, featuring an instant cart drawer, multilingual localization (FR, EN, ES, IT), fluid liquid hover interactions, and friction-free checkout architecture.",
+      year: '2026',
+      category: 'E-Commerce // Luxury Skincare',
+      skillType: 'frontend',
+      role: ['Front-End Development', 'E-Commerce UI/UX', 'Checkout Flow', 'Web Performance'],
+      stack: ['JavaScript (ES6+)', 'Modern CSS3', 'Cart Drawer', 'i18n Localization', 'Vite', 'Vercel'],
+      objective: "Deliver a luxury shopping experience with instant load times, refined typography, and intuitive customer checkout.",
+      status: 'Live',
+      liveUrl: 'https://aum-paris.vercel.app/',
+      image: aumParisImg,
+      featured: true,
+      metrics: [
+        { label: 'Type', value: 'E-Commerce' },
+        { label: 'Languages', value: 'FR • EN • ES • IT' },
+        { label: 'Cart', value: 'Instant Drawer' }
+      ]
+    },
+    {
+      id: 'disfocus',
+      title: 'DISFOCUS',
+      client: 'DISFOCUS',
+      subtitle: 'Immersive 3D Artist & Producer Showcase',
+      description: "Cyberpunk spatial 3D web experience with reactive WebGL shaders, integrated SoundCloud streaming, live video sets, and booking portal.",
+      longDescription: "Art direction and creative front-end engineering for electronic music producer DISFOCUS. Dark, high-octane spatial universe powered by Three.js and custom GLSL shaders: real-time glitch distortion, reactive audio visualizer, seamless SoundCloud streaming integration, and live video archives.",
+      year: '2026',
+      category: 'Artist Showcase // 3D WebGL & Audio',
+      skillType: 'frontend',
+      role: ['Art Direction', 'Three.js / WebGL Development', 'Custom GLSL Shaders', 'Cyberpunk UI'],
+      stack: ['Three.js', 'WebGL & Shaders GLSL', 'Audio Web API', 'GSAP', 'Vite', 'Vercel'],
+      objective: "Engineer a striking visual identity and interactive spatial universe matching the artist's live energy to engage labels and bookers.",
+      status: 'Live',
+      liveUrl: 'https://disfocus.vercel.app/',
+      image: disfocusImg,
+      featured: true,
+      isThreeD: true,
+      metrics: [
+        { label: '3D Engine', value: 'Three.js / GLSL' },
+        { label: 'Audio', value: 'Reactive Visualizer' },
+        { label: 'BPM', value: '125 — 175 BPM' }
       ]
     }
   ]
