@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
@@ -38,6 +38,54 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       [sectionKey]: !prev[sectionKey],
     }));
   };
+
+  // Automatically open target section and scroll to it when CTA or anchor link is clicked
+  useEffect(() => {
+    const handleNavigation = (sectionKey: string) => {
+      if (['services', 'skills', 'projects', 'cv', 'contact'].includes(sectionKey)) {
+        setOpenSections((prev) => ({
+          ...prev,
+          [sectionKey]: true,
+        }));
+        setTimeout(() => {
+          const el = document.getElementById(sectionKey);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 120);
+      }
+    };
+
+    // Check on initial page load
+    if (window.location.hash) {
+      handleNavigation(window.location.hash.replace('#', ''));
+    }
+
+    const handleHashChange = () => {
+      if (window.location.hash) {
+        handleNavigation(window.location.hash.replace('#', ''));
+      }
+    };
+
+    const handleGlobalClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('a[href^="#"]');
+      if (!target) return;
+      const href = target.getAttribute('href');
+      if (!href) return;
+      const sectionKey = href.replace('#', '');
+      if (['services', 'skills', 'projects', 'cv', 'contact'].includes(sectionKey)) {
+        handleNavigation(sectionKey);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    document.addEventListener('click', handleGlobalClick);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, []);
 
   const handleSelectSkill = (skillType: SkillType) => {
     setSelectedSkillFilter(skillType);
