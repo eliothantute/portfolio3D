@@ -10,6 +10,41 @@ interface VelocityCarouselProps {
   onLeaveItem?: () => void;
 }
 
+const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
+  'atelier-berger': {
+    fr: 'Globe 3D interactif pour explorer des projets d’exception à travers le monde.',
+    en: 'Interactive 3D globe to explore luxury design projects worldwide.',
+  },
+  'elora': {
+    fr: 'Site vitrine moderne conçu d’après une maquette Figma soignée.',
+    en: 'Clean, modern showcase website built from a detailed Figma design.',
+  },
+  'nari-os': {
+    fr: 'Site immersif présentant une solution d’intelligence artificielle vocale.',
+    en: 'Immersive website showcasing a sovereign voice AI solution.',
+  },
+  'ping-paris': {
+    fr: 'Carte interactive pour trouver facilement les tables de ping-pong gratuites à Paris.',
+    en: 'Interactive city map to find free outdoor table tennis spots in Paris.',
+  },
+  'hazi-whatsapp': {
+    fr: 'Page de présentation pour une application intelligente sur ordinateur.',
+    en: 'Showcase landing page for a modern desktop AI application.',
+  },
+  'aum-paris': {
+    fr: 'Boutique en ligne élégante et épurée pour une marque de maroquinerie de luxe.',
+    en: 'Minimalist, luxury e-commerce shop for leather goods.',
+  },
+  'centre-neuro': {
+    fr: 'Modernisation du site web du centre de santé pour une navigation plus claire.',
+    en: 'Clean redesign of a medical center website for easier navigation.',
+  },
+  'souvenir-francais': {
+    fr: 'Site institutionnel clair, accessible et adapté à tous les écrans.',
+    en: 'Clear, accessible institutional website designed for all screens.',
+  },
+};
+
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
@@ -25,6 +60,11 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
   const [activeIndex, setActiveIndex] = useState(() => Math.floor(projects.length / 2));
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [containerWidth, setContainerWidth] = useState(1200);
+
+  // Keep active index in bounds when filtering projects
+  useEffect(() => {
+    setActiveIndex((prev) => clamp(prev, 0, Math.max(0, projects.length - 1)));
+  }, [projects.length]);
 
   // 3D gyroscopic tilt tracking
   const mouseX = useMotionValue(0.5);
@@ -51,7 +91,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
   const isMobile = containerWidth < 640;
   const isTablet = containerWidth >= 640 && containerWidth < 1024;
 
-  // Larger Grand 3D Card Dimensions
+  // Grand 3D Card Dimensions
   const cardWidth = useMemo(() => {
     if (isMobile) return clamp(containerWidth - 48, 290, 340);
     if (isTablet) return clamp(containerWidth * 0.46, 360, 440);
@@ -125,13 +165,21 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
     [next, previous]
   );
 
+  if (!projects || projects.length === 0) {
+    return (
+      <div className="py-16 text-center font-mono text-sm text-zinc-500">
+        {lang === 'fr' ? 'Aucun projet dans cette catégorie.' : 'No projects in this category.'}
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleContainerMouseMove}
       onWheel={handleWheel}
-      className="relative flex w-full flex-col items-center justify-center overflow-hidden py-14 select-none [perspective:1600px]"
-      style={{ minHeight: cardHeight + 160 }}
+      className="relative flex w-full flex-col items-center justify-center overflow-hidden py-10 select-none [perspective:1600px]"
+      style={{ minHeight: cardHeight + 140 }}
     >
       {/* 3D Cards Stage */}
       <motion.div
@@ -153,6 +201,9 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
           const zDepth = isActive ? 0 : -absDistance * 110;
           const scale = isActive ? 1 : hoveredIndex === index ? 0.94 : 0.88;
           const opacity = absDistance > 2 ? 0.35 : absDistance === 2 ? 0.65 : 1;
+
+          const simpleDesc =
+            SIMPLE_DESCRIPTIONS[project.id]?.[lang] || project.subtitle || project.description;
 
           return (
             <motion.div
@@ -230,7 +281,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                 <div
                   style={{
                     backgroundColor: '#000000',
-                    opacity: isActive ? 0.42 : hoveredIndex === index ? 0.3 : 0.55,
+                    opacity: isActive ? 0.45 : hoveredIndex === index ? 0.32 : 0.58,
                     transition: 'opacity 0.5s ease',
                   }}
                   className="absolute inset-0"
@@ -247,15 +298,20 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                   />
                 )}
 
-                {/* YouTube Video Indicator Badge */}
-                {project.youtubeId && (
-                  <div className="absolute left-6 top-6 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-red-600/90 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-md">
-                    <span>▶</span>
-                    <span>YOUTUBE</span>
-                  </div>
-                )}
+                {/* Top Badge: Category & YouTube if available */}
+                <div className="absolute left-6 top-6 z-20 flex items-center gap-2">
+                  <span className="rounded-full bg-black/75 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-md">
+                    {project.category}
+                  </span>
+                  {project.youtubeId && (
+                    <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-red-600/90 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-md">
+                      <span>▶</span>
+                      <span>YOUTUBE</span>
+                    </div>
+                  )}
+                </div>
 
-                {/* Active Card Content (Centered Title, Description, White Pill Button) */}
+                {/* Active Card Content (Centered Title, Simple Description, Action Buttons) */}
                 {isActive && (
                   <motion.div
                     initial={{ opacity: 0, y: 16 }}
@@ -263,26 +319,40 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                     transition={{ duration: 0.4, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
                     className="relative z-10 flex h-full w-full flex-col items-center justify-end p-7 sm:p-9 text-center text-white [transform:translateZ(30px)]"
                   >
-                    <div className="flex flex-col items-center gap-2.5 max-w-full">
+                    <div className="flex flex-col items-center gap-2 max-w-full">
                       <h3 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl leading-tight">
                         {project.title}
                       </h3>
-                      <p className="line-clamp-2 max-w-[90%] text-xs sm:text-sm font-normal text-white/90 leading-relaxed">
-                        {project.subtitle}
+                      <p className="line-clamp-2 max-w-[92%] text-xs sm:text-sm font-normal text-white/90 leading-relaxed">
+                        {simpleDesc}
                       </p>
                     </div>
 
-                    {/* Centered White Pill Button */}
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectProject(project);
-                      }}
-                      className="mt-6 inline-flex items-center justify-center rounded-full bg-white px-8 py-3 font-sans text-xs sm:text-sm font-bold text-zinc-950 shadow-lg transition-all hover:bg-zinc-100 hover:scale-105 active:scale-95 cursor-pointer"
-                    >
-                      <span>{lang === 'fr' ? 'Explorer le projet' : 'Learn More'}</span>
-                    </button>
+                    {/* Action Buttons: Détails & Voir le site */}
+                    <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectProject(project);
+                        }}
+                        className="inline-flex items-center justify-center rounded-full bg-white px-6 py-2.5 font-sans text-xs sm:text-sm font-bold text-zinc-950 shadow-lg transition-all hover:bg-zinc-100 hover:scale-105 active:scale-95 cursor-pointer"
+                      >
+                        <span>{lang === 'fr' ? 'Détails du projet →' : 'Learn More →'}</span>
+                      </button>
+
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center justify-center rounded-full border border-white/40 bg-black/60 px-5 py-2.5 font-sans text-xs sm:text-sm font-semibold text-white backdrop-blur-md transition-all hover:bg-black/90 hover:border-white hover:scale-105 active:scale-95 cursor-pointer"
+                        >
+                          <span>{lang === 'fr' ? 'Voir le site ↗' : 'Visit site ↗'}</span>
+                        </a>
+                      )}
+                    </div>
                   </motion.div>
                 )}
               </motion.div>
@@ -293,7 +363,7 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
 
       {/* Indicator Pagination Dots & Controls */}
       {projects.length > 1 && (
-        <div className="mt-14 flex items-center justify-center gap-5 z-20">
+        <div className="mt-12 flex items-center justify-center gap-5 z-20">
           <button
             type="button"
             onClick={previous}

@@ -106,7 +106,7 @@ export default function App() {
           onLeaveItem={handleLeaveItem}
         />
 
-        {/* Hero Section */}
+        {/* Hero Section (Clean, modern, simple & 100% readable) */}
         <Hero
           lang={lang}
           onOpenContact={() => setIsContactOpen(true)}
@@ -114,7 +114,7 @@ export default function App() {
           onLeaveItem={handleLeaveItem}
         />
 
-        {/* Sections Hub: Accordion / Sliding Section Titles with Direct Skills and Filtered Projects */}
+        {/* Interactive Sections Menu: Sleek rows that open on click */}
         <SectionsHub
           projects={currentProjects}
           lang={lang}

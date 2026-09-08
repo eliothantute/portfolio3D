@@ -4,13 +4,13 @@
   :root {
     --bg: #fafafa;
     --surface: #ffffff;
-    --text-primary: #09090b;
+    --text-primary: #0a0a0a;
     --text-secondary: #52525b;
-    --text-muted: #a1a1aa;
-    --border: #e4e4e7;
-    --border-hover: #d4d4d8;
-    --accent: #0066ff;
-    --accent-light: #eff6ff;
+    --text-muted: #71717a;
+    --border: rgba(0, 0, 0, 0.08);
+    --border-hover: rgba(0, 0, 0, 0.2);
+    --accent: #000000;
+    --accent-red: #f02b42;
     --ease-framer: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -32,7 +32,7 @@
     margin: 0;
     color: var(--text-primary);
     background-color: var(--bg);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -45,8 +45,8 @@
 }
 
 .font-display {
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
-  letter-spacing: -0.03em;
+  font-family: 'DM Sans', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  letter-spacing: -0.035em;
 }
 
 .font-mono {
@@ -57,45 +57,127 @@
   font-family: 'Inter', -apple-system, sans-serif;
 }
 
-/* Framer-like clean glass panel */
+/* Neiden Style Architecture Utilities */
+.neiden-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #71717a;
+}
+
+.neiden-border {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.neiden-border-b {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.neiden-border-t {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.neiden-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neiden-card:hover {
+  border-color: rgba(0, 0, 0, 0.18);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.06);
+}
+
+/* Neiden Pill Buttons */
+.neiden-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.75rem;
+  border-radius: 9999px;
+  background: #000000;
+  color: #ffffff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border: 1px solid #000000;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.neiden-btn-primary:hover {
+  background: #1f1f23;
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.2);
+}
+
+.neiden-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.75rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.neiden-btn-secondary:hover {
+  border-color: #000000;
+  background: #fafafa;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Backwards compatibility aliases */
 .sneaks-card {
   background: #ffffff;
-  border: 1px solid rgba(228, 228, 231, 0.9);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 10px 30px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sneaks-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(212, 212, 216, 1);
-  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.18);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.06);
 }
 
-/* Pill Button */
 .sneaks-btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.85rem 1.85rem;
+  padding: 0.8rem 1.75rem;
   border-radius: 9999px;
-  background: #09090b;
+  background: #000000;
   color: #ffffff;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
-  border: 1px solid #09090b;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #000000;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 
 .sneaks-btn-primary:hover {
-  background: #27272a;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+  background: #1f1f23;
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.2);
 }
 
 .sneaks-btn-secondary {
@@ -103,47 +185,19 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.85rem 1.85rem;
+  padding: 0.8rem 1.75rem;
   border-radius: 9999px;
   background: #ffffff;
-  color: #09090b;
-  font-size: 0.875rem;
+  color: #000000;
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
-  border: 1px solid #e4e4e7;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 
 .sneaks-btn-secondary:hover {
-  border-color: #09090b;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-}
-
-/* Subtle pulse dot */
-.status-dot-emerald {
-  position: relative;
-  display: inline-flex;
-  height: 8px;
-  width: 8px;
-}
-
-.status-dot-emerald span:first-child {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  border-radius: 9999px;
-  background-color: #10b981;
-  opacity: 0.75;
-  animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-.status-dot-emerald span:last-child {
-  position: relative;
-  height: 8px;
-  width: 8px;
-  border-radius: 9999px;
-  background-color: #059669;
+  border-color: #000000;
+  background: #fafafa;
+  transform: translateY(-1.5px);
 }

@@ -32,174 +32,116 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
   if (!project) return null;
 
-  const primaryServices = project.role.slice(0, 4);
-  const projectActionLabel = project.youtubeId
-    ? (lang === 'fr' ? 'Ouvrir sur YouTube' : 'Watch on YouTube')
-    : (lang === 'fr' ? 'Lancer le projet' : 'Launch project');
-
   return (
     <div
-      className="fixed inset-0 z-[60] overflow-y-auto bg-[#020b1f]/94 px-4 py-6 backdrop-blur-xl sm:px-8 sm:py-8"
+      className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-black/75 px-4 py-8 backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="relative mx-auto w-full max-w-[1380px] overflow-hidden rounded-[2.15rem] border border-white/10 bg-[linear-gradient(160deg,#020c23_0%,#010915_52%,#061332_100%)] shadow-[0_40px_120px_rgba(0,0,0,0.55)]"
+        className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-2xl md:rounded-3xl border border-black/[0.1] bg-white p-6 sm:p-10 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_22%,rgba(255,115,58,0.12),transparent_36%),radial-gradient(circle_at_70%_65%,rgba(95,130,255,0.14),transparent_42%)]" />
-
-        <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 px-5 py-5 sm:px-8 sm:py-6">
-          <button
-            onClick={onClose}
-            onMouseEnter={() => onHoverItem?.('BACK')}
-            onMouseLeave={onLeaveItem}
-            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white px-5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[#10131a] transition-all hover:scale-[1.02] hover:bg-slate-200"
-          >
-            <span>←</span>
-            <span>{lang === 'fr' ? 'Retour' : 'Back'}</span>
-          </button>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-            <a
-              href="#contact"
-              onMouseEnter={() => onHoverItem?.('TALK')}
-              onMouseLeave={onLeaveItem}
-              className="inline-flex h-10 items-center rounded-full border border-white/15 bg-white/10 px-5 font-mono text-[11px] uppercase tracking-[0.15em] text-white transition-all hover:bg-white hover:text-[#10131a]"
-            >
-              {lang === 'fr' ? 'Contact' : "Let's Talk"}
-            </a>
-
-            <button
-              onClick={onClose}
-              onMouseEnter={() => onHoverItem?.('MENU')}
-              onMouseLeave={onLeaveItem}
-              aria-label={lang === 'fr' ? 'Fermer la fiche projet' : 'Close project sheet'}
-              className="inline-flex h-10 items-center rounded-full border border-white/20 bg-white px-5 font-mono text-[11px] uppercase tracking-[0.15em] text-[#10131a] transition-all hover:bg-slate-200"
-            >
-              {lang === 'fr' ? 'Fermer' : 'Menu'}
-            </button>
+        {/* Top Bar Navigation */}
+        <div className="flex items-center justify-between border-b border-black/[0.08] pb-4 mb-6">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-zinc-500">
+            <span className="font-bold text-black">[ EH® ‒ {project.year} ]</span>
+            <span>/</span>
+            <span>{project.category}</span>
           </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            onMouseEnter={() => onHoverItem?.('FERMER')}
+            onMouseLeave={onLeaveItem}
+            className="rounded-full border border-black/[0.12] bg-zinc-50 px-3.5 py-1 font-mono text-xs font-semibold text-black transition-all hover:bg-black hover:text-white cursor-pointer"
+          >
+            ✕ {lang === 'fr' ? 'Fermer' : 'Close'}
+          </button>
         </div>
 
-        <div className="relative z-10 grid gap-8 px-5 pb-8 sm:px-8 sm:pb-10 xl:grid-cols-[0.42fr_0.58fr] xl:items-end">
-          <div className="space-y-8 pb-2 text-white">
-            <div className="space-y-3">
-              <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#ff7a3f]">
-                {project.category}
-              </span>
-              <h1 className="font-display text-5xl leading-[0.9] tracking-tight text-[#f2f4ff] sm:text-6xl xl:text-[5.2rem]">
-                {project.title}
-              </h1>
+        {/* Media Preview */}
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-zinc-100 mb-6">
+          {project.youtubeId ? (
+            <iframe
+              className="h-full w-full"
+              src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+              title={project.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="h-full w-full object-cover"
+            />
+          )}
+        </div>
+
+        {/* Title & Simple Description */}
+        <div className="space-y-4">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-black">
+            {project.title}
+          </h2>
+
+          <p className="text-base text-zinc-600 leading-relaxed font-normal">
+            {project.description}
+          </p>
+
+          {/* Metadata Grid in Neiden Style */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-black/[0.08] pt-4 font-mono text-xs text-zinc-600">
+            <div>
+              <span className="text-zinc-400 block text-[10px] uppercase">Rôle</span>
+              <span className="text-black font-semibold">{Array.isArray(project.role) ? project.role.join(' • ') : (project.role || 'Développeur & Designer')}</span>
             </div>
-
-            <p className="max-w-[40ch] text-sm leading-relaxed text-white/72 sm:text-base">
-              {project.description}
-            </p>
-
-            <div className="grid grid-cols-2 gap-6 text-sm text-white/85">
-              <div>
-                <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#ff7a3f]">
-                  {lang === 'fr' ? 'Services' : 'Services'}
-                </div>
-                <ul className="space-y-1.5">
-                  {primaryServices.map((service, idx) => (
-                    <li key={`service-${idx}`} className="text-white/75">{service}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#ff7a3f]">
-                  {lang === 'fr' ? 'Liens' : 'Links'}
-                </div>
-                <div className="space-y-1.5">
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onMouseEnter={() => onHoverItem?.(project.youtubeId ? 'YOUTUBE' : 'LIVE')}
-                      onMouseLeave={onLeaveItem}
-                      className="block text-white/75 transition-colors hover:text-white"
-                    >
-                      {project.youtubeId
-                        ? (lang === 'fr' ? 'Vidéo YouTube ↗' : 'YouTube Video ↗')
-                        : (lang === 'fr' ? 'Site live' : 'Live website')}
-                    </a>
-                  )}
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onMouseEnter={() => onHoverItem?.('CODE')}
-                      onMouseLeave={onLeaveItem}
-                      className="block text-white/75 transition-colors hover:text-white"
-                    >
-                      GitHub
-                    </a>
-                  )}
-                </div>
-              </div>
+            <div>
+              <span className="text-zinc-400 block text-[10px] uppercase">Année</span>
+              <span className="text-black font-semibold">{project.year}</span>
             </div>
-
-            <a
-              href={project.liveUrl || project.githubUrl || '#'}
-              target={project.liveUrl || project.githubUrl ? '_blank' : undefined}
-              rel={project.liveUrl || project.githubUrl ? 'noreferrer' : undefined}
-              onMouseEnter={() => onHoverItem?.('OPEN')}
-              onMouseLeave={onLeaveItem}
-              className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white px-5 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-[#10131a] transition-all hover:bg-slate-200"
-            >
-              <span className={`inline-block h-2 w-2 rounded-full ${project.youtubeId ? 'bg-red-500' : 'bg-[#ff7a3f]'}`} />
-              <span>{projectActionLabel}</span>
-            </a>
+            <div>
+              <span className="text-zinc-400 block text-[10px] uppercase">Technologies</span>
+              <span className="text-black font-semibold">{project.stack.slice(0, 3).join(', ')}</span>
+            </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="relative overflow-hidden rounded-[1.7rem] border border-white/10 bg-black/40 shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
-              {project.youtubeId ? (
-                <div className="relative aspect-[16/9] w-full">
-                  <iframe
-                    className="absolute inset-0 h-full w-full"
-                    src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
-                    title={project.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              ) : (
-                <div className="relative aspect-[16/10] sm:aspect-[16/9]">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="h-full w-full object-cover"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,24,0.06)_0%,rgba(7,11,24,0.46)_100%)]" />
-                </div>
+          {/* Action CTAs */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/[0.08] pt-6">
+            <div className="flex items-center gap-3">
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  onMouseEnter={() => onHoverItem?.('VISITER')}
+                  onMouseLeave={onLeaveItem}
+                  className="neiden-btn-primary"
+                >
+                  <span>{lang === 'fr' ? 'Voir le projet en direct ↗' : 'Visit live site ↗'}</span>
+                </a>
+              )}
+
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  onMouseEnter={() => onHoverItem?.('GITHUB')}
+                  onMouseLeave={onLeaveItem}
+                  className="neiden-btn-secondary"
+                >
+                  <span>GitHub ↗</span>
+                </a>
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#ff7a3f]">
-              <span>{lang === 'fr' ? 'Scroll pour explorer' : 'Scroll to explore'}</span>
-              <span>››</span>
-            </div>
-
-            {project.metrics && (
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {project.metrics.map((metric, idx) => (
-                  <div
-                    key={`metric-${idx}`}
-                    className="rounded-2xl border border-white/12 bg-white/[0.04] px-4 py-3"
-                  >
-                    <div className="font-mono text-lg text-white sm:text-2xl">{metric.value}</div>
-                    <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/55">
-                      {metric.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-xs font-semibold text-zinc-500 hover:text-black transition-colors cursor-pointer"
+            >
+              ← {lang === 'fr' ? 'Retour aux projets' : 'Back to work'}
+            </button>
           </div>
         </div>
       </div>

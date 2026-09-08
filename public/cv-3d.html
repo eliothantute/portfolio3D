@@ -160,7 +160,7 @@
     let scene, camera, renderer, controls;
     let paperMesh, ambientParticles;
     let isAutoRotating = true;
-    let targetCameraPos = { x: 0, y: 0, z: 7.2 };
+    let targetCameraPos = { x: 0, y: 0, z: 5.2 };
     let targetLookAt = { x: 0, y: 0, z: 0 };
     let frontTex, backTex;
 
@@ -182,352 +182,335 @@
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, 2048, 2896);
 
-      const marginX = 140;
-      const colDividerX = 720;
-      const rightColX = 780;
-      const rightColWidth = 2048 - rightColX - marginX;
+      // 1. TOP DARK HEADER BANNER
+      ctx.fillStyle = '#09090b';
+      ctx.fillRect(0, 0, 2048, 480);
+
+      // Name
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 86px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Eliot Hantute', 100, 150);
+
+      // Separator & Subtitle
+      ctx.fillStyle = '#71717a';
+      ctx.font = '500 50px "Inter", sans-serif';
+      ctx.fillText('/', 740, 142);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 38px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Développeur Front-End', 790, 125);
+
+      ctx.fillStyle = '#a1a1aa';
+      ctx.font = '700 24px "JetBrains Mono", monospace';
+      ctx.fillText('CREATIVE DEVELOPER', 790, 165);
+
+      // Divider line in header
+      ctx.strokeStyle = '#27272a';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(100, 210);
+      ctx.lineTo(1948, 210);
+      ctx.stroke();
+
+      // Pitch paragraph in header
+      const bio = "Développeur front-end, musicien et cuistot pro, j'applique la même exigence au code qu'à une partition ou une recette : sens du rythme, dosage des composants et exécution millimétrée. Spécialisé en React, TypeScript et Three.js, je conçois des interfaces modulaires et des expériences immersives où fluidité visuelle et rigueur technique ne font qu'un.";
+      wrapText(ctx, bio, 100, 260, 1848, 26, 42, '#d4d4d8');
+
+      // 2. MAIN DOCUMENT: 2 COLUMNS
+      const leftColX = 100;
+      const leftColW = 540;
+      const rightColX = 720;
 
       // Vertical Divider
       ctx.strokeStyle = '#e4e4e7';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(colDividerX, 140);
-      ctx.lineTo(colDividerX, 2896 - 140);
-      ctx.stroke();
-
-      // ================= LEFT COLUMN =================
-      let leftY = 220;
-
-      // Header Left: Name
-      ctx.fillStyle = '#09090b';
-      ctx.font = '900 84px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText('ELIOT', marginX, leftY);
-      leftY += 88;
-      ctx.fillText('HANTUTE', marginX, leftY);
-
-      leftY += 60;
-      ctx.fillStyle = '#52525b';
-      ctx.font = '700 28px "JetBrains Mono", monospace';
-      ctx.fillText('UI DESIGNER &', marginX, leftY);
-      leftY += 38;
-      ctx.fillText('FRONT-END DEVELOPER', marginX, leftY);
-      leftY += 38;
-      ctx.fillStyle = '#0066ff';
-      ctx.font = '700 27px "JetBrains Mono", monospace';
-      ctx.fillText('JUNIOR', marginX, leftY);
-
-      // Section Divider
-      leftY += 60;
-      ctx.strokeStyle = '#e4e4e7';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(marginX, leftY);
-      ctx.lineTo(colDividerX - 50, leftY);
+      ctx.moveTo(670, 540);
+      ctx.lineTo(670, 2760);
       ctx.stroke();
 
-      // CONTACT
-      leftY += 60;
+      // --- LEFT COLUMN ---
+      let leftY = 560;
+
+      // Section CONTACT
       ctx.fillStyle = '#09090b';
-      ctx.font = '800 26px "JetBrains Mono", monospace';
-      ctx.fillText('CONTACT', marginX, leftY);
+      ctx.font = '800 28px "JetBrains Mono", monospace';
+      ctx.fillText('CONTACT', leftColX, leftY);
+      leftY += 12;
+      ctx.strokeStyle = '#09090b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(leftColX, leftY);
+      ctx.lineTo(leftColX + leftColW - 60, leftY);
+      ctx.stroke();
 
-      const contactItems = [
-        { icon: '📍', text: 'Paris, France' },
-        { icon: '✉️', text: 'eliot.hantute@gmail.com' },
-        { icon: '📞', text: '+33 7 75 03 68 75' },
-        { icon: '🌐', text: 'eliotlab.fr' }
-      ];
+      leftY += 48;
+      ctx.font = '500 26px "Inter", sans-serif';
+      ctx.fillStyle = '#3f3f46';
+      ctx.fillText('Paris, France', leftColX, leftY); leftY += 44;
+      ctx.fillText('+33 7 75 03 68 75', leftColX, leftY); leftY += 44;
+      ctx.font = '700 26px "Inter", sans-serif';
+      ctx.fillStyle = '#09090b';
+      ctx.fillText('eliot.hantute@gmail.com', leftColX, leftY); leftY += 44;
+      ctx.fillText('eliotlab.fr', leftColX, leftY); leftY += 44;
+      ctx.fillText('github.com/eliothantute', leftColX, leftY);
 
-      leftY += 52;
-      ctx.font = '600 25px "Inter", sans-serif';
-      ctx.fillStyle = '#18181b';
-      contactItems.forEach(item => {
-        ctx.fillText(`${item.icon}  ${item.text}`, marginX, leftY);
-        leftY += 46;
-      });
+      // Section FORMATION
+      leftY += 90;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 28px "JetBrains Mono", monospace';
+      ctx.fillText('FORMATION', leftColX, leftY);
+      leftY += 12;
+      ctx.strokeStyle = '#09090b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(leftColX, leftY);
+      ctx.lineTo(leftColX + leftColW - 60, leftY);
+      ctx.stroke();
 
-      // Section Divider
+      leftY += 45;
+      ctx.font = '700 20px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('En cours', leftColX, leftY);
+      leftY += 32;
+      ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#09090b';
+      ctx.fillText('Product Designer', leftColX, leftY);
       leftY += 30;
-      ctx.strokeStyle = '#e4e4e7';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(marginX, leftY);
-      ctx.lineTo(colDividerX - 50, leftY);
-      ctx.stroke();
-
-      // COMPETENCES
-      leftY += 60;
-      ctx.fillStyle = '#09090b';
-      ctx.font = '800 26px "JetBrains Mono", monospace';
-      ctx.fillText('COMPÉTENCES', marginX, leftY);
-
-      const skillCategories = [
-        {
-          title: 'UI / UX DESIGN',
-          skills: ['Figma', 'Framer', 'Prototypage', 'Design System', 'Photoshop', 'Illustrator']
-        },
-        {
-          title: 'DÉVELOPPEMENT',
-          skills: ['React', 'Next.js', 'Three.js', 'Tailwind CSS', 'JavaScript', 'HTML5 / CSS3']
-        },
-        {
-          title: 'SOFT SKILLS',
-          skills: ['Créativité', 'Autonomie', 'Initiative', 'Travail en équipe', 'Adaptabilité']
-        }
-      ];
+      ctx.font = '600 22px "Inter", sans-serif';
+      ctx.fillStyle = '#3f3f46';
+      ctx.fillText('RNCP Niv. 6 — Bac +3/4', leftColX, leftY);
+      leftY += 28;
+      ctx.font = '500 20px "Inter", sans-serif';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('OpenClassrooms', leftColX, leftY);
 
       leftY += 50;
-      skillCategories.forEach(cat => {
-        ctx.fillStyle = '#52525b';
-        ctx.font = '700 22px "JetBrains Mono", monospace';
-        ctx.fillText(cat.title, marginX, leftY);
-        leftY += 38;
-
-        let rowX = marginX;
-        cat.skills.forEach(skill => {
-          ctx.font = '600 21px "Inter", sans-serif';
-          const textMetrics = ctx.measureText(skill);
-          const pillWidth = textMetrics.width + 24;
-
-          if (rowX + pillWidth > colDividerX - 50) {
-            rowX = marginX;
-            leftY += 46;
-          }
-
-          // Pill Background
-          ctx.fillStyle = '#f4f4f5';
-          ctx.strokeStyle = '#d4d4d8';
-          ctx.lineWidth = 1.5;
-          roundRect(ctx, rowX, leftY - 26, pillWidth, 36, 8, true, true);
-
-          // Pill Text
-          ctx.fillStyle = '#18181b';
-          ctx.fillText(skill, rowX + 12, leftY - 2);
-
-          rowX += pillWidth + 10;
-        });
-
-        leftY += 60;
-      });
-
-      // Section Divider
-      leftY += 10;
-      ctx.strokeStyle = '#e4e4e7';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(marginX, leftY);
-      ctx.lineTo(colDividerX - 50, leftY);
-      ctx.stroke();
-
-      // LANGUES
-      leftY += 60;
+      ctx.font = '700 20px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('2025', leftColX, leftY);
+      leftY += 32;
+      ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = '#09090b';
-      ctx.font = '800 26px "JetBrains Mono", monospace';
-      ctx.fillText('LANGUES', marginX, leftY);
-
-      const languages = [
-        { lang: 'Français', level: 'Natif' },
-        { lang: 'Anglais', level: 'Avancé (C1)' },
-        { lang: 'Italien', level: 'Débutant (A2)' }
-      ];
+      ctx.fillText('BUT Info-Communication', leftColX, leftY);
+      leftY += 30;
+      ctx.font = '600 22px "Inter", sans-serif';
+      ctx.fillStyle = '#3f3f46';
+      ctx.fillText('Stratégie Digitale', leftColX, leftY);
+      leftY += 28;
+      ctx.font = '500 20px "Inter", sans-serif';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('IUT Haguenau / Univ. Strasbourg', leftColX, leftY);
 
       leftY += 50;
-      languages.forEach(l => {
-        ctx.font = '700 24px "Inter", sans-serif';
-        ctx.fillStyle = '#18181b';
-        ctx.fillText(l.lang, marginX, leftY);
-
-        ctx.font = '600 22px "Inter", sans-serif';
-        ctx.fillStyle = '#52525b';
-        ctx.fillText(l.level, colDividerX - 190, leftY);
-        leftY += 44;
-      });
-
-      // ================= RIGHT COLUMN =================
-      let rightY = 220;
-
-      // PROFIL
+      ctx.font = '700 20px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('2015', leftColX, leftY);
+      leftY += 32;
+      ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = '#09090b';
-      ctx.font = '800 32px "JetBrains Mono", monospace';
-      ctx.fillText('PROFIL', rightColX, rightY);
+      ctx.fillText('Bac STD2A', leftColX, leftY);
+      leftY += 30;
+      ctx.font = '600 22px "Inter", sans-serif';
+      ctx.fillStyle = '#3f3f46';
+      ctx.fillText('Design & Arts Appliqués', leftColX, leftY);
+      leftY += 28;
+      ctx.font = '500 20px "Inter", sans-serif';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('Paris 6e', leftColX, leftY);
 
-      rightY += 48;
-      const profileText = "Designer UI & développeur front-end, je conçois des interfaces sur Figma et je les développe moi-même avec React, Next.js et Three.js — du wireframe à la mise en production. J'aime particulièrement les expériences web immersives et interactives (3D, animations, micro-interactions), et j'accorde autant d'importance à l'esthétique qu'à la robustesse technique. Autonome, curieux et à l'aise en environnement agile, je recherche aujourd'hui un poste de UI Designer pour mettre cette double compétence design/développement au service de projets ambitieux.";
-      
-      rightY = wrapText(ctx, profileText, rightColX, rightY, rightColWidth, 26, 42, '#27272a');
-
-      // Section Divider
-      rightY += 35;
-      ctx.strokeStyle = '#e4e4e7';
-      ctx.lineWidth = 2;
+      // Section LANGUES
+      leftY += 90;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 28px "JetBrains Mono", monospace';
+      ctx.fillText('LANGUES', leftColX, leftY);
+      leftY += 12;
+      ctx.strokeStyle = '#09090b';
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(rightColX, rightY);
-      ctx.lineTo(2048 - marginX, rightY);
+      ctx.moveTo(leftColX, leftY);
+      ctx.lineTo(leftColX + leftColW - 60, leftY);
       ctx.stroke();
 
-      // EXPÉRIENCES PROFESSIONNELLES
-      rightY += 60;
+      const drawLanguage = (name, level, dots) => {
+        leftY += 45;
+        ctx.font = '800 26px "Inter", sans-serif';
+        ctx.fillStyle = '#09090b';
+        ctx.fillText(name, leftColX, leftY);
+        ctx.font = '600 20px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#71717a';
+        ctx.fillText(level, leftColX + leftColW - 140, leftY);
+        leftY += 26;
+        drawDots(ctx, leftColX, leftY, dots, 5);
+      };
+
+      drawLanguage('Français', 'Natif', 5);
+      drawLanguage('Anglais', 'C1', 4);
+      drawLanguage('Italien', 'A2', 2);
+
+      // --- RIGHT COLUMN ---
+      let rightY = 560;
+
+      // Section EXPÉRIENCES PROFESSIONNELLES
       ctx.fillStyle = '#09090b';
-      ctx.font = '800 32px "JetBrains Mono", monospace';
+      ctx.font = '800 28px "JetBrains Mono", monospace';
       ctx.fillText('EXPÉRIENCES PROFESSIONNELLES', rightColX, rightY);
-
-      const experiences = [
-        {
-          role: 'UI Designer',
-          company: "L'Atelier Berger · Freelance",
-          period: '2026 — Présent',
-          bullets: [
-            "Conception et développement d'une expérience web 3D interactive pour la refonte du site vitrine.",
-            "Globe 3D interactif avec navigation dynamique et animations fluides (React, Three.js).",
-            "Maquettes UI/UX sur Figma, intégration pixel-perfect en React."
-          ]
-        },
-        {
-          role: 'UI Designer',
-          company: "Ping Paris · Freelance",
-          period: '2026',
-          bullets: [
-            "Application web de géolocalisation des tables de ping-pong à Paris.",
-            "UX/UI complète : wireframes, prototypes haute-fidélité sur Figma.",
-            "Développement responsive et performant avec Next.js et Tailwind CSS."
-          ]
-        },
-        {
-          role: 'UI Designer & Graphiste & Community Manager',
-          company: "Centre de Neuro-Pédagogie de Strasbourg · Mission",
-          period: '2025',
-          bullets: [
-            "Refonte et modernisation du site vitrine (HTML5, CSS3, JavaScript, Framer).",
-            "Optimisation SEO on-page, déploiement et configuration DNS."
-          ]
-        },
-        {
-          role: 'Web Designer',
-          company: "Le Comité du Souvenir Français · Freelance",
-          period: '2025',
-          bullets: [
-            "Prototypes haute-fidélité sur Figma et Framer.",
-            "Mise en ligne avec stratégie DNS et déploiement."
-          ]
-        }
-      ];
-
-      rightY += 50;
-      experiences.forEach(exp => {
-        // Role & Period
-        ctx.fillStyle = '#09090b';
-        ctx.font = '800 28px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText(exp.role, rightColX, rightY);
-
-        // Period Badge
-        ctx.font = '700 20px "JetBrains Mono", monospace';
-        const pMetrics = ctx.measureText(exp.period);
-        const pWidth = pMetrics.width + 24;
-        const pX = 2048 - marginX - pWidth;
-        
-        ctx.fillStyle = '#f4f4f5';
-        ctx.strokeStyle = '#d4d4d8';
-        roundRect(ctx, pX, rightY - 24, pWidth, 32, 6, true, true);
-        ctx.fillStyle = '#27272a';
-        ctx.fillText(exp.period, pX + 12, rightY - 2);
-
-        // Company
-        rightY += 34;
-        ctx.fillStyle = '#3f3f46';
-        ctx.font = '600 23px "Inter", sans-serif';
-        ctx.fillText(exp.company, rightColX, rightY);
-
-        // Bullets
-        rightY += 34;
-        exp.bullets.forEach(bullet => {
-          ctx.fillStyle = '#0066ff';
-          ctx.font = '800 22px "Inter", sans-serif';
-          ctx.fillText('▪', rightColX + 8, rightY);
-
-          rightY = wrapText(ctx, bullet, rightColX + 32, rightY, rightColWidth - 40, 22, 34, '#27272a');
-          rightY += 8;
-        });
-
-        rightY += 20;
-      });
-
-      // Section Divider
-      rightY += 10;
-      ctx.strokeStyle = '#e4e4e7';
-      ctx.lineWidth = 2;
+      rightY += 12;
+      ctx.strokeStyle = '#09090b';
+      ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(rightColX, rightY);
-      ctx.lineTo(2048 - marginX, rightY);
+      ctx.lineTo(1948, rightY);
       ctx.stroke();
 
-      // FORMATIONS
-      rightY += 60;
+      // Exp 1: Développeur Front-End
+      rightY += 50;
+      ctx.font = '800 32px "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = '#09090b';
-      ctx.font = '800 32px "JetBrains Mono", monospace';
-      ctx.fillText('FORMATIONS', rightColX, rightY);
+      ctx.fillText('Développeur', rightColX, rightY);
+      rightY += 36;
+      ctx.fillText('Front-End', rightColX, rightY);
+      rightY += 32;
+      ctx.font = '600 22px "Inter", sans-serif';
+      ctx.fillStyle = '#52525b';
+      ctx.fillText('Freelance', rightColX, rightY);
+      rightY += 28;
+      ctx.font = '700 22px "Inter", sans-serif';
+      ctx.fillStyle = '#18181b';
+      ctx.fillText('Eliot Lab', rightColX, rightY);
+      rightY += 30;
+      ctx.font = '700 20px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('2026 – Présent', rightColX, rightY);
 
-      const formations = [
-        {
-          title: 'PRODUCT DESIGNER',
-          year: '2026',
-          school: 'OpenClassrooms',
-          desc: 'RNCP Niv. 6 (Bac+3/4) — En cours'
-        },
-        {
-          title: 'BUT INFORMATION-COMMUNICATION',
-          year: '2025',
-          school: 'IUT Haguenau / Univ. Strasbourg',
-          desc: 'Stratégie de Communication Digitale'
-        },
-        {
-          title: 'PRODUCTION SONORE & POST-PRODUCTION',
-          year: '2017',
-          school: 'Recording Arts of Canada — Montréal',
-          desc: 'Audio Engineering & Sound Design'
-        },
-        {
-          title: 'BACCALAURÉAT STD2A',
-          year: '2015',
-          school: 'Paris 6e',
-          desc: 'Design & Arts Appliqués'
-        }
+      // Bullets for Exp 1
+      const bullets1 = [
+        "Atelier Berger — Globe 3D interactif (Three.js, React Globe GL), rendu WebGL 60 FPS stable.",
+        "Hazi App — Plateforme IA agentique, LCP < 1.2s, Lighthouse 95+, micro-animations scroll.",
+        "Les Humanités — Refonte media indépendant, SSG/ISR Next.js, référencement maximisé.",
+        "Aum Paris — Showcase e-commerce luxe pixel-perfect, CLS: 0, 100% mobile-first.",
+        "Nari OS — Environnement fenêtré interactif, gestion d'états avancée clavier/souris."
       ];
 
-      rightY += 50;
-      const fColW = (rightColWidth - 30) / 2;
-      const fStartY = rightY;
+      let bulletY1 = 610;
+      const bulletX = rightColX + 340;
+      const bulletW = 1948 - bulletX;
 
-      formations.forEach((f, idx) => {
-        const isCol2 = idx % 2 === 1;
-        const isRow2 = idx >= 2;
-        const x = isCol2 ? rightColX + fColW + 30 : rightColX;
-        const y = isRow2 ? fStartY + 140 : fStartY;
-
-        // Card Outline
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#d4d4d8';
-        ctx.lineWidth = 1.5;
-        roundRect(ctx, x, y - 28, fColW, 115, 12, true, true);
-
-        // Title & Year
+      bullets1.forEach(b => {
         ctx.fillStyle = '#09090b';
-        ctx.font = '800 20px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText(f.title, x + 16, y);
-
-        ctx.fillStyle = '#52525b';
-        ctx.font = '700 18px "JetBrains Mono", monospace';
-        ctx.fillText(f.year, x + fColW - 65, y);
-
-        // School
-        ctx.fillStyle = '#27272a';
-        ctx.font = '600 19px "Inter", sans-serif';
-        ctx.fillText(f.school, x + 16, y + 32);
-
-        // Desc
-        ctx.fillStyle = '#52525b';
-        ctx.font = '500 18px "Inter", sans-serif';
-        ctx.fillText(f.desc, x + 16, y + 62);
+        ctx.font = '800 24px "Inter", sans-serif';
+        ctx.fillText('›', bulletX, bulletY1);
+        bulletY1 = wrapText(ctx, b, bulletX + 26, bulletY1, bulletW - 30, 24, 38, '#27272a');
+        bulletY1 += 14;
       });
+
+      // Exp 2: Intégrateur Web
+      rightY = Math.max(rightY + 40, bulletY1 + 30);
+
+      ctx.font = '800 32px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#09090b';
+      ctx.fillText('Intégrateur Web', rightColX, rightY);
+      rightY += 32;
+      ctx.font = '600 22px "Inter", sans-serif';
+      ctx.fillStyle = '#52525b';
+      ctx.fillText('Freelance', rightColX, rightY);
+      rightY += 28;
+      ctx.font = '700 22px "Inter", sans-serif';
+      ctx.fillStyle = '#18181b';
+      ctx.fillText('Missions indépendantes', rightColX, rightY);
+      rightY += 30;
+      ctx.font = '700 20px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#71717a';
+      ctx.fillText('2025', rightColX, rightY);
+
+      const bullets2 = [
+        "Centre de Neuro-Pédagogie — Refonte HTML5/CSS/JS vanilla, audit perf & accessibilité.",
+        "Le Comité du Souvenir Français — Intégration Figma → code, déploiement CI/CD."
+      ];
+
+      let bulletY2 = rightY - 80;
+      bullets2.forEach(b => {
+        ctx.fillStyle = '#09090b';
+        ctx.font = '800 24px "Inter", sans-serif';
+        ctx.fillText('›', bulletX, bulletY2);
+        bulletY2 = wrapText(ctx, b, bulletX + 26, bulletY2, bulletW - 30, 24, 38, '#27272a');
+        bulletY2 += 14;
+      });
+
+      rightY = Math.max(rightY + 30, bulletY2 + 40);
+
+      // Section Divider before COMPÉTENCES
+      ctx.strokeStyle = '#09090b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(rightColX, rightY);
+      ctx.lineTo(1948, rightY);
+      ctx.stroke();
+
+      // Section COMPÉTENCES & EXPERTISE
+      rightY += 50;
+      ctx.fillStyle = '#09090b';
+      ctx.font = '800 28px "JetBrains Mono", monospace';
+      ctx.fillText('COMPÉTENCES & EXPERTISE', rightColX, rightY);
+      rightY += 12;
+      ctx.strokeStyle = '#09090b';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(rightColX, rightY);
+      ctx.lineTo(1948, rightY);
+      ctx.stroke();
+
+      const skillsLeft = [
+        { name: 'TypeScript', dots: 5 },
+        { name: 'Three.js / WebGL', dots: 4 },
+        { name: 'Figma / Design', dots: 4 },
+        { name: 'Git / CI/CD', dots: 4 },
+        { name: 'HTML5 Sémantique', dots: 5 },
+        { name: 'Framer Motion', dots: 4 },
+        { name: 'Vercel / Deploy', dots: 4 },
+        { name: 'GLSL Shaders', dots: 3 },
+      ];
+
+      const skillsRight = [
+        { name: 'React / Next.js', dots: 5 },
+        { name: 'CSS / Tailwind', dots: 5 },
+        { name: 'GSAP / Animation', dots: 4 },
+        { name: 'Performance Web', dots: 5 },
+        { name: 'Vite / Webpack', dots: 4 },
+        { name: 'A11y / WCAG', dots: 3 },
+        { name: 'PWA', dots: 3 },
+        { name: 'Atomic Design', dots: 4 },
+      ];
+
+      rightY += 45;
+      const startSkillsY = rightY;
+      const halfColW = (1948 - rightColX - 60) / 2;
+
+      skillsLeft.forEach((s, i) => {
+        const rowY = startSkillsY + i * 46;
+        ctx.font = '700 24px "Inter", sans-serif';
+        ctx.fillStyle = '#09090b';
+        ctx.fillText(s.name, rightColX, rowY);
+        drawDots(ctx, rightColX + halfColW - 130, rowY - 8, s.dots, 5);
+      });
+
+      skillsRight.forEach((s, i) => {
+        const rowY = startSkillsY + i * 46;
+        const col2X = rightColX + halfColW + 60;
+        ctx.font = '700 24px "Inter", sans-serif';
+        ctx.fillStyle = '#09090b';
+        ctx.fillText(s.name, col2X, rowY);
+        drawDots(ctx, col2X + halfColW - 130, rowY - 8, s.dots, 5);
+      });
+
+      // 3. BOTTOM DARK FOOTER
+      ctx.fillStyle = '#09090b';
+      ctx.fillRect(0, 2896 - 80, 2048, 80);
+
+      ctx.fillStyle = '#a1a1aa';
+      ctx.font = '700 20px "JetBrains Mono", monospace';
+      ctx.fillText('ELIOT HANTUTE — CV 2026', 100, 2896 - 32);
+      ctx.fillText('ELIOTLAB.FR', 1948 - ctx.measureText('ELIOTLAB.FR').width, 2896 - 32);
 
       const tex = new THREE.CanvasTexture(canvas);
       tex.generateMipmaps = true;
@@ -535,6 +518,21 @@
       tex.magFilter = THREE.LinearFilter;
       return tex;
     }
+
+    function drawDots(ctx, x, y, value, max) {
+      for (let i = 0; i < max; i++) {
+        ctx.beginPath();
+        ctx.arc(x + i * 22, y, 7, 0, Math.PI * 2);
+        if (i < value) {
+          ctx.fillStyle = '#09090b';
+          ctx.fill();
+        } else {
+          ctx.strokeStyle = '#a1a1aa';
+          ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+  }
 
     // Helper: Round Rectangle on Canvas
     function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
@@ -771,7 +769,7 @@
 
       if (view === 'front') {
         document.getElementById('btn-front').classList.add('active');
-        targetCameraPos = { x: 0, y: 0, z: 7.2 };
+        targetCameraPos = { x: 0, y: 0, z: 5.2 };
       } else if (view === 'iso') {
         document.getElementById('btn-iso').classList.add('active');
         targetCameraPos = { x: 4.8, y: 2.2, z: 6.2 };

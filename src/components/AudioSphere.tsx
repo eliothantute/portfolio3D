@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { Float } from '@react-three/drei';
-import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 
 interface AudioSphereProps {
   analyserRef: React.MutableRefObject<AnalyserNode | null>;
@@ -11,10 +11,10 @@ interface AudioSphereProps {
 const BASE_RADIUS = 1.48;
 const QUALITY_PRESETS = {
   high: { particleCount: 28000, haloParticleCount: 8000 },
-  low: { particleCount: 12000, haloParticleCount: 3500 },
+  low: { particleCount: 14000, haloParticleCount: 4000 },
 } as const;
 
-// Fibonacci spherical distribution - creates natural flocking geometry (essaim d'oiseaux / murmuration)
+// Fibonacci spherical distribution - creates natural stippled murmuration geometry (essaim d'oiseaux)
 const createSphereDirections = (count: number) => {
   const dirs = new Float32Array(count * 3);
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
@@ -40,7 +40,6 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
   const pointsPrimaryRef = useRef<THREE.Points>(null);
   const pointsSecondaryRef = useRef<THREE.Points>(null);
   const pointsHaloRef = useRef<THREE.Points>(null);
-  const hitAreaRef = useRef<THREE.Mesh>(null);
   const primaryMaterialRef = useRef<THREE.PointsMaterial>(null);
   const secondaryMaterialRef = useRef<THREE.PointsMaterial>(null);
   const haloMaterialRef = useRef<THREE.PointsMaterial>(null);
@@ -49,18 +48,17 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
   const subEnergyRef = useRef(0);
   const prevSubRef = useRef(0);
   const kickPulseRef = useRef(0);
-  const prevKickPulseRef = useRef(0);
   const retractPulseRef = useRef(0);
   const beatCooldownRef = useRef(0);
 
+  // Global mouse coordinates & hover detection
+  const mouseNdcRef = useRef(new THREE.Vector2(-999, -999));
   const hoverStrengthRef = useRef(0);
-  const clickImpulseRef = useRef(0);
-  const isHoveringRef = useRef(false);
-  const isDraggingRef = useRef(false);
-  const groupTargetXRef = useRef(0);
-  const groupTargetYRef = useRef(0);
   const groupScaleRef = useRef(1);
+  const raycasterRef = useRef(new THREE.Raycaster());
+  const tempWorldPosRef = useRef(new THREE.Vector3());
 
+  // Fibonacci positions cache
   const directions = useMemo(() => createSphereDirections(particleCount), [particleCount]);
   const haloDirections = useMemo(() => createSphereDirections(haloParticleCount), [haloParticleCount]);
 
@@ -82,43 +80,23 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
     return geo;
   }, [haloParticleCount]);
 
-  const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation();
-    isHoveringRef.current = true;
-  };
-
-  const handlePointerOut = () => {
-    isHoveringRef.current = false;
-  };
-
-  const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation();
-    clickImpulseRef.current = 1;
-    isDraggingRef.current = true;
-  };
-
-  const handlePointerUp = (event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation();
-    isDraggingRef.current = false;
-  };
-
+  // Global pointer listener ensures hover works regardless of overlay layers
   useEffect(() => {
-    const releaseDrag = () => {
-      isDraggingRef.current = false;
+    const onPointerMove = (e: MouseEvent) => {
+      mouseNdcRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseNdcRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
-
-    window.addEventListener('pointerup', releaseDrag);
-    window.addEventListener('pointercancel', releaseDrag);
-
-    return () => {
-      window.removeEventListener('pointerup', releaseDrag);
-      window.removeEventListener('pointercancel', releaseDrag);
-    };
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onPointerMove);
   }, []);
 
   useFrame((state, delta) => {
+    const safeDelta = Math.min(delta, 0.08);
+
+    // Audio Analysis
     const analyser = analyserRef.current;
-    let subInstant = 0;
+    let instantSub = 0;
+    let instantOverall = 0;
 
     if (analyser) {
       if (!frequencyDataRef.current || frequencyDataRef.current.length !== analyser.frequencyBinCount) {
@@ -128,88 +106,82 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
       analyser.getByteFrequencyData(frequencyDataRef.current);
       const freqStep = analyser.context.sampleRate / analyser.fftSize;
 
-      let subWeightedSum = 0;
-      let subWeightTotal = 0;
+      let subSum = 0;
+      let subWeight = 0;
+      let totalSum = 0;
 
       for (let i = 0; i < frequencyDataRef.current.length; i += 1) {
+        const val = frequencyDataRef.current[i] / 255;
         const hz = i * freqStep;
-        if (hz < 20 || hz > 100) continue;
+        totalSum += val;
 
-        const value = frequencyDataRef.current[i] / 255;
-        const normalized = (hz - 20) / 80;
-        const weight = 1.32 - normalized * 0.72;
-        subWeightedSum += value * weight;
-        subWeightTotal += weight;
+        if (hz >= 20 && hz <= 120) {
+          const weight = 1.4 - ((hz - 20) / 100) * 0.8;
+          subSum += val * weight;
+          subWeight += weight;
+        }
       }
 
-      subInstant = subWeightTotal > 0 ? subWeightedSum / subWeightTotal : 0;
+      instantSub = subWeight > 0 ? subSum / subWeight : 0;
+      instantOverall = frequencyDataRef.current.length > 0 ? totalSum / frequencyDataRef.current.length : 0;
     }
 
-    const subLerp = subInstant > subEnergyRef.current ? 1 - Math.exp(-delta * 30) : 1 - Math.exp(-delta * 11);
-    subEnergyRef.current = THREE.MathUtils.lerp(subEnergyRef.current, subInstant, subLerp);
+    const subLerp = instantSub > subEnergyRef.current 
+      ? 1 - Math.exp(-safeDelta * 30) 
+      : 1 - Math.exp(-safeDelta * 10);
+    subEnergyRef.current = THREE.MathUtils.lerp(subEnergyRef.current, instantSub, subLerp);
 
     const subDelta = Math.max(0, subEnergyRef.current - prevSubRef.current);
-    beatCooldownRef.current = Math.max(0, beatCooldownRef.current - delta);
+    beatCooldownRef.current = Math.max(0, beatCooldownRef.current - safeDelta);
 
-    const beatDetected = subEnergyRef.current > 0.19 && subDelta > 0.009 && beatCooldownRef.current <= 0;
-    if (beatDetected) {
-      kickPulseRef.current = Math.min(1.2, kickPulseRef.current + 0.65);
-      beatCooldownRef.current = 0.14;
+    if (subEnergyRef.current > 0.18 && subDelta > 0.008 && beatCooldownRef.current <= 0) {
+      kickPulseRef.current = Math.min(1.4, kickPulseRef.current + 0.75);
+      retractPulseRef.current = 0.55;
+      beatCooldownRef.current = 0.12;
     } else {
-      kickPulseRef.current = THREE.MathUtils.lerp(kickPulseRef.current, 0, 1 - Math.exp(-delta * 9.5));
+      kickPulseRef.current = THREE.MathUtils.lerp(kickPulseRef.current, 0, 1 - Math.exp(-safeDelta * 8.5));
+      retractPulseRef.current = THREE.MathUtils.lerp(retractPulseRef.current, 0, 1 - Math.exp(-safeDelta * 12));
     }
-
-    const kickDelta = kickPulseRef.current - prevKickPulseRef.current;
-    retractPulseRef.current = Math.max(
-      retractPulseRef.current * Math.exp(-delta * 16),
-      Math.max(0, -kickDelta * 6)
-    );
-    prevKickPulseRef.current = kickPulseRef.current;
     prevSubRef.current = subEnergyRef.current;
+
+    // Hover Detection via 3D Raycasting
+    let targetHover = 0;
+    if (groupRef.current) {
+      groupRef.current.getWorldPosition(tempWorldPosRef.current);
+      raycasterRef.current.setFromCamera(mouseNdcRef.current, state.camera);
+      const distToRay = raycasterRef.current.ray.distanceToPoint(tempWorldPosRef.current);
+      const effectiveRadius = BASE_RADIUS * groupScaleRef.current * 1.4;
+
+      if (distToRay < effectiveRadius) {
+        targetHover = THREE.MathUtils.clamp(1.0 - distToRay / effectiveRadius, 0.25, 1.0);
+      }
+    }
 
     hoverStrengthRef.current = THREE.MathUtils.lerp(
       hoverStrengthRef.current,
-      isHoveringRef.current ? 1 : 0,
-      1 - Math.exp(-delta * 12)
-    );
-    clickImpulseRef.current = Math.max(0, clickImpulseRef.current - delta * 2.8);
-
-    const kickEnergy = THREE.MathUtils.clamp(subEnergyRef.current * 1.7 + kickPulseRef.current * 0.85, 0, 1.9);
-    const dragBoost = isDraggingRef.current ? 0.35 : 0;
-
-    const dragX = THREE.MathUtils.clamp(state.pointer.x * 2.1, -2.4, 2.4);
-    const dragY = THREE.MathUtils.clamp(state.pointer.y * 1.45, -1.5, 1.5);
-    const settleFactor = isDraggingRef.current ? 1 - Math.exp(-delta * 16) : 1 - Math.exp(-delta * 4.5);
-
-    groupTargetXRef.current = THREE.MathUtils.lerp(
-      groupTargetXRef.current,
-      isDraggingRef.current ? dragX : 0,
-      settleFactor
-    );
-    groupTargetYRef.current = THREE.MathUtils.lerp(
-      groupTargetYRef.current,
-      isDraggingRef.current ? dragY : 0,
-      settleFactor
+      targetHover,
+      1 - Math.exp(-safeDelta * 8)
     );
 
+    // Group Dynamics: Spin acceleration + gyroscopic tilt towards cursor on hover
     if (groupRef.current) {
-      groupRef.current.position.x = groupTargetXRef.current;
-      groupRef.current.position.y = groupTargetYRef.current;
+      const baseSpin = 0.38 + instantOverall * 0.45 + kickPulseRef.current * 0.25;
+      const hoverSpin = hoverStrengthRef.current * 1.5; // Accelerate spin significantly on hover
+      groupRef.current.rotation.y += safeDelta * (baseSpin + hoverSpin);
 
-      const spin = 0.44 + kickEnergy * 0.58 + hoverStrengthRef.current * 0.32 + dragBoost;
-      groupRef.current.rotation.y += delta * spin;
-      groupRef.current.rotation.x += delta * (0.14 + kickEnergy * 0.08);
-      groupRef.current.rotation.z += delta * 0.07;
+      // Gyroscopic tilt towards mouse
+      const tiltX = (mouseNdcRef.current.y || 0) * 0.32 * (0.3 + hoverStrengthRef.current * 0.7);
+      const tiltZ = (mouseNdcRef.current.x || 0) * 0.24 * (0.3 + hoverStrengthRef.current * 0.7);
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -tiltX, 1 - Math.exp(-safeDelta * 6));
+      groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, tiltZ, 1 - Math.exp(-safeDelta * 6));
 
-      const targetScale = 1 + kickPulseRef.current * 0.22 - retractPulseRef.current * 0.09 + subEnergyRef.current * 0.03;
-      groupScaleRef.current = THREE.MathUtils.lerp(
-        groupScaleRef.current,
-        targetScale,
-        1 - Math.exp(-delta * 30)
-      );
+      // Organic Scale Expansion on Kick & Hover
+      const targetScale = 1.0 + kickPulseRef.current * 0.18 - retractPulseRef.current * 0.08 + hoverStrengthRef.current * 0.18;
+      groupScaleRef.current = THREE.MathUtils.lerp(groupScaleRef.current, targetScale, 1 - Math.exp(-safeDelta * 14));
       groupRef.current.scale.setScalar(groupScaleRef.current);
     }
 
+    // Dynamic Murmuration Waves (essaim d'oiseaux)
     const t = state.clock.elapsedTime;
     const primaryAttr = pointsPrimaryRef.current?.geometry.attributes.position as THREE.BufferAttribute | undefined;
     const secondaryAttr = pointsSecondaryRef.current?.geometry.attributes.position as THREE.BufferAttribute | undefined;
@@ -221,10 +193,9 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
 
       const waveAmp =
         0.038
-        + kickEnergy * 0.08
-        + clickImpulseRef.current * 0.03
-        + hoverStrengthRef.current * 0.02
-        + kickPulseRef.current * 0.14;
+        + subEnergyRef.current * 0.07
+        + hoverStrengthRef.current * 0.045
+        + kickPulseRef.current * 0.12;
 
       for (let i = 0; i < particleCount; i += 1) {
         const ix = i * 3;
@@ -232,7 +203,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
         const dy = directions[ix + 1];
         const dz = directions[ix + 2];
 
-        // Harmonic murmuration ripples (starling flocking motion)
+        // Multi-frequency harmonic murmuration ripples
         const rippleA = Math.sin(t * 2.3 + i * 0.019) * 0.42;
         const rippleB = Math.cos(t * 1.9 + i * 0.013) * 0.3;
         const rippleC = Math.sin((dx + dz) * 6.5 + t * 3.3) * 0.22;
@@ -241,8 +212,8 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
           Math.sin(i * 0.014 + t * 8.2) * 0.58
           + Math.cos((dx - dy + dz) * 9.5 + t * 5.7) * 0.42;
 
-        const beatDeform = beatShape * kickPulseRef.current * 0.34;
-        const beatRetract = beatShape * retractPulseRef.current * 0.14;
+        const beatDeform = beatShape * kickPulseRef.current * 0.32;
+        const beatRetract = beatShape * retractPulseRef.current * 0.12;
 
         const radialOffset = THREE.MathUtils.clamp(
           (rippleA + rippleB + rippleC) * waveAmp + beatDeform - beatRetract,
@@ -251,8 +222,8 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
         );
         const radial = BASE_RADIUS + radialOffset;
 
-        // Fluid flocking micro-swirl
-        const swirl = 0.01 + kickEnergy * 0.014;
+        // Fluid flocking micro-swirl (amplified on hover)
+        const swirl = (0.01 + subEnergyRef.current * 0.014) * (1.0 + hoverStrengthRef.current * 1.2);
         primary[ix] = dx * radial + Math.sin(t + i * 0.003) * swirl;
         primary[ix + 1] = dy * radial + Math.cos(t * 1.2 + i * 0.004) * swirl;
         primary[ix + 2] = dz * radial + Math.sin(t * 0.85 + i * 0.005) * swirl;
@@ -270,7 +241,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
 
     if (haloAttr) {
       const halo = haloAttr.array as Float32Array;
-      const haloAmp = 0.028 + kickEnergy * 0.07 + kickPulseRef.current * 0.12;
+      const haloAmp = 0.028 + subEnergyRef.current * 0.06 + kickPulseRef.current * 0.1 + hoverStrengthRef.current * 0.04;
 
       for (let i = 0; i < haloParticleCount; i += 1) {
         const ix = i * 3;
@@ -279,7 +250,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
         const dz = haloDirections[ix + 2];
 
         const haloRipple = Math.sin(t * 0.95 + i * 0.021) * haloAmp;
-        const haloRadius = BASE_RADIUS * 1.14 + haloRipple;
+        const haloRadius = BASE_RADIUS * 1.15 + haloRipple;
 
         halo[ix] = dx * haloRadius;
         halo[ix + 1] = dy * haloRadius;
@@ -289,65 +260,36 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
       haloAttr.needsUpdate = true;
     }
 
-    // Dynamic music-reactive size and opacity transitions
+    // Dynamic music & hover reactive size and opacity transitions
     if (primaryMaterialRef.current) {
-      const targetSize = 0.016 + kickEnergy * 0.008 + kickPulseRef.current * 0.012;
-      const targetOpacity = 0.72 + kickEnergy * 0.12 + clickImpulseRef.current * 0.08 + kickPulseRef.current * 0.06;
+      const targetSize = 0.016 + subEnergyRef.current * 0.008 + kickPulseRef.current * 0.01 + hoverStrengthRef.current * 0.005;
+      const targetOpacity = 0.74 + subEnergyRef.current * 0.12 + kickPulseRef.current * 0.06 + hoverStrengthRef.current * 0.15;
 
-      primaryMaterialRef.current.size = THREE.MathUtils.lerp(
-        primaryMaterialRef.current.size,
-        targetSize,
-        1 - Math.exp(-delta * 11)
-      );
-      primaryMaterialRef.current.opacity = THREE.MathUtils.lerp(
-        primaryMaterialRef.current.opacity,
-        Math.min(0.95, targetOpacity),
-        1 - Math.exp(-delta * 11)
-      );
+      primaryMaterialRef.current.size = THREE.MathUtils.lerp(primaryMaterialRef.current.size, targetSize, 1 - Math.exp(-safeDelta * 11));
+      primaryMaterialRef.current.opacity = THREE.MathUtils.lerp(primaryMaterialRef.current.opacity, Math.min(0.96, targetOpacity), 1 - Math.exp(-safeDelta * 11));
     }
 
     if (secondaryMaterialRef.current) {
-      const targetSize = 0.0085 + kickEnergy * 0.004 + kickPulseRef.current * 0.003;
-      const targetOpacity = 0.32 + kickEnergy * 0.10 + kickPulseRef.current * 0.05;
+      const targetSize = 0.0085 + subEnergyRef.current * 0.004 + kickPulseRef.current * 0.003;
+      const targetOpacity = 0.32 + subEnergyRef.current * 0.10 + kickPulseRef.current * 0.05 + hoverStrengthRef.current * 0.12;
 
-      secondaryMaterialRef.current.size = THREE.MathUtils.lerp(
-        secondaryMaterialRef.current.size,
-        targetSize,
-        1 - Math.exp(-delta * 11)
-      );
-      secondaryMaterialRef.current.opacity = THREE.MathUtils.lerp(
-        secondaryMaterialRef.current.opacity,
-        Math.min(0.85, targetOpacity),
-        1 - Math.exp(-delta * 11)
-      );
+      secondaryMaterialRef.current.size = THREE.MathUtils.lerp(secondaryMaterialRef.current.size, targetSize, 1 - Math.exp(-safeDelta * 11));
+      secondaryMaterialRef.current.opacity = THREE.MathUtils.lerp(secondaryMaterialRef.current.opacity, Math.min(0.85, targetOpacity), 1 - Math.exp(-safeDelta * 11));
     }
 
     if (haloMaterialRef.current) {
-      const targetSize = 0.0045 + kickEnergy * 0.002 + kickPulseRef.current * 0.005;
-      const targetOpacity = 0.10 + kickEnergy * 0.04 + hoverStrengthRef.current * 0.012 + kickPulseRef.current * 0.1;
+      const targetSize = 0.0045 + subEnergyRef.current * 0.002 + kickPulseRef.current * 0.005;
+      const targetOpacity = 0.11 + subEnergyRef.current * 0.05 + hoverStrengthRef.current * 0.08 + kickPulseRef.current * 0.08;
 
-      haloMaterialRef.current.size = THREE.MathUtils.lerp(
-        haloMaterialRef.current.size,
-        targetSize,
-        1 - Math.exp(-delta * 11)
-      );
-      haloMaterialRef.current.opacity = THREE.MathUtils.lerp(
-        haloMaterialRef.current.opacity,
-        Math.min(0.28, targetOpacity),
-        1 - Math.exp(-delta * 11)
-      );
-    }
-
-    if (hitAreaRef.current) {
-      const targetScale = 1.05 + hoverStrengthRef.current * 0.03 + clickImpulseRef.current * 0.04;
-      hitAreaRef.current.scale.setScalar(targetScale);
+      haloMaterialRef.current.size = THREE.MathUtils.lerp(haloMaterialRef.current.size, targetSize, 1 - Math.exp(-safeDelta * 11));
+      haloMaterialRef.current.opacity = THREE.MathUtils.lerp(haloMaterialRef.current.opacity, Math.min(0.35, targetOpacity), 1 - Math.exp(-safeDelta * 11));
     }
   });
 
   return (
-    <Float speed={1.1} rotationIntensity={0.22} floatIntensity={0.5}>
+    <Float speed={1.1} rotationIntensity={0.2} floatIntensity={0.4}>
       <group ref={groupRef}>
-        {/* Primary Dense Starling Flock - Deep Obsidian */}
+        {/* Primary Dense Starling Flock - Deep Obsidian Stippling */}
         <points ref={pointsPrimaryRef} geometry={primaryGeometry}>
           <pointsMaterial
             ref={primaryMaterialRef}
@@ -355,13 +297,13 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
             size={0.016}
             sizeAttenuation
             transparent
-            opacity={0.72}
+            opacity={0.74}
             blending={THREE.NormalBlending}
             depthWrite={false}
           />
         </points>
 
-        {/* Secondary Inner Flocking Layer */}
+        {/* Secondary Inner Flocking Layer - Charcoal */}
         <points ref={pointsSecondaryRef} geometry={secondaryGeometry}>
           <pointsMaterial
             ref={secondaryMaterialRef}
@@ -374,7 +316,7 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
           />
         </points>
 
-        {/* Outer Stardust Murmuration Halo */}
+        {/* Outer Stardust Murmuration Halo - Graphite */}
         <points ref={pointsHaloRef} geometry={haloGeometry}>
           <pointsMaterial
             ref={haloMaterialRef}
@@ -382,22 +324,11 @@ export const AudioSphere: React.FC<AudioSphereProps> = ({ analyserRef, quality =
             size={0.0045}
             sizeAttenuation
             transparent
-            opacity={0.10}
+            opacity={0.11}
             blending={THREE.NormalBlending}
             depthWrite={false}
           />
         </points>
-
-        <mesh
-          ref={hitAreaRef}
-          onPointerOver={handlePointerOver}
-          onPointerOut={handlePointerOut}
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
-        >
-          <sphereGeometry args={[BASE_RADIUS * 1.06, 36, 36]} />
-          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-        </mesh>
       </group>
     </Float>
   );

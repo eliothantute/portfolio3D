@@ -156,9 +156,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             <div className="mx-auto mt-12 flex flex-wrap items-center justify-center gap-3">
               {[
                 { name: 'GitHub', url: 'https://github.com/eliothantute' },
-                { name: 'Instagram', url: 'https://www.instagram.com/zedenmusic' },
-                { name: 'Spotify', url: 'https://open.spotify.com/intl-fr/artist/77sTx1uwPp7N9KlNPPGH49' },
-                { name: 'LinkedIn', url: 'https://www.linkedin.com/' },
+                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/eliot-hantute/' },
               ].map((soc) => (
                 <a
                   key={soc.name}

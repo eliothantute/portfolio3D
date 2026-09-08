@@ -7,3 +7,6 @@ coverage/
 .env*
 !.env.example
 .vercel
+*.mp4
+hero_perfect.png
+pub_generator.py

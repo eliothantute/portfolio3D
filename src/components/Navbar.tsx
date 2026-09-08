@@ -38,10 +38,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     >
       <div
         className={`flex w-full max-w-4xl items-center justify-between border border-zinc-200/90 bg-white/85 px-4 py-2.5 backdrop-blur-xl transition-all sm:px-6 sm:py-3 rounded-full ${
-          scrolled ? 'shadow-md border-zinc-300' : 'shadow-sm'
+          scrolled ? 'shadow-md border-zinc-300' : 'shadow-xs'
         }`}
       >
-        {/* Brand Logo */}
+        {/* Brand Logo: Eliot Lab */}
         <a
           href="#top"
           onMouseEnter={() => onHoverItem?.('ACCUEIL')}
@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           Eliot Lab
         </a>
 
-        {/* Navigation Links */}
+        {/* Center Navigation Links */}
         <nav className="hidden items-center gap-7 font-sans text-xs font-semibold text-zinc-600 md:flex">
           <a
             href="#services"
@@ -84,9 +84,23 @@ export const Navbar: React.FC<NavbarProps> = ({
           </a>
         </nav>
 
-        {/* Action Controls */}
+        {/* Action Controls: Audio + Lang + Contact */}
         <div className="flex items-center gap-2">
+          {/* Audio toggle button */}
           <button
+            type="button"
+            onClick={toggleAudio}
+            onMouseEnter={() => onHoverItem?.(isMuted ? 'ACTIVER SON' : 'COUPER SON')}
+            onMouseLeave={onLeaveItem}
+            className="hidden sm:inline-flex h-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 font-mono text-xs text-zinc-600 hover:text-zinc-950 hover:bg-white transition-all cursor-pointer"
+            title={isMuted ? 'Activer le son' : 'Couper le son'}
+          >
+            <span>{isMuted ? '🔇' : '🔊'}</span>
+          </button>
+
+          {/* Lang toggle pill */}
+          <button
+            type="button"
             onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
             onMouseEnter={() => onHoverItem?.('LANG')}
             onMouseLeave={onLeaveItem}
@@ -95,6 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {lang.toUpperCase()}
           </button>
 
+          {/* Contact CTA pill */}
           <button
             type="button"
             onClick={() => {
@@ -107,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             onMouseEnter={() => onHoverItem?.('CONTACT')}
             onMouseLeave={onLeaveItem}
-            className="inline-flex h-8 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-semibold text-white shadow-sm transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer"
+            className="inline-flex h-8 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-semibold text-white shadow-xs transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer"
           >
             Contact
           </button>
