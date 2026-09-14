@@ -98,8 +98,8 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             className="max-w-xl text-base sm:text-lg text-zinc-300 font-normal leading-relaxed pointer-events-auto"
           >
             {lang === 'fr'
-              ? "À la frontière du design graphique et du développement moderne. Conception d'expériences interactives fluides, animations soignées et interfaces front-end au millimètre — du prototype Figma au déploiement haute performance à 60 FPS."
-              : "At the intersection of graphic direction and modern engineering. Crafting fluid interactive spaces, refined animations, and pixel-precise front-ends — from Figma concept to high-performance 60 FPS production."}
+              ? "Entre design et développement, conception d'interfaces et expériences web fluides et modernes."
+              : "Between design and development: crafting fluid, modern interfaces and web experiences."}
           </motion.p>
 
           {/* Action CTAs */}
