@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Language } from '../types';
 import { InteractiveText } from './InteractiveText';
+import { Interactive3DViewer } from './Interactive3DViewer';
 
 interface Resume3DProps {
   lang: Language;
@@ -37,7 +38,7 @@ export const Resume3D: React.FC<Resume3DProps> = ({
   onLeaveItem,
   hideHeader = false,
 }) => {
-  const [viewMode, setViewMode] = useState<'document' | '3d'>('document');
+  const [viewMode, setViewMode] = useState<'document' | '3d' | 'studio'>('document');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -102,8 +103,8 @@ export const Resume3D: React.FC<Resume3DProps> = ({
       {/* View Switcher & Action Toolbar */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] pb-4">
         <div className="flex flex-wrap items-center gap-3">
-          {/* Dual-View Switcher */}
-          <div className="inline-flex items-center rounded-2xl border border-zinc-200 bg-zinc-100/90 p-1 shadow-inner">
+          {/* View Mode Switcher: Document, 3D Card, and Studio 3D (Interactive Viewer with Import) */}
+          <div className="inline-flex items-center rounded-2xl border border-zinc-200 bg-zinc-100/90 p-1 shadow-inner dark:border-white/10 dark:bg-zinc-900/90">
             <button
               type="button"
               onClick={() => setViewMode('document')}
@@ -111,8 +112,8 @@ export const Resume3D: React.FC<Resume3DProps> = ({
               onMouseLeave={onLeaveItem}
               className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
                 viewMode === 'document'
-                  ? 'bg-white text-zinc-950 shadow-sm'
-                  : 'text-zinc-600 hover:text-zinc-950'
+                  ? 'bg-white text-zinc-950 shadow-sm dark:bg-white dark:text-zinc-950'
+                  : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white'
               }`}
             >
               <span>📄</span>
@@ -125,12 +126,26 @@ export const Resume3D: React.FC<Resume3DProps> = ({
               onMouseLeave={onLeaveItem}
               className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
                 viewMode === '3d'
-                  ? 'bg-white text-zinc-950 shadow-sm'
-                  : 'text-zinc-600 hover:text-zinc-950'
+                  ? 'bg-white text-zinc-950 shadow-sm dark:bg-white dark:text-zinc-950'
+                  : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white'
               }`}
             >
               <span>🪐</span>
               <span>{lang === 'fr' ? 'Vue 3D Tilt' : '3D Tilt View'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('studio')}
+              onMouseEnter={() => onHoverItem?.('VISUALISEUR 3D // IMPORTER UN FICHIER')}
+              onMouseLeave={onLeaveItem}
+              className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                viewMode === 'studio'
+                  ? 'bg-zinc-950 text-white shadow-sm dark:bg-white dark:text-zinc-950'
+                  : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white'
+              }`}
+            >
+              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>{lang === 'fr' ? 'Studio 3D (Import)' : '3D Studio (Import)'}</span>
             </button>
           </div>
 
@@ -177,16 +192,16 @@ export const Resume3D: React.FC<Resume3DProps> = ({
               <div className="flex items-baseline gap-3">
                 <span className="text-zinc-500 text-xl font-light">/</span>
                 <div>
-                  <span className="font-display text-lg sm:text-xl font-bold text-white">Développeur Front-End</span>
+                  <span className="font-urbanist text-lg sm:text-xl font-bold text-white">Creative Front-End Developer 3D</span>
                   <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
-                    CREATIVE DEVELOPER
+                    UI DESIGN, REACT &amp; THREE.JS
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="mt-5 text-sm sm:text-base leading-relaxed text-zinc-300 font-normal">
-              Développeur front-end, musicien et cuistot pro, j'applique la même exigence au code qu'à une partition ou une recette : sens du rythme, dosage des composants et exécution millimétrée. Spécialisé en React, TypeScript et Three.js, je conçois des interfaces modulaires et des expériences immersives où fluidité visuelle et rigueur technique ne font qu'un.
+              Spécialisé en Three.js, shaders GLSL et architecture React moderne, je conçois des interfaces spatiales où rigueur d'ingénierie et émotion visuelle se rencontrent. Sensible au sound design et au rythme d'interaction, chaque expérience est calibrée pour délivrer 60 FPS constants sur desktop et mobile.
             </p>
           </div>
 
@@ -356,36 +371,48 @@ export const Resume3D: React.FC<Resume3DProps> = ({
                 </div>
               </div>
 
-              {/* COMPÉTENCES & EXPERTISE */}
+              {/* COMPÉTENCES & EXPERTISE TECHNIQUE */}
               <div>
                 <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-950 border-b-2 border-zinc-950 pb-1.5">
-                  COMPÉTENCES &amp; EXPERTISE
+                  EXPERTISE TECHNIQUE // CREATIVE TECH
                 </h4>
 
-                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 text-sm">
-                  {[
-                    { name: 'TypeScript', dots: 5 },
-                    { name: 'React / Next.js', dots: 5 },
-                    { name: 'Three.js / WebGL', dots: 4 },
-                    { name: 'CSS / Tailwind', dots: 5 },
-                    { name: 'Figma / Design', dots: 4 },
-                    { name: 'GSAP / Animation', dots: 4 },
-                    { name: 'Git / CI/CD', dots: 4 },
-                    { name: 'Performance Web', dots: 5 },
-                    { name: 'HTML5 Sémantique', dots: 5 },
-                    { name: 'Vite / Webpack', dots: 4 },
-                    { name: 'Framer Motion', dots: 4 },
-                    { name: 'A11y / WCAG', dots: 3 },
-                    { name: 'Vercel / Deploy', dots: 4 },
-                    { name: 'PWA', dots: 3 },
-                    { name: 'GLSL Shaders', dots: 3 },
-                    { name: 'Atomic Design', dots: 4 },
-                  ].map((skill) => (
-                    <div key={skill.name} className="flex items-center justify-between border-b border-zinc-100 pb-1.5">
-                      <span className="font-medium text-zinc-800">{skill.name}</span>
-                      <RatingDots value={skill.dots} size="sm" />
+                <div className="mt-5 space-y-4 text-xs font-mono">
+                  {/* Creative 3D & Motion */}
+                  <div>
+                    <span className="text-[10px] font-bold uppercase text-zinc-900 dark:text-white">3D WebGL &amp; Motion :</span>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {['Three.js (r185)', 'React Three Fiber (R3F)', 'GLSL Custom Shaders', 'GSAP ScrollTrigger', 'Lenis Physics', 'Draco / KTX2', 'InstancedMesh'].map((item) => (
+                        <span key={item} className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 font-semibold text-zinc-800">
+                          {item}
+                        </span>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Front-End Architecture */}
+                  <div>
+                    <span className="text-[10px] font-bold uppercase text-zinc-500">Front-End Architecture :</span>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {['React 19', 'TypeScript', 'Next.js (App Router)', 'Tailwind CSS', 'Vite', 'State Management', 'HTML5 Web Audio API'].map((item) => (
+                        <span key={item} className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 font-semibold text-zinc-800">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Performance & Workflow */}
+                  <div>
+                    <span className="text-[10px] font-bold uppercase text-zinc-500">Performance &amp; Pipeline :</span>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {['Target 60 FPS Mobile', 'Lighthouse 95+', 'Figma to Code', 'Git / CI/CD', 'Memory Leaks Prevention', 'Blender (Topo/UV)'].map((item) => (
+                        <span key={item} className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 font-semibold text-zinc-800">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -487,9 +514,9 @@ export const Resume3D: React.FC<Resume3DProps> = ({
                   <div className="flex items-baseline gap-2">
                     <span className="text-zinc-500">/</span>
                     <div>
-                      <span className="font-display text-sm sm:text-base font-bold text-white">Développeur Front-End</span>
+                      <span className="font-display text-sm sm:text-base font-bold text-white">Creative Front-End Developer 3D</span>
                       <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
-                        CREATIVE DEVELOPER
+                        REACT, THREE.JS &amp; UI DESIGN
                       </p>
                     </div>
                   </div>
@@ -660,6 +687,22 @@ export const Resume3D: React.FC<Resume3DProps> = ({
         </motion.div>
       )}
 
+      {/* VIEW 3: Interactive 3D Studio & File/Image Viewer */}
+      {viewMode === 'studio' && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.45 }}
+          className="mx-auto max-w-5xl"
+        >
+          <Interactive3DViewer
+            initialImageUrl="/assets/hero-ChLQYlqc.png"
+            onHoverItem={onHoverItem}
+            onLeaveItem={onLeaveItem}
+          />
+        </motion.div>
+      )}
+
       {/* Fullscreen HD Document Modal */}
       {isModalOpen && (
         <div
@@ -715,9 +758,9 @@ export const Resume3D: React.FC<Resume3DProps> = ({
                   <div className="flex items-baseline gap-2">
                     <span className="text-zinc-500 text-lg">/</span>
                     <div>
-                      <span className="font-display text-lg font-bold text-white">Développeur Front-End</span>
+                      <span className="font-display text-lg font-bold text-white">Creative Front-End Developer 3D</span>
                       <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
-                        CREATIVE DEVELOPER
+                        REACT, THREE.JS &amp; UI DESIGN
                       </p>
                     </div>
                   </div>

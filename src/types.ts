@@ -26,6 +26,7 @@ export interface Project {
 }
 
 export type Language = 'fr' | 'en';
+export type Theme = 'light' | 'dark';
 
 export interface StackCategory {
   id: string;

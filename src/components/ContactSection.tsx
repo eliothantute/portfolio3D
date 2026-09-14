@@ -43,16 +43,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   return (
-    <div
-      id="contact-inner"
-      className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:px-12 [perspective:1200px]"
+    <section
+      id="contact"
+      className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-12 scroll-mt-24 [perspective:1200px]"
       aria-label={lang === 'fr' ? 'Contactez-moi' : 'Contact me'}
     >
       <motion.div
-        initial={{ opacity: 0, y: 35, scale: 0.96 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="sneaks-card mx-auto max-w-4xl rounded-[2.5rem] p-8 text-center sm:p-14 [transform-style:preserve-3d]"
       >
         <span className="mb-4 inline-block font-mono text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
@@ -66,10 +65,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           />
         </h2>
 
-        <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg">
+        <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 dark:text-zinc-300 sm:text-lg">
           {lang === 'fr'
-            ? 'Disponible pour des missions freelance, développement front-end React, intégration 3D et prototypage assisté par IA.'
-            : 'Available for freelance missions, React front-end development, 3D craft and AI-assisted prototyping.'}
+            ? 'Disponible pour des missions freelance : développement front-end React & TypeScript, intégration 3D WebGL (Three.js) et design d’interfaces UI/UX sous Figma.'
+            : 'Available for freelance missions: React & TypeScript front-end development, interactive 3D WebGL (Three.js), and Figma UI/UX design.'}
         </p>
 
         {/* Dual Direct Contact Actions: Email + Phone */}
@@ -148,6 +147,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           © 2026 Eliot Hantute • Creative Developer &amp; AI-Augmented Front-End • Paris, France
         </p>
       </motion.div>
-    </div>
+    </section>
   );
 };

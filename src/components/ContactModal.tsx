@@ -96,10 +96,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             </h2>
 
             {/* Subtitle */}
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 dark:text-zinc-300 sm:text-lg">
               {lang === 'fr'
-                ? 'Disponible pour des missions freelance, développement front-end React, intégration 3D et prototypage assisté par IA.'
-                : 'Available for freelance missions, React front-end development, 3D craft and AI-assisted prototyping.'}
+                ? 'Disponible pour des missions freelance : développement front-end React & TypeScript, intégration 3D WebGL (Three.js) et design d’interfaces UI/UX sous Figma.'
+                : 'Available for freelance missions: React & TypeScript front-end development, interactive 3D WebGL (Three.js), and Figma UI/UX design.'}
             </p>
 
             {/* Direct Contact Action Buttons: Email + Phone */}

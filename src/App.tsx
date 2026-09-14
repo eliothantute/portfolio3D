@@ -3,15 +3,17 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { projectsData } from './data/projects';
-import { Project, Language } from './types';
+import { Project, Language, Theme } from './types';
 import { CustomCursor } from './components/CustomCursor';
 import { Background3D } from './components/Background3D';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SectionsHub } from './components/SectionsHub';
+import { ContactSection } from './components/ContactSection';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProjectModal } from './components/ProjectModal';
 import { ContactModal } from './components/ContactModal';
+import { TechInspectorHUD } from './components/TechInspectorHUD';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,9 +22,28 @@ export default function App() {
   const [cursorText, setCursorText] = useState<string>('');
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme') as Theme | null;
+      if (saved === 'light' || saved === 'dark') return saved;
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+    }
+    return 'light';
+  });
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const analyserRef = useRef<AnalyserNode | null>(null);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [theme]);
 
   const currentProjects = projectsData[lang];
 
@@ -60,7 +81,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#fafafa] text-zinc-950 selection:bg-zinc-950 selection:text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#fafafa] dark:bg-[#09090b] text-zinc-950 dark:text-zinc-50 selection:bg-zinc-950 selection:text-white dark:selection:bg-white dark:selection:text-zinc-950 transition-colors duration-500">
       {/* Curseur Magnétique Custom */}
       <CustomCursor cursorText={cursorText} isHovered={isHovered} />
 
@@ -71,7 +92,7 @@ export default function App() {
       />
 
       <section className="sr-only" aria-label={lang === 'fr' ? 'Résumé du profil et des projets' : 'Profile and projects summary'}>
-        <h1>{lang === 'fr' ? 'Eliot — Creative Front-End Developer & UI Designer | React, Three.js & AI-Augmented Development' : 'Eliot — Creative Front-End Developer & UI Designer | React, Three.js & AI-Augmented Development'}</h1>
+        <h1>{lang === 'fr' ? 'Eliot — Creative Front-End Developer 3D | React, Three.js & WebGL' : 'Eliot — Creative Front-End Developer 3D | React, Three.js & WebGL'}</h1>
         <ul>
           {currentProjects.slice(0, 8).map((project) => (
             <li key={`seo-${project.id}`}>
@@ -99,6 +120,8 @@ export default function App() {
         <Navbar
           lang={lang}
           setLang={setLang}
+          theme={theme}
+          toggleTheme={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
           isMuted={isMuted}
           toggleAudio={() => setIsMuted(!isMuted)}
           onOpenContact={() => setIsContactOpen(true)}
@@ -114,12 +137,19 @@ export default function App() {
           onLeaveItem={handleLeaveItem}
         />
 
-        {/* Interactive Sections Menu: Sleek rows that open on click */}
+        {/* Interactive Sections Hub: All sections (00 Collab, 01 Skills, 02 Projects, 03 CV) closed by default */}
         <SectionsHub
           projects={currentProjects}
           lang={lang}
           onSelectProject={(project) => setSelectedProject(project)}
           onOpenContact={() => setIsContactOpen(true)}
+          onHoverItem={handleHoverItem}
+          onLeaveItem={handleLeaveItem}
+        />
+
+        {/* Dedicated Full Contact Section & Socials Footer */}
+        <ContactSection
+          lang={lang}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
@@ -149,6 +179,9 @@ export default function App() {
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
+
+        {/* Real-Time Tech & Performance Inspector HUD (FPS & Fluidity Monitor) */}
+        <TechInspectorHUD lang={lang} />
       </div>
     </div>
   );

@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
-import { ServicesSection } from './ServicesSection';
-import { VelocityCarousel } from './VelocityCarousel';
-import { SkillsVelocityCarousel } from './SkillsVelocityCarousel';
+import { LollipopCarousel } from './LollipopCarousel';
+import { SkillsGridCards } from './SkillsGridCards';
 import { Resume3D } from './Resume3D';
-import { ContactSection } from './ContactSection';
+import { CollaborationModes } from './CollaborationModes';
 
 interface SectionsHubProps {
   projects: Project[];
@@ -26,12 +25,12 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   onLeaveItem,
 }) => {
   const [selectedSkillFilter, setSelectedSkillFilter] = useState<SkillType>('all');
+  // Every section (00, 01, 02, 03, 04) is closed by default on initial page load, and opens on click
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    services: false,
+    collab: false,
     skills: false,
-    projects: true, // Open projects by default for direct showcase
+    projects: false,
     cv: false,
-    contact: false,
   });
 
   const toggleSection = (sectionKey: string) => {
@@ -41,28 +40,39 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     }));
   };
 
-  // Automatically open target section and scroll to it when CTA or anchor link is clicked
+  // Automatically open target section and scroll to it when CTA or navbar link is clicked
   useEffect(() => {
     const handleNavigation = (sectionKey: string) => {
-      const normalizedKey = sectionKey === 'about' ? 'skills' : sectionKey;
-      if (['services', 'skills', 'projects', 'cv', 'contact'].includes(normalizedKey)) {
+      const normalizedKey =
+        sectionKey === 'collaboration' || sectionKey === 'collab'
+          ? 'collab'
+          : sectionKey === 'skills' || sectionKey === 'stack' || sectionKey === 'about'
+          ? 'skills'
+          : sectionKey === 'projects' || sectionKey === 'projet' || sectionKey === 'projets'
+          ? 'projects'
+          : sectionKey;
+
+      if (['collab', 'skills', 'projects', 'cv'].includes(normalizedKey)) {
         setOpenSections((prev) => ({
           ...prev,
           [normalizedKey]: true,
         }));
         setTimeout(() => {
-          const el = document.getElementById(normalizedKey);
+          const el = document.getElementById(normalizedKey === 'collab' ? 'collaboration' : normalizedKey);
           if (el) {
             el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }, 150);
+      } else if (normalizedKey === 'contact') {
+        const el = document.getElementById('contact');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     };
 
-    if (window.location.hash) {
-      handleNavigation(window.location.hash.replace('#', ''));
-    }
-
+    // Sections are strictly closed on initial page load.
+    // They open ONLY when user clicks (click on section header or click on navbar/anchor link).
     const handleHashChange = () => {
       if (window.location.hash) {
         handleNavigation(window.location.hash.replace('#', ''));
@@ -75,7 +85,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       const href = target.getAttribute('href');
       if (!href) return;
       const sectionKey = href.replace('#', '');
-      if (['services', 'skills', 'projects', 'cv', 'contact', 'about'].includes(sectionKey)) {
+      if (['collab', 'collaboration', 'skills', 'stack', 'projects', 'projet', 'projets', 'cv', 'contact', 'about'].includes(sectionKey)) {
         handleNavigation(sectionKey);
       }
     };
@@ -111,29 +121,32 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 
   const sectionHeaders = [
     {
-      key: 'services',
-      id: 'services',
-      num: '01',
-      title: lang === 'fr' ? 'Services & Expertises' : 'Services & Solutions',
+      key: 'collab',
+      id: 'collaboration',
+      num: '00',
+      badge: lang === 'fr' ? 'FLEXIBILITÉ & MODES D’INTERVENTION' : 'COLLABORATION MODES & WORKFLOW',
+      title: lang === 'fr' ? 'Du design au déploiement : 3 façons de collaborer.' : 'From design to deployment: 3 ways to collaborate.',
       desc:
         lang === 'fr'
-          ? 'Site vitrine, landing page, e-commerce, apps, 3D & logos'
-          : 'Showcase sites, landing pages, e-commerce, apps, 3D & brand logos',
+          ? 'Clé en main, intégration pure de vos maquettes ou 3D temps réel & déploiement'
+          : 'End-to-end delivery, pixel-perfect integration, or real-time 3D & deploy',
     },
     {
       key: 'skills',
       id: 'skills',
-      num: '02',
+      num: '01',
+      badge: lang === 'fr' ? 'ARCHITECTURE TECHNIQUE & 3D' : 'TECHNICAL STACK & 3D',
       title: lang === 'fr' ? 'Compétences & Stack' : 'Skills & Stack',
       desc:
         lang === 'fr'
-          ? 'Front-End, Design UI/UX et Applications & IA en carrousel 3D'
-          : 'Front-End, UI/UX Design and Applications & AI in 3D carousel',
+          ? 'Front-End 3D, Design UI/UX, Applications & IA et Production Sonore'
+          : '3D Front-End, UI/UX Design, Web Apps & AI, and Music Scoring',
     },
     {
       key: 'projects',
       id: 'projects',
-      num: '03',
+      num: '02',
+      badge: lang === 'fr' ? 'SÉLECTION DE TRAVAUX' : 'SELECTED WORKS',
       title: lang === 'fr' ? 'Projets & Réalisations' : 'Selected Projects',
       desc:
         lang === 'fr'
@@ -143,29 +156,20 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     {
       key: 'cv',
       id: 'cv',
-      num: '04',
+      num: '03',
+      badge: lang === 'fr' ? 'CURRICULUM VITAE OFFICIEL' : 'OFFICIAL RESUME',
       title: lang === 'fr' ? 'Curriculum Vitae 2026' : 'Curriculum Vitae 2026',
       desc:
         lang === 'fr'
-          ? 'Carte 3D interactive, téléchargement PDF & visualiseur 360°'
-          : '3D Gyroscopic card, PDF download & 360° standalone viewer',
-    },
-    {
-      key: 'contact',
-      id: 'contact',
-      num: '05',
-      title: lang === 'fr' ? 'Contact & Collaboration' : 'Contact & Inquiries',
-      desc:
-        lang === 'fr'
-          ? 'Disponible pour opportunités CDI & missions freelance'
-          : 'Available for full-time roles & freelance projects',
+          ? 'Carte 3D interactive, téléchargement PDF & visualiseur 3D avec import'
+          : '3D Gyroscopic card, PDF download & 3D viewer with file import',
     },
   ];
 
   return (
-    <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:px-12">
+    <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-8 lg:px-12">
       {/* Sections Accordion List */}
-      <div className="flex flex-col divide-y divide-zinc-200 border-y border-zinc-200">
+      <div className="flex flex-col divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
         {sectionHeaders.map((sec) => {
           const isOpen = openSections[sec.key];
 
@@ -183,12 +187,17 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                 onMouseLeave={onLeaveItem}
                 className="group flex w-full items-center justify-between text-left cursor-pointer focus:outline-none"
               >
-                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
-                  <span className="font-mono text-sm sm:text-base font-bold text-zinc-400 group-hover:text-zinc-950 transition-colors">
-                    {sec.num} //
-                  </span>
-                  <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 group-hover:text-blue-600 transition-colors">
-                    <InteractiveText text={sec.title} hoverColor="#0066ff" />
+                <div className="flex flex-col gap-1.5 sm:gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-bold text-zinc-400 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+                      {sec.num} //
+                    </span>
+                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      {sec.badge}
+                    </span>
+                  </div>
+                  <h2 className="font-urbanist text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 group-hover:text-zinc-800 transition-colors dark:text-white dark:group-hover:text-zinc-200">
+                    <InteractiveText text={sec.title} hoverColor="#52525b" />
                   </h2>
                 </div>
 
@@ -199,7 +208,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                   <motion.span
                     animate={{ rotate: isOpen ? 45 : 0 }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-950 font-mono text-lg shadow-sm transition-all group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white cursor-pointer"
+                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-950 font-mono text-lg shadow-sm transition-all group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white cursor-pointer dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
                   >
                     +
                   </motion.span>
@@ -217,21 +226,23 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                     transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden pt-8"
                   >
-                    {/* SECTION 01: SERVICES & EXPERTISES (6 Rich Cards) */}
-                    {sec.key === 'services' && (
-                      <ServicesSection
-                        lang={lang}
-                        onOpenContact={onOpenContact}
-                        onHoverItem={onHoverItem}
-                        onLeaveItem={onLeaveItem}
-                        hideHeader={true}
-                      />
+                    {/* SECTION 00: COLLABORATION (3 Modes de collaboration) */}
+                    {sec.key === 'collab' && (
+                      <div className="flex flex-col pb-6">
+                        <CollaborationModes
+                          lang={lang}
+                          onOpenContact={onOpenContact}
+                          onHoverItem={onHoverItem}
+                          onLeaveItem={onLeaveItem}
+                          hideHeader={true}
+                        />
+                      </div>
                     )}
 
-                    {/* SECTION 02: COMPÉTENCES & STACK (3D Skills Velocity Carousel Cards) */}
+                    {/* SECTION 01: COMPÉTENCES & STACK (Grid Cards styled like Section 00) */}
                     {sec.key === 'skills' && (
                       <div className="flex flex-col pb-6">
-                        <SkillsVelocityCarousel
+                        <SkillsGridCards
                           lang={lang}
                           onSelectSkill={handleSelectSkill}
                           onHoverItem={onHoverItem}
@@ -309,8 +320,8 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           </button>
                         </div>
 
-                        {/* Velocity Carousel for Filtered Projects */}
-                        <VelocityCarousel
+                        {/* Framer-style Lollipop Carousel for Filtered Projects */}
+                        <LollipopCarousel
                           projects={filteredProjects}
                           lang={lang}
                           onSelectProject={onSelectProject}
@@ -324,18 +335,6 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                     {sec.key === 'cv' && (
                       <div className="pb-6">
                         <Resume3D
-                          lang={lang}
-                          onHoverItem={onHoverItem}
-                          onLeaveItem={onLeaveItem}
-                          hideHeader={true}
-                        />
-                      </div>
-                    )}
-
-                    {/* SECTION 05: CONTACT & COLLABORATION (Original Contact Card) */}
-                    {sec.key === 'contact' && (
-                      <div className="pb-6">
-                        <ContactSection
                           lang={lang}
                           onHoverItem={onHoverItem}
                           onLeaveItem={onLeaveItem}

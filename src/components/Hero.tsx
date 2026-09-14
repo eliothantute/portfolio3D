@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Language } from '../types';
 import { InteractiveText } from './InteractiveText';
+import { Sparkles, Clock, ArrowDownRight, Compass } from 'lucide-react';
+import { YinYangVortex } from './YinYangVortex';
 
 interface HeroProps {
   lang: Language;
@@ -11,106 +13,144 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, onLeaveItem }) => {
+  const [parisTime, setParisTime] = useState('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setParisTime(
+        now.toLocaleTimeString('fr-FR', {
+          timeZone: 'Europe/Paris',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
+      );
+    };
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section
       id="top"
-      className="relative flex min-h-[88vh] w-full items-center justify-start overflow-hidden px-4 pt-28 pb-16 sm:px-8 sm:pt-36 lg:px-12 xl:px-16"
+      className="relative w-full px-3 sm:px-6 lg:px-10 pt-24 sm:pt-28 pb-10"
     >
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
-        {/* Left Column: Original Hero Typography & Content */}
-        <div className="flex w-full lg:w-[58%] flex-col items-start text-left">
-          {/* Status Pill Badge */}
+      {/* Giant Frame Container encompassing the entire Hero */}
+      <div className="relative mx-auto w-full max-w-[1440px] min-h-[85vh] sm:min-h-[88vh] lg:min-h-[92vh] rounded-[2.5rem] sm:rounded-[3.2rem] lg:rounded-[3.8rem] bg-black text-white border border-zinc-800/90 shadow-[0_30px_90px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col justify-center">
+        {/* Full-Frame 3D WebGL Scene: Zero column bounds, 100% unified with the hero space */}
+        <YinYangVortex />
+
+        {/* Soft atmospheric gradient protecting text legibility while letting particles flow through */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/95 via-black/50 to-transparent lg:w-[58%] z-[5]" />
+
+        {/* Foreground Content: Typography & Action Buttons positioned with depth over the 3D space */}
+        <div className="relative z-10 flex w-full max-w-2xl flex-col items-start text-left p-6 sm:p-10 lg:p-16 pointer-events-none">
+          {/* Role Pill Badge with Live Paris Time */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-zinc-200/90 bg-white/90 px-4 py-1.5 shadow-xs backdrop-blur-md"
+            className="mb-5 inline-flex flex-wrap items-center gap-2.5 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 shadow-md backdrop-blur-xl pointer-events-auto"
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
-            <span className="font-mono text-xs font-medium text-zinc-700">
-              {lang === 'fr' ? 'Disponible pour nouveaux projets' : 'Available for new projects'}
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
+              ELIOT HANTUTE // PARIS {parisTime ? `• ${parisTime}` : ''}
+            </span>
+            <span className="h-3 w-px bg-white/20 hidden sm:inline" />
+            <span className="font-mono text-[10.5px] font-medium text-zinc-300 hidden sm:inline">
+              {lang === 'fr' ? 'Disponible Projets 3D' : 'Available for 3D Projects'}
             </span>
           </motion.div>
 
-          {/* Interactive 3D Hover Headline: Creative Front-End / Developer in Blue */}
+          {/* Interactive Headline */}
           <motion.div
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-5 max-w-2xl"
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-6 max-w-2xl pointer-events-auto"
           >
-            <h1 className="font-display flex flex-col text-4xl font-black tracking-tight text-zinc-950 sm:text-6xl md:text-7xl lg:text-[5.25rem] xl:text-[5.75rem] leading-[1.04]">
-              <span className="block text-zinc-950">
+            <h1 className="font-urbanist flex flex-col text-4xl font-black tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[4.6rem] xl:text-[5.2rem] leading-[1.02]">
+              <span className="block text-white">
                 <InteractiveText
                   text="Creative Front-End"
-                  hoverColor="#0066ff"
+                  hoverColor="#60a5fa"
                 />
               </span>
-              <span className="mt-1 block text-blue-600 sm:mt-2">
+              <span className="mt-1 block text-zinc-200 sm:mt-2">
                 <InteractiveText
-                  text="Developer"
-                  hoverColor="#0047b3"
+                  text="Developer 3D"
+                  hoverColor="#a78bfa"
                 />
               </span>
             </h1>
           </motion.div>
 
-          {/* Pitch Subtext */}
+          {/* Subtext Description */}
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-xl text-base sm:text-lg text-zinc-600 font-normal leading-relaxed"
+            transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-xl text-base sm:text-lg text-zinc-300 font-normal leading-relaxed pointer-events-auto"
           >
             {lang === 'fr'
-              ? "J'aime concevoir des interfaces soignées, des sites vitrines et des landing pages captivantes, sublimés par des animations fluides et de la 3D interactive."
-              : "I love crafting polished interfaces, showcase websites, and captivating landing pages enhanced by smooth animations and interactive 3D."}
+              ? "À la frontière du design graphique et de l'architecture WebGL. Conception d'expériences 3D interactives fluides, shaders génératifs et interfaces front-end au millimètre — du prototype Figma au déploiement temps réel à 60 FPS."
+              : "At the intersection of graphic direction and real-time WebGL. Crafting fluid interactive 3D spaces, procedural shaders, and pixel-precise front-ends — from Figma concept to high-performance 60 FPS production."}
           </motion.p>
 
-          {/* Two Original Highlighted Action Buttons */}
+          {/* Action CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-8 flex flex-wrap items-center gap-4"
+            transition={{ duration: 0.65, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-8 flex flex-wrap items-center gap-3.5 pointer-events-auto"
           >
-            {/* Me contacter black pill button */}
+            {/* Primary White Button */}
             <button
               type="button"
               onClick={() => {
-                if (onOpenContact) {
+                const el = document.getElementById('contact');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else if (onOpenContact) {
                   onOpenContact();
-                } else {
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              onMouseEnter={() => onHoverItem?.('ME CONTACTER')}
+              onMouseEnter={() => onHoverItem?.('DISCUTER D’UN PROJET')}
               onMouseLeave={onLeaveItem}
-              className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-zinc-950 px-7 py-3.5 text-sm font-bold text-white shadow-xl shadow-zinc-950/15 transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer ring-2 ring-zinc-950 ring-offset-2 ring-offset-[#fafafa]"
+              className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-white px-8 py-4 text-sm font-urbanist font-bold text-zinc-950 shadow-lg transition-all hover:bg-zinc-200 hover:scale-105 active:scale-95 cursor-pointer"
             >
-              <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>{lang === 'fr' ? 'Me contacter' : 'Get in touch'}</span>
-              <span className="text-zinc-400 group-hover:text-white transition-colors">↗</span>
+              <span>{lang === 'fr' ? 'Démarrer un projet' : 'Start a project'}</span>
+              <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
             </button>
 
-            {/* Explorer les projets white pill button */}
+            {/* Collaboration Modes Anchor Button */}
+            <a
+              href="#collaboration"
+              onMouseEnter={() => onHoverItem?.('LES 3 MODES')}
+              onMouseLeave={onLeaveItem}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-4 font-urbanist text-sm font-bold text-white shadow-xs backdrop-blur-md transition-all hover:bg-white/20 hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span>{lang === 'fr' ? '3 Modes de collaboration' : '3 Collaboration Modes'}</span>
+              <span className="text-zinc-400 group-hover:text-white">↓</span>
+            </a>
+
+            {/* Secondary Projects Button */}
             <a
               href="#projects"
-              onMouseEnter={() => onHoverItem?.('PROJETS')}
+              onMouseEnter={() => onHoverItem?.('PROJETS & 3D')}
               onMouseLeave={onLeaveItem}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-300 bg-white/95 px-7 py-3.5 text-sm font-bold text-zinc-900 shadow-xs backdrop-blur-sm transition-all hover:border-zinc-900 hover:bg-white hover:scale-105 active:scale-95 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-black/40 px-6 py-4 font-urbanist text-sm font-medium text-zinc-300 backdrop-blur-md transition-all hover:text-white hover:border-white/30 hover:scale-105 cursor-pointer"
             >
-              <span>{lang === 'fr' ? 'Explorer les projets' : 'Explore projects'}</span>
-              <span>↓</span>
+              <Compass className="h-4 w-4 text-zinc-300" />
+              <span>{lang === 'fr' ? 'Explorer les Projets' : 'Explore Projects'}</span>
             </a>
           </motion.div>
         </div>
-
-        {/* Right Column: Visual space reserved for the 3D animated sphere */}
-        <div className="hidden lg:block lg:w-[42%] min-h-[480px] pointer-events-none" />
       </div>
     </section>
   );
