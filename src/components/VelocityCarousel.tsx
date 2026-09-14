@@ -35,6 +35,10 @@ const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
     fr: 'Boutique en ligne élégante et épurée pour une marque de maroquinerie de luxe.',
     en: 'Minimalist, luxury e-commerce shop for leather goods.',
   },
+  'le-zinc': {
+    fr: 'Site vitrine mobile-first pour bistrot parisien avec menu sans PDF et horaires dynamiques.',
+    en: 'Mobile-first Parisian bistro showcase with zero-PDF menu and live opening hours.',
+  },
   'centre-neuro': {
     fr: 'Modernisation du site web du centre de santé pour une navigation plus claire.',
     en: 'Clean redesign of a medical center website for easier navigation.',

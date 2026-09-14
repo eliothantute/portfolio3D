@@ -6,6 +6,7 @@ import haziImg from '../assets/images/hazi-project.png';
 import nariOsImg from '../assets/images/nari-os-project.png';
 import aumParisImg from '../assets/aum-paris.jpg';
 import disfocusImg from '../assets/disfocus.jpg';
+import leZincImg from '../assets/le-zinc.jpg';
 
 export const projectsData: Record<'fr' | 'en', Project[]> = {
   fr: [
@@ -219,7 +220,30 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'Audio', value: 'Visualizer Réactif' },
         { label: 'BPM', value: '125 — 175 BPM' }
       ]
-    }
+    },
+    {
+      id: 'le-zinc',
+      title: 'Le Zinc Parisien',
+      client: 'Le Zinc Parisien',
+      subtitle: 'Site Vitrine Mobile-First & Horaires Dynamiques',
+      description: "Site vitrine mobile-first ultra-rapide (< 0.4s) pour bistrot parisien : zéro PDF, horaires d'ouverture calculés en temps réel et réservation directe.",
+      longDescription: "Conception et déploiement d'un template vitrine haute performance pour la restauration parisienne. Conçu spécifiquement pour convertir les clients sur smartphone sans friction : carte interactive tactile sans téléchargement de PDF, calcul en direct du statut d'ouverture (heure de Paris), carousel photographique contemporain et bouton d'appel direct au pouce.",
+      year: '2026',
+      category: 'Site Vitrine // Restauration & Mobile-First',
+      skillType: 'frontend',
+      role: ['Product Design', 'UI/UX Mobile-First', 'Développement Front-End', 'Performance Web'],
+      stack: ['HTML5 Sémantique', 'CSS3 Moderne', 'JavaScript Pur (ES6+)', 'Moteur Horaires Temps Réel', 'SEO Schema.org', 'Vercel'],
+      objective: "Prouver aux restaurateurs l'impact d'un site ultra-fluide se chargeant en une demi-seconde avec consultation de carte instantanée.",
+      status: 'En ligne',
+      liveUrl: 'https://bistrot-le-zinc-paris.vercel.app/',
+      image: leZincImg,
+      featured: true,
+      metrics: [
+        { label: 'Temps de chargement', value: '< 0.4s' },
+        { label: 'Score Mobile', value: '100/100' },
+        { label: 'Expérience Carte', value: 'Zéro PDF' }
+      ]
+    },
   ],
   en: [
     {
@@ -432,7 +456,30 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
         { label: 'Audio', value: 'Reactive Visualizer' },
         { label: 'BPM', value: '125 — 175 BPM' }
       ]
-    }
+    },
+    {
+      id: 'le-zinc',
+      title: 'Le Zinc Parisien',
+      client: 'Le Zinc Parisien',
+      subtitle: 'Mobile-First Bistro Showcase & Live Hours Engine',
+      description: "Ultra-fast (< 0.4s) mobile-first showcase for Parisian bistro: zero heavy PDFs, real-time live business hours engine, and 1-tap booking.",
+      longDescription: "High-performance showcase template engineered for the Parisian restaurant industry. Built for seamless mobile conversion: interactive menu with zero PDF downloads, live real-time business hours computation (Paris time), contemporary cinematic photo carousel, and 1-tap thumb-friendly booking.",
+      year: '2026',
+      category: 'Showcase // Restaurant & Mobile-First',
+      skillType: 'frontend',
+      role: ['Product Design', 'Mobile-First UI/UX', 'Front-End Engineering', 'Web Performance'],
+      stack: ['Semantic HTML5', 'Modern CSS3', 'Vanilla JavaScript', 'Live Hours Engine', 'Schema.org SEO', 'Vercel'],
+      objective: "Demonstrate to restaurateurs the business impact of a sub-half-second interface with instant frictionless menu access.",
+      status: 'Live',
+      liveUrl: 'https://bistrot-le-zinc-paris.vercel.app/',
+      image: leZincImg,
+      featured: true,
+      metrics: [
+        { label: 'Load Speed', value: '< 0.4s' },
+        { label: 'Mobile Score', value: '100/100' },
+        { label: 'Menu Flow', value: 'Zero PDF' }
+      ]
+    },
   ]
 };
 
