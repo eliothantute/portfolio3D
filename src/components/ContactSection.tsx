@@ -67,8 +67,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
         <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 dark:text-zinc-300 sm:text-lg">
           {lang === 'fr'
-            ? 'Disponible pour des missions freelance : développement front-end React & TypeScript, intégration 3D WebGL (Three.js) et design d’interfaces UI/UX sous Figma.'
-            : 'Available for freelance missions: React & TypeScript front-end development, interactive 3D WebGL (Three.js), and Figma UI/UX design.'}
+            ? 'Disponible pour des missions freelance : site, design, animation ou projet web.'
+            : 'Available for freelance work: websites, design, animation or web projects.'}
         </p>
 
         {/* Dual Direct Contact Actions: Email + Phone */}

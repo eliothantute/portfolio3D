@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language } from '../types';
 
 interface LollipopCarouselProps {
@@ -9,45 +8,6 @@ interface LollipopCarouselProps {
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
-
-const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
-  'atelier-berger': {
-    fr: 'Globe 3D interactif pour explorer des réalisations de prestige à travers le monde.',
-    en: 'Interactive 3D globe to explore prestige architecture & jewelry worldwide.',
-  },
-  'elora': {
-    fr: 'Site vitrine moderne conçu avec fidélité d’après une maquette Figma soignée.',
-    en: 'Modern showcase website faithfully built from a detailed Figma design.',
-  },
-  'nari-os': {
-    fr: 'Landing page spatiale et sobre pour un agent vocal IA souverain français.',
-    en: 'Sleek, sovereign voice AI landing page built with spatial minimalism.',
-  },
-  'ping-paris': {
-    fr: 'Carte interactive PWA pour localiser les tables de ping-pong gratuites à Paris avec météo.',
-    en: 'Interactive PWA city map finding free outdoor ping-pong spots in Paris with live weather.',
-  },
-  'hazi-whatsapp': {
-    fr: 'Page de présentation pour une application intelligente sur ordinateur.',
-    en: 'Showcase landing page for a modern desktop AI application.',
-  },
-  'aum-paris': {
-    fr: 'Boutique en ligne épurée et élégante pour une marque de maroquinerie de luxe.',
-    en: 'Minimalist, luxury e-commerce experience for high-end leather goods.',
-  },
-  'le-zinc': {
-    fr: 'Site vitrine mobile-first pour bistrot parisien avec menu sans PDF et horaires dynamiques.',
-    en: 'Mobile-first Parisian bistro showcase with zero-PDF menu and live opening hours.',
-  },
-  'centre-neuro': {
-    fr: 'Modernisation de l’expérience web médicale pour une navigation claire et fluide.',
-    en: 'Medical center web modernisation for smooth, intuitive patient guidance.',
-  },
-  'souvenir-francais': {
-    fr: 'Site institutionnel clair, accessible et adapté à tous les formats d’écrans.',
-    en: 'Clear, accessible institutional platform designed for all screen formats.',
-  },
-};
 
 export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   projects,
@@ -59,30 +19,36 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  // Hovered item identifier (flatIndex)
   const [hoveredFlatIndex, setHoveredFlatIndex] = useState<number | null>(null);
   const [isPointerOver, setIsPointerOver] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Position accumulator for subpixel drift
+  // Position accumulator for smooth drift
   const posRef = useRef(0);
-  const dragStartRef = useRef<{ startX: number; startPos: number; lastX: number; lastTime: number; velocity: number }>({
+  const dragStartRef = useRef<{
+    startX: number;
+    startPos: number;
+    lastX: number;
+    lastTime: number;
+    velocity: number;
+  }>({
     startX: 0,
     startPos: 0,
     lastX: 0,
     lastTime: 0,
     velocity: 0,
   });
+  const hasMovedRef = useRef(false);
   const velocityRef = useRef(0);
   const rafRef = useRef<number | null>(null);
 
-  // Dimensions of the lollipop capsules
-  const pillWidth = 160;
-  const pillHeight = 250;
-  const gap = 16;
-  const itemStride = pillWidth + gap;
+  // Balanced landscape proportions for project cards (readable previews, no ugly cropping)
+  const cardWidth = 320;
+  const cardHeight = 200;
+  const gap = 18;
+  const itemStride = cardWidth + gap;
 
-  // We repeat projects 3 times so the ribbon loops infinitely
+  // Repeat projects 3 times so the carousel loops infinitely
   const COPIES = 3;
   const count = projects.length;
   const singleSetWidth = count * itemStride;
@@ -102,7 +68,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
     return repeated;
   }, [projects, count]);
 
-  // Initialize position in the middle copy
+  // Initialize position in the middle set
   useEffect(() => {
     if (singleSetWidth > 0) {
       posRef.current = singleSetWidth;
@@ -118,15 +84,15 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
       lastTime = now;
 
       if (!isDragging && singleSetWidth > 0) {
-        // Friction decay for inertia throw
+        // Friction decay for flick / inertia
         if (Math.abs(velocityRef.current) > 0.5) {
           posRef.current += velocityRef.current * dt;
           velocityRef.current *= Math.pow(0.88, dt * 60);
         } else {
           velocityRef.current = 0;
-          // Steady ambient drift when not hovering an item
+          // Ambient slow drift when not hovering an item
           if (!isPointerOver && hoveredFlatIndex === null) {
-            const driftSpeed = 34; // px per second
+            const driftSpeed = 32; // px per second
             posRef.current += driftSpeed * dt;
           }
         }
@@ -138,7 +104,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
           posRef.current += singleSetWidth;
         }
 
-        // Apply transform to the track directly for 60fps performance
+        // Direct hardware-accelerated transform
         if (trackRef.current) {
           trackRef.current.style.transform = `translate3d(${-posRef.current}px, 0, 0)`;
         }
@@ -148,6 +114,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
     };
 
     rafRef.current = requestAnimationFrame(loop);
+
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
@@ -157,6 +124,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   const handlePointerDown = (e: React.PointerEvent) => {
     if (e.button !== 0) return;
     setIsDragging(true);
+    hasMovedRef.current = false;
     dragStartRef.current = {
       startX: e.clientX,
       startPos: posRef.current,
@@ -173,6 +141,10 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
     const now = performance.now();
     const dt = Math.max((now - dragStartRef.current.lastTime) / 1000, 0.001);
     const dx = e.clientX - dragStartRef.current.lastX;
+
+    if (Math.abs(e.clientX - dragStartRef.current.startX) > 6) {
+      hasMovedRef.current = true;
+    }
 
     posRef.current = dragStartRef.current.startPos - (e.clientX - dragStartRef.current.startX);
 
@@ -208,20 +180,14 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
     }
   };
 
-  // Nav chevrons
+  // Chevrons navigation controls
   const scrollStep = (direction: 'left' | 'right') => {
-    velocityRef.current = direction === 'left' ? -600 : 600;
+    velocityRef.current = direction === 'left' ? -650 : 650;
   };
-
-  // Currently hovered project
-  const activeItem = useMemo(() => {
-    if (hoveredFlatIndex === null) return null;
-    return items.find((it) => it.flatIndex === hoveredFlatIndex)?.project || null;
-  }, [hoveredFlatIndex, items]);
 
   if (projects.length === 0) {
     return (
-      <div className="py-16 text-center text-zinc-500 font-mono text-sm">
+      <div className="py-12 text-center text-zinc-500 font-mono text-xs">
         {lang === 'fr' ? 'Aucun projet dans cette catégorie.' : 'No projects found in this category.'}
       </div>
     );
@@ -230,7 +196,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full select-none overflow-visible py-4"
+      className="relative w-full select-none overflow-visible py-2"
       onPointerEnter={() => setIsPointerOver(true)}
       onPointerLeave={() => {
         setIsPointerOver(false);
@@ -239,49 +205,41 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
       }}
       onWheel={handleWheel}
     >
-      {/* Top hint bar */}
-      <div className="flex items-center justify-between px-4 sm:px-8 mb-4">
-        <div className="flex items-center gap-2 text-xs font-mono text-zinc-600 uppercase tracking-wider">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>{lang === 'fr' ? 'SURVOLER POUR DÉPLOYER' : 'HOVER TO EXPAND'}</span>
-          <span className="text-zinc-600">//</span>
-          <span className="text-zinc-600">{projects.length} {lang === 'fr' ? 'réalisations' : 'projects'}</span>
+      {/* Top minimal bar : compteur discret et flèches de navigation */}
+      <div className="flex items-center justify-between px-4 sm:px-6 mb-3">
+        <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+          <span>{projects.length} {lang === 'fr' ? 'projets' : 'projects'}</span>
         </div>
 
-        {/* Chevrons controls */}
-        <div className="flex items-center gap-1.5">
+        {/* Flèches de défilement discrètes */}
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => scrollStep('left')}
-            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-110 active:scale-95 transition-all shadow-sm cursor-pointer"
+            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer"
             aria-label="Previous"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            ‹
           </button>
           <button
             type="button"
             onClick={() => scrollStep('right')}
-            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-110 active:scale-95 transition-all shadow-sm cursor-pointer"
+            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer"
             aria-label="Next"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            ›
           </button>
         </div>
       </div>
 
-      {/* Main Lollipop Scroller Viewport */}
+      {/* Main Track Viewport */}
       <div
-        className="relative w-full overflow-hidden cursor-grab active:cursor-grabbing touch-none py-8"
+        className="relative w-full overflow-hidden cursor-grab active:cursor-grabbing touch-none py-2"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {/* Continuous track */}
         <div
           ref={trackRef}
           className="flex items-center will-change-transform"
@@ -292,192 +250,64 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
         >
           {items.map((item) => {
             const isHovered = hoveredFlatIndex === item.flatIndex;
-            const hasAnyHover = hoveredFlatIndex !== null;
-
-            // Framer Lollipop neighbor parting calculation
-            let spreadOffset = 0;
-            if (hoveredFlatIndex !== null && !isHovered) {
-              const diff = item.flatIndex - hoveredFlatIndex;
-              if (diff > 0) {
-                spreadOffset = Math.max(0, 90 - (diff - 1) * 25);
-              } else if (diff < 0) {
-                spreadOffset = -Math.max(0, 90 - (Math.abs(diff) - 1) * 25);
-              }
-            }
 
             return (
               <div
                 key={`${item.project.id}-${item.copyIndex}-${item.flatIndex}`}
-                className="relative flex-shrink-0 transition-all duration-300 ease-out"
+                className="relative flex-shrink-0 group"
                 style={{
-                  width: `${pillWidth}px`,
-                  height: `${pillHeight}px`,
-                  transform: `translateX(${spreadOffset}px)`,
-                  zIndex: isHovered ? 40 : 10,
+                  width: `${cardWidth}px`,
+                  height: `${cardHeight}px`,
                 }}
                 onPointerEnter={() => {
                   setHoveredFlatIndex(item.flatIndex);
                   onHoverItem?.(item.project.title);
                 }}
               >
-                {/* The Capsule / Lollipop Media Container */}
-                <motion.div
-                  layout
-                  className={`relative w-full h-full overflow-hidden transition-all duration-300 ease-out cursor-pointer ${
+                {/* Image du projet cliquable : ouvre directement la carte projet */}
+                <div
+                  className={`relative w-full h-full overflow-hidden rounded-2xl border transition-all duration-300 ease-out cursor-pointer ${
                     isHovered
-                      ? 'rounded-3xl shadow-2xl ring-2 ring-blue-500 dark:ring-blue-400 shadow-blue-500/30'
-                      : 'rounded-full shadow-md hover:shadow-xl border border-zinc-200/60 dark:border-zinc-800/80'
-                  } ${
-                    hasAnyHover && !isHovered ? 'opacity-40 scale-95 blur-[0.3px]' : 'opacity-100 scale-100'
-                  }`}
-                  style={{
-                    transformOrigin: 'center center',
-                    transform: isHovered ? 'scale(1.22)' : 'scale(1)',
-                  }}
+                      ? 'border-zinc-900 dark:border-zinc-100 shadow-xl scale-[1.03]'
+                      : 'border-zinc-200/80 dark:border-zinc-800/80 shadow-sm hover:shadow-md'
+                  } bg-zinc-100 dark:bg-zinc-900`}
                   onClick={(e) => {
                     e.stopPropagation();
+                    if (hasMovedRef.current) return;
                     onSelectProject(item.project);
                   }}
+                  title={lang === 'fr' ? `Voir la carte ${item.project.title}` : `View ${item.project.title} card`}
                 >
-                  {/* Media (Image or Video) */}
                   <img
                     src={item.project.image}
                     alt={item.project.title}
-                    className="w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out hover:scale-105"
+                    className="w-full h-full object-cover object-top pointer-events-none transition-transform duration-500 ease-out group-hover:scale-105"
                     loading="lazy"
                   />
 
-                  {/* Subtle gradient vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent pointer-events-none" />
+                  {/* Gradient sombre discret en bas pour détacher le titre */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
 
-                  {/* Pill idle label */}
-                  {!isHovered && (
-                    <div className="absolute inset-x-0 bottom-4 px-3 text-center pointer-events-none">
-                      <span className="inline-block text-[11px] font-mono font-semibold tracking-wider text-white drop-shadow-md truncate max-w-full">
+                  {/* Titre minimaliste sur l'image */}
+                  <div className="absolute inset-x-0 bottom-0 p-3.5 flex items-end justify-between pointer-events-none">
+                    <div className="min-w-0 pr-2">
+                      <h3 className="text-sm sm:text-base font-bold text-white font-mono tracking-tight drop-shadow truncate">
                         {item.project.title}
+                      </h3>
+                      <span className="text-[11px] font-mono text-zinc-300 drop-shadow">
+                        {item.project.category}
                       </span>
                     </div>
-                  )}
 
-                  {/* Quick Expand Badge on Hover */}
-                  {isHovered && (
-                    <div className="absolute top-3 right-3 pointer-events-none">
-                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-white backdrop-blur-md shadow-md text-xs font-bold">
-                        ↗
-                      </span>
-                    </div>
-                  )}
-                </motion.div>
+                    <span className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-white backdrop-blur-md shadow-sm text-xs font-bold transition-transform group-hover:scale-110">
+                      ↗
+                    </span>
+                  </div>
+                </div>
               </div>
             );
           })}
         </div>
-      </div>
-
-      {/* Expanded Lollipop Caption Drawer */}
-      <div className="w-full max-w-4xl mx-auto px-4 min-h-[140px] flex items-center justify-center">
-        <AnimatePresence mode="wait">
-          {activeItem ? (
-            <motion.div
-              key={activeItem.id}
-              initial={{ opacity: 0, y: 12, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200/90 dark:border-zinc-800/90 rounded-2xl p-5 sm:p-6 shadow-xl backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-5"
-            >
-              {/* Left Details */}
-              <div className="flex-1 min-w-0 space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold uppercase bg-blue-100 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
-                    {activeItem.category}
-                  </span>
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
-                    {activeItem.year}
-                  </span>
-                  {activeItem.status && (
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/40">
-                      ● {activeItem.status}
-                    </span>
-                  )}
-                </div>
-
-                <div className="space-y-1">
-                  <h3 className="text-xl sm:text-2xl font-bold font-mono tracking-tight text-zinc-900 dark:text-zinc-50">
-                    {activeItem.title}
-                  </h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2 max-w-2xl leading-relaxed">
-                    {SIMPLE_DESCRIPTIONS[activeItem.id]?.[lang] || activeItem.subtitle || activeItem.description}
-                  </p>
-                </div>
-
-                {/* Tech Tags */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {activeItem.stack.slice(0, 5).map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-0.5 rounded-md text-[10px] font-mono text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/70 border border-zinc-200/50 dark:border-zinc-700/50"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {activeItem.stack.length > 5 && (
-                    <span className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400">
-                      +{activeItem.stack.length - 5}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Right Action Buttons */}
-              <div className="flex items-center gap-3 flex-shrink-0 w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => onSelectProject(activeItem)}
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-bold text-white bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all shadow-md active:scale-95 cursor-pointer"
-                >
-                  <span>{lang === 'fr' ? 'DÉTAILS DU PROJET' : 'VIEW DETAILS'}</span>
-                  <span>→</span>
-                </button>
-
-                {activeItem.liveUrl && (
-                  <a
-                    href={activeItem.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all shadow-sm cursor-pointer"
-                    title={lang === 'fr' ? 'Ouvrir le site en direct' : 'Open live website'}
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                  </a>
-                )}
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="idle-hint"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="py-4 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400 flex items-center gap-2"
-            >
-              <span>←</span>
-              <span>
-                {lang === 'fr'
-                  ? 'Glissez ou survolez une capsule pour inspecter les métriques et lancer le projet'
-                  : 'Drag or hover a capsule to inspect metrics and launch the project'}
-              </span>
-              <span>→</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );
