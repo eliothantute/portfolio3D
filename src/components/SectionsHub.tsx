@@ -45,10 +45,10 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
         sectionKey === 'modes' || sectionKey === 'prestations' || sectionKey === 'collaboration' || sectionKey === 'collab' || sectionKey === 'services'
           ? 'modes'
           : sectionKey === 'projects' || sectionKey === 'projet' || sectionKey === 'projets'
-          ? 'projects'
-          : sectionKey === 'cv'
-          ? 'cv'
-          : sectionKey;
+            ? 'projects'
+            : sectionKey === 'cv'
+              ? 'cv'
+              : sectionKey;
 
       if (['modes', 'projects', 'cv'].includes(normalizedKey)) {
         setOpenSections((prev) => ({
@@ -111,8 +111,8 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       key: 'modes',
       id: 'modes',
       num: '01',
-      badge: lang === 'fr' ? 'SERVICES & EXPERTISE' : 'SERVICES & EXPERTISE',
-      title: lang === 'fr' ? 'Prestations' : 'Services',
+      badge: lang === 'fr' ? 'QUELS SONT VOS BESOINS?' : 'WHAT DO YOU NEED?',
+      title: lang === 'fr' ? 'Services & Prestations' : 'Services',
     },
     {
       key: 'projects',
@@ -208,11 +208,10 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           <button
                             type="button"
                             onClick={() => setSelectedSkillFilter('all')}
-                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
-                              selectedSkillFilter === 'all'
+                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'all'
                                 ? 'bg-zinc-950 text-white shadow-md scale-105'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
-                            }`}
+                              }`}
                           >
                             {lang === 'fr' ? 'TOUS LES PROJETS' : 'ALL PROJECTS'} ({projects.length})
                           </button>
@@ -220,11 +219,10 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           <button
                             type="button"
                             onClick={() => setSelectedSkillFilter('frontend')}
-                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
-                              selectedSkillFilter === 'frontend'
+                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'frontend'
                                 ? 'bg-blue-600 text-white shadow-md scale-105'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
-                            }`}
+                              }`}
                           >
                             FRONT-END (
                             {projects.filter((p) => p.skillType === 'frontend').length})
@@ -233,11 +231,10 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           <button
                             type="button"
                             onClick={() => setSelectedSkillFilter('design')}
-                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
-                              selectedSkillFilter === 'design'
+                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'design'
                                 ? 'bg-zinc-950 text-white shadow-md scale-105'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
-                            }`}
+                              }`}
                           >
                             DESIGN (
                             {projects.filter((p) => p.skillType === 'design').length})
@@ -246,11 +243,10 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           <button
                             type="button"
                             onClick={() => setSelectedSkillFilter('app')}
-                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
-                              selectedSkillFilter === 'app'
+                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'app'
                                 ? 'bg-zinc-950 text-white shadow-md scale-105'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
-                            }`}
+                              }`}
                           >
                             APP ({projects.filter((p) => p.skillType === 'app').length})
                           </button>
@@ -258,11 +254,10 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           <button
                             type="button"
                             onClick={() => setSelectedSkillFilter('music')}
-                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
-                              selectedSkillFilter === 'music'
+                            className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'music'
                                 ? 'bg-purple-600 text-white shadow-md scale-105'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
-                            }`}
+                              }`}
                           >
                             {lang === 'fr' ? 'COMPOSITION MUSICALE' : 'MUSIC COMPOSITION'} (
                             {projects.filter((p) => p.skillType === 'music').length})
