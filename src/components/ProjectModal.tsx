@@ -38,11 +38,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative mx-auto w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 sm:p-7 shadow-2xl transition-colors duration-300"
+        className="relative mx-auto w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 sm:p-8 shadow-2xl transition-colors duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Barre supérieure : Badge & Bouton Fermer */}
-        <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3.5 mb-4">
+        <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
           <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             <span className="font-bold text-zinc-900 dark:text-zinc-100">[ {project.year} ]</span>
             <span>/</span>
@@ -63,8 +63,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           </button>
         </div>
 
-        {/* Prévisualisation Image : Sans Crop, 100% lisible et centrée */}
-        <div className="relative w-full max-h-[320px] sm:max-h-[380px] overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-950 border border-zinc-200/70 dark:border-zinc-800/80 flex items-center justify-center mb-5">
+        {/* Prévisualisation Image : Sans Crop, 100% lisible */}
+        <div className="relative w-full max-h-[340px] sm:max-h-[380px] overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-950 border border-zinc-200/70 dark:border-zinc-800/80 flex items-center justify-center mb-5">
           {project.youtubeId ? (
             <div className="aspect-video w-full">
               <iframe
@@ -79,70 +79,23 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-auto max-h-[320px] sm:max-h-[380px] object-contain object-center"
+              className="w-full h-auto max-h-[340px] sm:max-h-[380px] object-contain object-center"
             />
           )}
         </div>
 
-        {/* Titre & Description du projet */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
-              {project.title}
-            </h2>
-            {project.subtitle && (
-              <p className="mt-1 font-mono text-xs text-zinc-500 dark:text-zinc-400">
-                {project.subtitle}
-              </p>
-            )}
-          </div>
+        {/* Titre & Explication claire et simple (sans blabla ni spécifications dans tous les sens) */}
+        <div className="space-y-3">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
+            {project.title}
+          </h2>
 
-          <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-            {project.description}
+          <p className="text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
+            {project.longDescription || project.description}
           </p>
 
-          {/* Grille de métadonnées lisible */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 border-t border-zinc-100 dark:border-zinc-800 pt-3.5 font-mono text-xs text-zinc-600 dark:text-zinc-400">
-            <div>
-              <span className="text-zinc-400 dark:text-zinc-500 block text-[10px] uppercase tracking-wider mb-0.5">
-                {lang === 'fr' ? 'Rôle' : 'Role'}
-              </span>
-              <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
-                {Array.isArray(project.role) ? project.role.join(' • ') : (project.role || 'Développeur & Designer')}
-              </span>
-            </div>
-            <div>
-              <span className="text-zinc-400 dark:text-zinc-500 block text-[10px] uppercase tracking-wider mb-0.5">
-                {lang === 'fr' ? 'Année' : 'Year'}
-              </span>
-              <span className="text-zinc-900 dark:text-zinc-100 font-semibold">{project.year}</span>
-            </div>
-            <div className="col-span-2 sm:col-span-1">
-              <span className="text-zinc-400 dark:text-zinc-500 block text-[10px] uppercase tracking-wider mb-0.5">
-                Stack
-              </span>
-              <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
-                {project.stack.slice(0, 3).join(', ')}
-              </span>
-            </div>
-          </div>
-
-          {/* Tags Stack Complets */}
-          {project.stack && project.stack.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {project.stack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2 py-0.5 rounded-md text-[11px] font-mono text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Boutons d'action : Voir en direct & GitHub */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
+          {/* Boutons d'action : Accès direct à l'URL du projet & GitHub */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 dark:border-zinc-800 pt-5 mt-4">
             <div className="flex flex-wrap items-center gap-2.5">
               {project.liveUrl && (
                 <a
@@ -151,9 +104,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   rel="noreferrer"
                   onMouseEnter={() => onHoverItem?.('VISITER')}
                   onMouseLeave={onLeaveItem}
-                  className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow-md transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 cursor-pointer"
                 >
-                  <span>{lang === 'fr' ? 'Voir le projet en direct ↗' : 'Visit live site ↗'}</span>
+                  <span>{lang === 'fr' ? 'Accéder au projet en direct ↗' : 'Visit live project ↗'}</span>
                 </a>
               )}
 
@@ -164,7 +117,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   rel="noreferrer"
                   onMouseEnter={() => onHoverItem?.('GITHUB')}
                   onMouseLeave={onLeaveItem}
-                  className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-4 py-2 text-xs sm:text-sm font-semibold text-zinc-800 dark:text-zinc-200 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-700 hover:scale-105 active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-4 py-2.5 text-xs sm:text-sm font-semibold text-zinc-800 dark:text-zinc-200 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-700 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   <span>GitHub ↗</span>
                 </a>

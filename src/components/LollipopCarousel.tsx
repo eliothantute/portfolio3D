@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language } from '../types';
 
 interface LollipopCarouselProps {
@@ -8,6 +9,45 @@ interface LollipopCarouselProps {
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
+
+const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
+  'atelier-berger': {
+    fr: 'Globe 3D interactif pour explorer des réalisations de prestige à travers le monde.',
+    en: 'Interactive 3D globe to explore prestige architecture & jewelry worldwide.',
+  },
+  'elora': {
+    fr: 'Site vitrine moderne conçu avec fidélité d’après une maquette Figma soignée.',
+    en: 'Modern showcase website faithfully built from a detailed Figma design.',
+  },
+  'nari-os': {
+    fr: 'Landing page spatiale et sobre pour un agent vocal IA souverain français.',
+    en: 'Sleek, sovereign voice AI landing page built with spatial minimalism.',
+  },
+  'ping-paris': {
+    fr: 'Carte interactive PWA pour localiser les tables de ping-pong gratuites à Paris avec météo.',
+    en: 'Interactive PWA city map finding free outdoor ping-pong spots in Paris with live weather.',
+  },
+  'hazi-whatsapp': {
+    fr: 'Page de présentation pour une application intelligente sur ordinateur.',
+    en: 'Showcase landing page for a modern desktop AI application.',
+  },
+  'aum-paris': {
+    fr: 'Boutique en ligne épurée et élégante pour une marque de maroquinerie de luxe.',
+    en: 'Minimalist, luxury e-commerce experience for high-end leather goods.',
+  },
+  'le-zinc': {
+    fr: 'Site vitrine mobile-first pour bistrot parisien avec menu sans PDF et horaires dynamiques.',
+    en: 'Mobile-first Parisian bistro showcase with zero-PDF menu and live opening hours.',
+  },
+  'centre-neuro': {
+    fr: 'Modernisation de l’expérience web médicale pour une navigation claire et fluide.',
+    en: 'Medical center web modernisation for smooth, intuitive patient guidance.',
+  },
+  'souvenir-francais': {
+    fr: 'Site institutionnel clair, accessible et adapté à tous les formats d’écrans.',
+    en: 'Clear, accessible institutional platform designed for all screen formats.',
+  },
+};
 
 export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   projects,
@@ -19,19 +59,14 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
+  // Hovered item identifier (flatIndex)
   const [hoveredFlatIndex, setHoveredFlatIndex] = useState<number | null>(null);
   const [isPointerOver, setIsPointerOver] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Position accumulator for smooth drift
+  // Position accumulator for subpixel drift
   const posRef = useRef(0);
-  const dragStartRef = useRef<{
-    startX: number;
-    startPos: number;
-    lastX: number;
-    lastTime: number;
-    velocity: number;
-  }>({
+  const dragStartRef = useRef<{ startX: number; startPos: number; lastX: number; lastTime: number; velocity: number }>({
     startX: 0,
     startPos: 0,
     lastX: 0,
@@ -42,13 +77,13 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   const velocityRef = useRef(0);
   const rafRef = useRef<number | null>(null);
 
-  // Balanced landscape proportions for project cards (readable previews, no ugly cropping)
-  const cardWidth = 320;
-  const cardHeight = 200;
-  const gap = 18;
-  const itemStride = cardWidth + gap;
+  // Dimensions of the lollipop capsules (original sleek lollipop proportions)
+  const pillWidth = 160;
+  const pillHeight = 250;
+  const gap = 16;
+  const itemStride = pillWidth + gap;
 
-  // Repeat projects 3 times so the carousel loops infinitely
+  // Repeat projects 3 times so the ribbon loops infinitely
   const COPIES = 3;
   const count = projects.length;
   const singleSetWidth = count * itemStride;
@@ -68,7 +103,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
     return repeated;
   }, [projects, count]);
 
-  // Initialize position in the middle set
+  // Initialize position in the middle copy
   useEffect(() => {
     if (singleSetWidth > 0) {
       posRef.current = singleSetWidth;
@@ -84,15 +119,15 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
       lastTime = now;
 
       if (!isDragging && singleSetWidth > 0) {
-        // Friction decay for flick / inertia
+        // Friction decay for inertia throw
         if (Math.abs(velocityRef.current) > 0.5) {
           posRef.current += velocityRef.current * dt;
           velocityRef.current *= Math.pow(0.88, dt * 60);
         } else {
           velocityRef.current = 0;
-          // Ambient slow drift when not hovering an item
+          // Steady ambient drift when not hovering an item
           if (!isPointerOver && hoveredFlatIndex === null) {
-            const driftSpeed = 32; // px per second
+            const driftSpeed = 34; // px per second
             posRef.current += driftSpeed * dt;
           }
         }
@@ -104,7 +139,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
           posRef.current += singleSetWidth;
         }
 
-        // Direct hardware-accelerated transform
+        // Apply transform to the track directly for 60fps performance
         if (trackRef.current) {
           trackRef.current.style.transform = `translate3d(${-posRef.current}px, 0, 0)`;
         }
@@ -180,14 +215,20 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
     }
   };
 
-  // Chevrons navigation controls
+  // Nav chevrons
   const scrollStep = (direction: 'left' | 'right') => {
-    velocityRef.current = direction === 'left' ? -650 : 650;
+    velocityRef.current = direction === 'left' ? -600 : 600;
   };
+
+  // Currently hovered project
+  const activeItem = useMemo(() => {
+    if (hoveredFlatIndex === null) return null;
+    return items.find((it) => it.flatIndex === hoveredFlatIndex)?.project || null;
+  }, [hoveredFlatIndex, items]);
 
   if (projects.length === 0) {
     return (
-      <div className="py-12 text-center text-zinc-500 font-mono text-xs">
+      <div className="py-16 text-center text-zinc-500 font-mono text-sm">
         {lang === 'fr' ? 'Aucun projet dans cette catégorie.' : 'No projects found in this category.'}
       </div>
     );
@@ -196,7 +237,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full select-none overflow-visible py-2"
+      className="relative w-full select-none overflow-visible py-4"
       onPointerEnter={() => setIsPointerOver(true)}
       onPointerLeave={() => {
         setIsPointerOver(false);
@@ -205,41 +246,49 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
       }}
       onWheel={handleWheel}
     >
-      {/* Top minimal bar : compteur discret et flèches de navigation */}
-      <div className="flex items-center justify-between px-4 sm:px-6 mb-3">
-        <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-          <span>{projects.length} {lang === 'fr' ? 'projets' : 'projects'}</span>
+      {/* Top bar avec commandes chevrons */}
+      <div className="flex items-center justify-between px-4 sm:px-8 mb-4">
+        <div className="flex items-center gap-2 text-xs font-mono text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>{lang === 'fr' ? 'CLIQUEZ SUR L’IMAGE POUR ACCÉDER AU SITE' : 'CLICK IMAGE TO VISIT LIVE SITE'}</span>
+          <span className="text-zinc-400">//</span>
+          <span className="text-zinc-500">{projects.length} {lang === 'fr' ? 'réalisations' : 'projects'}</span>
         </div>
 
-        {/* Flèches de défilement discrètes */}
-        <div className="flex items-center gap-2">
+        {/* Chevrons controls */}
+        <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => scrollStep('left')}
-            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer"
+            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-110 active:scale-95 transition-all shadow-sm cursor-pointer"
             aria-label="Previous"
           >
-            ‹
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
           <button
             type="button"
             onClick={() => scrollStep('right')}
-            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer"
+            className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:scale-110 active:scale-95 transition-all shadow-sm cursor-pointer"
             aria-label="Next"
           >
-            ›
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </button>
         </div>
       </div>
 
-      {/* Main Track Viewport */}
+      {/* Main Lollipop Scroller Viewport */}
       <div
-        className="relative w-full overflow-hidden cursor-grab active:cursor-grabbing touch-none py-2"
+        className="relative w-full overflow-hidden cursor-grab active:cursor-grabbing touch-none py-8"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
+        {/* Continuous track */}
         <div
           ref={trackRef}
           className="flex items-center will-change-transform"
@@ -250,108 +299,182 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
         >
           {items.map((item) => {
             const isHovered = hoveredFlatIndex === item.flatIndex;
+            const hasAnyHover = hoveredFlatIndex !== null;
+
+            // Framer Lollipop neighbor parting calculation
+            let spreadOffset = 0;
+            if (hoveredFlatIndex !== null && !isHovered) {
+              const diff = item.flatIndex - hoveredFlatIndex;
+              if (diff > 0) {
+                spreadOffset = Math.max(0, 90 - (diff - 1) * 25);
+              } else if (diff < 0) {
+                spreadOffset = -Math.max(0, 90 - (Math.abs(diff) - 1) * 25);
+              }
+            }
 
             return (
               <div
                 key={`${item.project.id}-${item.copyIndex}-${item.flatIndex}`}
-                className="relative flex-shrink-0 group"
+                className="relative flex-shrink-0 transition-all duration-300 ease-out"
                 style={{
-                  width: `${cardWidth}px`,
-                  height: `${cardHeight}px`,
+                  width: `${pillWidth}px`,
+                  height: `${pillHeight}px`,
+                  transform: `translateX(${spreadOffset}px)`,
+                  zIndex: isHovered ? 40 : 10,
                 }}
                 onPointerEnter={() => {
                   setHoveredFlatIndex(item.flatIndex);
                   onHoverItem?.(item.project.title);
                 }}
               >
-                {/* Image du projet cliquable : ouvre directement la carte projet */}
-                <div
-                  className={`relative w-full h-full overflow-hidden rounded-2xl border transition-all duration-300 ease-out cursor-pointer ${
+                {/* The Capsule / Lollipop Media Container */}
+                <motion.div
+                  layout
+                  className={`relative w-full h-full overflow-hidden transition-all duration-300 ease-out cursor-pointer ${
                     isHovered
-                      ? 'border-zinc-900 dark:border-zinc-100 shadow-xl scale-[1.03]'
-                      : 'border-zinc-200/80 dark:border-zinc-800/80 shadow-sm hover:shadow-md'
-                  } bg-zinc-100 dark:bg-zinc-900`}
+                      ? 'rounded-3xl shadow-2xl ring-2 ring-blue-500 dark:ring-blue-400 shadow-blue-500/30'
+                      : 'rounded-full shadow-md hover:shadow-xl border border-zinc-200/60 dark:border-zinc-800/80'
+                  } ${
+                    hasAnyHover && !isHovered ? 'opacity-40 scale-95 blur-[0.3px]' : 'opacity-100 scale-100'
+                  }`}
+                  style={{
+                    transformOrigin: 'center center',
+                    transform: isHovered ? 'scale(1.22)' : 'scale(1)',
+                  }}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (hasMovedRef.current) return;
-                    onSelectProject(item.project);
+                    // Clic direct sur l'image pour ouvrir l'URL du projet respectif
+                    if (item.project.liveUrl) {
+                      window.open(item.project.liveUrl, '_blank', 'noopener,noreferrer');
+                    } else {
+                      onSelectProject(item.project);
+                    }
                   }}
-                  title={lang === 'fr' ? `Voir la carte ${item.project.title}` : `View ${item.project.title} card`}
+                  title={item.project.liveUrl ? (lang === 'fr' ? `Ouvrir ${item.project.title} ↗` : `Open ${item.project.title} ↗`) : item.project.title}
                 >
+                  {/* Media Image */}
                   <img
                     src={item.project.image}
                     alt={item.project.title}
-                    className="w-full h-full object-cover object-top pointer-events-none transition-transform duration-500 ease-out group-hover:scale-105"
+                    className="w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out hover:scale-105"
                     loading="lazy"
                   />
 
-                  {/* Gradient sombre discret pour détacher les textes et actions */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+                  {/* Subtle gradient vignette */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent pointer-events-none" />
 
-                  {/* Top Bar : Badge Catégorie à gauche, Liens Directs à droite */}
-                  <div className="absolute top-3 inset-x-3 z-20 flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full bg-black/60 text-white/90 border border-white/10 backdrop-blur-md text-[10px] font-mono uppercase font-semibold pointer-events-none">
-                      {item.project.category}
-                    </span>
-
-                    {/* Liens cliquables directs : Voir le site et GitHub */}
-                    <div className="flex items-center gap-1.5 pointer-events-auto">
-                      {item.project.liveUrl && (
-                        <a
-                          href={item.project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          onMouseEnter={() => onHoverItem?.('VISITER')}
-                          onMouseLeave={onLeaveItem}
-                          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 hover:bg-white text-zinc-950 shadow-md text-[11px] font-mono font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
-                          title={lang === 'fr' ? 'Ouvrir le site en direct ↗' : 'Open live site ↗'}
-                        >
-                          <span>{lang === 'fr' ? 'Visiter' : 'Live'}</span>
-                          <span>↗</span>
-                        </a>
-                      )}
-
-                      {item.project.githubUrl && (
-                        <a
-                          href={item.project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          onMouseEnter={() => onHoverItem?.('GITHUB')}
-                          onMouseLeave={onLeaveItem}
-                          className="flex items-center justify-center w-6 h-6 rounded-full bg-black/70 hover:bg-black text-white border border-white/20 backdrop-blur-md shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
-                          title="GitHub ↗"
-                        >
-                          <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
-                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                          </svg>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Bas de carte : Titre & Puce fiche détaillée */}
-                  <div className="absolute inset-x-0 bottom-0 p-3.5 flex items-end justify-between pointer-events-none z-20">
-                    <div className="min-w-0 pr-2">
-                      <h3 className="text-sm sm:text-base font-bold text-white font-mono tracking-tight drop-shadow truncate">
+                  {/* Pill idle label */}
+                  {!isHovered && (
+                    <div className="absolute inset-x-0 bottom-4 px-3 text-center pointer-events-none">
+                      <span className="inline-block text-[11px] font-mono font-semibold tracking-wider text-white drop-shadow-md truncate max-w-full">
                         {item.project.title}
-                      </h3>
-                      <span className="text-[11px] font-mono text-zinc-300 drop-shadow truncate block">
-                        {item.project.subtitle || item.project.category}
                       </span>
                     </div>
+                  )}
 
-                    <span className="flex-shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-white backdrop-blur-md text-[10px] font-mono font-medium">
-                      <span>{lang === 'fr' ? 'Fiche' : 'Details'}</span>
-                      <span>→</span>
-                    </span>
-                  </div>
-                </div>
+                  {/* Quick External Link Badge on Hover */}
+                  {isHovered && (
+                    <div className="absolute top-3 right-3 pointer-events-none">
+                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-white backdrop-blur-md shadow-md text-xs font-bold">
+                        ↗
+                      </span>
+                    </div>
+                  )}
+                </motion.div>
               </div>
             );
           })}
         </div>
+      </div>
+
+      {/* Expanded Lollipop Caption Drawer : Design d'avant, sans blabla ni spécifications dans tous les sens */}
+      <div className="w-full max-w-4xl mx-auto px-4 min-h-[120px] flex items-center justify-center">
+        <AnimatePresence mode="wait">
+          {activeItem ? (
+            <motion.div
+              key={activeItem.id}
+              initial={{ opacity: 0, y: 12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full bg-white/95 dark:bg-zinc-900/95 border border-zinc-200/90 dark:border-zinc-800/90 rounded-2xl p-5 sm:p-6 shadow-xl backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-5"
+            >
+              {/* Explication claire et simple */}
+              <div className="flex-1 min-w-0 space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold uppercase bg-blue-100 text-blue-700 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
+                    {activeItem.category}
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                    {activeItem.year}
+                  </span>
+                  {activeItem.status && (
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/40">
+                      ● {activeItem.status}
+                    </span>
+                  )}
+                </div>
+
+                <h3 className="text-xl sm:text-2xl font-bold font-mono tracking-tight text-zinc-900 dark:text-zinc-50">
+                  {activeItem.title}
+                </h3>
+
+                {/* Explication simple et directe (zéro blabla technique ou spécifications superflues) */}
+                <p className="text-sm text-zinc-600 dark:text-zinc-300 max-w-2xl leading-relaxed">
+                  {SIMPLE_DESCRIPTIONS[activeItem.id]?.[lang] || activeItem.subtitle || activeItem.description}
+                </p>
+              </div>
+
+              {/* Bouton pour accéder aux détails + bouton URL direct */}
+              <div className="flex items-center gap-3 flex-shrink-0 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => onSelectProject(activeItem)}
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-bold text-white bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all shadow-md active:scale-95 cursor-pointer"
+                >
+                  <span>{lang === 'fr' ? 'DÉTAILS DU PROJET' : 'VIEW DETAILS'}</span>
+                  <span>→</span>
+                </button>
+
+                {activeItem.liveUrl && (
+                  <a
+                    href={activeItem.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all shadow-sm cursor-pointer"
+                    title={lang === 'fr' ? 'Ouvrir le site en direct ↗' : 'Open live website ↗'}
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="idle-hint"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="py-4 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400 flex items-center gap-2"
+            >
+              <span>←</span>
+              <span>
+                {lang === 'fr'
+                  ? 'Survolez ou glissez pour explorer • Cliquez sur l’image pour ouvrir le site'
+                  : 'Hover or drag to explore • Click image to open live site'}
+              </span>
+              <span>→</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
