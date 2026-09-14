@@ -285,22 +285,66 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
                     loading="lazy"
                   />
 
-                  {/* Gradient sombre discret en bas pour détacher le titre */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
+                  {/* Gradient sombre discret pour détacher les textes et actions */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
 
-                  {/* Titre minimaliste sur l'image */}
-                  <div className="absolute inset-x-0 bottom-0 p-3.5 flex items-end justify-between pointer-events-none">
+                  {/* Top Bar : Badge Catégorie à gauche, Liens Directs à droite */}
+                  <div className="absolute top-3 inset-x-3 z-20 flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-full bg-black/60 text-white/90 border border-white/10 backdrop-blur-md text-[10px] font-mono uppercase font-semibold pointer-events-none">
+                      {item.project.category}
+                    </span>
+
+                    {/* Liens cliquables directs : Voir le site et GitHub */}
+                    <div className="flex items-center gap-1.5 pointer-events-auto">
+                      {item.project.liveUrl && (
+                        <a
+                          href={item.project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseEnter={() => onHoverItem?.('VISITER')}
+                          onMouseLeave={onLeaveItem}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 hover:bg-white text-zinc-950 shadow-md text-[11px] font-mono font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                          title={lang === 'fr' ? 'Ouvrir le site en direct ↗' : 'Open live site ↗'}
+                        >
+                          <span>{lang === 'fr' ? 'Visiter' : 'Live'}</span>
+                          <span>↗</span>
+                        </a>
+                      )}
+
+                      {item.project.githubUrl && (
+                        <a
+                          href={item.project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseEnter={() => onHoverItem?.('GITHUB')}
+                          onMouseLeave={onLeaveItem}
+                          className="flex items-center justify-center w-6 h-6 rounded-full bg-black/70 hover:bg-black text-white border border-white/20 backdrop-blur-md shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                          title="GitHub ↗"
+                        >
+                          <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bas de carte : Titre & Puce fiche détaillée */}
+                  <div className="absolute inset-x-0 bottom-0 p-3.5 flex items-end justify-between pointer-events-none z-20">
                     <div className="min-w-0 pr-2">
                       <h3 className="text-sm sm:text-base font-bold text-white font-mono tracking-tight drop-shadow truncate">
                         {item.project.title}
                       </h3>
-                      <span className="text-[11px] font-mono text-zinc-300 drop-shadow">
-                        {item.project.category}
+                      <span className="text-[11px] font-mono text-zinc-300 drop-shadow truncate block">
+                        {item.project.subtitle || item.project.category}
                       </span>
                     </div>
 
-                    <span className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-full bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-white backdrop-blur-md shadow-sm text-xs font-bold transition-transform group-hover:scale-110">
-                      ↗
+                    <span className="flex-shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-white backdrop-blur-md text-[10px] font-mono font-medium">
+                      <span>{lang === 'fr' ? 'Fiche' : 'Details'}</span>
+                      <span>→</span>
                     </span>
                   </div>
                 </div>
