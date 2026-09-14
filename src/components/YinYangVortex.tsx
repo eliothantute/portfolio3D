@@ -1,25 +1,8 @@
 import React, { useRef, useMemo, useEffect } from 'react';
-import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
-import { OrbitControls, Effects } from '@react-three/drei';
-import { UnrealBloomPass } from 'three-stdlib';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib';
 import * as THREE from 'three';
-
-extend({ UnrealBloomPass });
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      unrealBloomPass: any;
-    }
-  }
-}
-
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    unrealBloomPass: any;
-  }
-}
 
 interface YinYangVortexProps {
   interactive?: boolean;
@@ -82,19 +65,19 @@ const ParticleSwarm: React.FC = () => {
     return { side, blend, angBase, r, sqrtU, heightFactor };
   }, []);
 
-  // Lightweight crystalline tetrahedron geometry: 80,000 triangles instead of 1.44M (18x faster)
-  const geometry = useMemo(() => new THREE.TetrahedronGeometry(0.24), []);
+  // Crystalline tetrahedron geometry: crisp black ink-sculpted particles on white backdrop
+  const geometry = useMemo(() => new THREE.TetrahedronGeometry(0.28), []);
   const material = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.94,
+        opacity: 0.90,
       }),
     []
   );
 
-  // Initialize particle colors ONCE (zero per-frame CPU allocation & zero GPU color buffer re-uploads)
+  // Initialize particle colors in rich sculpted deep blacks and charcoal tones
   useEffect(() => {
     if (!meshRef.current) return;
     const mesh = meshRef.current;
@@ -107,13 +90,13 @@ const ParticleSwarm: React.FC = () => {
       const u = (local + 0.5) / half;
 
       if (s < 0) {
-        // Silver/White Stardust arm
-        const lightness = 0.72 - 0.42 * u;
+        // Pure deep obsidian black arm with subtle contrast
+        const lightness = 0.02 + 0.09 * u;
         color.setHSL(0.0, 0.0, lightness);
       } else {
-        // Glowing Cosmic Cobalt Blue arm
-        const lightness = 0.18 + 0.44 * (1.0 - u);
-        color.setHSL(0.62, 0.96, lightness);
+        // Deep carbon/graphite arm with hint of dark slate
+        const lightness = 0.04 + 0.12 * (1.0 - u);
+        color.setHSL(0.62, 0.15, lightness);
       }
       mesh.setColorAt(i, color);
     }
@@ -174,8 +157,8 @@ const ResponsiveVortexScene: React.FC<{ interactive: boolean }> = ({ interactive
 
   return (
     <>
-      <color attach="background" args={['#000000']} />
-      <fog attach="fog" args={['#000000', 0.008]} />
+      <color attach="background" args={['#ffffff']} />
+      <fog attach="fog" args={['#ffffff', 0.007]} />
 
       <group position={[targetX, targetY, 0]} scale={scale}>
         <ParticleSwarm />
@@ -195,24 +178,19 @@ const ResponsiveVortexScene: React.FC<{ interactive: boolean }> = ({ interactive
           dampingFactor={0.06}
         />
       )}
-
-      {/* Balanced Bloom: Crisp neon glow without solid white blow-out */}
-      <Effects disableGamma>
-        <unrealBloomPass threshold={0.16} strength={0.88} radius={0.35} />
-      </Effects>
     </>
   );
 };
 
 export const YinYangVortex: React.FC<YinYangVortexProps> = ({ interactive = true }) => {
   return (
-    <div className="absolute inset-0 w-full h-full select-none bg-transparent overflow-hidden">
+    <div className="absolute inset-0 w-full h-full select-none bg-white overflow-hidden">
       <Canvas
         camera={{ position: [0, 0, 70], fov: 60 }}
-        // Performance-tuned DPR: Ensures solid 60/120 FPS on high-DPI Retina screens
         dpr={[1, 1.25]}
         gl={{
           antialias: true,
+          alpha: true,
           powerPreference: 'high-performance',
         }}
         className="w-full h-full"
