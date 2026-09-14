@@ -128,16 +128,6 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
               <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
             </button>
 
-            {/* Bouton Modes de collaboration */}
-            <a
-              href="#collaboration"
-              onMouseEnter={() => onHoverItem?.('LES 3 MODES')}
-              onMouseLeave={onLeaveItem}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-300 bg-zinc-50 hover:bg-zinc-100 px-7 py-4 font-urbanist text-sm font-bold text-zinc-900 shadow-xs backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              <span>{lang === 'fr' ? '3 Modes de collaboration' : '3 Collaboration Modes'}</span>
-              <span className="text-zinc-500 group-hover:text-zinc-950">↓</span>
-            </a>
 
             {/* Bouton Explorer les Projets */}
             <a

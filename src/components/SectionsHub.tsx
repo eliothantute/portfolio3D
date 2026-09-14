@@ -5,7 +5,6 @@ import { InteractiveText } from './InteractiveText';
 import { LollipopCarousel } from './LollipopCarousel';
 import { SkillsGridCards } from './SkillsGridCards';
 import { Resume3D } from './Resume3D';
-import { CollaborationModes } from './CollaborationModes';
 
 interface SectionsHubProps {
   projects: Project[];
@@ -20,14 +19,12 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   projects,
   lang,
   onSelectProject,
-  onOpenContact,
   onHoverItem,
   onLeaveItem,
 }) => {
   const [selectedSkillFilter, setSelectedSkillFilter] = useState<SkillType>('all');
-  // Every section (00, 01, 02, 03, 04) is closed by default on initial page load, and opens on click
+  // Sections closed by default on initial page load, and open on click
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    collab: false,
     skills: false,
     projects: false,
     cv: false,
@@ -44,21 +41,19 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   useEffect(() => {
     const handleNavigation = (sectionKey: string) => {
       const normalizedKey =
-        sectionKey === 'collaboration' || sectionKey === 'collab'
-          ? 'collab'
-          : sectionKey === 'skills' || sectionKey === 'stack' || sectionKey === 'about'
+        sectionKey === 'skills' || sectionKey === 'stack' || sectionKey === 'about'
           ? 'skills'
           : sectionKey === 'projects' || sectionKey === 'projet' || sectionKey === 'projets'
           ? 'projects'
           : sectionKey;
 
-      if (['collab', 'skills', 'projects', 'cv'].includes(normalizedKey)) {
+      if (['skills', 'projects', 'cv'].includes(normalizedKey)) {
         setOpenSections((prev) => ({
           ...prev,
           [normalizedKey]: true,
         }));
         setTimeout(() => {
-          const el = document.getElementById(normalizedKey === 'collab' ? 'collaboration' : normalizedKey);
+          const el = document.getElementById(normalizedKey);
           if (el) {
             el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
@@ -71,8 +66,6 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       }
     };
 
-    // Sections are strictly closed on initial page load.
-    // They open ONLY when user clicks (click on section header or click on navbar/anchor link).
     const handleHashChange = () => {
       if (window.location.hash) {
         handleNavigation(window.location.hash.replace('#', ''));
@@ -85,7 +78,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       const href = target.getAttribute('href');
       if (!href) return;
       const sectionKey = href.replace('#', '');
-      if (['collab', 'collaboration', 'skills', 'stack', 'projects', 'projet', 'projets', 'cv', 'contact', 'about'].includes(sectionKey)) {
+      if (['skills', 'stack', 'projects', 'projet', 'projets', 'cv', 'contact', 'about'].includes(sectionKey)) {
         handleNavigation(sectionKey);
       }
     };
@@ -121,26 +114,11 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 
   const sectionHeaders = [
     {
-      key: 'collab',
-      id: 'collaboration',
-      num: '00',
-      badge: lang === 'fr' ? 'FLEXIBILITÉ & MODES D’INTERVENTION' : 'COLLABORATION MODES & WORKFLOW',
-      title: lang === 'fr' ? 'Du design au déploiement : 3 façons de collaborer.' : 'From design to deployment: 3 ways to collaborate.',
-      desc:
-        lang === 'fr'
-          ? 'Clé en main, intégration pure de vos maquettes ou 3D temps réel & déploiement'
-          : 'End-to-end delivery, pixel-perfect integration, or real-time 3D & deploy',
-    },
-    {
       key: 'skills',
       id: 'skills',
       num: '01',
       badge: lang === 'fr' ? 'ARCHITECTURE TECHNIQUE & 3D' : 'TECHNICAL STACK & 3D',
       title: lang === 'fr' ? 'Compétences & Stack' : 'Skills & Stack',
-      desc:
-        lang === 'fr'
-          ? 'Front-End 3D, Design UI/UX, Applications & IA et Production Sonore'
-          : '3D Front-End, UI/UX Design, Web Apps & AI, and Music Scoring',
     },
     {
       key: 'projects',
@@ -148,10 +126,6 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       num: '02',
       badge: lang === 'fr' ? 'SÉLECTION DE TRAVAUX' : 'SELECTED WORKS',
       title: lang === 'fr' ? 'Projets & Réalisations' : 'Selected Projects',
-      desc:
-        lang === 'fr'
-          ? `Filtré par : ${selectedSkillFilter.toUpperCase()} (${filteredProjects.length} projets)`
-          : `Filtered by: ${selectedSkillFilter.toUpperCase()} (${filteredProjects.length} projects)`,
     },
     {
       key: 'cv',
@@ -159,10 +133,6 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       num: '03',
       badge: lang === 'fr' ? 'CURRICULUM VITAE OFFICIEL' : 'OFFICIAL RESUME',
       title: lang === 'fr' ? 'Curriculum Vitae 2026' : 'Curriculum Vitae 2026',
-      desc:
-        lang === 'fr'
-          ? 'Carte 3D interactive, téléchargement PDF & visualiseur 3D avec import'
-          : '3D Gyroscopic card, PDF download & 3D viewer with file import',
     },
   ];
 
@@ -202,9 +172,6 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="hidden md:block font-mono text-xs text-zinc-400">
-                    {sec.desc}
-                  </span>
                   <motion.span
                     animate={{ rotate: isOpen ? 45 : 0 }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
@@ -226,20 +193,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                     transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden pt-8"
                   >
-                    {/* SECTION 00: COLLABORATION (3 Modes de collaboration) */}
-                    {sec.key === 'collab' && (
-                      <div className="flex flex-col pb-6">
-                        <CollaborationModes
-                          lang={lang}
-                          onOpenContact={onOpenContact}
-                          onHoverItem={onHoverItem}
-                          onLeaveItem={onLeaveItem}
-                          hideHeader={true}
-                        />
-                      </div>
-                    )}
-
-                    {/* SECTION 01: COMPÉTENCES & STACK (Grid Cards styled like Section 00) */}
+                    {/* SECTION 01: COMPÉTENCES & STACK */}
                     {sec.key === 'skills' && (
                       <div className="flex flex-col pb-6">
                         <SkillsGridCards
@@ -251,7 +205,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                       </div>
                     )}
 
-                    {/* SECTION 03: PROJETS & RÉALISATIONS (3D Velocity Carousel Cards) */}
+                    {/* SECTION 02: PROJETS & RÉALISATIONS */}
                     {sec.key === 'projects' && (
                       <div className="flex flex-col gap-6 pb-6">
                         {/* Skill Filter Buttons (Front-End : Design : App : Tous) */}
@@ -262,7 +216,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
                               selectedSkillFilter === 'all'
                                 ? 'bg-zinc-950 text-white shadow-md scale-105'
-                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                             }`}
                           >
                             {lang === 'fr' ? 'TOUS LES PROJETS' : 'ALL PROJECTS'} ({projects.length})
@@ -274,7 +228,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
                               selectedSkillFilter === 'frontend'
                                 ? 'bg-blue-600 text-white shadow-md scale-105'
-                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                             }`}
                           >
                             FRONT-END (
@@ -287,7 +241,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
                               selectedSkillFilter === 'design'
                                 ? 'bg-zinc-950 text-white shadow-md scale-105'
-                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                             }`}
                           >
                             DESIGN (
@@ -300,7 +254,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
                               selectedSkillFilter === 'app'
                                 ? 'bg-zinc-950 text-white shadow-md scale-105'
-                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                             }`}
                           >
                             APP ({projects.filter((p) => p.skillType === 'app').length})
@@ -312,7 +266,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${
                               selectedSkillFilter === 'music'
                                 ? 'bg-purple-600 text-white shadow-md scale-105'
-                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                             }`}
                           >
                             {lang === 'fr' ? 'COMPOSITION MUSICALE' : 'MUSIC COMPOSITION'} (
@@ -320,7 +274,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           </button>
                         </div>
 
-                        {/* Framer-style Lollipop Carousel for Filtered Projects */}
+                        {/* Lollipop Carousel */}
                         <LollipopCarousel
                           projects={filteredProjects}
                           lang={lang}
@@ -331,7 +285,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                       </div>
                     )}
 
-                    {/* SECTION 04: CV 2026 (3D Resume Card) */}
+                    {/* SECTION 03: CV 2026 */}
                     {sec.key === 'cv' && (
                       <div className="pb-6">
                         <Resume3D

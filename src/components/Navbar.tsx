@@ -92,14 +92,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               {/* Center Navigation Links */}
               <nav className="hidden items-center gap-6 font-sans text-xs font-semibold text-zinc-600 dark:text-zinc-300 md:flex">
-                <a
-                  href="#collaboration"
-                  onMouseEnter={() => onHoverItem?.('COLLABORATION')}
-                  onMouseLeave={onLeaveItem}
-                  className="transition-colors hover:text-zinc-950 dark:hover:text-white cursor-pointer py-1"
-                >
-                  {lang === 'fr' ? 'Collaboration' : 'Workflow'}
-                </a>
 
                 <a
                   href="#skills"

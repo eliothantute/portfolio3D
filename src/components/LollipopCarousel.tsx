@@ -246,16 +246,8 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
       }}
       onWheel={handleWheel}
     >
-      {/* Top bar avec commandes chevrons */}
-      <div className="flex items-center justify-between px-4 sm:px-8 mb-4">
-        <div className="flex items-center gap-2 text-xs font-mono text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>{lang === 'fr' ? 'CLIQUEZ SUR L’IMAGE POUR ACCÉDER AU SITE' : 'CLICK IMAGE TO VISIT LIVE SITE'}</span>
-          <span className="text-zinc-400">//</span>
-          <span className="text-zinc-500">{projects.length} {lang === 'fr' ? 'réalisations' : 'projects'}</span>
-        </div>
-
-        {/* Chevrons controls */}
+      {/* Commandes chevrons discrètes à droite */}
+      <div className="flex items-center justify-end px-4 sm:px-8 mb-2">
         <div className="flex items-center gap-1.5">
           <button
             type="button"
