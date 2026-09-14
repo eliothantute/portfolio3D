@@ -336,14 +336,9 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (hasMovedRef.current) return;
-                    // Clic direct sur l'image pour ouvrir l'URL du projet respectif
-                    if (item.project.liveUrl) {
-                      window.open(item.project.liveUrl, '_blank', 'noopener,noreferrer');
-                    } else {
-                      onSelectProject(item.project);
-                    }
+                    onSelectProject(item.project);
                   }}
-                  title={item.project.liveUrl ? (lang === 'fr' ? `Ouvrir ${item.project.title} ↗` : `Open ${item.project.title} ↗`) : item.project.title}
+                  title={lang === 'fr' ? `Voir les détails de ${item.project.title}` : `View ${item.project.title} details`}
                 >
                   {/* Media Image */}
                   <img
@@ -361,15 +356,6 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
                     <div className="absolute inset-x-0 bottom-4 px-3 text-center pointer-events-none">
                       <span className="inline-block text-[11px] font-mono font-semibold tracking-wider text-white drop-shadow-md truncate max-w-full">
                         {item.project.title}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Quick External Link Badge on Hover */}
-                  {isHovered && (
-                    <div className="absolute top-3 right-3 pointer-events-none">
-                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/95 dark:bg-zinc-900/95 text-zinc-900 dark:text-white backdrop-blur-md shadow-md text-xs font-bold">
-                        ↗
                       </span>
                     </div>
                   )}
@@ -460,8 +446,8 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
               <span>←</span>
               <span>
                 {lang === 'fr'
-                  ? 'Survolez ou glissez pour explorer • Cliquez sur l’image pour ouvrir le site'
-                  : 'Hover or drag to explore • Click image to open live site'}
+                  ? 'Glissez ou survolez pour explorer • Cliquez sur une image pour afficher les détails'
+                  : 'Drag or hover to explore • Click an image to view details'}
               </span>
               <span>→</span>
             </motion.div>
