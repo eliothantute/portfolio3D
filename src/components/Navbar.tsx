@@ -95,11 +95,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 <a
                   href="#modes"
-                  onMouseEnter={() => onHoverItem?.('MODES')}
+                  onMouseEnter={() => onHoverItem?.('PRESTATIONS')}
                   onMouseLeave={onLeaveItem}
                   className="transition-colors hover:text-zinc-950 dark:hover:text-white cursor-pointer py-1"
                 >
-                  {lang === 'fr' ? 'Modes' : 'Modes'}
+                  {lang === 'fr' ? 'Prestations' : 'Services'}
                 </a>
 
                 <a

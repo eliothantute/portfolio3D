@@ -158,7 +158,7 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 px-3 py-1">
               <span className="h-2 w-2 rounded-full bg-zinc-950 dark:bg-white animate-pulse" />
               <span className="font-mono text-xs text-zinc-700 dark:text-zinc-300">
-                01 // {lang === 'fr' ? 'MODES D’INTERVENTION & PRESTATIONS' : 'COLLABORATION MODES & SERVICES'}
+                01 // {lang === 'fr' ? 'PRESTATIONS' : 'SERVICES'}
               </span>
             </div>
 

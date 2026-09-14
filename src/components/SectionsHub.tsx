@@ -42,7 +42,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   useEffect(() => {
     const handleNavigation = (sectionKey: string) => {
       const normalizedKey =
-        sectionKey === 'modes' || sectionKey === 'collaboration' || sectionKey === 'collab' || sectionKey === 'services'
+        sectionKey === 'modes' || sectionKey === 'prestations' || sectionKey === 'collaboration' || sectionKey === 'collab' || sectionKey === 'services'
           ? 'modes'
           : sectionKey === 'projects' || sectionKey === 'projet' || sectionKey === 'projets'
           ? 'projects'
@@ -81,13 +81,18 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       const href = target.getAttribute('href');
       if (!href) return;
       const sectionKey = href.replace('#', '');
-      if (['modes', 'collaboration', 'collab', 'services', 'projects', 'projet', 'projets', 'cv', 'contact'].includes(sectionKey)) {
+      if (['modes', 'prestations', 'collaboration', 'collab', 'services', 'projects', 'projet', 'projets', 'cv', 'contact'].includes(sectionKey)) {
         handleNavigation(sectionKey);
       }
     };
 
     window.addEventListener('hashchange', handleHashChange);
     document.addEventListener('click', handleGlobalClick);
+
+    // Initial check on mount
+    if (window.location.hash) {
+      handleNavigation(window.location.hash.replace('#', ''));
+    }
 
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
@@ -106,8 +111,8 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       key: 'modes',
       id: 'modes',
       num: '01',
-      badge: lang === 'fr' ? 'MODES D’INTERVENTION & PRESTATIONS' : 'COLLABORATION MODES & SERVICES',
-      title: lang === 'fr' ? 'Modes : Design au déploiement, refonte, animation, musique' : 'Modes: Design to deploy, redesign, animation, music',
+      badge: lang === 'fr' ? 'SERVICES & EXPERTISE' : 'SERVICES & EXPERTISE',
+      title: lang === 'fr' ? 'Prestations' : 'Services',
     },
     {
       key: 'projects',
