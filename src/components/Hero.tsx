@@ -63,7 +63,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             </span>
             <span className="h-3 w-px bg-white/20 hidden sm:inline" />
             <span className="font-mono text-[10.5px] font-medium text-zinc-300 hidden sm:inline">
-              {lang === 'fr' ? 'Disponible Projets 3D' : 'Available for 3D Projects'}
+              {lang === 'fr' ? 'Disponible pour projets' : 'Available for projects'}
             </span>
           </motion.div>
 
@@ -83,7 +83,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
               </span>
               <span className="mt-1 block text-zinc-200 sm:mt-2">
                 <InteractiveText
-                  text="Developer 3D"
+                  text="Developer"
                   hoverColor="#a78bfa"
                 />
               </span>
@@ -98,8 +98,8 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             className="max-w-xl text-base sm:text-lg text-zinc-300 font-normal leading-relaxed pointer-events-auto"
           >
             {lang === 'fr'
-              ? "À la frontière du design graphique et de l'architecture WebGL. Conception d'expériences 3D interactives fluides, shaders génératifs et interfaces front-end au millimètre — du prototype Figma au déploiement temps réel à 60 FPS."
-              : "At the intersection of graphic direction and real-time WebGL. Crafting fluid interactive 3D spaces, procedural shaders, and pixel-precise front-ends — from Figma concept to high-performance 60 FPS production."}
+              ? "À la frontière du design graphique et du développement moderne. Conception d'expériences interactives fluides, animations soignées et interfaces front-end au millimètre — du prototype Figma au déploiement haute performance à 60 FPS."
+              : "At the intersection of graphic direction and modern engineering. Crafting fluid interactive spaces, refined animations, and pixel-precise front-ends — from Figma concept to high-performance 60 FPS production."}
           </motion.p>
 
           {/* Action CTAs */}
@@ -142,7 +142,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             {/* Secondary Projects Button */}
             <a
               href="#projects"
-              onMouseEnter={() => onHoverItem?.('PROJETS & 3D')}
+              onMouseEnter={() => onHoverItem?.('PROJETS')}
               onMouseLeave={onLeaveItem}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-black/40 px-6 py-4 font-urbanist text-sm font-medium text-zinc-300 backdrop-blur-md transition-all hover:text-white hover:border-white/30 hover:scale-105 cursor-pointer"
             >

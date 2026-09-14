@@ -174,7 +174,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
             {/* Footer Tag */}
             <p className="mx-auto mt-14 font-mono text-xs text-zinc-400">
-              © 2026 Eliot Hantute • Creative Developer &amp; AI-Augmented Front-End • Paris, France
+              © 2026 Eliot Hantute • Creative Front-End Developer • Paris, France
             </p>
           </motion.div>
         </div>
