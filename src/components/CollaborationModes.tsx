@@ -3,15 +3,11 @@ import { motion } from 'framer-motion';
 import { Language } from '../types';
 import {
   Palette,
-  Code2,
-  Rocket,
-  Sparkles,
+  RefreshCw,
+  Zap,
+  Music,
   CheckCircle2,
   ArrowRight,
-  Boxes,
-  Cpu,
-  Layers,
-  Flame,
 } from 'lucide-react';
 import { InteractiveText } from './InteractiveText';
 
@@ -32,134 +28,155 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
 }) => {
   const modes = [
     {
-      id: 'full-cycle',
+      id: 'design-to-deployment',
       num: '01',
       badge: lang === 'fr' ? 'DE A À Z // CLÉ EN MAIN' : 'END-TO-END // ALL-IN-ONE',
-      title: lang === 'fr' ? 'Propositions, Intégration & Déploiement' : 'Design Concepts, Front-End & Deploy',
+      title: lang === 'fr' ? 'Design au Déploiement' : 'Design to Deployment',
       subtitle:
         lang === 'fr'
-          ? 'Je prends en charge tout le cycle : de la direction artistique et des maquettes interactives sur Figma jusqu’au code front-end réactif et à la mise en ligne.'
-          : 'Full lifecycle ownership: from bespoke Figma creative concepts and art direction to production-ready front-end code and live deployment.',
+          ? 'Prise en charge complète de votre projet : de la direction artistique et maquettes Figma jusqu’au code front-end réactif et à la mise en ligne finale.'
+          : 'Complete project ownership: from art direction and bespoke Figma prototypes to responsive front-end development and live cloud deployment.',
       icon: Palette,
-      accentColor: '#18181b',
       deliverables:
         lang === 'fr'
           ? [
-              'Propositions graphiques & Direction Artistique',
-              'Prototypage & Design System complet sous Figma',
+              'Direction artistique & maquettes interactives Figma',
               'Développement Front-End React 19 & TypeScript',
-              'Déploiement Vercel, nom de domaine & optimisation SEO',
+              'Design System modulaire & responsive minutieux',
+              'Mise en ligne, domaine personnalisé & SEO optimisé',
             ]
           : [
-              'Visual concepts & bespoke Art Direction',
-              'Figma prototyping & complete Design System',
+              'Art direction & interactive Figma prototypes',
               'React 19 & TypeScript front-end architecture',
-              'Vercel deployment, custom domain & SEO polish',
+              'Modular design system & pixel-perfect responsive',
+              'Live deployment, custom domain & optimized SEO',
             ],
       bestFor:
         lang === 'fr'
-          ? 'Startups, marques & créateurs souhaitant un interlocuteur unique pour tout gérer.'
-          : 'Startups, brands & creators seeking a single partner from concept to launch.',
-      cta: lang === 'fr' ? 'Lancer un projet complet' : 'Start an end-to-end project',
+          ? 'Créateurs, marques & startups souhaitant un interlocuteur unique pour concevoir et lancer un site complet.'
+          : 'Creators, brands & startups looking for a single specialist to design and launch an entire product.',
+      cta: lang === 'fr' ? 'Lancer un projet complet' : 'Start end-to-end project',
     },
     {
-      id: 'frontend-integration',
+      id: 'refonte',
       num: '02',
-      badge: lang === 'fr' ? 'FIGMA TO CODE // PIXEL-PERFECT' : 'FIGMA TO CODE // PIXEL-PERFECT',
-      title: lang === 'fr' ? 'Intégration Pure & Micro-Interactions' : 'Pure Integration & Micro-Interactions',
+      badge: lang === 'fr' ? 'MODERNISATION // ERGONOMIE' : 'MODERNIZATION // REDESIGN',
+      title: lang === 'fr' ? 'Refonte de Site & d’Expérience' : 'Website & UX Redesign',
       subtitle:
         lang === 'fr'
-          ? 'Vos maquettes sont déjà prêtes ? Je les traduis en code ultra-rapide, fidèle au pixel près, avec des animations fluides et une ergonomie irréprochable.'
-          : 'Already have your Figma designs? I translate them into clean, high-performance code with meticulous pixel-accuracy and fluid micro-animations.',
-      icon: Code2,
-      accentColor: '#27272a',
+          ? 'Modernisation intégrale d’un site ou produit existant : nouveau souffle visuel, parcours utilisateur simplifié, optimisation mobile et accélération des performances.'
+          : 'Full modernization of an existing site or product: fresh contemporary aesthetics, simplified user journeys, mobile polish, and massive speed boost.',
+      icon: RefreshCw,
       deliverables:
         lang === 'fr'
           ? [
-              'Respect absolu de vos maquettes Figma & typographie',
-              'Micro-interactions fluides (GSAP & Framer Motion)',
-              'Composants propres, modulaires & réutilisables',
-              'Responsive minutieux (Mobile, Tablette, Desktop)',
+              'Audit ergonomique, visuel et technique de l’existant',
+              'Refonte de l’interface graphique contemporaine & épurée',
+              'Reconstruction de l’expérience avec code moderne et propre',
+              'Amélioration de la fluidité, du responsive et des conversions',
             ]
           : [
-              'Pixel-perfect adherence to your Figma files',
-              'Fluid GSAP & Framer Motion micro-interactions',
-              'Modular, maintainable & clean component architecture',
-              'Flawless responsive layouts across all devices',
+              'Comprehensive UX, visual and performance audit',
+              'Contemporary, clean graphic interface redesign',
+              'Rebuilding experience with modern clean code',
+              'Significant improvements in responsiveness and conversions',
             ],
       bestFor:
         lang === 'fr'
-          ? 'Agences web, studios créatifs & designers UI/UX ayant besoin d’un bras droit technique.'
-          : 'Web agencies, creative studios & UI designers needing a top-tier code partner.',
-      cta: lang === 'fr' ? 'Intégrer vos maquettes' : 'Integrate your designs',
+          ? 'Entreprises et indépendants dont le site a vieilli et qui souhaitent retrouver un impact visuel fort.'
+          : 'Companies and businesses whose existing website needs modern visual elevation and clarity.',
+      cta: lang === 'fr' ? 'Discuter d’une refonte' : 'Discuss a redesign',
     },
     {
-      id: 'deployment-3d',
+      id: 'animation-integration',
       num: '03',
-      badge: lang === 'fr' ? '3D & PERFORMANCE // IMMERSION' : '3D IMMERSION & CLOUD DEPLOY',
-      title: lang === 'fr' ? 'Animation 3D, Performance & Déploiement' : '3D Animation, Speed & Deployment',
+      badge: lang === 'fr' ? 'MICRO-INTERACTIONS // 3D WEBGL' : 'MICRO-INTERACTIONS // 3D WEBGL',
+      title: lang === 'fr' ? 'Intégration d’Animation & 3D' : 'Animation & 3D Integration',
       subtitle:
         lang === 'fr'
-          ? 'Votre site existe déjà ou vous avez le code ? J’injecte des expériences 3D immersives (Three.js/WebGL), optimise la fluidité à 60 FPS et gère le déploiement.'
-          : 'Already have a site or codebase? I integrate real-time 3D scenes, optimize GPU rendering to constant 60 FPS, and set up rock-solid cloud deployment.',
-      icon: Rocket,
-      accentColor: '#3f3f46',
+          ? 'Enrichissement d’interfaces web avec des animations fluides (GSAP, Framer Motion) et modules 3D temps réel (Three.js/WebGL) pour une expérience vivante et marquante.'
+          : 'Elevating web interfaces with fluid micro-interactions (GSAP, Framer Motion) and interactive real-time 3D modules (Three.js/WebGL) for unforgettable impressions.',
+      icon: Zap,
       deliverables:
         lang === 'fr'
           ? [
-              'Scènes 3D interactives Three.js & React Three Fiber',
-              'Shaders GLSL sur-mesure & effets de particules',
-              'Optimisation drastique GPU & 60 FPS constants',
-              'Mise en ligne CI/CD, hébergement cloud & monitoring',
+              'Animations fluides au scroll, au curseur et au clic',
+              'Intégration de scènes 3D interactives légères et stables',
+              'Micro-interactions soignées au millimètre près',
+              'Optimisation drastique pour 60 FPS constants sans saccades',
             ]
           : [
-              'Interactive Three.js & React Three Fiber scenes',
-              'Custom GLSL shaders & procedural particle effects',
-              'Drastic GPU & rendering optimizations (locked 60 FPS)',
-              'CI/CD cloud deployment, hosting setup & monitoring',
+              'Smooth scroll-triggered and cursor interactions',
+              'Lightweight, stable real-time 3D WebGL scenes',
+              'Pixel-perfect micro-interactions and transitions',
+              'Locked 60 FPS performance optimization',
             ],
       bestFor:
         lang === 'fr'
-          ? 'Projets souhaitant marquer les esprits avec de la 3D ou sécuriser leur déploiement.'
-          : 'Brands looking for standout 3D immersion or rock-solid production deployment.',
-      cta: lang === 'fr' ? 'Ajouter de la 3D ou déployer' : 'Add 3D or deploy now',
+          ? 'Studios, agences et marques voulant transformer un site statique en une expérience interactive haut de gamme.'
+          : 'Studios, agencies and brands looking to turn a static site into a high-end interactive experience.',
+      cta: lang === 'fr' ? 'Ajouter des animations' : 'Add animations & 3D',
+    },
+    {
+      id: 'composition-musicale',
+      num: '04',
+      badge: lang === 'fr' ? 'SOUND DESIGN // ATMOSPHÈRE' : 'SOUND DESIGN // ATMOSPHERE',
+      title: lang === 'fr' ? 'Composition Musicale & Atmosphère' : 'Music Composition & Atmosphere',
+      subtitle:
+        lang === 'fr'
+          ? 'Création d’univers sonores immersifs et compositions musicales sur-mesure pour sublimer vos expériences web, applications interactives et identités de marque.'
+          : 'Original musical compositions and immersive soundscapes crafted to give web experiences and digital products a distinct sensory signature.',
+      icon: Music,
+      deliverables:
+        lang === 'fr'
+          ? [
+              'Bandes originales & morceaux instrumentaux sur-mesure',
+              'Sound design web interactif (retours audio aux interactions)',
+              'Intégration de lecteurs audio personnalisés avec visualiseur',
+              'Mixage et mastering professionnel haute fidélité',
+            ]
+          : [
+              'Bespoke original soundtracks and musical scoring',
+              'Interactive web audio cues and ambient soundscapes',
+              'Custom embedded audio player with real-time visualizer',
+              'High-fidelity mixing and professional mastering',
+            ],
+      bestFor:
+        lang === 'fr'
+          ? 'Projets artistiques, portfolios créatifs, marques de luxe et jeux web cherchant une identité sonore mémorable.'
+          : 'Creative portfolios, luxury brands, artistic platforms and web games seeking audio personality.',
+      cta: lang === 'fr' ? 'Créer une atmosphère sonore' : 'Craft audio identity',
     },
   ];
 
   return (
-    <section id="collaboration" className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 sm:px-8 lg:px-12 scroll-mt-24">
+    <section id="modes" className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 lg:px-12 scroll-mt-24">
       {/* Section Header */}
       {!hideHeader && (
-        <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+        <div className="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <div className="quora-pill mb-3">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 px-3 py-1">
               <span className="h-2 w-2 rounded-full bg-zinc-950 dark:bg-white animate-pulse" />
               <span className="font-mono text-xs text-zinc-700 dark:text-zinc-300">
-                00 // {lang === 'fr' ? 'FLEXIBILITÉ & MODES D’INTERVENTION' : 'COLLABORATION MODES & WORKFLOW'}
+                01 // {lang === 'fr' ? 'MODES D’INTERVENTION & PRESTATIONS' : 'COLLABORATION MODES & SERVICES'}
               </span>
             </div>
 
             <h2 className="font-urbanist text-3xl font-black tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl dark:text-white leading-[1.05]">
-              {lang === 'fr' ? 'Du design au déploiement :' : 'From design to deployment:'}{' '}
-              <span className="text-zinc-900 dark:text-zinc-100">
-                <InteractiveText
-                  text={lang === 'fr' ? '3 façons de collaborer.' : '3 ways we can work together.'}
-                  hoverColor="#52525b"
-                />
-              </span>
+              {lang === 'fr' ? '4 façons d’intervenir sur votre projet.' : '4 ways we can collaborate on your project.'}
             </h2>
           </div>
 
           <p className="max-w-md font-urbanist text-sm sm:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">
             {lang === 'fr'
-              ? 'Entre sensibilité design et rigueur front-end, je m’adapte à votre projet : création complète avec propositions, intégration fidèle de vos maquettes ou simple déploiement avec touche 3D.'
-              : 'Bridging design craft and front-end engineering, I adapt to your needs: full creative delivery with bespoke proposals, pixel-perfect integration, or pure 3D enhancement & deployment.'}
+              ? 'Du design au déploiement, en refonte complète, en injection d’animations ou en création d’atmosphère musicale, je m’adapte précisément à vos besoins.'
+              : 'From complete design to deployment, comprehensive redesigns, animation integration, or bespoke musical atmosphere, tailored to your exact needs.'}
           </p>
         </div>
       )}
 
-      {/* 3 Collaboration Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+      {/* 4 Modes Cards Grid (2x2) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
         {modes.map((mode, index) => {
           const Icon = mode.icon;
 
@@ -169,12 +186,11 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
               onMouseEnter={() => onHoverItem?.(mode.title.toUpperCase())}
               onMouseLeave={onLeaveItem}
-              className="group relative flex flex-col justify-between rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:border-zinc-400 hover:shadow-xl hover:-translate-y-1.5 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:border-zinc-700"
+              className="group relative flex flex-col justify-between rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:border-zinc-400 hover:shadow-xl hover:-translate-y-1 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:border-zinc-700"
             >
-              {/* Card Header: Step number & Badge */}
               <div>
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-900 shadow-xs transition-all duration-300 group-hover:scale-110 group-hover:bg-zinc-950 group-hover:text-white dark:bg-zinc-800 dark:text-white dark:group-hover:bg-zinc-700">
@@ -185,7 +201,6 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                   </span>
                 </div>
 
-                {/* Badge & Title */}
                 <div className="mt-5">
                   <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                     {mode.badge}
@@ -195,15 +210,14 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                   </h3>
                 </div>
 
-                {/* Subtitle / Description */}
                 <p className="mt-3 text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
                   {mode.subtitle}
                 </p>
 
-                {/* Deliverables Checklist */}
+                {/* Deliverables */}
                 <div className="mt-6 border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
                   <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                    {lang === 'fr' ? 'CE QUI EST INCLUS :' : 'WHAT IS DELIVERED:'}
+                    {lang === 'fr' ? 'CE QUI EST INCLUS :' : 'DELIVERABLES:'}
                   </span>
                   <ul className="mt-2.5 space-y-2">
                     {mode.deliverables.map((item, idx) => (
@@ -215,7 +229,7 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                   </ul>
                 </div>
 
-                {/* Target Audience Pill */}
+                {/* Target Audience */}
                 <div className="mt-5 rounded-xl border border-zinc-100 bg-zinc-50 p-3 text-[11px] text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400">
                   <span className="font-semibold text-zinc-900 dark:text-white">
                     {lang === 'fr' ? 'Pour qui ? ' : 'Best for: '}
@@ -224,8 +238,8 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                 </div>
               </div>
 
-              {/* Bottom Action CTA */}
-              <div className="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+              {/* Action CTA */}
+              <div className="mt-7 pt-4 border-t border-zinc-100 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={() => {
@@ -245,66 +259,6 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
           );
         })}
       </div>
-
-      {/* Specialty 3D & Interaction Banner Highlight */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        className="quora-dark-card mt-8 p-6 sm:p-8 relative overflow-hidden"
-      >
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-mono backdrop-blur-md mb-4">
-              <Sparkles className="h-3.5 w-3.5 text-white" />
-              <span className="text-white font-bold">
-                {lang === 'fr' ? 'SPÉCIALISATION MAÎTRESSE // SIGNATURE' : 'SIGNATURE SPECIALIZATION // 3D & CRAFT'}
-              </span>
-            </div>
-
-            <h3 className="font-urbanist text-2xl sm:text-3xl font-black tracking-tight text-white">
-              {lang === 'fr'
-                ? "L'animation 3D temps réel et l'interaction qui captivent."
-                : 'Real-time 3D animation and spatial interaction.'}
-            </h3>
-
-            <p className="mt-2 text-sm text-zinc-300 font-urbanist leading-relaxed">
-              {lang === 'fr'
-                ? "Au-delà du site vitrine statique, je donne vie aux interfaces grâce à des scènes WebGL fluides, des shaders procéduraux et des micro-interactions physiques réactives à 60 FPS. C’est ce qui transforme un simple visiteur en client marqué par votre univers."
-                : "Far beyond static websites, I breathe life into digital products with fluid WebGL spatial scenes, procedural shaders, and responsive physical interactions at locked 60 FPS. Creating lasting emotional impressions for visionary brands."}
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end gap-3 shrink-0">
-            {/* 3D Tech Pills */}
-            <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-              <span className="rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 text-zinc-200 backdrop-blur-sm">
-                Three.js &amp; R3F
-              </span>
-              <span className="rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 text-zinc-200 backdrop-blur-sm">
-                GLSL Shaders
-              </span>
-              <span className="rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 text-zinc-200 backdrop-blur-sm">
-                GSAP &amp; Lenis 60 FPS
-              </span>
-            </div>
-
-            <a
-              href="#projects"
-              onMouseEnter={() => onHoverItem?.('VOIR LES PROJETS')}
-              onMouseLeave={onLeaveItem}
-              className="mt-2 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-urbanist text-xs font-bold text-zinc-950 shadow-lg transition-all hover:scale-105 hover:bg-zinc-200 cursor-pointer"
-            >
-              <span>{lang === 'fr' ? 'Voir les projets' : 'Explore Projects'}</span>
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-        </div>
-
-        {/* Ambient subtle glow background effect */}
-        <div className="absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-white/5 blur-3xl pointer-events-none" />
-      </motion.div>
     </section>
   );
 };

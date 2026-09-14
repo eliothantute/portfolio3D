@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
 import { LollipopCarousel } from './LollipopCarousel';
-import { SkillsGridCards } from './SkillsGridCards';
+import { CollaborationModes } from './CollaborationModes';
 import { Resume3D } from './Resume3D';
 
 interface SectionsHubProps {
@@ -19,13 +19,14 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   projects,
   lang,
   onSelectProject,
+  onOpenContact,
   onHoverItem,
   onLeaveItem,
 }) => {
   const [selectedSkillFilter, setSelectedSkillFilter] = useState<SkillType>('all');
   // Sections closed by default on initial page load, and open on click
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    skills: false,
+    modes: false,
     projects: false,
     cv: false,
   });
@@ -41,13 +42,15 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   useEffect(() => {
     const handleNavigation = (sectionKey: string) => {
       const normalizedKey =
-        sectionKey === 'skills' || sectionKey === 'stack' || sectionKey === 'about'
-          ? 'skills'
+        sectionKey === 'modes' || sectionKey === 'collaboration' || sectionKey === 'collab' || sectionKey === 'services'
+          ? 'modes'
           : sectionKey === 'projects' || sectionKey === 'projet' || sectionKey === 'projets'
           ? 'projects'
+          : sectionKey === 'cv'
+          ? 'cv'
           : sectionKey;
 
-      if (['skills', 'projects', 'cv'].includes(normalizedKey)) {
+      if (['modes', 'projects', 'cv'].includes(normalizedKey)) {
         setOpenSections((prev) => ({
           ...prev,
           [normalizedKey]: true,
@@ -78,7 +81,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
       const href = target.getAttribute('href');
       if (!href) return;
       const sectionKey = href.replace('#', '');
-      if (['skills', 'stack', 'projects', 'projet', 'projets', 'cv', 'contact', 'about'].includes(sectionKey)) {
+      if (['modes', 'collaboration', 'collab', 'services', 'projects', 'projet', 'projets', 'cv', 'contact'].includes(sectionKey)) {
         handleNavigation(sectionKey);
       }
     };
@@ -92,20 +95,6 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     };
   }, []);
 
-  const handleSelectSkill = (skillType: SkillType) => {
-    setSelectedSkillFilter(skillType);
-    setOpenSections((prev) => ({
-      ...prev,
-      projects: true,
-    }));
-    setTimeout(() => {
-      const el = document.getElementById('projects');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 150);
-  };
-
   // Filtered projects according to active skill type
   const filteredProjects = projects.filter((p) => {
     if (selectedSkillFilter === 'all') return true;
@@ -114,11 +103,11 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 
   const sectionHeaders = [
     {
-      key: 'skills',
-      id: 'skills',
+      key: 'modes',
+      id: 'modes',
       num: '01',
-      badge: lang === 'fr' ? 'ARCHITECTURE TECHNIQUE & 3D' : 'TECHNICAL STACK & 3D',
-      title: lang === 'fr' ? 'Compétences & Stack' : 'Skills & Stack',
+      badge: lang === 'fr' ? 'MODES D’INTERVENTION & PRESTATIONS' : 'COLLABORATION MODES & SERVICES',
+      title: lang === 'fr' ? 'Modes : Design au déploiement, refonte, animation, musique' : 'Modes: Design to deploy, redesign, animation, music',
     },
     {
       key: 'projects',
@@ -193,14 +182,15 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                     transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden pt-8"
                   >
-                    {/* SECTION 01: COMPÉTENCES & STACK */}
-                    {sec.key === 'skills' && (
+                    {/* SECTION 01: MODES D'INTERVENTION */}
+                    {sec.key === 'modes' && (
                       <div className="flex flex-col pb-6">
-                        <SkillsGridCards
+                        <CollaborationModes
                           lang={lang}
-                          onSelectSkill={handleSelectSkill}
+                          onOpenContact={onOpenContact}
                           onHoverItem={onHoverItem}
                           onLeaveItem={onLeaveItem}
+                          hideHeader={true}
                         />
                       </div>
                     )}

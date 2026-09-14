@@ -94,12 +94,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               <nav className="hidden items-center gap-6 font-sans text-xs font-semibold text-zinc-600 dark:text-zinc-300 md:flex">
 
                 <a
-                  href="#skills"
-                  onMouseEnter={() => onHoverItem?.('COMPÉTENCES')}
+                  href="#modes"
+                  onMouseEnter={() => onHoverItem?.('MODES')}
                   onMouseLeave={onLeaveItem}
                   className="transition-colors hover:text-zinc-950 dark:hover:text-white cursor-pointer py-1"
                 >
-                  {lang === 'fr' ? 'Compétences' : 'Skills'}
+                  {lang === 'fr' ? 'Modes' : 'Modes'}
                 </a>
 
                 <a
