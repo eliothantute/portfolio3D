@@ -1,0 +1,947 @@
+import React, { useRef, useMemo, useState, useEffect, useCallback, Suspense } from 'react';
+import { Canvas, useFrame, ThreeEvent } from '@react-three/fiber';
+import { OrbitControls, useGLTF, useTexture } from '@react-three/drei';
+import * as THREE from 'three';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, Compass, Tv, Eye } from 'lucide-react';
+
+interface TokyoOtakuDioramaProps {
+  className?: string;
+  theme?: 'light' | 'dark';
+}
+
+type LightingMood = 'night' | 'sunset' | 'cyberpunk';
+type CameraView = 'diorama' | 'crt' | 'window';
+
+const PHRASES = [
+  'SO, WHAT\nDO YOU FEEL?',
+  'ELIOT LAB //\nCREATIVE DEV',
+  'PRESS START\nTO EXPLORE',
+  'WAKE UP,\nSAMURAI...',
+  'REACT // 3D //\nTAILWIND CSS',
+  '404 SLEEP\nNOT FOUND',
+  'NEO TOKYO //\n02:42 AM',
+  'PARIS 2026 //\nREADY TO BUILD',
+  'INSERT COIN\nTO CONTINUE',
+  'HELLO WORLD_\nLET’S TALK!',
+];
+
+// Three.js coordinates (Y is UP, Z is depth)
+const CAMERA_PRESETS: Record<CameraView, { pos: [number, number, number]; target: [number, number, number] }> = {
+  diorama: {
+    pos: [1.6, 2.5, 4.4],
+    target: [0.0, 0.7, 0.6],
+  },
+  crt: {
+    pos: [-0.05, 1.15, 1.3],
+    target: [-0.3, 0.88, -0.6],
+  },
+  window: {
+    pos: [0.2, 1.4, 2.2],
+    target: [0.6, 1.2, -1.0],
+  },
+};
+
+// Helper to draw authentic CRT scanline text texture
+function createCrtTexture(text: string, colorHex = '#22c55e'): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return new THREE.CanvasTexture(canvas);
+
+  // Background deep phosphor dark
+  const bgGrad = ctx.createRadialGradient(256, 256, 40, 256, 256, 320);
+  if (colorHex === '#fbbf24') {
+    bgGrad.addColorStop(0, '#261805');
+    bgGrad.addColorStop(0.7, '#120b02');
+    bgGrad.addColorStop(1, '#080501');
+  } else if (colorHex === '#f43f5e') {
+    bgGrad.addColorStop(0, '#290615');
+    bgGrad.addColorStop(0.7, '#140209');
+    bgGrad.addColorStop(1, '#080104');
+  } else {
+    bgGrad.addColorStop(0, '#062812');
+    bgGrad.addColorStop(0.7, '#021408');
+    bgGrad.addColorStop(1, '#000803');
+  }
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, 512, 512);
+
+  // CRT Screen Border Bezel
+  ctx.strokeStyle = colorHex === '#fbbf24' ? '#3d2507' : colorHex === '#f43f5e' ? '#420a22' : '#0d381b';
+  ctx.lineWidth = 14;
+  ctx.strokeRect(7, 7, 498, 498);
+
+  // Flip Y only so text is upright, normal left-to-right, line 1 on top
+  ctx.save();
+  ctx.translate(256, 256);
+  ctx.scale(1, -1);
+  ctx.translate(-256, -256);
+
+  // Text setup
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = colorHex;
+  ctx.font = '900 42px "JetBrains Mono", "Courier New", monospace';
+  ctx.shadowColor = colorHex;
+  ctx.shadowBlur = 18;
+
+  const lines = text.split('\n');
+  const lineHeight = 58;
+  const startY = 256 - ((lines.length - 1) * lineHeight) / 2;
+
+  lines.forEach((line, i) => {
+    ctx.fillText(line, 256, startY + i * lineHeight);
+    ctx.fillText(line, 256, startY + i * lineHeight);
+  });
+  ctx.restore();
+
+  // CRT Scanlines
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.28)';
+  for (let y = 0; y < 512; y += 4) {
+    ctx.fillRect(0, y, 512, 2);
+  }
+
+  // Vignette
+  const vignette = ctx.createRadialGradient(256, 256, 180, 256, 256, 260);
+  vignette.addColorStop(0, 'rgba(0,0,0,0)');
+  vignette.addColorStop(1, 'rgba(0,0,0,0.65)');
+  ctx.fillStyle = vignette;
+  ctx.fillRect(0, 0, 512, 512);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+// Living Tokyo Window Sky: strictly framed behind bay window, with twinkling skyscraper lights, highway streams, and crossing airplanes
+const TokyoWindowSky: React.FC<{ mood: LightingMood }> = ({ mood }) => {
+  const skylineTexture = useTexture('/models/tokyo_skyline.jpg');
+  const pointsRef = useRef<THREE.Points>(null);
+  const beaconsRef = useRef<THREE.Points>(null);
+  const trafficRef = useRef<THREE.Points>(null);
+  const airplane1Ref = useRef<THREE.Group>(null);
+  const airplane2Ref = useRef<THREE.Group>(null);
+  const strobe1Ref = useRef<THREE.Mesh>(null);
+  const strobe2Ref = useRef<THREE.Mesh>(null);
+  const beacon1Ref = useRef<THREE.Mesh>(null);
+  const beacon2Ref = useRef<THREE.Mesh>(null);
+
+  useMemo(() => {
+    skylineTexture.wrapS = THREE.RepeatWrapping;
+    skylineTexture.wrapT = THREE.RepeatWrapping;
+    // Repeat and offset with Y inverted (-1.0, 1.0) so buildings stand upright with sky at the top!
+    skylineTexture.repeat.set(0.60, -1.0);
+    skylineTexture.offset.set(0.20, 1.0);
+  }, [skylineTexture]);
+
+  // 1. Generate twinkling window lights on skyscrapers
+  const { positions, colors, phases, speeds } = useMemo(() => {
+    const count = 240;
+    const pos = new Float32Array(count * 3);
+    const col = new Float32Array(count * 3);
+    const ph = new Float32Array(count);
+    const sp = new Float32Array(count);
+
+    const colorPalette = [
+      new THREE.Color('#38bdf8'), // Cyan neon
+      new THREE.Color('#f59e0b'), // Amber window
+      new THREE.Color('#fbbf24'), // Warm gold
+      new THREE.Color('#ffffff'), // Crisp white
+      new THREE.Color('#ff4444'), // Red window/sign
+      new THREE.Color('#c084fc'), // Purple neon
+    ];
+
+    for (let i = 0; i < count; i++) {
+      const theta = (0.69 + Math.random() * 0.62) * Math.PI;
+      const r = 1.50 + Math.random() * 0.015;
+      const x = r * Math.sin(theta);
+      const z = r * Math.cos(theta);
+      // Upright building levels: Y from 0.40 to 1.70
+      const y = 0.40 + Math.random() * 1.30;
+
+      pos[i * 3] = x;
+      pos[i * 3 + 1] = y;
+      pos[i * 3 + 2] = z;
+
+      const c = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+      col[i * 3] = c.r;
+      col[i * 3 + 1] = c.g;
+      col[i * 3 + 2] = c.b;
+
+      ph[i] = Math.random() * Math.PI * 2;
+      sp[i] = 1.2 + Math.random() * 3.5;
+    }
+    return { positions: pos, colors: col, phases: ph, speeds: sp };
+  }, []);
+
+  // 2. Skyscraper Radio Antenna Warning Beacons (synchronized red flashes)
+  const beaconPositions = useMemo(() => {
+    const pos = [
+      // 6 tall tower spires along Tokyo skyline
+      [1.25 * Math.sin(0.78 * Math.PI), 1.78, 1.25 * Math.cos(0.78 * Math.PI)],
+      [1.35 * Math.sin(0.92 * Math.PI), 1.84, 1.35 * Math.cos(0.92 * Math.PI)],
+      [1.40 * Math.sin(1.04 * Math.PI), 1.92, 1.40 * Math.cos(1.04 * Math.PI)],
+      [1.38 * Math.sin(1.15 * Math.PI), 1.82, 1.38 * Math.cos(1.15 * Math.PI)],
+      [1.30 * Math.sin(1.24 * Math.PI), 1.74, 1.30 * Math.cos(1.24 * Math.PI)],
+      [1.32 * Math.sin(0.85 * Math.PI), 1.70, 1.32 * Math.cos(0.85 * Math.PI)],
+    ];
+    return new Float32Array(pos.flat());
+  }, []);
+
+  // 3. Moving Expressway Highway Traffic Streams
+  const { trafficPositions, trafficColors, trafficSpeeds, trafficOffsets } = useMemo(() => {
+    const count = 40;
+    const pos = new Float32Array(count * 3);
+    const col = new Float32Array(count * 3);
+    const sp = new Float32Array(count);
+    const off = new Float32Array(count);
+
+    for (let i = 0; i < count; i++) {
+      off[i] = (i / count);
+      // Direction: half eastbound (white headlights), half westbound (red taillights)
+      const isEast = i % 2 === 0;
+      sp[i] = isEast ? 0.08 : -0.07;
+      const c = isEast ? new THREE.Color('#fef08a') : new THREE.Color('#ef4444');
+      col[i * 3] = c.r;
+      col[i * 3 + 1] = c.g;
+      col[i * 3 + 2] = c.b;
+    }
+    return { trafficPositions: pos, trafficColors: col, trafficSpeeds: sp, trafficOffsets: off };
+  }, []);
+
+  // Animate airplanes, beacons, traffic, and shimmering windows
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+
+    // 1. Airplane 1: High airliner crossing left-to-right across night sky above skyline
+    if (airplane1Ref.current) {
+      const progress = ((t * 0.035) % 1.0);
+      const theta = (1.33 - progress * 0.66) * Math.PI;
+      const r = 1.48;
+      const x = r * Math.sin(theta);
+      const z = r * Math.cos(theta);
+      const y = 2.14 + Math.sin(t * 0.25) * 0.015;
+      airplane1Ref.current.position.set(x, y, z);
+      airplane1Ref.current.lookAt(
+        r * Math.sin(theta - 0.05),
+        y,
+        r * Math.cos(theta - 0.05)
+      );
+
+      // Blinking red beacon (sharp pulse every 1.1s)
+      if (beacon1Ref.current) {
+        const isBeacon = (t % 1.1) < 0.16;
+        beacon1Ref.current.scale.setScalar(isBeacon ? 1.0 : 0.001);
+      }
+      // Double white wingtip strobe flash (every 1.4s)
+      if (strobe1Ref.current) {
+        const m = t % 1.4;
+        const isStrobe = m < 0.06 || (m > 0.14 && m < 0.20);
+        strobe1Ref.current.scale.setScalar(isStrobe ? 1.4 : 0.001);
+      }
+    }
+
+    // 2. Airplane 2 / Drone: Lower-altitude craft crossing right-to-left
+    if (airplane2Ref.current) {
+      const progress = ((t * 0.026 + 0.48) % 1.0);
+      const theta = (0.68 + progress * 0.65) * Math.PI;
+      const r = 1.47;
+      const x = r * Math.sin(theta);
+      const z = r * Math.cos(theta);
+      const y = 1.95 + Math.sin(t * 0.3) * 0.02;
+      airplane2Ref.current.position.set(x, y, z);
+      airplane2Ref.current.lookAt(
+        r * Math.sin(theta + 0.05),
+        y,
+        r * Math.cos(theta + 0.05)
+      );
+
+      // Blinking warning strobe
+      if (beacon2Ref.current) {
+        const isBeacon = (t % 0.85) < 0.14;
+        beacon2Ref.current.scale.setScalar(isBeacon ? 1.0 : 0.001);
+      }
+      if (strobe2Ref.current) {
+        const isStrobe = (t % 1.5) < 0.07;
+        strobe2Ref.current.scale.setScalar(isStrobe ? 1.2 : 0.001);
+      }
+    }
+
+    // 3. Shimmering skyscraper windows
+    if (pointsRef.current) {
+      const geom = pointsRef.current.geometry;
+      const cols = geom.attributes.color;
+      if (cols) {
+        const arr = cols.array as Float32Array;
+        for (let i = 0; i < phases.length; i++) {
+          const shimmer = 0.5 + 0.5 * Math.sin(t * speeds[i] + phases[i]);
+          arr[i * 3] = colors[i * 3] * shimmer;
+          arr[i * 3 + 1] = colors[i * 3 + 1] * shimmer;
+          arr[i * 3 + 2] = colors[i * 3 + 2] * shimmer;
+        }
+        cols.needsUpdate = true;
+      }
+    }
+
+    // 4. Skyscraper warning beacon blink (rhythmic red flash every 1.5s)
+    if (beaconsRef.current) {
+      const mat = beaconsRef.current.material as THREE.PointsMaterial;
+      if (mat) {
+        const pulse = (Math.sin(t * 4.2) > 0.6) ? 1.0 : 0.12;
+        mat.opacity = pulse;
+      }
+    }
+
+    // 5. Flowing highway traffic on expressways
+    if (trafficRef.current) {
+      const geom = trafficRef.current.geometry;
+      const posAttr = geom.attributes.position;
+      if (posAttr) {
+        const arr = posAttr.array as Float32Array;
+        for (let i = 0; i < trafficOffsets.length; i++) {
+          const u = ((trafficOffsets[i] + t * trafficSpeeds[i]) % 1.0 + 1.0) % 1.0;
+          const theta = (0.72 + u * 0.56) * Math.PI;
+          const r = 1.49;
+          arr[i * 3] = r * Math.sin(theta);
+          arr[i * 3 + 1] = 0.42 + (i % 3) * 0.03; // Highway level
+          arr[i * 3 + 2] = r * Math.cos(theta);
+        }
+        posAttr.needsUpdate = true;
+      }
+    }
+  });
+
+  const skyColor = mood === 'sunset' ? '#fed7aa' : mood === 'cyberpunk' ? '#f472b6' : '#ffffff';
+
+  return (
+    <group raycast={() => null}>
+      {/* 1. Curved Tokyo Skyline Backdrop strictly framed behind the bay window */}
+      <mesh position={[0, 1.32, 0]}>
+        <cylinderGeometry
+          args={[
+            1.52, // radiusTop
+            1.52, // radiusBottom
+            2.65, // height
+            48,   // radialSegments
+            1,    // heightSegments
+            true, // openEnded
+            Math.PI * 0.68, // thetaStart (at right edge of window)
+            Math.PI * 0.64, // thetaLength (curves across window to left edge)
+          ]}
+        />
+        <meshBasicMaterial
+          map={skylineTexture}
+          color={skyColor}
+          side={THREE.BackSide}
+          toneMapped={false}
+        />
+      </mesh>
+
+      {/* 2. Twinkling City Lights on Skyscrapers */}
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[positions, 3]}
+          />
+          <bufferAttribute
+            attach="attributes-color"
+            args={[colors, 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.016}
+          vertexColors
+          transparent
+          opacity={0.95}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </points>
+
+      {/* 3. Red Aviation Obstruction Beacons on Skyscraper Towers */}
+      <points ref={beaconsRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[beaconPositions, 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.024}
+          color="#ff1111"
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </points>
+
+      {/* 4. Moving Highway Expressway Lights */}
+      <points ref={trafficRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[trafficPositions, 3]}
+          />
+          <bufferAttribute
+            attach="attributes-color"
+            args={[trafficColors, 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.012}
+          vertexColors
+          transparent
+          opacity={0.85}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </points>
+
+      {/* 5. Airplane 1 (High airliner crossing left-to-right) */}
+      <group ref={airplane1Ref}>
+        {/* White navigation light */}
+        <mesh>
+          <sphereGeometry args={[0.009, 8, 8]} />
+          <meshBasicMaterial color="#ffffff" toneMapped={false} />
+        </mesh>
+        {/* Blinking red anti-collision beacon */}
+        <mesh ref={beacon1Ref} position={[0, 0.008, 0]}>
+          <sphereGeometry args={[0.012, 8, 8]} />
+          <meshBasicMaterial color="#ff2222" toneMapped={false} />
+        </mesh>
+        {/* Double white wingtip strobe */}
+        <mesh ref={strobe1Ref} position={[0.02, 0, 0]}>
+          <sphereGeometry args={[0.014, 8, 8]} />
+          <meshBasicMaterial color="#ffffff" toneMapped={false} />
+        </mesh>
+        {/* Faint luminous contrail */}
+        <mesh position={[0, 0, 0.04]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.001, 0.006, 0.08, 4]} />
+          <meshBasicMaterial color="#93c5fd" transparent opacity={0.3} toneMapped={false} />
+        </mesh>
+      </group>
+
+      {/* 6. Airplane 2 (Drone / commuter crossing right-to-left) */}
+      <group ref={airplane2Ref}>
+        <mesh>
+          <sphereGeometry args={[0.008, 8, 8]} />
+          <meshBasicMaterial color="#fef08a" toneMapped={false} />
+        </mesh>
+        <mesh ref={beacon2Ref} position={[0, 0.006, 0]}>
+          <sphereGeometry args={[0.011, 8, 8]} />
+          <meshBasicMaterial color="#ef4444" toneMapped={false} />
+        </mesh>
+        <mesh ref={strobe2Ref} position={[-0.015, 0, 0]}>
+          <sphereGeometry args={[0.011, 8, 8]} />
+          <meshBasicMaterial color="#22c55e" toneMapped={false} />
+        </mesh>
+        <mesh position={[0, 0, 0.03]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.001, 0.005, 0.06, 4]} />
+          <meshBasicMaterial color="#fed7aa" transparent opacity={0.25} toneMapped={false} />
+        </mesh>
+      </group>
+    </group>
+  );
+};
+
+const DioramaModel: React.FC<{
+  mood: LightingMood;
+  phraseIndex: number;
+  onTvClick: () => void;
+  isDuvetHovered: boolean;
+  setIsDuvetHovered: (hovered: boolean) => void;
+}> = ({ mood, phraseIndex, onTvClick, isDuvetHovered, setIsDuvetHovered }) => {
+  const { scene } = useGLTF('/models/tokyo_otaku_diorama.glb');
+  const crtLightRef = useRef<THREE.PointLight>(null);
+  const duvetMeshRef = useRef<THREE.Mesh | null>(null);
+  const initialDuvetY = useRef<number | null>(null);
+  const flashAnim = useRef<number>(0);
+
+  // Dynamic CRT texture
+  const crtTexture = useMemo(() => {
+    const textColor = mood === 'cyberpunk' ? '#f43f5e' : mood === 'sunset' ? '#fbbf24' : '#34d399';
+    return createCrtTexture(PHRASES[phraseIndex], textColor);
+  }, [phraseIndex, mood]);
+
+  // Clone scene and setup materials
+  const clonedScene = useMemo(() => {
+    const s = scene.clone(true);
+    s.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        const name = mesh.name.toLowerCase();
+
+        // 1. Completely hide spherical HDRI dome if present & disable raycasts on pedestal
+        if (name.includes('hdri') || name.includes('sphere')) {
+          mesh.visible = false;
+          mesh.raycast = () => null;
+        } else if (name.includes('pedestal')) {
+          mesh.raycast = () => null;
+        }
+
+        // 2. Find duvet mesh
+        if (
+          name.includes('duvet') ||
+          name.includes('0.001_jn3_0.001')
+        ) {
+          duvetMeshRef.current = mesh;
+          if (initialDuvetY.current === null) {
+            initialDuvetY.current = mesh.position.y;
+          }
+        }
+
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach((mat) => setupMaterial(mat, mesh.name));
+        } else if (mesh.material) {
+          setupMaterial(mesh.material, mesh.name);
+        }
+      }
+    });
+    return s;
+  }, [scene]);
+
+  // Update CRT screen material with dynamic texture
+  useEffect(() => {
+    clonedScene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        const name = mesh.name.toLowerCase();
+        if (
+          name.includes('screen') ||
+          name.includes('017')
+        ) {
+          const mat = new THREE.MeshBasicMaterial({
+            map: crtTexture,
+            toneMapped: false,
+          });
+          mesh.material = mat;
+        }
+      }
+    });
+  }, [clonedScene, crtTexture]);
+
+  function setupMaterial(mat: THREE.Material, meshName: string) {
+    if ((mat as THREE.MeshStandardMaterial).isMeshStandardMaterial) {
+      const std = mat as THREE.MeshStandardMaterial;
+
+      // Room exterior walls: FrontSide backface culling so viewing from outside doesn't block interior
+      if (meshName.toLowerCase().includes('cylinder') || mat.name === 'material_1') {
+        std.side = THREE.FrontSide;
+      }
+    }
+  }
+
+  // When phrase changes, trigger bright flash pulse
+  useEffect(() => {
+    flashAnim.current = 1.0;
+  }, [phraseIndex]);
+
+  // Animation frame: Duvet lift & CRT pulse
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+
+    // 1. Animate Duvet on Hover: lifts +0.42m with smooth lerp & gentle floating breathing wave
+    if (duvetMeshRef.current) {
+      const baseY = initialDuvetY.current ?? 0;
+      const targetY = isDuvetHovered
+        ? baseY + 0.42 + Math.sin(t * 3.5) * 0.03
+        : baseY;
+      const targetRotX = isDuvetHovered ? -0.16 : 0;
+      const targetRotZ = isDuvetHovered ? 0.08 : 0;
+
+      duvetMeshRef.current.position.y = THREE.MathUtils.lerp(
+        duvetMeshRef.current.position.y,
+        targetY,
+        0.09
+      );
+      duvetMeshRef.current.rotation.x = THREE.MathUtils.lerp(
+        duvetMeshRef.current.rotation.x,
+        targetRotX,
+        0.09
+      );
+      duvetMeshRef.current.rotation.z = THREE.MathUtils.lerp(
+        duvetMeshRef.current.rotation.z,
+        targetRotZ,
+        0.09
+      );
+    }
+
+    // 2. Animate CRT light pulse & click flash
+    if (crtLightRef.current) {
+      flashAnim.current = Math.max(0, flashAnim.current - 0.07);
+      const baseInt = mood === 'cyberpunk' ? 45 : 35;
+      const flicker = 1.0 + Math.sin(t * 12) * 0.08 + Math.sin(t * 4.5) * 0.05;
+      const flash = flashAnim.current * 55;
+      crtLightRef.current.intensity = baseInt * flicker + flash;
+    }
+  });
+
+  // Mood color palettes
+  const moodConfig = useMemo(() => {
+    switch (mood) {
+      case 'sunset':
+        return {
+          ambient: '#4a2818',
+          ambientInt: 0.9,
+          sunColor: '#f97316',
+          sunInt: 2.2,
+          roomColor: '#fed7aa',
+          roomInt: 140,
+          crtColor: '#fbbf24',
+        };
+      case 'cyberpunk':
+        return {
+          ambient: '#1e1b4b',
+          ambientInt: 0.7,
+          sunColor: '#06b6d4',
+          sunInt: 2.0,
+          roomColor: '#a855f7',
+          roomInt: 130,
+          crtColor: '#f43f5e',
+        };
+      case 'night':
+      default:
+        return {
+          ambient: '#111827',
+          ambientInt: 0.85,
+          sunColor: '#60a5fa',
+          sunInt: 1.8,
+          roomColor: '#fef3c7',
+          roomInt: 120,
+          crtColor: '#34d399',
+        };
+    }
+  }, [mood]);
+
+  // Direct mesh pointer event handlers
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+    const targetName = e.object.name.toLowerCase();
+    if (
+      targetName.includes('screen') ||
+      targetName.includes('tv') ||
+      targetName.includes('017') ||
+      targetName.includes('002')
+    ) {
+      e.stopPropagation();
+      onTvClick();
+    }
+  };
+
+  const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+    const targetName = e.object.name.toLowerCase();
+    const isDuvet =
+      targetName.includes('duvet') || targetName.includes('0.001_jn3_0.001');
+    const isTv =
+      targetName.includes('screen') ||
+      targetName.includes('tv') ||
+      targetName.includes('017') ||
+      targetName.includes('002');
+
+    if (isDuvet) {
+      setIsDuvetHovered(true);
+    }
+    if (isDuvet || isTv) {
+      document.body.style.cursor = 'pointer';
+    } else if (!isDuvetHovered) {
+      document.body.style.cursor = 'default';
+    }
+  };
+
+  return (
+    <>
+      <ambientLight color={moodConfig.ambient} intensity={moodConfig.ambientInt} />
+
+      <directionalLight
+        position={[2, 4, -5]}
+        color={moodConfig.sunColor}
+        intensity={moodConfig.sunInt}
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-bias={-0.0001}
+      />
+
+      <pointLight
+        position={[0, 2.1, 0.6]}
+        color={moodConfig.roomColor}
+        intensity={moodConfig.roomInt}
+        distance={8}
+        decay={2}
+      />
+
+      <pointLight
+        ref={crtLightRef}
+        position={[-0.3, 0.88, -0.6]}
+        color={moodConfig.crtColor}
+        intensity={35}
+        distance={4.5}
+        decay={2}
+      />
+
+      {/* Living Tokyo Window View: Strictly framed behind the window with twinkling lights and moving airplanes */}
+      <TokyoWindowSky mood={mood} />
+
+      {/* Main 3D Model */}
+      <primitive
+        object={clonedScene}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+      />
+
+      {/* Static Interactive Hitbox for Bed Duvet (avoids hover flicker while duvet levitates) */}
+      <mesh
+        position={[0.28, 0.38, 1.45]}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setIsDuvetHovered(true);
+          document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          setIsDuvetHovered(false);
+          document.body.style.cursor = 'default';
+        }}
+      >
+        <boxGeometry args={[1.8, 0.8, 2.2]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
+
+      {/* Interactive Hitbox for CRT TV Monitor (reliable click area from any angle) */}
+      <mesh
+        position={[-0.32, 0.86, -0.68]}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          onTvClick();
+        }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          if (!isDuvetHovered) {
+            document.body.style.cursor = 'default';
+          }
+        }}
+      >
+        <boxGeometry args={[0.8, 0.8, 0.8]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
+    </>
+  );
+};
+
+// Smooth Camera Controller
+const CameraController: React.FC<{
+  activeView: CameraView;
+  autoRotate: boolean;
+}> = ({ activeView, autoRotate }) => {
+  const controlsRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!controlsRef.current) return;
+    const preset = CAMERA_PRESETS[activeView];
+    const controls = controlsRef.current;
+    
+    const startPos = controls.object.position.clone();
+    const endPos = new THREE.Vector3(...preset.pos);
+    const startTarget = controls.target.clone();
+    const endTarget = new THREE.Vector3(...preset.target);
+
+    let progress = 0;
+    const duration = 1.0;
+    const startTime = performance.now();
+
+    const animateTransition = (now: number) => {
+      progress = Math.min(1, (now - startTime) / (duration * 1000));
+      const ease = 1 - Math.pow(1 - progress, 3);
+      
+      controls.object.position.lerpVectors(startPos, endPos, ease);
+      controls.target.lerpVectors(startTarget, endTarget, ease);
+      controls.update();
+
+      if (progress < 1) {
+        requestAnimationFrame(animateTransition);
+      }
+    };
+    requestAnimationFrame(animateTransition);
+  }, [activeView]);
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      makeDefault
+      enableDamping
+      dampingFactor={0.05}
+      minDistance={2.0}
+      maxDistance={10}
+      maxPolarAngle={Math.PI / 2.05}
+      minPolarAngle={Math.PI / 8}
+      autoRotate={autoRotate && activeView === 'diorama'}
+      autoRotateSpeed={0.5}
+    />
+  );
+};
+
+export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
+  className = '',
+  theme = 'light',
+}) => {
+  const [mood, setMood] = useState<LightingMood>('night');
+  const [activeView, setActiveView] = useState<CameraView>('diorama');
+  const [autoRotate, setAutoRotate] = useState<boolean>(true);
+  const [phraseIndex, setPhraseIndex] = useState<number>(0);
+  const [isDuvetHovered, setIsDuvetHovered] = useState<boolean>(false);
+  const [interactionToast, setInteractionToast] = useState<string | null>(null);
+
+  const handleTvClick = useCallback(() => {
+    setPhraseIndex((prev) => {
+      const nextIndex = (prev + 1) % PHRASES.length;
+      const cleanPhrase = PHRASES[nextIndex].replace('\n', ' ');
+      setInteractionToast(`📺 CRT : « ${cleanPhrase} »`);
+      return nextIndex;
+    });
+    setTimeout(() => setInteractionToast(null), 2500);
+  }, []);
+
+  return (
+    <div className={`relative w-full h-full select-none ${className}`}>
+      {/* 3D WebGL Canvas */}
+      <Canvas
+        shadows
+        camera={{ position: CAMERA_PRESETS.diorama.pos, fov: 38 }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: mood === 'sunset' ? 1.25 : 1.4,
+          powerPreference: 'high-performance',
+        }}
+        className="w-full h-full cursor-grab active:cursor-grabbing"
+      >
+        <Suspense fallback={null}>
+          <DioramaModel
+            mood={mood}
+            phraseIndex={phraseIndex}
+            onTvClick={handleTvClick}
+            isDuvetHovered={isDuvetHovered}
+            setIsDuvetHovered={setIsDuvetHovered}
+          />
+          <CameraController
+            activeView={activeView}
+            autoRotate={autoRotate && !isDuvetHovered}
+          />
+        </Suspense>
+      </Canvas>
+
+      {/* Interactive Toast Notification when clicking TV */}
+      <AnimatePresence>
+        {interactionToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.92 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="absolute top-20 right-6 z-30 flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-zinc-950/95 px-3.5 py-2 font-mono text-[11px] font-bold text-emerald-400 shadow-2xl backdrop-blur-md pointer-events-none"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            <span>{interactionToast}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Interactive Badge & Controls */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 flex flex-col items-end gap-2.5 pointer-events-auto">
+
+
+        {/* View Angles & Lighting Bar */}
+        <div className="flex items-center gap-1.5 rounded-2xl border border-zinc-200/80 bg-white/85 p-1.5 shadow-lg backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-900/85">
+          {/* Preset Views */}
+          <div className="flex items-center gap-1 pr-1.5 border-r border-zinc-200 dark:border-zinc-800">
+            <button
+              type="button"
+              onClick={() => setActiveView('diorama')}
+              title="Vue Diorama Isométrique"
+              className={`flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
+                activeView === 'diorama'
+                  ? 'bg-zinc-950 text-white shadow-xs dark:bg-white dark:text-zinc-950'
+                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
+              }`}
+            >
+              <Compass className="h-3 w-3" />
+              <span className="hidden sm:inline">Diorama</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveView('crt')}
+              title="Focus Écran Rétro CRT (Cliquez sur la télé pour zapper !)"
+              className={`flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
+                activeView === 'crt'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
+              }`}
+            >
+              <Tv className="h-3 w-3" />
+              <span className="hidden sm:inline">CRT TV</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveView('window')}
+              title="Vue Baie Vitrée Tokyo (Lumières & Trafic Aérien)"
+              className={`flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
+                activeView === 'window'
+                  ? 'bg-sky-600 text-white shadow-xs'
+                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
+              }`}
+            >
+              <Eye className="h-3 w-3" />
+              <span className="hidden sm:inline">Tokyo</span>
+            </button>
+          </div>
+
+          {/* Lighting Mood Toggle */}
+          <div className="flex items-center gap-1 pl-1">
+            <button
+              type="button"
+              onClick={() => setMood((m) => (m === 'night' ? 'sunset' : m === 'sunset' ? 'cyberpunk' : 'night'))}
+              title={`Ambiance: ${mood.toUpperCase()} (Cliquer pour changer)`}
+              className="flex items-center gap-1 rounded-xl px-2 py-1.5 font-mono text-[10.5px] font-medium text-zinc-700 hover:bg-zinc-100 transition-all cursor-pointer dark:text-zinc-300 dark:hover:bg-zinc-800"
+            >
+              {mood === 'night' && <span>🌙 Nuit</span>}
+              {mood === 'sunset' && <span>🌅 Sunset</span>}
+              {mood === 'cyberpunk' && <span>⚡ Neon</span>}
+            </button>
+
+            {/* Auto-rotate Toggle */}
+            <button
+              type="button"
+              onClick={() => setAutoRotate(!autoRotate)}
+              title={autoRotate ? 'Désactiver la rotation' : 'Activer la rotation'}
+              className={`rounded-xl p-1.5 transition-all cursor-pointer ${
+                autoRotate
+                  ? 'text-zinc-950 dark:text-white bg-zinc-100 dark:bg-zinc-800'
+                  : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  );
+};
