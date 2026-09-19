@@ -1,8 +1,7 @@
 import React, { useRef, useMemo, useState, useEffect, useCallback, Suspense } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, useGLTF, useTexture, Html } from '@react-three/drei';
+import { Canvas, useFrame, ThreeEvent } from '@react-three/fiber';
+import { OrbitControls, useGLTF, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Compass, Tv, Eye, Image as ImageIcon, Volume2, VolumeX, Sun, Moon } from 'lucide-react';
 import { dioramaAudio } from './diorama/DioramaSoundEngine';
 import { InteractiveLightSwitch3D } from './diorama/InteractiveLightSwitch3D';
@@ -20,8 +19,13 @@ const PHRASES = [
   'SO, WHAT\nDO YOU FEEL?',
   'ELIOT LAB //\nCREATIVE DEV',
   'PRESS START\nTO EXPLORE',
-  'NEO TOKYO //\n02:42 AM',
   'WAKE UP,\nSAMURAI...',
+  'REACT // 3D //\nTAILWIND CSS',
+  '404 SLEEP\nNOT FOUND',
+  'NEO TOKYO //\n02:42 AM',
+  'PARIS 2026 //\nREADY TO BUILD',
+  'INSERT COIN\nTO CONTINUE',
+  'HELLO WORLD_\nLET’S TALK!',
 ];
 
 const CAMERA_PRESETS: Record<CameraView, { pos: [number, number, number]; target: [number, number, number] }> = {
@@ -31,7 +35,7 @@ const CAMERA_PRESETS: Record<CameraView, { pos: [number, number, number]; target
   },
   crt: {
     pos: [-0.05, 1.15, 1.3],
-    target: [-0.3, 0.88, -0.6],
+    target: [-0.33, 0.86, -0.68],
   },
   window: {
     pos: [0.2, 1.4, 2.2],
@@ -43,7 +47,7 @@ const CAMERA_PRESETS: Record<CameraView, { pos: [number, number, number]; target
   },
 };
 
-// Helper to draw authentic CRT scanline text texture
+// Helper to draw authentic CRT scanline text texture with correct orientation (upright, left-to-right)
 function createCrtTexture(text: string, colorHex: string): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -52,19 +56,26 @@ function createCrtTexture(text: string, colorHex: string): THREE.CanvasTexture {
 
   if (!ctx) return new THREE.CanvasTexture(canvas);
 
+  // Background deep phosphor dark
   ctx.fillStyle = '#030804';
   ctx.fillRect(0, 0, 512, 512);
 
   const grad = ctx.createRadialGradient(256, 256, 120, 256, 256, 320);
-  grad.addColorStop(0, 'rgba(0, 40, 10, 0.4)');
+  grad.addColorStop(0, 'rgba(0, 40, 10, 0.45)');
   grad.addColorStop(1, 'rgba(0, 0, 0, 0.95)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 512, 512);
 
+  // Vertical flip only (scale(1, -1)) so text is upright, line 1 on top, reading normal left-to-right
+  ctx.save();
+  ctx.translate(256, 256);
+  ctx.scale(1, -1);
+  ctx.translate(-256, -256);
+
   ctx.shadowColor = colorHex;
   ctx.shadowBlur = 18;
   ctx.fillStyle = colorHex;
-  ctx.font = 'bold 36px monospace';
+  ctx.font = '900 40px monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
@@ -74,14 +85,18 @@ function createCrtTexture(text: string, colorHex: string): THREE.CanvasTexture {
 
   lines.forEach((line, i) => {
     ctx.fillText(line, 256, startY + i * lineHeight);
+    ctx.fillText(line, 256, startY + i * lineHeight);
   });
+  ctx.restore();
 
+  // CRT Scanlines
   ctx.shadowBlur = 0;
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
   for (let y = 0; y < 512; y += 4) {
     ctx.fillRect(0, y, 512, 2);
   }
 
+  // Curved glass glare reflection
   const glareGrad = ctx.createLinearGradient(0, 0, 512, 512);
   glareGrad.addColorStop(0.3, 'rgba(255, 255, 255, 0.08)');
   glareGrad.addColorStop(0.35, 'rgba(255, 255, 255, 0.16)');
@@ -94,8 +109,8 @@ function createCrtTexture(text: string, colorHex: string): THREE.CanvasTexture {
   return texture;
 }
 
-// Living Tokyo Window Sky: strictly framed behind bay window, with twinkling skyscraper lights, highway streams, and crossing airplanes
-const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({ mood, isHovered }) => {
+// Living Tokyo Window Sky: wide panoramic curved cyclorama with atmospheric gradient shader, city lights, highway and airplanes
+const TokyoWindowSky: React.FC<{ mood: LightingMood }> = ({ mood }) => {
   const skylineTexture = useTexture('/models/tokyo_skyline.jpg');
   const pointsRef = useRef<THREE.Points>(null);
   const beaconsRef = useRef<THREE.Points>(null);
@@ -109,40 +124,159 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
 
   useMemo(() => {
     skylineTexture.wrapS = THREE.RepeatWrapping;
-    skylineTexture.wrapT = THREE.RepeatWrapping;
-    // Repeat and offset with Y inverted (-1.0, 1.0) so buildings stand upright with sky at the top!
-    skylineTexture.repeat.set(0.60, -1.0);
-    skylineTexture.offset.set(0.20, 1.0);
+    skylineTexture.wrapT = THREE.ClampToEdgeWrapping;
   }, [skylineTexture]);
 
-  // 1. Generate twinkling window lights on skyscrapers
+  // Wide panoramic cyclorama geometry (R=4.2m, H=7.5m, arc 198 deg)
+  const skyGeometry = useMemo(() => {
+    return new THREE.CylinderGeometry(
+      4.2,
+      4.2,
+      7.5,
+      64,
+      1,
+      true,
+      Math.PI * 0.45,
+      Math.PI * 1.10
+    );
+  }, []);
+
+  const skyShaderMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTexture: { value: skylineTexture },
+        uTime: { value: 0 },
+        uZenithColor: { value: new THREE.Color('#020617') },
+        uHorizonColor: { value: new THREE.Color('#0f172a') },
+        uGlowColor: { value: new THREE.Color('#38bdf8') },
+        uMood: { value: 0.0 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        varying vec3 vWorldPos;
+        void main() {
+          vUv = uv;
+          vec4 wp = modelMatrix * vec4(position, 1.0);
+          vWorldPos = wp.xyz;
+          gl_Position = projectionMatrix * viewMatrix * wp;
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D uTexture;
+        uniform float uTime;
+        uniform vec3 uZenithColor;
+        uniform vec3 uHorizonColor;
+        uniform vec3 uGlowColor;
+        uniform float uMood;
+
+        varying vec2 vUv;
+        varying vec3 vWorldPos;
+
+        float hash(vec2 p) {
+          p = fract(p * vec2(123.34, 456.21));
+          p += dot(p, p + 45.32);
+          return fract(p.x * p.y);
+        }
+
+        void main() {
+          // Cityscape occupies band vUv.y from 0.15 to 0.65
+          float cityMin = 0.15;
+          float cityMax = 0.65;
+          float cityUvY = 1.0 - clamp((vUv.y - cityMin) / (cityMax - cityMin), 0.0, 1.0);
+          
+          vec2 texUv = vec2(fract(vUv.x * 1.5 + 0.10), cityUvY);
+          vec4 cityTex = texture2D(uTexture, texUv);
+
+          // Deep sky gradient from horizon up to zenith
+          float skyGrad = smoothstep(0.35, 0.90, vUv.y);
+          vec3 skyColor = mix(uHorizonColor, uZenithColor, skyGrad);
+
+          // Atmospheric horizon light dome
+          float horizonGlow = exp(-pow((vUv.y - 0.42) * 4.2, 2.0)) * 0.45;
+          skyColor += uGlowColor * horizonGlow;
+
+          // Twinkling stars in the upper night sky
+          if (vUv.y > 0.52) {
+            vec2 starGrid = floor(vUv * vec2(300.0, 150.0));
+            float h = hash(starGrid);
+            if (h > 0.982) {
+              float twinkle = 0.4 + 0.6 * sin(uTime * (3.0 + h * 5.0) + h * 6.28);
+              skyColor += vec3(1.0, 0.98, 0.95) * (h - 0.982) * 55.0 * twinkle * smoothstep(0.52, 0.70, vUv.y);
+            }
+          }
+
+          // Vibrant city lights boost for Tokyo night skyline
+          vec3 cityRgb = cityTex.rgb * 1.6;
+
+          // Color grading for moods
+          if (uMood > 1.5) {
+            cityRgb = mix(cityRgb, cityRgb * vec3(1.4, 0.65, 1.5), 0.55);
+          } else if (uMood > 0.5) {
+            cityRgb = mix(cityRgb, cityRgb * vec3(1.4, 1.05, 0.75), 0.55);
+          }
+
+          // Shimmering building windows
+          float shimmer = 0.97 + 0.03 * sin(uTime * 3.0 + vUv.x * 50.0);
+          cityRgb *= shimmer;
+
+          // Smooth blend of skyline into the night sky
+          float cityFade = smoothstep(cityMax, cityMax - 0.10, vUv.y);
+          float bottomFade = smoothstep(cityMin - 0.05, cityMin + 0.05, vUv.y);
+          float inCity = cityFade * bottomFade;
+
+          vec3 finalColor = mix(skyColor, cityRgb + skyColor * 0.25, inCity);
+          gl_FragColor = vec4(finalColor, 1.0);
+        }
+      `,
+      side: THREE.BackSide,
+      depthWrite: false,
+    });
+  }, [skylineTexture]);
+
+  // Update mood uniforms
+  useEffect(() => {
+    if (!skyShaderMaterial) return;
+    if (mood === 'sunset') {
+      skyShaderMaterial.uniforms.uZenithColor.value.set('#1e0b36');
+      skyShaderMaterial.uniforms.uHorizonColor.value.set('#4c1d3d');
+      skyShaderMaterial.uniforms.uGlowColor.value.set('#f97316');
+      skyShaderMaterial.uniforms.uMood.value = 1.0;
+    } else if (mood === 'cyberpunk') {
+      skyShaderMaterial.uniforms.uZenithColor.value.set('#100424');
+      skyShaderMaterial.uniforms.uHorizonColor.value.set('#1c053a');
+      skyShaderMaterial.uniforms.uGlowColor.value.set('#f43f5e');
+      skyShaderMaterial.uniforms.uMood.value = 2.0;
+    } else {
+      skyShaderMaterial.uniforms.uZenithColor.value.set('#020617');
+      skyShaderMaterial.uniforms.uHorizonColor.value.set('#0a1128');
+      skyShaderMaterial.uniforms.uGlowColor.value.set('#38bdf8');
+      skyShaderMaterial.uniforms.uMood.value = 0.0;
+    }
+  }, [mood, skyShaderMaterial]);
+
+  // City Lights, Warning Beacons & Expressway Streams scaled to depth R ≈ 4.15m
   const { positions, colors, phases, speeds } = useMemo(() => {
-    const count = 260;
+    const count = 280;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const ph = new Float32Array(count);
     const sp = new Float32Array(count);
 
     const colorPalette = [
-      new THREE.Color('#38bdf8'), // Cyan neon
-      new THREE.Color('#f59e0b'), // Amber window
-      new THREE.Color('#fbbf24'), // Warm gold
-      new THREE.Color('#ffffff'), // Crisp white
-      new THREE.Color('#ff4444'), // Red window/sign
-      new THREE.Color('#c084fc'), // Purple neon
+      new THREE.Color('#38bdf8'),
+      new THREE.Color('#f59e0b'),
+      new THREE.Color('#fbbf24'),
+      new THREE.Color('#ffffff'),
+      new THREE.Color('#ff4444'),
+      new THREE.Color('#c084fc'),
     ];
 
     for (let i = 0; i < count; i++) {
-      const theta = (0.69 + Math.random() * 0.62) * Math.PI;
-      const r = 1.50 + Math.random() * 0.015;
-      const x = r * Math.sin(theta);
-      const z = r * Math.cos(theta);
-      // Upright building levels: Y from 0.40 to 1.70
-      const y = 0.40 + Math.random() * 1.30;
-
-      pos[i * 3] = x;
-      pos[i * 3 + 1] = y;
-      pos[i * 3 + 2] = z;
+      const theta = (0.52 + Math.random() * 0.96) * Math.PI;
+      const r = 4.14 + Math.random() * 0.04;
+      pos[i * 3] = r * Math.sin(theta);
+      pos[i * 3 + 1] = 0.40 + Math.random() * 1.80;
+      pos[i * 3 + 2] = -0.4 + r * Math.cos(theta);
 
       const c = colorPalette[Math.floor(Math.random() * colorPalette.length)];
       col[i * 3] = c.r;
@@ -155,22 +289,23 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
     return { positions: pos, colors: col, phases: ph, speeds: sp };
   }, []);
 
-  // 2. Skyscraper Radio Antenna Warning Beacons (synchronized red flashes)
   const beaconPositions = useMemo(() => {
-    const pos = [
-      [1.25 * Math.sin(0.78 * Math.PI), 1.78, 1.25 * Math.cos(0.78 * Math.PI)],
-      [1.35 * Math.sin(0.92 * Math.PI), 1.84, 1.35 * Math.cos(0.92 * Math.PI)],
-      [1.40 * Math.sin(1.04 * Math.PI), 1.92, 1.40 * Math.cos(1.04 * Math.PI)],
-      [1.38 * Math.sin(1.15 * Math.PI), 1.82, 1.38 * Math.cos(1.15 * Math.PI)],
-      [1.30 * Math.sin(1.24 * Math.PI), 1.74, 1.30 * Math.cos(1.24 * Math.PI)],
-      [1.32 * Math.sin(0.85 * Math.PI), 1.70, 1.32 * Math.cos(0.85 * Math.PI)],
-    ];
-    return new Float32Array(pos.flat());
+    const angles = [0.62, 0.78, 0.92, 1.06, 1.22, 1.38];
+    const heights = [2.2, 2.45, 2.3, 2.5, 2.15, 2.35];
+    const r = 4.13;
+    const pos: number[] = [];
+    for (let i = 0; i < angles.length; i++) {
+      pos.push(
+        r * Math.sin(angles[i] * Math.PI),
+        heights[i],
+        -0.4 + r * Math.cos(angles[i] * Math.PI)
+      );
+    }
+    return new Float32Array(pos);
   }, []);
 
-  // 3. Moving Expressway Highway Traffic Streams
   const { trafficPositions, trafficColors, trafficSpeeds, trafficOffsets } = useMemo(() => {
-    const count = 40;
+    const count = 48;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const sp = new Float32Array(count);
@@ -179,7 +314,7 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
     for (let i = 0; i < count; i++) {
       off[i] = (i / count);
       const isEast = i % 2 === 0;
-      sp[i] = isEast ? 0.08 : -0.07;
+      sp[i] = isEast ? 0.06 : -0.055;
       const c = isEast ? new THREE.Color('#fef08a') : new THREE.Color('#ef4444');
       col[i * 3] = c.r;
       col[i * 3 + 1] = c.g;
@@ -188,24 +323,26 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
     return { trafficPositions: pos, trafficColors: col, trafficSpeeds: sp, trafficOffsets: off };
   }, []);
 
-  // Animate airplanes, beacons, traffic, and shimmering windows
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    const speedMult = isHovered ? 1.5 : 1.0;
 
-    // 1. Airplane 1: High airliner crossing left-to-right across night sky above skyline
+    if (skyShaderMaterial) {
+      skyShaderMaterial.uniforms.uTime.value = t;
+    }
+
+    // Airplane 1: High airliner crossing left to right (R ≈ 4.1m, Y ≈ 3.2m)
     if (airplane1Ref.current) {
-      const progress = ((t * 0.035 * speedMult) % 1.0);
-      const theta = (1.33 - progress * 0.66) * Math.PI;
-      const r = 1.48;
+      const progress = ((t * 0.024) % 1.0);
+      const theta = (1.40 - progress * 0.85) * Math.PI;
+      const r = 4.08;
       const x = r * Math.sin(theta);
-      const z = r * Math.cos(theta);
-      const y = 2.14 + Math.sin(t * 0.25) * 0.015;
+      const z = -0.4 + r * Math.cos(theta);
+      const y = 3.10 + Math.sin(t * 0.25) * 0.03;
       airplane1Ref.current.position.set(x, y, z);
       airplane1Ref.current.lookAt(
         r * Math.sin(theta - 0.05),
         y,
-        r * Math.cos(theta - 0.05)
+        -0.4 + r * Math.cos(theta - 0.05)
       );
 
       if (beacon1Ref.current) {
@@ -219,19 +356,19 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
       }
     }
 
-    // 2. Airplane 2 / Drone: Lower-altitude craft crossing right-to-left
+    // Airplane 2: Lower commuter craft crossing right to left
     if (airplane2Ref.current) {
-      const progress = ((t * 0.026 * speedMult + 0.48) % 1.0);
-      const theta = (0.68 + progress * 0.65) * Math.PI;
-      const r = 1.47;
+      const progress = ((t * 0.018 + 0.48) % 1.0);
+      const theta = (0.58 + progress * 0.82) * Math.PI;
+      const r = 4.05;
       const x = r * Math.sin(theta);
-      const z = r * Math.cos(theta);
-      const y = 1.95 + Math.sin(t * 0.3) * 0.02;
+      const z = -0.4 + r * Math.cos(theta);
+      const y = 2.65 + Math.cos(t * 0.2) * 0.025;
       airplane2Ref.current.position.set(x, y, z);
       airplane2Ref.current.lookAt(
         r * Math.sin(theta + 0.05),
         y,
-        r * Math.cos(theta + 0.05)
+        -0.4 + r * Math.cos(theta + 0.05)
       );
 
       if (beacon2Ref.current) {
@@ -239,19 +376,19 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
         beacon2Ref.current.scale.setScalar(isBeacon ? 1.0 : 0.001);
       }
       if (strobe2Ref.current) {
-        const isStrobe = (t % 1.5) < 0.07;
-        strobe2Ref.current.scale.setScalar(isStrobe ? 1.2 : 0.001);
+        const m = t % 1.2;
+        const isStrobe = m < 0.06;
+        strobe2Ref.current.scale.setScalar(isStrobe ? 1.3 : 0.001);
       }
     }
 
-    // 3. Shimmering skyscraper windows
+    // Window lights shimmer
     if (pointsRef.current) {
-      const geom = pointsRef.current.geometry;
-      const cols = geom.attributes.color;
+      const cols = pointsRef.current.geometry.attributes.color;
       if (cols) {
         const arr = cols.array as Float32Array;
         for (let i = 0; i < phases.length; i++) {
-          const shimmer = 0.5 + 0.5 * Math.sin(t * speeds[i] * (isHovered ? 2.0 : 1.0) + phases[i]);
+          const shimmer = 0.5 + 0.5 * Math.sin(t * speeds[i] + phases[i]);
           arr[i * 3] = colors[i * 3] * shimmer;
           arr[i * 3 + 1] = colors[i * 3 + 1] * shimmer;
           arr[i * 3 + 2] = colors[i * 3 + 2] * shimmer;
@@ -260,7 +397,7 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
       }
     }
 
-    // 4. Skyscraper warning beacon blink
+    // Radio beacons blink
     if (beaconsRef.current) {
       const mat = beaconsRef.current.material as THREE.PointsMaterial;
       if (mat) {
@@ -269,59 +406,73 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
       }
     }
 
-    // 5. Flowing highway traffic on expressways
+    // Flowing highway traffic
     if (trafficRef.current) {
       const geom = trafficRef.current.geometry;
       const posAttr = geom.attributes.position;
       if (posAttr) {
         const arr = posAttr.array as Float32Array;
         for (let i = 0; i < trafficOffsets.length; i++) {
-          const u = ((trafficOffsets[i] + t * trafficSpeeds[i] * speedMult) % 1.0 + 1.0) % 1.0;
-          const theta = (0.72 + u * 0.56) * Math.PI;
-          const r = 1.49;
+          const u = ((trafficOffsets[i] + t * trafficSpeeds[i]) % 1.0 + 1.0) % 1.0;
+          const theta = (0.58 + u * 0.84) * Math.PI;
+          const r = 4.12;
           arr[i * 3] = r * Math.sin(theta);
-          arr[i * 3 + 1] = 0.42 + (i % 3) * 0.03;
-          arr[i * 3 + 2] = r * Math.cos(theta);
+          arr[i * 3 + 1] = 0.44 + (i % 3) * 0.035;
+          arr[i * 3 + 2] = -0.4 + r * Math.cos(theta);
         }
         posAttr.needsUpdate = true;
       }
     }
   });
 
-  const skyColor = mood === 'sunset' ? '#fed7aa' : mood === 'cyberpunk' ? '#f472b6' : '#ffffff';
-
   return (
     <group raycast={() => null}>
-      {/* 1. Curved Tokyo Skyline Backdrop strictly framed behind the bay window */}
-      <mesh position={[0, 1.32, 0]}>
-        <cylinderGeometry
-          args={[
-            1.52,
-            1.52,
-            2.65,
-            48,
-            1,
-            true,
-            Math.PI * 0.68,
-            Math.PI * 0.64,
-          ]}
-        />
-        <meshBasicMaterial
-          map={skylineTexture}
-          color={skyColor}
-          side={THREE.BackSide}
-          toneMapped={false}
-        />
-      </mesh>
+      {/* 1. Seamless Deep Tokyo Skyline Curved Cyclorama */}
+      <mesh
+        position={[0, 1.8, -0.4]}
+        geometry={skyGeometry}
+        material={skyShaderMaterial}
+      />
 
-      {/* 2. Twinkling City Lights on Skyscrapers */}
+      {/* 2. Twinkling City Lights on Distant Skyscrapers */}
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
           <bufferAttribute attach="attributes-color" args={[colors, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.018}
+          size={0.022}
+          vertexColors
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </points>
+
+      {/* 3. Red Aviation Obstruction Beacons on Tower Spire Peaks */}
+      <points ref={beaconsRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[beaconPositions, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.038}
+          color="#ff2222"
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </points>
+
+      {/* 4. Flowing Highway Traffic Streams */}
+      <points ref={trafficRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[trafficPositions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[trafficColors, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.024}
           vertexColors
           transparent
           opacity={0.95}
@@ -330,49 +481,18 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
         />
       </points>
 
-      {/* 3. Red Aviation Obstruction Beacons on Skyscraper Towers */}
-      <points ref={beaconsRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[beaconPositions, 3]} />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.024}
-          color="#ff1111"
-          transparent
-          opacity={0.9}
-          depthWrite={false}
-          toneMapped={false}
-        />
-      </points>
-
-      {/* 4. Expressway Traffic Headlights & Taillights Stream */}
-      <points ref={trafficRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[trafficPositions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[trafficColors, 3]} />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.016}
-          vertexColors
-          transparent
-          opacity={0.88}
-          depthWrite={false}
-          toneMapped={false}
-        />
-      </points>
-
-      {/* 5. Crossing Airliner 1 with blinking strobes */}
+      {/* 5. Crossing Airliner 1 */}
       <group ref={airplane1Ref}>
         <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[0.022, 0.005, 0.005]} />
+          <boxGeometry args={[0.04, 0.008, 0.008]} />
           <meshBasicMaterial color="#ffffff" toneMapped={false} />
         </mesh>
-        <mesh ref={strobe1Ref} position={[0.011, 0, 0]}>
-          <sphereGeometry args={[0.008, 8, 8]} />
+        <mesh ref={strobe1Ref} position={[0.02, 0, 0]}>
+          <sphereGeometry args={[0.014, 8, 8]} />
           <meshBasicMaterial color="#ffffff" toneMapped={false} />
         </mesh>
-        <mesh ref={beacon1Ref} position={[0, 0.004, 0]}>
-          <sphereGeometry args={[0.007, 8, 8]} />
+        <mesh ref={beacon1Ref} position={[0, 0.008, 0]}>
+          <sphereGeometry args={[0.012, 8, 8]} />
           <meshBasicMaterial color="#ef4444" toneMapped={false} />
         </mesh>
       </group>
@@ -380,15 +500,15 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood; isHovered?: boolean }> = ({
       {/* 6. Crossing Airliner 2 */}
       <group ref={airplane2Ref}>
         <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[0.018, 0.004, 0.004]} />
+          <boxGeometry args={[0.032, 0.007, 0.007]} />
           <meshBasicMaterial color="#38bdf8" toneMapped={false} />
         </mesh>
-        <mesh ref={strobe2Ref} position={[-0.009, 0, 0]}>
-          <sphereGeometry args={[0.007, 8, 8]} />
+        <mesh ref={strobe2Ref} position={[-0.016, 0, 0]}>
+          <sphereGeometry args={[0.012, 8, 8]} />
           <meshBasicMaterial color="#38bdf8" toneMapped={false} />
         </mesh>
-        <mesh ref={beacon2Ref} position={[0, 0.003, 0]}>
-          <sphereGeometry args={[0.006, 8, 8]} />
+        <mesh ref={beacon2Ref} position={[0, 0.006, 0]}>
+          <sphereGeometry args={[0.01, 8, 8]} />
           <meshBasicMaterial color="#ef4444" toneMapped={false} />
         </mesh>
       </group>
@@ -479,11 +599,9 @@ const SceneContent: React.FC<SceneContentProps> = ({
   const initialDuvetY = useRef<number | null>(null);
   const flashAnim = useRef<number>(0);
 
-  // Hover states for fluid 3D micro-animations
+  // Hover states for fluid 3D micro-animations (without text)
   const [isDuvetHovered, setIsDuvetHovered] = useState<boolean>(false);
   const [isTvHovered, setIsTvHovered] = useState<boolean>(false);
-  const [isPostersHovered, setIsPostersHovered] = useState<boolean>(false);
-  const [isWindowHovered, setIsWindowHovered] = useState<boolean>(false);
 
   const crtTexture = useMemo(() => {
     const textColor = mood === 'cyberpunk' ? '#f43f5e' : mood === 'sunset' ? '#fbbf24' : '#34d399';
@@ -562,7 +680,7 @@ const SceneContent: React.FC<SceneContentProps> = ({
     });
   }, [clonedScene, wallTexture]);
 
-  // Update CRT screen material
+  // Update CRT screen material with dynamic texture
   useEffect(() => {
     clonedScene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
@@ -613,11 +731,11 @@ const SceneContent: React.FC<SceneContentProps> = ({
     switch (mood) {
       case 'sunset':
         return {
-          ambient: '#4a2818',
+          ambient: '#2e1065',
           ambientInt: 0.9,
-          sunColor: '#f97316',
-          sunInt: 2.2,
-          roomColor: '#fed7aa',
+          sunColor: '#fb923c',
+          sunInt: 2.5,
+          roomColor: '#f97316',
           roomInt: 140,
           crtColor: '#fbbf24',
         };
@@ -645,6 +763,19 @@ const SceneContent: React.FC<SceneContentProps> = ({
     }
   }, [mood, isRoomLightOn]);
 
+  // Direct mesh click handler on the 3D model
+  const handlePointerDownMesh = (e: ThreeEvent<PointerEvent>) => {
+    const targetName = e.object.name.toLowerCase();
+    if (
+      targetName.includes('screen') ||
+      targetName.includes('tv') ||
+      targetName.includes('017')
+    ) {
+      e.stopPropagation();
+      onNextPhrase();
+    }
+  };
+
   return (
     <>
       <ambientLight color={moodConfig.ambient} intensity={moodConfig.ambientInt} />
@@ -655,33 +786,26 @@ const SceneContent: React.FC<SceneContentProps> = ({
         intensity={moodConfig.sunInt}
         castShadow
         shadow-mapSize={[1024, 1024]}
-        shadow-bias={-0.0005}
+        shadow-bias={-0.0001}
       />
 
-      <directionalLight
-        position={[-3, 4, -3]}
-        color={mood === 'cyberpunk' ? '#ec4899' : '#3b82f6'}
-        intensity={mood === 'cyberpunk' ? 0.9 : 0.45}
-      />
-
-      {/* Main Room Ceiling Light */}
+      {/* Ceiling room light */}
       {isRoomLightOn && (
         <pointLight
-          position={[0, 2.35, 0]}
+          position={[0, 2.3, 0.4]}
           color={moodConfig.roomColor}
           intensity={moodConfig.roomInt}
           distance={5.2}
           decay={2}
           castShadow
           shadow-mapSize={[1024, 1024]}
-          shadow-bias={-0.0003}
         />
       )}
 
-      {/* Vintage CRT TV Screen Glow */}
+      {/* CRT Screen Dynamic Glow Light (positioned at actual TV location) */}
       <pointLight
         ref={crtLightRef}
-        position={[0.62, 1.15, -0.65]}
+        position={[-0.33, 0.86, -0.68]}
         color={moodConfig.crtColor}
         distance={4.2}
         decay={2}
@@ -691,15 +815,15 @@ const SceneContent: React.FC<SceneContentProps> = ({
       <spotLight
         position={[0.5, 2.4, 0.8]}
         target-position={[-0.8, 1.45, -0.92]}
-        color={isPostersHovered ? '#ffffff' : '#fde047'}
-        intensity={isPostersHovered ? 18 : 6}
+        color="#ffffff"
+        intensity={8}
         angle={0.65}
         penumbra={0.8}
         distance={4.5}
       />
 
-      {/* Unobstructed Living Tokyo Window Sky */}
-      <TokyoWindowSky mood={mood} isHovered={isWindowHovered} />
+      {/* Panoramic Living Tokyo Window Sky */}
+      <TokyoWindowSky mood={mood} />
 
       {/* Dynamic Dust Particles in Night Mode */}
       <AmbientDustParticles isRoomLightOn={isRoomLightOn} />
@@ -717,14 +841,17 @@ const SceneContent: React.FC<SceneContentProps> = ({
         onDragEnd={onDragEnd}
       />
 
-      {/* Main GLTF Room Mesh */}
-      <primitive object={clonedScene} />
+      {/* Main GLTF Room Mesh with direct TV click support */}
+      <primitive
+        object={clonedScene}
+        onPointerDown={handlePointerDownMesh}
+      />
 
-      {/* Fluid Hover Detection Hitboxes & 3D Badges */}
+      {/* Hitbox zones for interactions (Clean: no text badges or floating UI) */}
 
-      {/* 1. CRT TV Hover Zone */}
-      <group
-        position={[0.62, 1.15, -0.65]}
+      {/* 1. CRT TV Interaction Hitbox directly centered on the TV monitor */}
+      <mesh
+        position={[-0.33, 0.86, -0.68]}
         onPointerOver={(e) => {
           e.stopPropagation();
           setIsTvHovered(true);
@@ -735,130 +862,53 @@ const SceneContent: React.FC<SceneContentProps> = ({
           setIsTvHovered(false);
           document.body.style.cursor = 'default';
         }}
-        onClick={(e) => {
+        onPointerDown={(e) => {
           e.stopPropagation();
           onNextPhrase();
         }}
       >
-        <mesh visible={false}>
-          <boxGeometry args={[0.55, 0.55, 0.45]} />
-          <meshBasicMaterial transparent opacity={0} />
-        </mesh>
-        {isTvHovered && (
-          <Html position={[0, 0.38, 0]} center distanceFactor={5.5} pointerEvents="none">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/85 text-white text-[11px] font-mono border border-emerald-500/40 shadow-2xl backdrop-blur-md whitespace-nowrap select-none animate-in fade-in zoom-in-95 duration-150">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="font-semibold text-emerald-300">TV CRT Sony</span>
-              <span className="text-[10px] text-zinc-400">• Zapper</span>
-            </div>
-          </Html>
-        )}
-      </group>
+        <boxGeometry args={[0.70, 0.65, 0.60]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
 
-      {/* 2. Wall Posters Hover Zone */}
-      <group
-        position={[-0.8, 1.45, -0.92]}
-        onPointerOver={(e) => {
-          e.stopPropagation();
-          setIsPostersHovered(true);
-        }}
-        onPointerOut={(e) => {
-          e.stopPropagation();
-          setIsPostersHovered(false);
-        }}
-      >
-        <mesh visible={false}>
-          <boxGeometry args={[1.5, 1.2, 0.15]} />
-          <meshBasicMaterial transparent opacity={0} />
-        </mesh>
-        {isPostersHovered && (
-          <Html position={[0, 0.55, 0.1]} center distanceFactor={5.5} pointerEvents="none">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/85 text-white text-[11px] font-mono border border-purple-500/40 shadow-2xl backdrop-blur-md whitespace-nowrap select-none animate-in fade-in zoom-in-95 duration-150">
-              <span className="text-xs">🖼️</span>
-              <span className="font-semibold text-purple-300">Affiches Otaku</span>
-              <span className="text-[10px] text-zinc-400">• Tokyo 1994</span>
-            </div>
-          </Html>
-        )}
-      </group>
-
-      {/* 3. Futon / Duvet Hover Zone */}
-      <group
+      {/* 2. Futon / Duvet Hover Hitbox */}
+      <mesh
         position={[0.05, 0.25, 0.85]}
         onPointerOver={(e) => {
           e.stopPropagation();
           setIsDuvetHovered(true);
+          document.body.style.cursor = 'pointer';
         }}
         onPointerOut={(e) => {
           e.stopPropagation();
           setIsDuvetHovered(false);
+          document.body.style.cursor = 'default';
         }}
       >
-        <mesh visible={false}>
-          <boxGeometry args={[0.70, 0.25, 0.75]} />
-          <meshBasicMaterial transparent opacity={0} />
-        </mesh>
-        {isDuvetHovered && (
-          <Html position={[0, 0.38, 0]} center distanceFactor={5.5} pointerEvents="none">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/85 text-white text-[11px] font-mono border border-white/20 shadow-2xl backdrop-blur-md whitespace-nowrap select-none animate-in fade-in zoom-in-95 duration-150">
-              <span className="text-xs">🛏️</span>
-              <span className="font-semibold text-zinc-100">Futon Douillet</span>
-              <span className="text-[10px] text-zinc-400">• Respirant</span>
-            </div>
-          </Html>
-        )}
-      </group>
-
-      {/* 4. Tokyo Bay Window Hover Zone */}
-      <group
-        position={[0.0, 1.45, -1.25]}
-        onPointerOver={(e) => {
-          e.stopPropagation();
-          setIsWindowHovered(true);
-        }}
-        onPointerOut={(e) => {
-          e.stopPropagation();
-          setIsWindowHovered(false);
-        }}
-      >
-        <mesh visible={false}>
-          <boxGeometry args={[2.2, 1.8, 0.2]} />
-          <meshBasicMaterial transparent opacity={0} />
-        </mesh>
-        {isWindowHovered && (
-          <Html position={[0, 0.45, 0]} center distanceFactor={5.5} pointerEvents="none">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/85 text-white text-[11px] font-mono border border-cyan-500/40 shadow-2xl backdrop-blur-md whitespace-nowrap select-none animate-in fade-in zoom-in-95 duration-150">
-              <span className="text-xs">🌃</span>
-              <span className="font-semibold text-cyan-300">Néo-Tokyo</span>
-              <span className="text-[10px] text-zinc-400">• Vue Panoramique</span>
-            </div>
-          </Html>
-        )}
-      </group>
+        <boxGeometry args={[0.75, 0.30, 0.80]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
     </>
   );
 };
 
 export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
   className = '',
-  theme = 'dark',
 }) => {
   const [mood, setMood] = useState<LightingMood>('night');
   const [activeView, setActiveView] = useState<CameraView>('diorama');
-  const [isRoomLightOn, setIsRoomLightOn] = useState<boolean>(true);
-  const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
+  const [isRoomLightOn, setIsRoomLightOn] = useState<boolean>(false);
+  const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
   const [phraseIndex, setPhraseIndex] = useState<number>(0);
   const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
-  const [interactionToast, setInteractionToast] = useState<string | null>(null);
   const [isDraggingObject, setIsDraggingObject] = useState<boolean>(false);
 
   const controlsRef = useRef<any>(null);
 
-  // Smooth camera transitions between presets
   const handleViewChange = useCallback((view: CameraView) => {
     setActiveView(view);
     const preset = CAMERA_PRESETS[view];
-    if (controlsRef.current && preset) {
+    if (controlsRef.current) {
       const controls = controlsRef.current;
       const startPos = controls.object.position.clone();
       const startTarget = controls.target.clone();
@@ -885,30 +935,17 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
 
   const handleNextPhrase = useCallback(() => {
     dioramaAudio.playCrtZap();
-    setPhraseIndex((prev) => {
-      const nextIndex = (prev + 1) % PHRASES.length;
-      const cleanPhrase = PHRASES[nextIndex].replace('\n', ' ');
-      setInteractionToast(`📺 CRT : « ${cleanPhrase} »`);
-      return nextIndex;
-    });
-    setTimeout(() => setInteractionToast(null), 2400);
+    setPhraseIndex((prev) => (prev + 1) % PHRASES.length);
   }, []);
 
   const handleToggleLight = useCallback(() => {
-    setIsRoomLightOn((prev) => {
-      const next = !prev;
-      setInteractionToast(next ? '💡 Lumière allumée' : '🌙 Lumière éteinte : Mode Nuit immersif');
-      setTimeout(() => setInteractionToast(null), 2400);
-      return next;
-    });
+    setIsRoomLightOn((prev) => !prev);
   }, []);
 
   const handleToggleAudio = useCallback(() => {
     setIsAudioMuted((prev) => {
       const next = !prev;
       dioramaAudio.setMuted(next);
-      setInteractionToast(next ? '🔇 Audio coupé' : '🔊 Effets sonores 3D activés !');
-      setTimeout(() => setInteractionToast(null), 2200);
       return next;
     });
   }, []);
@@ -954,25 +991,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
         />
       </Canvas>
 
-      {/* Floating Interactive Toast Feedback */}
-      <AnimatePresence>
-        {interactionToast && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.92 }}
-            className="absolute top-20 left-1/2 -translate-x-1/2 z-30 pointer-events-none rounded-2xl border border-white/20 bg-zinc-950/85 px-4 py-2 shadow-2xl backdrop-blur-xl text-xs font-mono text-white flex items-center gap-2"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            <span>{interactionToast}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Discreet Minimal Top HUD Bar */}
+      {/* Discreet Minimal Top HUD Bar (Camera & Atmosphere Toggles) */}
       <div className="absolute top-4 right-4 z-20 flex flex-wrap items-center gap-1.5">
         <div className="flex items-center gap-1 rounded-2xl border border-zinc-200/80 bg-white/90 p-1 shadow-xl backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-900/90">
           {/* Camera View Buttons */}
@@ -1098,12 +1117,6 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Discrete Interactive Hint Pill at bottom */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none hidden sm:flex items-center gap-2 rounded-full border border-white/20 bg-zinc-950/70 px-4 py-1.5 shadow-xl backdrop-blur-md text-[11px] font-mono text-zinc-300">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        <span>Déplace la manette, le manga ou la canette à la souris • Survole la pièce pour révéler ses animations !</span>
       </div>
     </div>
   );

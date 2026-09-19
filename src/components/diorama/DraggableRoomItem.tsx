@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useFrame, ThreeEvent, useThree } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { dioramaAudio } from './DioramaSoundEngine';
 
@@ -211,21 +210,7 @@ export const DraggableRoomItem: React.FC<DraggableRoomItemProps> = ({
         {children}
       </group>
 
-      {/* 3D Floating Minimal Label Badge (only visible on hover, zero blocking popup) */}
-      {isHovered && !isDragging && (
-        <Html
-          position={[0, liftHeight + 0.12, 0]}
-          center
-          distanceFactor={5.5}
-          pointerEvents="none"
-        >
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/85 text-white text-[11px] font-mono border border-white/20 shadow-2xl backdrop-blur-md whitespace-nowrap select-none animate-in fade-in zoom-in-95 duration-150">
-            <span className="text-xs">{icon}</span>
-            <span className="font-semibold text-zinc-100">{label}</span>
-            <span className="text-[10px] text-emerald-400 font-medium">• Glisser</span>
-          </div>
-        </Html>
-      )}
+
     </group>
   );
 };
