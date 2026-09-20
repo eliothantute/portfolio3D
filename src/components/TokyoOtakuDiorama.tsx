@@ -900,13 +900,18 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
   const [isRoomLightOn, setIsRoomLightOn] = useState<boolean>(false);
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
   const [phraseIndex, setPhraseIndex] = useState<number>(0);
-  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
+  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(true);
   const [isDraggingObject, setIsDraggingObject] = useState<boolean>(false);
 
   const controlsRef = useRef<any>(null);
 
   const handleViewChange = useCallback((view: CameraView) => {
     setActiveView(view);
+    if (view !== 'diorama') {
+      setIsAutoRotating(false);
+    } else {
+      setIsAutoRotating(true);
+    }
     const preset = CAMERA_PRESETS[view];
     if (controlsRef.current) {
       const controls = controlsRef.current;
