@@ -725,27 +725,27 @@ const SceneContent: React.FC<SceneContentProps> = ({
     switch (mood) {
       case 'sunset':
         return {
-          ambient: '#1e110a',
-          ambientInt: 0.65,
-          sunColor: '#f97316',
-          sunInt: 0.9,
+          ambient: '#291e14',
+          ambientInt: 0.95,
+          sunColor: '#fed7aa',
+          sunInt: 1.4,
           crtColor: '#fbbf24',
         };
       case 'cyberpunk':
         return {
-          ambient: '#0d0720',
-          ambientInt: 0.7,
-          sunColor: '#a855f7',
-          sunInt: 1.1,
+          ambient: '#180e2b',
+          ambientInt: 1.05,
+          sunColor: '#c084fc',
+          sunInt: 1.5,
           crtColor: '#f43f5e',
         };
       case 'night':
       default:
         return {
-          ambient: '#070b16',
-          ambientInt: 0.6,
-          sunColor: '#38bdf8',
-          sunInt: 0.75,
+          ambient: '#1a2234',
+          ambientInt: 1.1,
+          sunColor: '#e2e8f0',
+          sunInt: 1.35,
           crtColor: '#38bdf8',
         };
     }
@@ -783,6 +783,22 @@ const SceneContent: React.FC<SceneContentProps> = ({
         position={[-0.33, 0.86, -0.68]}
         color={moodConfig.crtColor}
         distance={1.6}
+        decay={2}
+      />
+
+      {/* Gallery Accent Lights to illuminate and reveal the wall posters clearly (Omnidirectional Warm Gallery Lights) */}
+      <pointLight
+        position={[1.05, 1.55, 1.25]}
+        color="#fff8ed"
+        intensity={14}
+        distance={4.0}
+        decay={2}
+      />
+      <pointLight
+        position={[-0.15, 1.65, -0.45]}
+        color="#f8fafc"
+        intensity={9}
+        distance={3.8}
         decay={2}
       />
 
@@ -919,7 +935,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
           antialias: true,
           alpha: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: mood === 'sunset' ? 1.1 : mood === 'cyberpunk' ? 1.05 : 0.95,
+          toneMappingExposure: mood === 'sunset' ? 1.15 : mood === 'cyberpunk' ? 1.1 : 1.08,
           powerPreference: 'high-performance',
         }}
       >
