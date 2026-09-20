@@ -4,7 +4,6 @@ import { OrbitControls, useGLTF, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { Sparkles, Compass, Tv, Eye, Image as ImageIcon, Volume2, VolumeX, Sun, Moon } from 'lucide-react';
 import { dioramaAudio } from './diorama/DioramaSoundEngine';
-import { InteractiveLightSwitch3D } from './diorama/InteractiveLightSwitch3D';
 import { InteractiveItems3D } from './diorama/InteractiveItems3D';
 
 interface TokyoOtakuDioramaProps {
@@ -517,7 +516,7 @@ const TokyoWindowSky: React.FC<{ mood: LightingMood }> = ({ mood }) => {
 };
 
 // Subtle ambient dust particles visible in dark night mode
-const AmbientDustParticles: React.FC<{ isRoomLightOn: boolean }> = ({ isRoomLightOn }) => {
+const AmbientDustParticles: React.FC = () => {
   const count = 45;
   const meshRef = useRef<THREE.Points>(null);
 
@@ -556,9 +555,9 @@ const AmbientDustParticles: React.FC<{ isRoomLightOn: boolean }> = ({ isRoomLigh
       </bufferGeometry>
       <pointsMaterial
         size={0.022}
-        color={!isRoomLightOn ? '#38bdf8' : '#fed7aa'}
+        color="#38bdf8"
         transparent
-        opacity={!isRoomLightOn ? 0.65 : 0.25}
+        opacity={0.45}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -569,8 +568,6 @@ const AmbientDustParticles: React.FC<{ isRoomLightOn: boolean }> = ({ isRoomLigh
 // Internal 3D Scene Content
 interface SceneContentProps {
   mood: LightingMood;
-  isRoomLightOn: boolean;
-  onToggleLight: () => void;
   phraseIndex: number;
   onNextPhrase: () => void;
   onDragStart: () => void;
@@ -579,8 +576,6 @@ interface SceneContentProps {
 
 const SceneContent: React.FC<SceneContentProps> = ({
   mood,
-  isRoomLightOn,
-  onToggleLight,
   phraseIndex,
   onNextPhrase,
   onDragStart,
@@ -604,7 +599,7 @@ const SceneContent: React.FC<SceneContentProps> = ({
   const [isTvHovered, setIsTvHovered] = useState<boolean>(false);
 
   const crtTexture = useMemo(() => {
-    const textColor = mood === 'cyberpunk' ? '#f43f5e' : mood === 'sunset' ? '#fbbf24' : '#34d399';
+    const textColor = mood === 'cyberpunk' ? '#f43f5e' : mood === 'sunset' ? '#fbbf24' : '#38bdf8';
     return createCrtTexture(PHRASES[phraseIndex], textColor);
   }, [phraseIndex, mood]);
 
@@ -716,14 +711,13 @@ const SceneContent: React.FC<SceneContentProps> = ({
       duvetMeshRef.current.rotation.z = THREE.MathUtils.lerp(duvetMeshRef.current.rotation.z, targetRotZ, 0.09);
     }
 
-    // 2. CRT Light pulse + extra glow when hovered
+    // 2. CRT Light pulse + extra glow when hovered (subtle realistic screen glow, no room flooding)
     if (crtLightRef.current) {
       flashAnim.current = Math.max(0, flashAnim.current - 0.07);
-      const baseInt = !isRoomLightOn ? 55 : 30;
-      const hoverBoost = isTvHovered ? 25 : 0;
+      const hoverBoost = isTvHovered ? 0.8 : 0;
       const flicker = 1.0 + Math.sin(t * 12) * 0.08 + Math.sin(t * 4.5) * 0.05;
-      const flash = flashAnim.current * 45;
-      crtLightRef.current.intensity = (baseInt + hoverBoost) * flicker + flash;
+      const flash = flashAnim.current * 1.5;
+      crtLightRef.current.intensity = (1.6 + hoverBoost) * flicker + flash;
     }
   });
 
@@ -731,37 +725,31 @@ const SceneContent: React.FC<SceneContentProps> = ({
     switch (mood) {
       case 'sunset':
         return {
-          ambient: '#2e1065',
-          ambientInt: 0.9,
-          sunColor: '#fb923c',
-          sunInt: 2.5,
-          roomColor: '#f97316',
-          roomInt: 140,
+          ambient: '#1e110a',
+          ambientInt: 0.65,
+          sunColor: '#f97316',
+          sunInt: 0.9,
           crtColor: '#fbbf24',
         };
       case 'cyberpunk':
         return {
-          ambient: '#1e0524',
-          ambientInt: 1.0,
-          sunColor: '#06b6d4',
-          sunInt: 1.8,
-          roomColor: '#f43f5e',
-          roomInt: 160,
+          ambient: '#0d0720',
+          ambientInt: 0.7,
+          sunColor: '#a855f7',
+          sunInt: 1.1,
           crtColor: '#f43f5e',
         };
       case 'night':
       default:
         return {
-          ambient: isRoomLightOn ? '#0f172a' : '#040714',
-          ambientInt: isRoomLightOn ? 0.8 : 0.35,
-          sunColor: isRoomLightOn ? '#38bdf8' : '#1e3a8a',
-          sunInt: isRoomLightOn ? 1.6 : 0.45,
-          roomColor: '#e0f2fe',
-          roomInt: isRoomLightOn ? 125 : 0,
-          crtColor: '#34d399',
+          ambient: '#070b16',
+          ambientInt: 0.6,
+          sunColor: '#38bdf8',
+          sunInt: 0.75,
+          crtColor: '#38bdf8',
         };
     }
-  }, [mood, isRoomLightOn]);
+  }, [mood]);
 
   // Direct mesh click handler on the 3D model
   const handlePointerDownMesh = (e: ThreeEvent<PointerEvent>) => {
@@ -789,51 +777,20 @@ const SceneContent: React.FC<SceneContentProps> = ({
         shadow-bias={-0.0001}
       />
 
-      {/* Ceiling room light */}
-      {isRoomLightOn && (
-        <pointLight
-          position={[0, 2.3, 0.4]}
-          color={moodConfig.roomColor}
-          intensity={moodConfig.roomInt}
-          distance={5.2}
-          decay={2}
-          castShadow
-          shadow-mapSize={[1024, 1024]}
-        />
-      )}
-
-      {/* CRT Screen Dynamic Glow Light (positioned at actual TV location) */}
+      {/* Subtle CRT Screen local glow */}
       <pointLight
         ref={crtLightRef}
         position={[-0.33, 0.86, -0.68]}
         color={moodConfig.crtColor}
-        distance={4.2}
+        distance={1.6}
         decay={2}
-      />
-
-      {/* Wall Posters Accent Spotlight */}
-      <spotLight
-        position={[0.5, 2.4, 0.8]}
-        target-position={[-0.8, 1.45, -0.92]}
-        color="#ffffff"
-        intensity={8}
-        angle={0.65}
-        penumbra={0.8}
-        distance={4.5}
       />
 
       {/* Panoramic Living Tokyo Window Sky */}
       <TokyoWindowSky mood={mood} />
 
       {/* Dynamic Dust Particles in Night Mode */}
-      <AmbientDustParticles isRoomLightOn={isRoomLightOn} />
-
-      {/* Interactive 3D Wall Light Switch */}
-      <InteractiveLightSwitch3D
-        isLightOn={isRoomLightOn}
-        onToggle={onToggleLight}
-        position={[1.635, 1.30, 0.45]}
-      />
+      <AmbientDustParticles />
 
       {/* Draggable 3D Room Items (Gamepad, Manga, Ramune) */}
       <InteractiveItems3D
@@ -897,7 +854,6 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
 }) => {
   const [mood, setMood] = useState<LightingMood>('night');
   const [activeView, setActiveView] = useState<CameraView>('diorama');
-  const [isRoomLightOn, setIsRoomLightOn] = useState<boolean>(false);
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
   const [phraseIndex, setPhraseIndex] = useState<number>(0);
   const [isAutoRotating, setIsAutoRotating] = useState<boolean>(true);
@@ -943,9 +899,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
     setPhraseIndex((prev) => (prev + 1) % PHRASES.length);
   }, []);
 
-  const handleToggleLight = useCallback(() => {
-    setIsRoomLightOn((prev) => !prev);
-  }, []);
+
 
   const handleToggleAudio = useCallback(() => {
     setIsAudioMuted((prev) => {
@@ -965,15 +919,13 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
           antialias: true,
           alpha: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: mood === 'sunset' ? 1.12 : isRoomLightOn ? 1.05 : 0.88,
+          toneMappingExposure: mood === 'sunset' ? 1.1 : mood === 'cyberpunk' ? 1.05 : 0.95,
           powerPreference: 'high-performance',
         }}
       >
         <Suspense fallback={null}>
           <SceneContent
             mood={mood}
-            isRoomLightOn={isRoomLightOn}
-            onToggleLight={handleToggleLight}
             phraseIndex={phraseIndex}
             onNextPhrase={handleNextPhrase}
             onDragStart={() => setIsDraggingObject(true)}
@@ -983,6 +935,9 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
 
         <OrbitControls
           ref={controlsRef}
+          makeDefault
+          enableDamping
+          dampingFactor={0.05}
           enabled={!isDraggingObject}
           enablePan={false}
           enableZoom={true}
@@ -990,8 +945,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
           maxDistance={7.5}
           maxPolarAngle={Math.PI / 2 + 0.04}
           autoRotate={isAutoRotating && !isDraggingObject}
-          autoRotateSpeed={0.9}
-          dampingFactor={0.06}
+          autoRotateSpeed={1.0}
           target={CAMERA_PRESETS.diorama.target}
         />
       </Canvas>
@@ -1064,21 +1018,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
 
           {/* Quick Toggles: Light, Audio, Mood, Auto-rotate */}
           <div className="flex items-center gap-1 pl-1">
-            {/* Room Light Switch Toggle */}
-            <button
-              type="button"
-              id="btn-toggle-light"
-              onClick={handleToggleLight}
-              title={isRoomLightOn ? 'Éteindre la lumière (Mode Nuit)' : 'Allumer la lumière'}
-              className={`flex items-center gap-1 rounded-xl px-2 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
-                !isRoomLightOn
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800'
-              }`}
-            >
-              {isRoomLightOn ? <Sun className="h-3.5 w-3.5 text-amber-500" /> : <Moon className="h-3.5 w-3.5 text-cyan-300" />}
-              <span className="hidden md:inline">{isRoomLightOn ? 'Lumière' : 'Nuit'}</span>
-            </button>
+
 
             {/* Audio Toggle */}
             <button
