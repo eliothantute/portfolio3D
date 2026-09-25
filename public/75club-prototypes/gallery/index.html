@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LE SEPT CINQ — Galerie d'Art Contemporain & Salon</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="gallery-page">
+
+  <!-- ============================================ -->
+  <!-- TOP TICKER ANNOUNCEMENT                      -->
+  <!-- ============================================ -->
+  <div class="top-announcement">
+    <div class="announcement-content">
+      <span class="pulse-orange"></span>
+      <span class="ann-text"><strong>PARIS ART WEEK 2026</strong> &bull; NOUVELLE EXPOSITION : <em>« HYBRIDATIONS, MARBRE & ONDES »</em> &bull; ENTRÉE LIBRE DU MARDI AU DIMANCHE</span>
+      <a href="#expositions" class="ann-link">Réserver un créneau &rarr;</a>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- HEADER & NAVIGATION                          -->
+  <!-- ============================================ -->
+  <header class="gallery-header" id="header">
+    <div class="nav-container">
+      <a href="#hero" class="brand-group">
+        <div class="brand-monogram">
+          <span class="b-75">7.5</span>
+          <span class="b-dot"></span>
+        </div>
+        <div class="brand-text">
+          <span class="b-name">LE SEPT CINQ</span>
+          <span class="b-tag">GALERIE D'ART &bull; PARIS</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#expositions" class="nav-item">Expositions</a>
+        <a href="#oeuvres" class="nav-item">Collection &amp; Artistes</a>
+        <a href="#viewing-room" class="nav-item">Viewing Room</a>
+        <a href="#salon" class="nav-item">Le Salon &amp; Pensée</a>
+        <a href="#visite" class="nav-item">Informations &amp; Visite</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#visite" class="btn btn-orange">Visite Privée</a>
+        <button class="lang-switch">FR / EN</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================ -->
+  <!-- HERO SECTION : GRIS / VERT / ORANGE / BLANC  -->
+  <!-- ============================================ -->
+  <section class="gallery-hero" id="hero">
+    <div class="hero-bg-accent">
+      <div class="blur-glow glow-green"></div>
+      <div class="blur-glow glow-orange"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <div class="hero-shell">
+      <!-- SURTITRE & STATUT -->
+      <div class="hero-top-badges">
+        <span class="pill-orange">FONDÉE EN 2014 &bull; ISABELLE SURET</span>
+        <span class="pill-green"><span class="dot-green"></span> GALERIE OUVERTE AUJOURD'HUI JUSQU'À 19H</span>
+        <span class="pill-gray">PARIS 75000</span>
+      </div>
+
+      <!-- TYPOGRAPHIE MAJESTUEUSE : LE SEPT CINQ -->
+      <div class="hero-title-area">
+        <h1 class="hero-main-title font-syne">
+          <span class="white-text">LE SEPT</span>
+          <span class="orange-text">CINQ</span>
+        </h1>
+        <p class="hero-subtitle font-cinzel">
+          GALERIE D'ART CONTEMPORAIN &bull; SCULPTURE &bull; HYBRIDATION EXPÉRIMENTALE
+        </p>
+      </div>
+
+      <!-- DUAL DISPLAY 3D : LOGO ET VUE D'EXPOSITION -->
+      <div class="hero-dual-stage">
+        <!-- Carte 1 : Logo 3D 7.5 (Marbre Blanc, Verre Menthe & Ruban Orange) -->
+        <div class="stage-card card-logo-3d">
+          <div class="card-inner">
+            <img src="images/logo_75_gallery.jpg" alt="Logo 7.5 Art Gallery Marbre et Verre" class="stage-img">
+            <div class="badge-overlay badge-art-info">
+              <span class="b-title">SCULPTURE IDENTITAIRE 7.5</span>
+              <span class="b-desc">Marbre de Carrare &bull; Verre menthe &bull; Ruban orange fondu</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carte 2 : Grande Salle d'Exposition -->
+        <div class="stage-card card-exhibition">
+          <div class="card-inner">
+            <img src="images/exhibition_hero.jpg" alt="Exposition Galerie Le Sept Cinq" class="stage-img">
+            <div class="badge-overlay badge-expo-info">
+              <span class="expo-tag-orange">EN CE MOMENT</span>
+              <h3 class="expo-title-white font-syne">« Formes qui se Font &amp; Défont »</h3>
+              <p class="expo-meta-gray">Installation monumentale minérale &bull; Salomé Chatriot &times; Studio Fasse</p>
+              <a href="#expositions" class="btn btn-outline-white btn-sm mt-3">Découvrir l'exposition &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANIFESTE ÉDITORIAL & CALL TO ACTION -->
+      <div class="hero-editorial-footer">
+        <div class="editorial-quote-box">
+          <p class="lead-quote font-cinzel">
+            « Ce n’est pas une galerie ordinaire. Telle une onde radio l’énergie se diffuse, 7.5 comme carrefour des arts plastiques, de la performance et de la philosophie. »
+          </p>
+        </div>
+        <div class="editorial-ctas">
+          <a href="#oeuvres" class="btn btn-orange">Consulter le catalogue d'œuvres</a>
+          <a href="#viewing-room" class="btn btn-green-outline">Accéder au Viewing Room</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION : EXPOSITION EN COURS               -->
+  <!-- ============================================ -->
+  <section class="section-wrapper bg-gray-dark" id="expositions">
+    <div class="container">
+      <div class="section-header-flex">
+        <div>
+          <span class="sec-badge orange-badge">PROGRAMMATION SAISON 2026</span>
+          <h2 class="sec-title-white font-syne">Exposition Actuelle</h2>
+        </div>
+        <div class="header-dates">
+          <span class="date-large font-space">24 OCT — 18 DÉC 2026</span>
+          <span class="date-sub">Vernissage le jeudi 24 à 18h30 &bull; Commissariat : Isabelle Suret</span>
+        </div>
+      </div>
+
+      <div class="current-expo-card">
+        <div class="expo-card-media">
+          <img src="images/exhibition_hero.jpg" alt="Exposition Salomé Chatriot" class="expo-visual">
+          <div class="live-tag"><span class="pulse-green"></span> EN COURS D'ACQUISITION</div>
+        </div>
+        <div class="expo-card-body">
+          <span class="expo-curator">COMMISSARIAT &amp; DIRECTION ARTISTIQUE</span>
+          <h3 class="expo-headline font-syne">« Matière Vivante, Marbre &amp; Ondes Tangerine »</h3>
+          <p class="expo-text">
+            À travers cette installation sculpturale monumentale, la galerie confronte la rigidité éternelle du marbre blanc et de la pierre volcanique grise à l'hyper-fluidité de résines néon vert émeraude et orange mandarine en fusion.
+          </p>
+          <div class="expo-details-grid">
+            <div class="detail-cell">
+              <span class="d-label">Artistes Résidents</span>
+              <span class="d-val">Salomé Chatriot &times; Studio Fasse</span>
+            </div>
+            <div class="detail-cell">
+              <span class="d-label">Matériaux &amp; Médium</span>
+              <span class="d-val">Marbre, verre soufflé, fluide cinétique</span>
+            </div>
+            <div class="detail-cell">
+              <span class="d-label">Catalogue</span>
+              <span class="d-val">Édition numérotée disponible</span>
+            </div>
+          </div>
+          <div class="expo-card-actions">
+            <a href="#visite" class="btn btn-orange">Réserver une visite guidée</a>
+            <button class="btn btn-outline-white" onclick="openDossierModal()">Demander le dossier d'œuvres (PDF)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION : COLLECTION & CATALOGUE D'ŒUVRES    -->
+  <!-- ============================================ -->
+  <section class="section-wrapper bg-gray-mid" id="oeuvres">
+    <div class="container">
+      <div class="section-header-flex">
+        <div>
+          <span class="sec-badge green-badge">CATALOGUE &amp; ACQUISITIONS</span>
+          <h2 class="sec-title-white font-syne">Sélection d'Œuvres en Galerie</h2>
+          <p class="sec-sub-gray">Pièces disponibles pour collectionneurs privés, fondations et institutions.</p>
+        </div>
+
+        <div class="gallery-filters" id="galleryFilters">
+          <button class="filter-btn active" data-filter="all">Toutes</button>
+          <button class="filter-btn" data-filter="sculpture">Sculptures 3D</button>
+          <button class="filter-btn" data-filter="installation">Installations In Situ</button>
+          <button class="filter-btn" data-filter="marbre">Marbre &amp; Matières</button>
+        </div>
+      </div>
+
+      <div class="artwork-grid">
+        <!-- Œuvre 1 -->
+        <article class="art-card" data-cat="sculpture">
+          <div class="art-thumb-wrap">
+            <img src="images/logo_75_gallery.jpg" alt="Figure 7.5" class="art-img">
+            <span class="art-status-badge available">Disponible</span>
+          </div>
+          <div class="art-info">
+            <span class="art-artist">Isabelle Suret &bull; Équipe 7.5</span>
+            <h4 class="art-title font-syne">Figure 7.5 (Tangerine &amp; Mint)</h4>
+            <p class="art-medium">Marbre de Carrare, verre soufflé menthe, ruban néon orange fondu</p>
+            <div class="art-meta-bottom">
+              <span class="art-year">2026 &bull; Pièce unique</span>
+              <button class="btn-link-orange" onclick="inquireArtwork('Figure 7.5 (Tangerine & Mint)')">Acquérir l'œuvre &rarr;</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Œuvre 2 -->
+        <article class="art-card" data-cat="installation">
+          <div class="art-thumb-wrap">
+            <img src="images/05_75club_installation_ondes_radio.jpg" alt="Installation Ondes Radio" class="art-img">
+            <span class="art-status-badge in-exhibition">Exposée</span>
+          </div>
+          <div class="art-info">
+            <span class="art-artist">Collectif 7.5 Hertz</span>
+            <h4 class="art-title font-syne">Dispositif Radio 7.5 MHz</h4>
+            <p class="art-medium">Verre acrylique ondulé, tubes néon argon, résonateur hertzien</p>
+            <div class="art-meta-bottom">
+              <span class="art-year">2026 &bull; Installation cinétique</span>
+              <button class="btn-link-orange" onclick="inquireArtwork('Dispositif Radio 7.5 MHz')">Acquérir l'œuvre &rarr;</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Œuvre 3 -->
+        <article class="art-card" data-cat="marbre">
+          <div class="art-thumb-wrap">
+            <img src="images/02_75_embleme_isole_surrealiste.jpg" alt="Marbre et Chrome" class="art-img">
+            <span class="art-status-badge reserved">Réservée</span>
+          </div>
+          <div class="art-info">
+            <span class="art-artist">Atelier 7.5 Paris</span>
+            <h4 class="art-title font-syne">Fracture Métaphysique &bull; N°02</h4>
+            <p class="art-medium">Marbre blanc antique fracturé en apesanteur &amp; chrome liquide</p>
+            <div class="art-meta-bottom">
+              <span class="art-year">2026 &bull; Édition 1/3</span>
+              <button class="btn-link-orange" onclick="inquireArtwork('Fracture Métaphysique N°02')">Consulter la fiche &rarr;</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Œuvre 4 -->
+        <article class="art-card" data-cat="sculpture">
+          <div class="art-thumb-wrap">
+            <img src="images/04_75_sculpture_biomorphique_dali.jpg" alt="Totem Biomorphique" class="art-img">
+            <span class="art-status-badge available">Disponible</span>
+          </div>
+          <div class="art-info">
+            <span class="art-artist">Studio 7.5 Expérimental</span>
+            <h4 class="art-title font-syne">Totem Biomorphique &amp; Main de Cristal</h4>
+            <p class="art-medium">Porcelaine liquide, jade d'eau, chrome et orbe luminescent</p>
+            <div class="art-meta-bottom">
+              <span class="art-year">2025 &bull; Pièce de collection</span>
+              <button class="btn-link-orange" onclick="inquireArtwork('Totem Biomorphique')">Acquérir l'œuvre &rarr;</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION : VIEWING ROOM PRIVÉ                 -->
+  <!-- ============================================ -->
+  <section class="section-wrapper bg-gray-dark" id="viewing-room">
+    <div class="container">
+      <div class="viewing-room-box">
+        <div class="vr-copy">
+          <span class="sec-badge orange-badge">ESPACE COLLECTIONNEURS</span>
+          <h2 class="sec-title-white font-syne">Private Viewing Room 3D</h2>
+          <p class="vr-desc">
+            Accédez à notre salon virtuel haute fidélité pour visualiser les sculptures en échelle 1:1, consulter les cotes d'artistes et simuler l'accrochage dans vos espaces architecturaux.
+          </p>
+          <div class="vr-features">
+            <div class="feat-item">
+              <span class="feat-icon">✦</span>
+              <span>Modèles 3D photoréalistes sous lumière contrôlée</span>
+            </div>
+            <div class="feat-item">
+              <span class="feat-icon">✦</span>
+              <span>Certificats d'authenticité signés par la directrice</span>
+            </div>
+            <div class="feat-item">
+              <span class="feat-icon">✦</span>
+              <span>Livraison d'art sécurisée &amp; installation sur mesure</span>
+            </div>
+          </div>
+          <div class="vr-form-wrap">
+            <form class="vr-form" onsubmit="event.preventDefault(); alert('Votre accès VIP au Viewing Room a été validé. Un code confidentiel vous a été envoyé.');">
+              <input type="email" placeholder="Entrez votre email pour demander un accès VIP..." required class="vr-input">
+              <button type="submit" class="btn btn-orange">Entrer dans la Room</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="vr-visual">
+          <div class="vr-visual-frame">
+            <img src="images/03_75_scene_metaphysique_de_chirico.jpg" alt="Viewing Room Privé" class="vr-img">
+            <div class="vr-floating-tag">
+              <span class="tag-title">SALLE N°1 &bull; SCÉNOGRAPHIE DE CHIRICO</span>
+              <span class="tag-meta">Visite interactive 360° disponible</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION : LE SALON CONTEMPORAIN & PENSÉE    -->
+  <!-- ============================================ -->
+  <section class="section-wrapper bg-gray-mid" id="salon">
+    <div class="container">
+      <div class="salon-manifesto-grid">
+        <div class="salon-left">
+          <span class="sec-badge green-badge">LE SALON DU 7.5</span>
+          <h2 class="sec-title-white font-syne">Plus qu'une galerie : un carrefour d'idées</h2>
+          <p class="salon-lead-p font-cinzel">
+            « Fondé en 2014 par Isabelle Suret, le 7.5 club ne cesse d'ouvrir le dialogue, à la croisée des arts plastiques, de la performance, de la danse, de la musique et de la philosophie. »
+          </p>
+          <p class="salon-sub-p">
+            Nous organisons régulièrement des dîners-débats intimistes, des séances d'écoute acousmatique et des présentations de thèses philosophiques au milieu des sculptures.
+          </p>
+          <div class="salon-stats-row">
+            <div class="stat-col">
+              <span class="stat-num font-syne text-orange">13+</span>
+              <span class="stat-desc">Années d'existence</span>
+            </div>
+            <div class="stat-col">
+              <span class="stat-num font-syne text-green">140+</span>
+              <span class="stat-desc">Artistes accueillis</span>
+            </div>
+            <div class="stat-col">
+              <span class="stat-num font-syne text-white">5</span>
+              <span class="stat-desc">Pôles d'expression</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="salon-right">
+          <div class="salon-card-list">
+            <div class="salon-mini-card">
+              <span class="sm-num font-space">01</span>
+              <div class="sm-content">
+                <h4 class="sm-title font-syne">Rencontres Philosophiques</h4>
+                <p class="sm-desc">Débats bimensuels autour des mutations esthétiques contemporaines et de l'hybridation technologique.</p>
+              </div>
+            </div>
+
+            <div class="salon-mini-card highlight-orange">
+              <span class="sm-num font-space">02</span>
+              <div class="sm-content">
+                <h4 class="sm-title font-syne">Performances &amp; Danse In Situ</h4>
+                <p class="sm-desc">Des corps en mouvement interagissant directement avec les volumes sculpturaux de la galerie.</p>
+              </div>
+            </div>
+
+            <div class="salon-mini-card">
+              <span class="sm-num font-space">03</span>
+              <div class="sm-content">
+                <h4 class="sm-title font-syne">Éditions d'Art Numérotées</h4>
+                <p class="sm-desc">Tirages limités, monographies critiques et multiples d'artistes résidents édités par le 7.5.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION : VISITE, HORAIRES & CONTACT        -->
+  <!-- ============================================ -->
+  <section class="section-wrapper bg-gray-dark" id="visite">
+    <div class="container">
+      <div class="visit-grid">
+        <div class="visit-info-col">
+          <span class="sec-badge orange-badge">INFORMATIONS PRATIQUES</span>
+          <h2 class="sec-title-white font-syne">Visiter la Galerie</h2>
+          <p class="visit-lead">
+            Le 7.5 vous accueille pour découvrir les expositions en cours ou pour des rendez-vous privés personnalisés.
+          </p>
+
+          <div class="info-blocks">
+            <div class="info-block">
+              <span class="ib-title font-space">ADRESSE</span>
+              <p class="ib-val">Le 7.5 Paris &bull; Quartier des Arts &bull; Paris, France</p>
+            </div>
+            <div class="info-block">
+              <span class="ib-title font-space">HORAIRES D'OUVERTURE</span>
+              <p class="ib-val">Mardi &ndash; Samedi : 11h00 &ndash; 19h00<br>Nocturne le jeudi jusqu'à 21h00<br>Dimanche &amp; Lundi sur rendez-vous</p>
+            </div>
+            <div class="info-block">
+              <span class="ib-title font-space">CONTACT GALERIE</span>
+              <p class="ib-val">
+                Email : <a href="mailto:contact@leseptcinq.com" class="text-green">contact@leseptcinq.com</a><br>
+                Instagram : <a href="https://www.instagram.com/le7.5paris/" target="_blank" class="text-orange">@le7.5paris</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="visit-form-col">
+          <div class="form-card">
+            <h3 class="form-title font-syne">Demande de Visite Privée ou Acquisition</h3>
+            <p class="form-subtitle">Laissez-nous vos coordonnées, un conseiller de la galerie vous répondra sous 24h :</p>
+            <form onsubmit="event.preventDefault(); alert('Merci pour votre demande. Notre équipe vous contactera très rapidement.');">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Nom &amp; Prénom</label>
+                  <input type="text" required placeholder="Votre nom...">
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" required placeholder="votre.email@domaine.com">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Objet de votre demande</label>
+                <select>
+                  <option>Visite privée de l'exposition en cours</option>
+                  <option>Demande d'acquisition d'une œuvre</option>
+                  <option>Rejoindre le Cercle des Bienfaiteurs</option>
+                  <option>Presse &amp; Médias</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Message</label>
+                <textarea rows="4" placeholder="Précisez votre demande ou vos disponibilités..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-orange full-width">Envoyer ma demande</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- FOOTER                                       -->
+  <!-- ============================================ -->
+  <footer class="gallery-footer">
+    <div class="container footer-content">
+      <div class="f-brand">
+        <div class="f-logo font-syne">7.5 <span class="text-orange">LE SEPT CINQ</span></div>
+        <p class="f-desc">Galerie d'art contemporain et espace d'hybridation philosophique fondé en 2014 par Isabelle Suret.</p>
+        <span class="f-copy">&copy; 2014 &ndash; 2026 LE SEPT CINQ ART GALLERY. Tous droits réservés.</span>
+      </div>
+
+      <div class="f-links-group">
+        <span class="f-title">Galerie</span>
+        <a href="#expositions">Exposition Actuelle</a>
+        <a href="#oeuvres">Catalogue d'Œuvres</a>
+        <a href="#viewing-room">Viewing Room VIP</a>
+        <a href="#salon">Le Salon &amp; Débats</a>
+      </div>
+
+      <div class="f-links-group">
+        <span class="f-title">Services</span>
+        <a href="#visite">Visite Privée</a>
+        <a href="#visite">Conseil en Acquisition</a>
+        <a href="#visite">Prêt d'œuvres aux Musées</a>
+        <a href="#visite">Éditions Numérotées</a>
+      </div>
+
+      <div class="f-links-group">
+        <span class="f-title">Palette Signature</span>
+        <div class="palette-swatches">
+          <span class="swatch s-gray" title="Gris Minéral"></span>
+          <span class="swatch s-green" title="Vert Menthe"></span>
+          <span class="swatch s-orange" title="Orange Vibrant"></span>
+          <span class="swatch s-white" title="Blanc Marbre"></span>
+        </div>
+        <span class="swatch-lbl">Gris &bull; Vert &bull; Orange &bull; Blanc</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Demande d'acquisition -->
+  <div class="inquiry-modal" id="inquiryModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeInquiryModal()">&times;</button>
+      <span class="modal-badge orange-badge">DOSSIER D'ACQUISITION</span>
+      <h3 class="modal-title font-syne" id="modalArtTitle">Demande d'information sur l'œuvre</h3>
+      <p class="modal-desc">Recevez le dossier technique complet, la provenance et le certificat d'authenticité de l'œuvre sélectionnée.</p>
+      <form onsubmit="event.preventDefault(); alert('Dossier envoyé avec succès.'); closeInquiryModal();">
+        <div class="form-group">
+          <label>Votre Nom</label>
+          <input type="text" required placeholder="Votre nom...">
+        </div>
+        <div class="form-group">
+          <label>Votre Email</label>
+          <input type="email" required placeholder="votre.email@domaine.com">
+        </div>
+        <button type="submit" class="btn btn-orange full-width mt-2">Recevoir le dossier</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

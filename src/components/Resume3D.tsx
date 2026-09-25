@@ -104,48 +104,51 @@ export const Resume3D: React.FC<Resume3DProps> = ({
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] pb-4">
         <div className="flex flex-wrap items-center gap-3">
           {/* View Mode Switcher: Document, 3D Card, and Studio 3D (Interactive Viewer with Import) */}
-          <div className="inline-flex items-center rounded-2xl border border-zinc-200 bg-zinc-100/90 p-1 shadow-inner dark:border-white/10 dark:bg-zinc-900/90">
+          <div className="flex flex-wrap items-center gap-1 rounded-2xl border border-zinc-200 bg-zinc-100/90 p-1 shadow-inner dark:border-white/10 dark:bg-zinc-900/90 max-w-full">
             <button
               type="button"
               onClick={() => setViewMode('document')}
               onMouseEnter={() => onHoverItem?.('VUE DOCUMENT LISIBLE')}
               onMouseLeave={onLeaveItem}
-              className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
                 viewMode === 'document'
                   ? 'bg-white text-zinc-950 shadow-sm dark:bg-white dark:text-zinc-950'
                   : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white'
               }`}
             >
               <span>📄</span>
-              <span>{lang === 'fr' ? 'Document Lisible HD' : 'Readable Document'}</span>
+              <span>{lang === 'fr' ? 'Document' : 'Document'}</span>
+              <span className="hidden sm:inline">{lang === 'fr' ? ' Lisible HD' : ' HD'}</span>
             </button>
             <button
               type="button"
               onClick={() => setViewMode('3d')}
               onMouseEnter={() => onHoverItem?.('VUE 3D HOLOGRAPHIQUE')}
               onMouseLeave={onLeaveItem}
-              className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
                 viewMode === '3d'
                   ? 'bg-white text-zinc-950 shadow-sm dark:bg-white dark:text-zinc-950'
                   : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white'
               }`}
             >
               <span>🪐</span>
-              <span>{lang === 'fr' ? 'Vue 3D Tilt' : '3D Tilt View'}</span>
+              <span>{lang === 'fr' ? 'Vue 3D' : '3D View'}</span>
+              <span className="hidden sm:inline"> Tilt</span>
             </button>
             <button
               type="button"
               onClick={() => setViewMode('studio')}
               onMouseEnter={() => onHoverItem?.('VISUALISEUR 3D // IMPORTER UN FICHIER')}
               onMouseLeave={onLeaveItem}
-              className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
                 viewMode === 'studio'
                   ? 'bg-zinc-950 text-white shadow-sm dark:bg-white dark:text-zinc-950'
                   : 'text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white'
               }`}
             >
               <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>{lang === 'fr' ? 'Studio 3D (Import)' : '3D Studio (Import)'}</span>
+              <span>Studio 3D</span>
+              <span className="hidden sm:inline">{lang === 'fr' ? ' (Import)' : ' (Import)'}</span>
             </button>
           </div>
 

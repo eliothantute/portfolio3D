@@ -48,23 +48,23 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-white/85 to-transparent dark:from-zinc-950 dark:via-zinc-950/85 dark:to-transparent lg:w-[48%] z-[5]" />
 
         {/* Contenu avant-plan : Typographie & Boutons */}
-        <div className="relative z-10 flex w-full max-w-2xl flex-col items-start text-left p-6 sm:p-10 lg:p-16 pointer-events-none">
+        <div className="relative z-10 flex w-full max-w-2xl flex-col items-start text-left p-5 sm:p-10 lg:p-16 pointer-events-none">
           {/* Badge Pillule Rôle avec Heure de Paris */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-5 inline-flex flex-wrap items-center gap-2.5 rounded-full border border-zinc-200 bg-zinc-100/90 dark:border-zinc-800 dark:bg-zinc-900/90 px-4 py-1.5 shadow-xs backdrop-blur-xl pointer-events-auto"
+            className="mb-6 inline-flex max-w-full flex-wrap items-center gap-2.5 sm:gap-3 rounded-2xl sm:rounded-full border border-zinc-200 bg-zinc-100/90 dark:border-zinc-800 dark:bg-zinc-900/90 px-3.5 py-2 sm:px-5 sm:py-2.5 shadow-sm backdrop-blur-xl pointer-events-auto"
           >
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-2 sm:h-2.5 w-2 sm:w-2.5 shrink-0">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="relative inline-flex h-2 sm:h-2.5 w-2 sm:w-2.5 rounded-full bg-emerald-500" />
             </span>
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-950 dark:text-zinc-100">
+            <span className="font-mono text-sm sm:text-base md:text-lg lg:text-xl font-extrabold uppercase tracking-wider text-zinc-950 dark:text-zinc-100">
               ELIOT HANTUTE // PARIS {parisTime ? `• ${parisTime}` : ''}
             </span>
-            <span className="h-3 w-px bg-zinc-300 dark:bg-zinc-700 hidden sm:inline" />
-            <span className="font-mono text-[10.5px] font-medium text-zinc-600 dark:text-zinc-400 hidden sm:inline">
+            <span className="h-4 w-px bg-zinc-300 dark:bg-zinc-700 hidden sm:inline" />
+            <span className="font-mono text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400 hidden sm:inline">
               {lang === 'fr' ? 'Disponible pour projets' : 'Available for projects'}
             </span>
           </motion.div>
@@ -76,7 +76,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
             className="mb-6 max-w-2xl pointer-events-auto"
           >
-            <h1 className="font-urbanist flex flex-col text-4xl font-black tracking-tight text-zinc-950 dark:text-white sm:text-5xl md:text-6xl lg:text-[4.6rem] xl:text-[5.2rem] leading-[1.02]">
+            <h1 className="font-urbanist flex flex-col text-3xl sm:text-5xl md:text-6xl lg:text-[4.6rem] xl:text-[5.2rem] font-black tracking-tight text-zinc-950 dark:text-white leading-[1.04] sm:leading-[1.02]">
               <span className="block text-zinc-950 dark:text-white">
                 <InteractiveText
                   text="Creative Front-End"
@@ -97,7 +97,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-xl text-base sm:text-lg text-zinc-600 dark:text-zinc-300 font-normal leading-relaxed pointer-events-auto"
+            className="max-w-xl text-sm sm:text-base md:text-lg text-zinc-600 dark:text-zinc-300 font-normal leading-relaxed pointer-events-auto"
           >
             {lang === 'fr'
               ? "Entre design et développement, conception d'interfaces et expériences web 3D fluides et immersives."
@@ -109,7 +109,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-8 flex flex-wrap items-center gap-3.5 pointer-events-auto"
+            className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5 pointer-events-auto w-full sm:w-auto"
           >
             {/* Bouton Principal */}
             <button
@@ -124,7 +124,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
               }}
               onMouseEnter={() => onHoverItem?.('DISCUTER D’UN PROJET')}
               onMouseLeave={onLeaveItem}
-              className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 px-8 py-4 text-sm font-urbanist font-bold shadow-md transition-all hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:scale-105 active:scale-95 cursor-pointer"
+              className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 px-7 sm:px-8 py-3.5 sm:py-4 text-sm font-urbanist font-bold shadow-md transition-all hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:scale-105 active:scale-95 cursor-pointer text-center"
             >
               <span>{lang === 'fr' ? 'Démarrer un projet' : 'Start a project'}</span>
               <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
@@ -135,7 +135,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
               href="#projects"
               onMouseEnter={() => onHoverItem?.('PROJETS')}
               onMouseLeave={onLeaveItem}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white hover:border-zinc-900 text-zinc-700 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-white dark:hover:border-zinc-700 px-6 py-4 font-urbanist text-sm font-medium backdrop-blur-md transition-all hover:scale-105 cursor-pointer shadow-xs"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white hover:border-zinc-900 text-zinc-700 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:white dark:hover:border-zinc-700 px-6 py-3.5 sm:py-4 font-urbanist text-sm font-medium backdrop-blur-md transition-all hover:scale-105 cursor-pointer shadow-xs text-center"
             >
               <Compass className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
               <span>{lang === 'fr' ? 'Explorer les Projets' : 'Explore Projects'}</span>

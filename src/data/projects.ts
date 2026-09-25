@@ -7,6 +7,7 @@ import nariOsImg from '../assets/images/nari-os-project.png';
 import aumParisImg from '../assets/aum-paris.jpg';
 import disfocusImg from '../assets/disfocus.jpg';
 import leZincImg from '../assets/le-zinc.jpg';
+import oneshotImg from '../assets/images/oneshot-project.png';
 
 export const projectsData: Record<'fr' | 'en', Project[]> = {
   fr: [
@@ -124,6 +125,29 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       metrics: [
         { label: 'Offre', value: 'Licence à vie' },
         { label: 'Rôle', value: 'Brand + Front-End' }
+      ]
+    },
+    {
+      id: 'oneshot',
+      title: 'Oneshot',
+      client: 'Projet Personnel / SaaS IA',
+      subtitle: 'Agent IA de Candidatures Automatisées en 1 Clic',
+      description: "Plateforme SaaS agentique automatisant la recherche et l'envoi de candidatures en 1 clic (LinkedIn, France Travail, Indeed) avec injection de CV et télémétrie en temps réel.",
+      longDescription: "Oneshot révolutionne la recherche d'emploi en orchestrant un agent IA autonome capable d'analyser les offres, de cibler les opportunités sur plusieurs plateformes (LinkedIn, Indeed, France Travail) et de postuler en un clic avec injection automatique de CV sur mesure. L'application intègre une console télémétrique en direct, une jauge orbitale gamifiée, un mode furtif anti-détection Playwright et un sélecteur dynamique de thèmes rétro/modernes.",
+      year: '2026',
+      category: 'App // Agent IA & Automatisation',
+      skillType: 'app',
+      role: ['Architecture Agentique', 'Développement Full-Stack', 'UI/UX Gamifiée', 'Automatisation Navigateur'],
+      stack: ['React', 'TypeScript', 'Playwright', 'Tailwind CSS', 'Vite', 'Vercel'],
+      objective: "Supprimer le temps rébarbatif de saisie des candidatures grâce à un pipeline agentique ultra-rapide, autonome et transparent.",
+      status: 'En phase de test (Bêta)',
+      liveUrl: 'https://job-application-agent-five.vercel.app/',
+      image: oneshotImg,
+      featured: true,
+      metrics: [
+        { label: 'Mode', value: '1-Clic Direct' },
+        { label: 'Plateformes', value: 'LinkedIn • FT • Indeed' },
+        { label: 'Statut', value: 'Phase Test (Bêta)' }
       ]
     },
     {
@@ -360,6 +384,29 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       metrics: [
         { label: 'Offer', value: 'Lifetime License' },
         { label: 'Role', value: 'Brand + Front-End' }
+      ]
+    },
+    {
+      id: 'oneshot',
+      title: 'Oneshot',
+      client: 'Personal Project / AI SaaS',
+      subtitle: '1-Click Autonomous AI Job Application Agent',
+      description: "Agentic SaaS platform automating job search and 1-click applications (LinkedIn, France Travail, Indeed) with dynamic CV injection and real-time live telemetry.",
+      longDescription: "Oneshot streamlines job applications by orchestrating an autonomous AI agent capable of parsing job postings across multiple platforms (LinkedIn, Indeed, France Travail) and applying in a single click with custom CV injection. Built with a live real-time telemetry console, gamified orbital progress gauge, stealth Playwright browser automation mode, and dynamic retro/modern theme switcher.",
+      year: '2026',
+      category: 'App // AI Agent & Automation',
+      skillType: 'app',
+      role: ['Agentic Architecture', 'Full-Stack Engineering', 'Gamified UI/UX', 'Browser Automation'],
+      stack: ['React', 'TypeScript', 'Playwright', 'Tailwind CSS', 'Vite', 'Vercel'],
+      objective: "Eliminate repetitive application tasks through an ultra-fast, transparent, autonomous agentic application pipeline.",
+      status: 'Testing Phase (Beta)',
+      liveUrl: 'https://job-application-agent-five.vercel.app/',
+      image: oneshotImg,
+      featured: true,
+      metrics: [
+        { label: 'Mode', value: '1-Click Direct' },
+        { label: 'Platforms', value: 'LinkedIn • FT • Indeed' },
+        { label: 'Status', value: 'Testing Phase (Beta)' }
       ]
     },
     {
@@ -618,7 +665,7 @@ export const skillsCategories = [
       en: 'Full-stack web applications, geolocated PWAs, LLM integration (Claude, Gemini), autonomous agents and CI/CD cloud deployment.'
     },
     skills: ['PWA & Mobile', 'APIs & Geolocation', 'LLMs & Agents IA', 'Claude Code / Antigravity', 'CI/CD & Vercel', 'Performance Optimization'],
-    projectIds: ['ping-paris', 'hazi-whatsapp']
+    projectIds: ['ping-paris', 'hazi-whatsapp', 'oneshot']
   },
   {
     type: 'music' as const,

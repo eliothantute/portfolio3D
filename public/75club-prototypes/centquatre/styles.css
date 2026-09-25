@@ -1,0 +1,1053 @@
+/* ==========================================================================
+   LE SEPT CINQ — HERO PLEIN ÉCRAN ANIMÉ & DIRECTION ARTISTIQUE 3D
+   ========================================================================== */
+
+:root {
+  --c-mint: #4ef2a3;
+  --c-mint-bright: #6effb9;
+  --c-mint-glow: rgba(78, 242, 163, 0.35);
+  
+  --c-blue: #7d8ef6;
+  --c-orange: #ea482d;
+  
+  --c-dark-base: #080b09;
+  --c-dark-surface: #111613;
+  --c-dark-card: #18201b;
+  
+  --c-white: #ffffff;
+  --c-gray-light: #e0e8e3;
+  --c-gray-muted: #8d9e94;
+  --c-border-glass: rgba(255, 255, 255, 0.1);
+
+  --font-anton: 'Anton', sans-serif;
+  --font-condensed: 'Barlow Condensed', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-space: 'Space Mono', monospace;
+  --font-syne: 'Syne', sans-serif;
+
+  --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #ffffff;
+  color: #0a0a0a;
+}
+
+body.c104-layout {
+  font-family: var(--font-sans);
+  background-color: #ffffff;
+  color: #0a0a0a;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   NAVIGATION ÉDITORIALE HAUT DE GAMME
+   ========================================================================== */
+.fullscreen-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 16px 36px;
+  background: rgba(247, 247, 245, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 2px solid #000;
+  transition: var(--transition);
+}
+
+.fullscreen-nav.scrolled {
+  padding: 12px 36px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.nav-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #000;
+  font-size: 1.35rem;
+  letter-spacing: 0.03em;
+}
+
+.logo-num {
+  color: var(--c-mint);
+  background: #000;
+  font-family: var(--font-space);
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1.5px solid #000;
+  box-shadow: 2px 2px 0px #000;
+}
+
+.logo-txt {
+  font-family: var(--font-anton);
+  letter-spacing: 0.04em;
+  color: #000;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.n-link {
+  text-decoration: none;
+  color: #000;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: var(--transition);
+  position: relative;
+}
+
+.n-link:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.n-link.highlight {
+  color: #ffffff;
+  background: #f57600;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px #000;
+  padding: 7px 18px;
+  border-radius: 4px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.n-link.highlight:hover {
+  background: #dc6900;
+  color: #ffffff;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000;
+  text-decoration: none;
+}
+
+.nav-ig {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #000;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.nav-ig:hover {
+  color: var(--c-mint);
+}
+
+/* ==========================================================================
+/* ==========================================================================
+   HERO CENTQUATRE AVEC ÉNORME IMAGE 3D AMÉLIORÉE & ENTÊTE COMPLÈTE
+   ========================================================================== */
+.c104-hero-section {
+  padding: 105px 0 40px;
+  background: #ffffff;
+  border-bottom: 2px solid #000;
+}
+
+.hero-c104-head-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid #000;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hero-c104-title {
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.hero-c104-subtitle {
+  font-family: var(--font-sans);
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  font-weight: 600;
+  color: #222;
+  letter-spacing: -0.01em;
+  margin-top: 8px;
+  line-height: 1.35;
+  max-width: 840px;
+}
+
+/* ==========================================================================
+   ÉNORME CARTE VISUELLE HERO 3D AMÉLIORÉE
+   ========================================================================== */
+.hero-grand-stage-card {
+  background: #ffffff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  box-shadow: 8px 8px 0px #000;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 10px;
+}
+
+.hero-grand-stage-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0px #000;
+}
+
+/* Boîte de l'image géante */
+.hero-grand-image-box {
+  position: relative;
+  width: 100%;
+  height: clamp(560px, 78vh, 860px);
+  min-height: 520px;
+  overflow: hidden;
+  background: #040805;
+  border-bottom: none;
+  cursor: crosshair;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .hero-grand-image-box {
+    height: 460px;
+    min-height: 400px;
+  }
+}
+
+.hero-light-sweep {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle 400px at 50% 50%, rgba(255, 255, 255, 0.14), transparent 70%);
+  pointer-events: none;
+  z-index: 6;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.hero-grand-img {
+  position: absolute;
+  inset: -4%;
+  width: 108%;
+  height: 108%;
+  object-fit: cover;
+  object-position: center 42%;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  will-change: transform;
+}
+
+.hero-grand-image-box:hover .hero-grand-img {
+  filter: contrast(112%) brightness(1.04);
+}
+
+/* Halo lumineux pulsant sur l'orbe vert central (Amélioration) */
+.orb-pulsing-aura {
+  position: absolute;
+  top: 49.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 255, 185, 0.65) 0%, rgba(78, 242, 163, 0.28) 45%, transparent 75%);
+  filter: blur(20px);
+  pointer-events: none;
+  animation: orbGlowPulse 3.5s infinite ease-in-out;
+  will-change: transform, opacity;
+  z-index: 5;
+}
+
+@keyframes orbGlowPulse {
+  0%, 100% {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.35);
+    filter: blur(25px);
+  }
+}
+
+/* Légère vignette cinématographique pour accentuer la profondeur */
+.hero-grand-vignette {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.45) 100%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, transparent 20%, transparent 75%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Badges discrets dans les coins de l'image */
+.hero-stage-badges {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  pointer-events: none;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-stage-badges > * {
+  pointer-events: auto;
+}
+
+.badge-cta-orange {
+  background: #f57600;
+  color: #ffffff;
+  font-family: var(--font-space);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 6px 14px;
+  border: 1.5px solid #000;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px #000;
+  text-transform: uppercase;
+}
+
+/* Tag interactif */
+.hero-interaction-tag {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  color: var(--c-mint);
+  font-family: var(--font-space);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(78, 242, 163, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hero-grand-image-box:hover .hero-interaction-tag {
+  border-color: var(--c-mint);
+  box-shadow: 0 0 15px rgba(78, 242, 163, 0.3);
+}
+
+/* ==========================================================================
+   BARRE DE FOOTER DU HERO AVEC MANIFESTE ET CTAs #F57600
+   ========================================================================== */
+.hero-grand-footer-bar {
+  padding: 28px 36px;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 32px;
+  align-items: center;
+  background: #ffffff;
+}
+
+@media (max-width: 960px) {
+  .hero-grand-footer-bar {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}
+
+.hero-manifesto-quote {
+  font-family: var(--font-space);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #000;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  line-height: 1.45;
+}
+
+.hero-manifesto-body {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.55;
+}
+
+.hero-manifesto-body strong {
+  color: #000;
+}
+
+.hg-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+@media (max-width: 960px) {
+  .hg-right {
+    align-items: stretch;
+  }
+}
+
+.btn-cta-orange {
+  background: #f57600;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: var(--font-anton);
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  padding: 15px 32px;
+  border: 2px solid #000;
+  border-radius: 6px;
+  box-shadow: 4px 4px 0px #000;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+}
+
+.btn-cta-orange:hover {
+  background: #dc6900;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+  color: #ffffff;
+}
+
+.hero-meta-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+@media (max-width: 960px) {
+  .hero-meta-row {
+    justify-content: flex-start;
+  }
+}
+
+/* ==========================================================================
+   BANDEAU DE STATUT CONTINU (SIGNATURE MENTHE)
+   ========================================================================== */
+.status-strip {
+  background: var(--c-mint);
+  color: #000;
+  padding: 22px 0;
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+  overflow: hidden;
+}
+
+.strip-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.strip-text-marquee {
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-title {
+  font-family: var(--font-anton);
+  font-size: clamp(1.8rem, 3.4vw, 3rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.status-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  color: #000;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  padding: 12px 24px;
+  border-radius: 100px;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.status-pill-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+}
+
+.pill-dot {
+  width: 9px;
+  height: 9px;
+  background: #00d084;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00d084;
+}
+
+.pill-arrow {
+  font-size: 1.1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   SECTIONS CONTENU SITE
+   ========================================================================== */
+.site-content {
+  background: #ffffff;
+  color: #0a0a0a;
+}
+
+.c104-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.c104-tag {
+  display: inline-block;
+  font-family: var(--font-space);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: #000;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.c104-tag.text-dark {
+  background: #06110a;
+  color: var(--c-mint);
+}
+
+/* MANIFESTE */
+.manifesto-section {
+  padding: 110px 0;
+  border-bottom: 2px solid #000;
+  background: #fff;
+}
+
+.manifesto-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+.manifesto-headline {
+  font-size: clamp(2.6rem, 5vw, 4.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.lead-paragraph {
+  font-size: 1.45rem;
+  line-height: 1.45;
+  color: #000;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.secondary-paragraph {
+  font-size: 1.05rem;
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.btn-group-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.c104-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border-radius: 6px;
+  border: 2px solid #000;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.c104-btn-primary {
+  background: #f57600;
+  color: #ffffff;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0px #000;
+}
+
+.c104-btn-primary:hover {
+  background: #dc6900;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+  color: #ffffff;
+}
+
+.c104-btn-outline {
+  background: transparent;
+  color: #000;
+}
+
+.c104-btn-outline:hover {
+  background: #000;
+  color: #fff;
+}
+
+.c104-btn-dark {
+  background: #f57600;
+  color: #ffffff;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0px #000;
+}
+
+.c104-btn-dark:hover {
+  background: #dc6900;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+  color: #ffffff;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* PROGRAMMATION */
+.programme-section {
+  padding: 100px 0;
+  border-bottom: 2px solid #000;
+}
+
+.section-head-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #000;
+}
+
+.sh-title {
+  font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.meta-season {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.events-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.event-c104-card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 6px 6px 0px #000;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.event-c104-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px #000;
+}
+
+.card-media-box {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-bottom: 2px solid #000;
+  background: #000;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-date-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #000;
+  color: var(--c-mint);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border: 1.5px solid #000;
+  border-radius: 4px;
+}
+
+.card-info-box {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.event-category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.event-name {
+  font-size: 1.45rem;
+  line-height: 1.15;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.event-snippet {
+  font-size: 0.92rem;
+  color: #555;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.card-action-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding-top: 14px;
+  border-top: 1px solid #eee;
+}
+
+.card-action-link .arrow {
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.event-c104-card:hover .card-action-link .arrow {
+  transform: translateX(6px);
+}
+
+/* DIAPORAMA / ARCHIVES */
+.gallery-strip-section {
+  padding: 100px 0;
+  background: #fff;
+  border-bottom: 2px solid #000;
+}
+
+.gallery-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 36px;
+  gap: 30px;
+}
+
+.gallery-lead {
+  font-size: 1.15rem;
+  max-width: 480px;
+  color: #666;
+}
+
+.art-carousel-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.carousel-item {
+  position: relative;
+  height: 380px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 5px 5px 0px #000;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.carousel-item:hover img {
+  transform: scale(1.04);
+}
+
+.item-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+  color: #fff;
+}
+
+.io-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: block;
+}
+
+.io-sub {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  opacity: 0.8;
+}
+
+/* ADHÉSION BANNER */
+.membership-section {
+  padding: 100px 0;
+}
+
+.membership-banner {
+  background: #0e1612;
+  color: #fff;
+  border: 3px solid #000;
+  border-radius: 12px;
+  padding: 60px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 50px;
+  align-items: center;
+  box-shadow: 8px 8px 0px #000;
+}
+
+.mb-title {
+  font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.mb-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 580px;
+  color: var(--c-gray-light);
+}
+
+.mb-cta-box {
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 5px 5px 0px #000;
+}
+
+.mb-price {
+  font-family: var(--font-anton);
+  font-size: 1.8rem;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.mb-sub {
+  font-size: 0.88rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* FOOTER */
+.c104-footer {
+  background: #000;
+  color: #fff;
+  padding: 80px 0 50px;
+  border-top: 3px solid #000;
+}
+
+.footer-flex {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.f-brand-logo {
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  color: var(--c-mint);
+}
+
+.f-text {
+  font-size: 0.9rem;
+  color: #999;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.f-cr {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #555;
+}
+
+.f-heading {
+  font-family: var(--font-anton);
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  color: #fff;
+}
+
+.c104-footer ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.c104-footer ul a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: var(--transition);
+}
+
+.c104-footer ul a:hover {
+  color: var(--c-mint);
+}
+
+.ig-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  background: #222;
+  border: 1px solid #444;
+  padding: 10px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.ig-btn:hover {
+  background: var(--c-mint);
+  color: #000;
+  border-color: var(--c-mint);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .manifesto-grid,
+  .membership-banner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .events-cards-grid,
+  .carousel-track {
+    grid-template-columns: 1fr;
+  }
+  .footer-flex {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .fullscreen-nav {
+    padding: 14px 20px;
+  }
+  .nav-links {
+    display: none;
+  }
+  .hero-fullscreen {
+    min-height: 90vh;
+    padding-bottom: 50px;
+  }
+  .strip-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer-flex {
+    grid-template-columns: 1fr;
+  }
+}

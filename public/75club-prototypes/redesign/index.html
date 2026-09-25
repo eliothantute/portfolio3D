@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le 7.5 club | Espace d'Art & Philosophie Contemporaine (Paris)</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="redesign-body">
+
+  <!-- ============================================ -->
+  <!-- 1. HEADER DU SITE (DESIGN SYSTEM COHÉRENT)   -->
+  <!-- ============================================ -->
+  <header class="site-header" id="topHeader">
+    <div class="header-inner">
+      
+      <!-- LOGO 7.5 HAUT GAUCHE -->
+      <a href="#hero" class="header-logo-brand" title="7.5 Paris">
+        <svg class="nav-logo-75" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 20H65L30 120" stroke="#5effab" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="78" cy="74" r="5" fill="#5effab"/>
+          <path d="M135 20H98V70H122C138 70 150 82 150 100C150 118 136 130 116 130C100 130 92 122 89 112" stroke="#5effab" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <!-- MENU DU SITE ORIGINAL AVEC POINTS DE SÉPARATION -->
+      <nav class="header-nav-menu">
+        <a href="#hero" class="nav-item accent-amber active">ACCUEIL</a>
+        <span class="nav-separator">&bull;</span>
+        <a href="#esprit" class="nav-item">L'ESPRIT DU CLUB</a>
+        <span class="nav-separator">&bull;</span>
+        <a href="#programme" class="nav-item accent-amber">LA PROGRAMMATION</a>
+        <span class="nav-separator">&bull;</span>
+        <a href="#activite" class="nav-item">L'ACTIVITÉ DU CLUB</a>
+        <span class="nav-separator">&bull;</span>
+        <a href="#adherer" class="nav-item">ADHÉRER</a>
+        <span class="nav-separator">&bull;</span>
+        <a href="#contact" class="nav-item">CONTACT</a>
+      </nav>
+
+      <!-- INSTAGRAM OFFICIEL -->
+      <div class="header-social-right">
+        <a href="https://www.instagram.com/le7.5paris/" target="_blank" rel="noopener" class="ig-icon-link" title="Instagram @le7.5paris">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5effab" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============================================ -->
+  <!-- 2. HERO PRINCIPAL (HARMONISÉ AVEC LE DESIGN) -->
+  <!-- ============================================ -->
+  <section class="hero-showcase" id="hero">
+    
+    <!-- ARRIÈRE-PLAN PHOTO AVEC TRAITEMENT MINÉRAL & GRAPHITE -->
+    <div class="hero-bg-photo-wrap" id="heroPhotoWrap">
+      <img src="images/hero_original_dance.jpg" alt="Performance artistique 7.5" class="hero-bg-photo" id="heroPhoto">
+      
+      <!-- COUCHES DE TEINTE HARMONISÉES AU DESIGN SYSTEM -->
+      <div class="hero-duotone-layer"></div>
+      <div class="hero-vignette-radial"></div>
+      <div class="hero-noise-texture"></div>
+    </div>
+
+    <!-- ONDES RADIO CONCENTRIQUES SUBTILES EN ARRIÈRE-PLAN DU LOGO -->
+    <div class="hero-radio-waves">
+      <span class="wave-ring ring-1"></span>
+      <span class="wave-ring ring-2"></span>
+      <span class="wave-ring ring-3"></span>
+    </div>
+
+    <!-- METADATA SUPÉRIEURES DU HERO -->
+    <div class="hero-top-meta">
+      <span class="meta-tag font-mono">PARIS &bull; FONDÉ EN 2014 &bull; ISABELLE SURET</span>
+      <span class="meta-status"><span class="pulse-green-dot"></span> FRÉQUENCE CONTINUE &bull; ESPACE OUVERT</span>
+    </div>
+
+    <!-- LE LOGO 7.5 FLOTTANT EN MAJESTÉ AU CENTRE -->
+    <div class="hero-center-logo-stage" id="heroCenterStage">
+      
+      <!-- LOGO 7.5 ORIGINAL NÉON MINT (ACTIF) -->
+      <div class="logo-75-vector-container" id="logoVector">
+        <svg class="giant-75-svg" viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 7 -->
+          <path d="M22 28H115L52 195" stroke="#5effab" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Point central -->
+          <circle cx="132" cy="118" r="8" fill="#5effab"/>
+          <!-- 5 -->
+          <path d="M220 28H160V108H198C222 108 242 124 242 152C242 178 220 198 188 198C162 198 148 184 144 168" stroke="#5effab" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="logo-pulsing-glow"></div>
+      </div>
+
+      <!-- ALTERNATIVE SCULPTURALE 3D (INTERCHANGEABLE) -->
+      <div class="logo-75-3d-container" id="logo3D" style="display:none;">
+        <img src="images/01_75club_lockup_officiel_surrealiste.jpg" alt="7.5 3D Marbre et Chrome" class="logo-3d-round">
+      </div>
+
+      <!-- CONTRÔLE SUBTIL DE VERSION (ORIGINAL VS 3D) -->
+      <div class="logo-toggle-switch">
+        <button class="toggle-mode-btn active" id="btnLogoVector" onclick="setLogoMode('vector')">Logo 7.5 Épuré</button>
+        <button class="toggle-mode-btn" id="btnLogo3D" onclick="setLogoMode('3d')">Logo 7.5 3D</button>
+      </div>
+
+    </div>
+
+    <!-- SOUS-TITRE MANIFESTE HERO INTÉGRÉ AU STYLE SOMBRE -->
+    <div class="hero-bottom-manifesto">
+      <p class="hero-caption font-mono">
+        « Telle une onde radio l’énergie se diffuse, 7.5 comme hybridation expérimentale. »
+      </p>
+      <a href="#colonnes" class="hero-scroll-btn" aria-label="Découvrir le club">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5effab" stroke-width="2">
+          <path d="M7 10l5 5 5-5"/>
+        </svg>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 3. LES 3 BLOCS ICONIQUES (PARFAITEMENT LIÉS) -->
+  <!-- ============================================ -->
+  <section class="iconic-three-columns" id="colonnes">
+    <div class="columns-grid">
+      
+      <!-- COLONNE 1 : L'ESPRIT DU CLUB -->
+      <a href="#esprit" class="column-card col-esprit">
+        <div class="col-inner">
+          <span class="col-num font-mono">01</span>
+          <h2 class="col-title font-montserrat">L'Esprit<br>du club</h2>
+          <span class="col-link-text">Explorer le manifeste &rarr;</span>
+        </div>
+      </a>
+
+      <!-- COLONNE 2 : L'ACTIVITÉ DU CLUB -->
+      <a href="#activite" class="column-card col-activite">
+        <div class="col-inner">
+          <span class="col-num font-mono">02</span>
+          <h2 class="col-title font-montserrat">L'Activité<br>du club</h2>
+          <span class="col-link-text">Voir les créations in situ &rarr;</span>
+        </div>
+      </a>
+
+      <!-- COLONNE 3 : LA PROGRAMMATION -->
+      <a href="#programme" class="column-card col-programme">
+        <div class="col-inner">
+          <span class="col-num font-mono">03</span>
+          <h2 class="col-title font-montserrat">La<br>programmation</h2>
+          <span class="col-link-text">Agenda des saisons &rarr;</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 4. CONTENU DU SITE ORIGINAL : 3 COLONNES     -->
+  <!-- ============================================ -->
+  <main class="main-body-section" id="esprit">
+    <div class="content-container">
+      
+      <div class="original-body-grid">
+        
+        <!-- COLONNE 1 : ÉDITORIAL & MANIFESTE ISABELLE SURET -->
+        <div class="editorial-col">
+          <div class="editorial-card">
+            <span class="ed-tag font-mono">FONDÉ EN 2014 &bull; ISABELLE SURET</span>
+            <p class="ed-intro font-montserrat">
+              Après treize ans d’intense activité, le <strong>7.5 Paris</strong> s'affirme aujourd'hui comme un véritable espace pluridisciplinaire croisant les arts plastiques et la pensée contemporaine.
+            </p>
+            <div class="ed-quote-box">
+              <p class="ed-quote font-montserrat">
+                « Ce n’est pas une galerie. Proche d’un salon contemporain ou d’un petit centre d’art, mais s’en distinguant toutefois. Tentez de le définir et il vous échappe, tant les formes qui s’y font et défont quotidiennement sortent des habituels cloisonnements du monde de l’art. »
+              </p>
+              <p class="ed-quote-sub font-mono">
+                Telle une onde radio l'énergie se diffuse, 7.5 comme hybridation expérimentale.
+              </p>
+            </div>
+            <a href="#adherer" class="btn-clean-green">Soutenir le club &rarr;</a>
+          </div>
+        </div>
+
+        <!-- COLONNE 2 : DIAPORAMA D'ŒUVRES RÉELLES DU SITE -->
+        <div class="slideshow-col" id="activite">
+          <div class="slideshow-card">
+            <div class="slideshow-frame" id="slideshowFrame">
+              <img src="images/original/veronique.jpeg" alt="Véronique Malécot" class="slide-photo active" data-index="0">
+              <img src="images/original/domaine-de-diane.jpg" alt="Domaine de Diane" class="slide-photo" data-index="1">
+              <img src="images/original/olga-titus.jpg" alt="Olga Titus" class="slide-photo" data-index="2">
+              
+              <div class="slide-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+                <span class="dot" onclick="goToSlide(1)"></span>
+                <span class="dot" onclick="goToSlide(2)"></span>
+              </div>
+            </div>
+            <div class="slideshow-info">
+              <span class="slide-title" id="slideTitle">Véronique Malécot // Photographie &amp; Scénographie</span>
+              <span class="slide-meta font-mono">Archives In Situ &bull; Le 7.5 Paris</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLONNE 3 : ACTUALITÉS & ARTICLES RÉCENTS -->
+        <div class="posts-col" id="programme">
+          <div class="posts-card">
+            <h3 class="posts-heading font-montserrat">ACTUALITÉ DU CLUB &bull; ÉVÉNEMENTS</h3>
+
+            <!-- Article 1 : Cinémorphe -->
+            <article class="post-item">
+              <div class="post-thumb">
+                <img src="images/original/cinemorphe.jpg" alt="Collectif Cinémorphe">
+              </div>
+              <div class="post-details">
+                <span class="post-badge font-mono">ACTIVITÉ DU CLUB &bull; PERFORMANCE</span>
+                <h4 class="post-title font-montserrat">
+                  <a href="https://leseptcinq.com/collectif-cinemorphe/" target="_blank">Collectif Cinémorphe // Une collection jalousement gardée</a>
+                </h4>
+                <span class="post-link">Lire l'article &rarr;</span>
+              </div>
+            </article>
+
+            <!-- Article 2 : France Hervé -->
+            <article class="post-item">
+              <div class="post-thumb">
+                <img src="images/original/france-herve.jpg" alt="France Hervé">
+              </div>
+              <div class="post-details">
+                <span class="post-badge font-mono">PERFORMANCES DU 7.5</span>
+                <h4 class="post-title font-montserrat">
+                  <a href="https://leseptcinq.com/france-herve-catch-caffeine-cape-copy/" target="_blank">France Hervé // CATCH CAFFEINE CAPE</a>
+                </h4>
+                <span class="post-link">Lire l'article &rarr;</span>
+              </div>
+            </article>
+
+            <!-- Article 3 : Salomé Chatriot -->
+            <article class="post-item">
+              <div class="post-thumb">
+                <img src="images/hero_original_dance.jpg" alt="Salomé Chatriot x Studio Fasse">
+              </div>
+              <div class="post-details">
+                <span class="post-badge font-mono">EXPOSITION EN COURS</span>
+                <h4 class="post-title font-montserrat">
+                  <a href="#hero">Salomé Chatriot &times; Studio Fasse // Victor Malécot</a>
+                </h4>
+                <span class="post-link">En savoir plus &rarr;</span>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============================================ -->
+  <!-- 5. SECTION ADHÉSION & SOUTIEN                -->
+  <!-- ============================================ -->
+  <section class="membership-strip" id="adherer">
+    <div class="content-container">
+      <div class="membership-card">
+        <div class="mc-left">
+          <span class="mc-tag font-mono">REJOINDRE LE CERCLE</span>
+          <h2 class="mc-title font-montserrat">Le 7.5 club : Adhérer</h2>
+          <p class="mc-desc">
+            Association artistique et philosophique qui soutient celles et ceux qui s’engagent. Accédez à tous les vernissages privés, résidences et rencontres.
+          </p>
+        </div>
+        <div class="mc-right">
+          <div class="price-box">
+            <span class="price-val">50 € <small>/ an</small></span>
+            <span class="price-desc font-mono">Adhésion annuelle &bull; Accès prioritaire</span>
+          </div>
+          <a href="mailto:contact@leseptcinq.com?subject=Adhésion%20Club%207.5" class="btn-join">Adhérer en ligne &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 6. FOOTER DU SITE ORIGINAL                   -->
+  <!-- ============================================ -->
+  <footer class="site-footer" id="contact">
+    <div class="content-container footer-content">
+      
+      <div class="footer-left">
+        <div class="footer-brand">
+          <span class="f-75">7.5</span>
+          <span class="f-title font-montserrat">Le 7.5 club</span>
+        </div>
+        <p class="f-sub">Association artistique et philosophique &bull; Fondée en 2014 par Isabelle Suret</p>
+        <span class="f-copy font-mono">&copy; 2014 &ndash; 2026 Le 7.5 club &bull; Tous droits réservés</span>
+      </div>
+
+      <div class="footer-center">
+        <div class="footer-links-row">
+          <a href="https://leseptcinq.com/politique-de-cookies-ue/">Politique de cookies (UE)</a>
+          <span class="f-sep">&bull;</span>
+          <a href="https://leseptcinq.com/declaration-de-confidentialite-ue/">Déclaration de confidentialité</a>
+          <span class="f-sep">&bull;</span>
+          <a href="https://leseptcinq.com/avertissement/">Avertissement</a>
+          <span class="f-sep">&bull;</span>
+          <a href="#adherer" class="f-highlight">Adhérer</a>
+          <span class="f-sep">&bull;</span>
+          <a href="mailto:contact@leseptcinq.com">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <a href="https://www.instagram.com/le7.5paris/" target="_blank" rel="noopener" class="footer-ig-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          </svg>
+          <span>@le7.5paris</span>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

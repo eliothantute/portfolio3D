@@ -31,6 +31,10 @@ const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
     fr: 'Page de présentation pour une application intelligente sur ordinateur.',
     en: 'Showcase landing page for a modern desktop AI application.',
   },
+  'oneshot': {
+    fr: 'Agent IA autonome et plateforme SaaS pour postuler en 1 clic avec télémétrie en direct.',
+    en: 'Autonomous AI agent and SaaS platform automating 1-click job applications with live telemetry.',
+  },
   'aum-paris': {
     fr: 'Boutique en ligne épurée et élégante pour une marque de maroquinerie de luxe.',
     en: 'Minimalist, luxury e-commerce experience for high-end leather goods.',
@@ -338,7 +342,7 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
                     if (hasMovedRef.current) return;
                     onSelectProject(item.project);
                   }}
-                  title={lang === 'fr' ? `Voir les détails de ${item.project.title}` : `View ${item.project.title} details`}
+                  title={lang === 'fr' ? `Afficher les détails de ${item.project.title}` : `View ${item.project.title} details`}
                 >
                   {/* Media Image */}
                   <img
@@ -358,6 +362,43 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
                         {item.project.title}
                       </span>
                     </div>
+                  )}
+
+                  {/* Bouton VISITER ↗ interactif qui ouvre directement l'URL */}
+                  {isHovered && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9, y: 6 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      className="absolute inset-x-0 bottom-4 px-3 flex items-center justify-center pointer-events-auto z-30"
+                    >
+                      {item.project.liveUrl || item.project.githubUrl ? (
+                        <a
+                          href={item.project.liveUrl || item.project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-mono text-xs font-black tracking-wider shadow-[0_8px_30px_rgb(0,0,0,0.35)] border border-black/10 hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                          title={lang === 'fr' ? `Ouvrir ${item.project.title} en direct ↗` : `Open ${item.project.title} live ↗`}
+                        >
+                          <span>{lang === 'fr' ? 'VISITER' : 'VISIT'}</span>
+                          <span className="font-bold text-sm">↗</span>
+                        </a>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectProject(item.project);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white text-zinc-950 hover:bg-zinc-100 font-mono text-xs font-black tracking-wider shadow-[0_8px_30px_rgb(0,0,0,0.35)] border border-black/10 hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                        >
+                          <span>{lang === 'fr' ? 'DÉTAILS' : 'DETAILS'}</span>
+                          <span>→</span>
+                        </button>
+                      )}
+                    </motion.div>
                   )}
                 </motion.div>
               </div>
@@ -388,7 +429,11 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
                     {activeItem.year}
                   </span>
                   {activeItem.status && (
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/40">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono ${
+                      activeItem.status.toLowerCase().includes('test') || activeItem.status.toLowerCase().includes('bêta') || activeItem.status.toLowerCase().includes('beta')
+                        ? 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200/50 dark:border-amber-800/40 font-semibold'
+                        : 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/50 dark:border-emerald-800/40'
+                    }`}>
                       ● {activeItem.status}
                     </span>
                   )}
@@ -405,34 +450,28 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
               </div>
 
               {/* Bouton pour accéder aux détails + bouton URL direct */}
-              <div className="flex items-center gap-3 flex-shrink-0 w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => onSelectProject(activeItem)}
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-bold text-white bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-all shadow-md active:scale-95 cursor-pointer"
-                >
-                  <span>{lang === 'fr' ? 'DÉTAILS DU PROJET' : 'VIEW DETAILS'}</span>
-                  <span>→</span>
-                </button>
-
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 flex-shrink-0 w-full sm:w-auto">
                 {activeItem.liveUrl && (
                   <a
                     href={activeItem.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all shadow-sm cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-md active:scale-95 cursor-pointer"
                     title={lang === 'fr' ? 'Ouvrir le site en direct ↗' : 'Open live website ↗'}
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
+                    <span>{lang === 'fr' ? 'VISITER LE SITE' : 'VISIT LIVE SITE'}</span>
+                    <span>↗</span>
                   </a>
                 )}
+
+                <button
+                  type="button"
+                  onClick={() => onSelectProject(activeItem)}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-bold text-zinc-800 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-all shadow-sm active:scale-95 cursor-pointer"
+                >
+                  <span>{lang === 'fr' ? 'DÉTAILS DU PROJET' : 'VIEW DETAILS'}</span>
+                  <span>ℹ️</span>
+                </button>
               </div>
             </motion.div>
           ) : (
@@ -441,13 +480,13 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="py-4 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400 flex items-center gap-2"
+              className="py-4 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400 flex items-center justify-center gap-2"
             >
               <span>←</span>
               <span>
                 {lang === 'fr'
-                  ? 'Glissez ou survolez pour explorer • Cliquez sur une image pour afficher les détails'
-                  : 'Drag or hover to explore • Click an image to view details'}
+                  ? 'Glissez pour explorer • Cliquez directement sur une image pour ouvrir le projet en direct ↗'
+                  : 'Drag to explore • Click any image to open live project ↗'}
               </span>
               <span>→</span>
             </motion.div>

@@ -58,8 +58,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         transition={{ type: 'spring', damping: 28, stiffness: 260 }}
         className={`pointer-events-auto flex items-center border backdrop-blur-2xl rounded-full transition-colors duration-300 shadow-xl ${
           isExpanded
-            ? 'w-full max-w-4xl justify-between px-4 py-2.5 sm:px-6 sm:py-3 border-zinc-200/90 dark:border-zinc-800 bg-white/90 dark:bg-zinc-950/90 shadow-md'
-            : 'w-auto justify-center px-5 py-2.5 border-zinc-300/90 dark:border-zinc-700 bg-white/95 dark:bg-zinc-950/95 shadow-2xl hover:scale-105 cursor-pointer'
+            ? 'w-full max-w-4xl justify-between px-3 py-2 sm:px-6 sm:py-3 border-zinc-200/90 dark:border-zinc-800 bg-white/90 dark:bg-zinc-950/90 shadow-md'
+            : 'w-auto justify-center px-4 py-2 sm:px-5 sm:py-2.5 border-zinc-300/90 dark:border-zinc-700 bg-white/95 dark:bg-zinc-950/95 shadow-2xl hover:scale-105 cursor-pointer'
         }`}
       >
         {/* Brand Logo: Eliot Lab */}
@@ -73,7 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           }}
           onMouseEnter={() => onHoverItem?.('ACCUEIL // TOP')}
           onMouseLeave={onLeaveItem}
-          className="flex items-center gap-2 font-display font-extrabold tracking-tight text-zinc-950 dark:text-white transition-opacity hover:opacity-80 text-sm sm:text-base shrink-0"
+          className="flex items-center gap-1.5 sm:gap-2 font-display font-extrabold tracking-tight text-zinc-950 dark:text-white transition-opacity hover:opacity-80 text-xs sm:text-base shrink-0"
         >
           <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
           <span>Eliot Lab</span>
@@ -88,7 +88,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               animate={{ opacity: 1, scale: 1, width: 'auto' }}
               exit={{ opacity: 0, scale: 0.95, width: 0 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center justify-between gap-6 overflow-hidden pl-6 flex-1 min-w-0"
+              className="flex items-center justify-between gap-2 sm:gap-6 overflow-hidden pl-2 sm:pl-6 flex-1 min-w-0"
             >
               {/* Center Navigation Links */}
               <nav className="hidden items-center gap-6 font-sans text-xs font-semibold text-zinc-600 dark:text-zinc-300 md:flex">
@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </nav>
 
               {/* Action Controls: Audio + Lang + Contact */}
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 {/* Audio toggle button */}
                 <button
                   type="button"
@@ -141,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
                   onMouseEnter={() => onHoverItem?.('LANG')}
                   onMouseLeave={onLeaveItem}
-                  className="inline-flex h-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-3 font-mono text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-white hover:text-zinc-950 cursor-pointer dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                  className="inline-flex h-7 sm:h-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 sm:px-3 font-mono text-[11px] sm:text-xs font-medium text-zinc-700 transition-all hover:border-zinc-300 hover:bg-white hover:text-zinc-950 cursor-pointer dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
                 >
                   {lang.toUpperCase()}
                 </button>
@@ -162,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     )
                   }
                   onMouseLeave={onLeaveItem}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 text-xs transition-all hover:border-zinc-300 hover:bg-white hover:scale-110 active:scale-95 cursor-pointer dark:border-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                  className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 text-[11px] sm:text-xs transition-all hover:border-zinc-300 hover:bg-white hover:scale-110 active:scale-95 cursor-pointer dark:border-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700"
                   title={
                     theme === 'dark'
                       ? lang === 'fr'
@@ -190,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }}
                   onMouseEnter={() => onHoverItem?.('CONTACT')}
                   onMouseLeave={onLeaveItem}
-                  className="inline-flex h-8 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-semibold text-white shadow-xs transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
+                  className="inline-flex h-7 sm:h-8 items-center justify-center rounded-full bg-zinc-950 px-3 sm:px-4 text-[11px] sm:text-xs font-semibold text-white shadow-xs transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 cursor-pointer dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
                 >
                   Contact
                 </button>

@@ -967,8 +967,8 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
       </Canvas>
 
       {/* Discreet Minimal Top HUD Bar (Camera & Atmosphere Toggles) */}
-      <div className="absolute top-4 right-4 z-20 flex flex-wrap items-center gap-1.5">
-        <div className="flex items-center gap-1 rounded-2xl border border-zinc-200/80 bg-white/90 p-1 shadow-xl backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-900/90">
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex flex-wrap items-center gap-1 sm:gap-1.5 max-w-[calc(100%-1.5rem)] justify-end">
+        <div className="flex items-center gap-0.5 sm:gap-1 rounded-2xl border border-zinc-200/80 bg-white/90 p-1 shadow-xl backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-900/90 scale-90 sm:scale-100 origin-top-right">
           {/* Camera View Buttons */}
           <div className="flex items-center gap-0.5 pr-1 border-r border-zinc-200 dark:border-zinc-800">
             <button
@@ -976,7 +976,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
               id="btn-view-diorama"
               onClick={() => handleViewChange('diorama')}
               title="Vue Globale Diorama"
-              className={`flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
                 activeView === 'diorama'
                   ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs'
                   : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
@@ -991,7 +991,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
               id="btn-view-crt"
               onClick={() => handleViewChange('crt')}
               title="Vue Téléviseur CRT"
-              className={`flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
                 activeView === 'crt'
                   ? 'bg-emerald-600 text-white shadow-xs'
                   : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
@@ -1006,7 +1006,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
               id="btn-view-window"
               onClick={() => handleViewChange('window')}
               title="Vue Baie Vitrée Tokyo"
-              className={`flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
                 activeView === 'window'
                   ? 'bg-sky-600 text-white shadow-xs'
                   : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
@@ -1021,7 +1021,7 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
               id="btn-view-posters"
               onClick={() => handleViewChange('posters')}
               title="Vue Mur des Posters Rétro"
-              className={`flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 font-mono text-[10.5px] font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
                 activeView === 'posters'
                   ? 'bg-rose-600 text-white shadow-xs'
                   : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
@@ -1034,8 +1034,6 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
 
           {/* Quick Toggles: Light, Audio, Mood, Auto-rotate */}
           <div className="flex items-center gap-1 pl-1">
-
-
             {/* Audio Toggle */}
             <button
               type="button"
@@ -1058,9 +1056,9 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
               title={`Ambiance: ${mood.toUpperCase()} (Cliquer pour changer)`}
               className="flex items-center gap-1 rounded-xl px-2 py-1.5 font-mono text-[10.5px] font-medium text-zinc-700 hover:bg-zinc-100 transition-all cursor-pointer dark:text-zinc-300 dark:hover:bg-zinc-800"
             >
-              {mood === 'night' && <span>🌙 Nuit</span>}
-              {mood === 'sunset' && <span>🌅 Sunset</span>}
-              {mood === 'cyberpunk' && <span>⚡ Neon</span>}
+              {mood === 'night' && <span>🌙<span className="hidden sm:inline"> Nuit</span></span>}
+              {mood === 'sunset' && <span>🌅<span className="hidden sm:inline"> Sunset</span></span>}
+              {mood === 'cyberpunk' && <span>⚡<span className="hidden sm:inline"> Neon</span></span>}
             </button>
 
             {/* Auto-rotate Toggle */}

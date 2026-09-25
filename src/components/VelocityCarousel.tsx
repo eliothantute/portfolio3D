@@ -31,6 +31,10 @@ const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
     fr: 'Page de présentation pour une application intelligente sur ordinateur.',
     en: 'Showcase landing page for a modern desktop AI application.',
   },
+  'oneshot': {
+    fr: 'Plateforme SaaS et agent IA pour automatiser vos candidatures en 1 clic avec suivi en direct.',
+    en: 'Agentic SaaS platform automating job applications in 1 click with real-time live telemetry.',
+  },
   'aum-paris': {
     fr: 'Boutique en ligne élégante et épurée pour une marque de maroquinerie de luxe.',
     en: 'Minimalist, luxury e-commerce shop for leather goods.',
@@ -218,6 +222,10 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
               onClick={() => {
                 if (!isActive) {
                   goTo(index);
+                } else if (project.liveUrl || project.githubUrl) {
+                  window.open(project.liveUrl || project.githubUrl, '_blank', 'noopener,noreferrer');
+                } else {
+                  onSelectProject(project);
                 }
               }}
               onMouseEnter={() => {
@@ -303,10 +311,15 @@ export const VelocityCarousel: React.FC<VelocityCarouselProps> = ({
                 )}
 
                 {/* Top Badge: Category & YouTube if available */}
-                <div className="absolute left-6 top-6 z-20 flex items-center gap-2">
+                <div className="absolute left-6 top-6 z-20 flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-black/75 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-md">
                     {project.category}
                   </span>
+                  {project.status && (project.status.toLowerCase().includes('test') || project.status.toLowerCase().includes('bêta') || project.status.toLowerCase().includes('beta')) && (
+                    <span className="rounded-full bg-amber-500/90 border border-amber-300/40 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-black shadow-md backdrop-blur-md">
+                      ● {lang === 'fr' ? 'PHASE TEST' : 'TEST PHASE'}
+                    </span>
+                  )}
                   {project.youtubeId && (
                     <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-red-600/90 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-md">
                       <span>▶</span>

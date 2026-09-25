@@ -33,6 +33,10 @@ const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
     fr: 'Page de présentation pour une application intelligente sur ordinateur.',
     en: 'Showcase landing page for a modern desktop AI application.',
   },
+  'oneshot': {
+    fr: 'Plateforme SaaS et agent IA pour automatiser vos candidatures en 1 clic avec suivi en direct.',
+    en: 'Agentic SaaS platform automating job applications in 1 click with real-time live telemetry.',
+  },
   'aum-paris': {
     fr: 'Boutique en ligne élégante et épurée pour une marque de maroquinerie de luxe.',
     en: 'Minimalist, luxury e-commerce shop for leather goods.',
@@ -138,9 +142,16 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                     <span className="font-bold text-zinc-950">
                       [ {projectIndex} ‒ {project.year} ]
                     </span>
-                    <span className="rounded-full bg-zinc-100 px-3 py-1 font-semibold uppercase tracking-wider text-zinc-700">
-                      {project.category}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="rounded-full bg-zinc-100 px-3 py-1 font-semibold uppercase tracking-wider text-zinc-700">
+                        {project.category}
+                      </span>
+                      {project.status && (project.status.toLowerCase().includes('test') || project.status.toLowerCase().includes('bêta') || project.status.toLowerCase().includes('beta')) && (
+                        <span className="rounded-full bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-600">
+                          ● {lang === 'fr' ? 'Phase Test' : 'Test Phase'}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Clean Visual Media Preview */}
