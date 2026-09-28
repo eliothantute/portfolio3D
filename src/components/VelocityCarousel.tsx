@@ -32,8 +32,8 @@ const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
     en: 'Showcase landing page for a modern desktop AI application.',
   },
   'oneshot': {
-    fr: 'Plateforme SaaS et agent IA pour automatiser vos candidatures en 1 clic avec suivi en direct.',
-    en: 'Agentic SaaS platform automating job applications in 1 click with real-time live telemetry.',
+    fr: "Outil local de prospection & web scraping d'agences avec audit de délivrabilité MX.",
+    en: 'Private local engine for agency web scraping, email extraction and MX deliverability.',
   },
   'aum-paris': {
     fr: 'Boutique en ligne élégante et épurée pour une marque de maroquinerie de luxe.',

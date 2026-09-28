@@ -34,8 +34,8 @@ const SIMPLE_DESCRIPTIONS: Record<string, { fr: string; en: string }> = {
     en: 'Showcase landing page for a modern desktop AI application.',
   },
   'oneshot': {
-    fr: 'Plateforme SaaS et agent IA pour automatiser vos candidatures en 1 clic avec suivi en direct.',
-    en: 'Agentic SaaS platform automating job applications in 1 click with real-time live telemetry.',
+    fr: "Outil local de prospection & web scraping d'agences avec audit de délivrabilité MX.",
+    en: 'Private local engine for agency web scraping, email extraction and MX deliverability.',
   },
   'aum-paris': {
     fr: 'Boutique en ligne élégante et épurée pour une marque de maroquinerie de luxe.',
@@ -215,7 +215,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                     <span>→</span>
                   </button>
 
-                  {project.liveUrl && (
+                  {project.liveUrl ? (
                     <a
                       href={project.liveUrl}
                       target="_blank"
@@ -225,6 +225,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                       <span>{lang === 'fr' ? 'Voir le site' : 'Visit site'}</span>
                       <span className="text-[10px]">↗</span>
                     </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800/80 px-3 py-1 text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span>{lang === 'fr' ? 'Usage Local' : 'Local Only'}</span>
+                    </span>
                   )}
                 </div>
               </motion.article>

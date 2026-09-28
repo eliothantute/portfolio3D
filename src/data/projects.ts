@@ -130,24 +130,23 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
     {
       id: 'oneshot',
       title: 'Oneshot',
-      client: 'Projet Personnel / SaaS IA',
-      subtitle: 'Agent IA de Candidatures Automatisées en 1 Clic',
-      description: "Plateforme SaaS agentique automatisant la recherche et l'envoi de candidatures en 1 clic (LinkedIn, France Travail, Indeed) avec injection de CV et télémétrie en temps réel.",
-      longDescription: "Oneshot révolutionne la recherche d'emploi en orchestrant un agent IA autonome capable d'analyser les offres, de cibler les opportunités sur plusieurs plateformes (LinkedIn, Indeed, France Travail) et de postuler en un clic avec injection automatique de CV sur mesure. L'application intègre une console télémétrique en direct, une jauge orbitale gamifiée, un mode furtif anti-détection Playwright et un sélecteur dynamique de thèmes rétro/modernes.",
+      client: 'Outil Interne & Propriétaire',
+      subtitle: 'Outil Local de Prospection B2B & Web Scraping',
+      description: "Outil automatisé de prospection et scraping d'agences web & studios créatifs, extraction d'adresses qualifiées, audit de délivrabilité MX et automatisation de candidatures directes.",
+      longDescription: "Oneshot est un outil sur-mesure développé pour un usage strictement local et personnel. Il orchestre un pipeline complet de scraping et de prospection : découverte continue d'agences web et studios de design (Paris, Lyon, remote), extraction automatique des adresses emails directes et des décideurs clés (directeurs artistiques, fondateurs), audit de délivrabilité en temps réel (résolution DNS MX anti-bounce) et génération dynamique de pitchs adaptés avec balises contextuelles. L'outil intègre également une console télémétrique locale, une base de données SQLite embarquée et un mode de postulation automatique furtif Playwright.",
       year: '2026',
-      category: 'App // Agent IA & Automatisation',
+      category: 'App // Prospection & Scraping',
       skillType: 'app',
-      role: ['Architecture Agentique', 'Développement Full-Stack', 'UI/UX Gamifiée', 'Automatisation Navigateur'],
-      stack: ['React', 'TypeScript', 'Playwright', 'Tailwind CSS', 'Vite', 'Vercel'],
-      objective: "Supprimer le temps rébarbatif de saisie des candidatures grâce à un pipeline agentique ultra-rapide, autonome et transparent.",
-      status: 'En phase de test (Bêta)',
-      liveUrl: 'https://job-application-agent-five.vercel.app/',
+      role: ['Architecture Outil Local', 'Web Scraping & Extraction', 'Audit DNS / MX', 'Automatisation B2B'],
+      stack: ['Python', 'FastAPI', 'Playwright', 'SQLite', 'Web Scraping', 'DNS MX Audit'],
+      objective: "Automatiser à 100% la veille, le scraping et la prospection ciblée auprès des agences web et DA en local, sans dépendre de plateformes tierces.",
+      status: 'Usage Local Privé (Non partageable)',
       image: oneshotImg,
       featured: true,
       metrics: [
-        { label: 'Mode', value: '1-Clic Direct' },
-        { label: 'Plateformes', value: 'LinkedIn • FT • Indeed' },
-        { label: 'Statut', value: 'Phase Test (Bêta)' }
+        { label: 'Déploiement', value: 'Local Only (Privé)' },
+        { label: 'Cible', value: 'Agences Web & DA' },
+        { label: 'Scraping', value: 'Emails, Portails & MX' }
       ]
     },
     {
@@ -389,24 +388,23 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
     {
       id: 'oneshot',
       title: 'Oneshot',
-      client: 'Personal Project / AI SaaS',
-      subtitle: '1-Click Autonomous AI Job Application Agent',
-      description: "Agentic SaaS platform automating job search and 1-click applications (LinkedIn, France Travail, Indeed) with dynamic CV injection and real-time live telemetry.",
-      longDescription: "Oneshot streamlines job applications by orchestrating an autonomous AI agent capable of parsing job postings across multiple platforms (LinkedIn, Indeed, France Travail) and applying in a single click with custom CV injection. Built with a live real-time telemetry console, gamified orbital progress gauge, stealth Playwright browser automation mode, and dynamic retro/modern theme switcher.",
+      client: 'Internal & Proprietary Tool',
+      subtitle: 'Local Web Scraping & B2B Prospecting Engine',
+      description: "Automated engine for B2B prospecting and scraping creative studios & web agencies, extracting decision-maker emails, verifying MX deliverability and running 1-click tailored outreach.",
+      longDescription: "Oneshot is a custom engineering tool developed exclusively for private, local use. It powers a full scraping and prospecting pipeline: continuous discovery of digital agencies and design studios, automated extraction of direct emails and key decision makers (Art Directors, studio founders), real-time DNS MX deliverability audits to prevent bounces, and dynamic contextual pitch generation. Includes a local telemetry console, embedded SQLite store, and stealth Playwright browser automation.",
       year: '2026',
-      category: 'App // AI Agent & Automation',
+      category: 'App // Prospecting & Scraping',
       skillType: 'app',
-      role: ['Agentic Architecture', 'Full-Stack Engineering', 'Gamified UI/UX', 'Browser Automation'],
-      stack: ['React', 'TypeScript', 'Playwright', 'Tailwind CSS', 'Vite', 'Vercel'],
-      objective: "Eliminate repetitive application tasks through an ultra-fast, transparent, autonomous agentic application pipeline.",
-      status: 'Testing Phase (Beta)',
-      liveUrl: 'https://job-application-agent-five.vercel.app/',
+      role: ['Local Tool Architecture', 'Web Scraping & Extraction', 'DNS / MX Deliverability', 'B2B Automation'],
+      stack: ['Python', 'FastAPI', 'Playwright', 'SQLite', 'Web Scraping', 'DNS MX Audit'],
+      objective: "Fully automate agency scouting, contact extraction and B2B outreach locally with zero third-party dependency.",
+      status: 'Private Local Tool (Not Public)',
       image: oneshotImg,
       featured: true,
       metrics: [
-        { label: 'Mode', value: '1-Click Direct' },
-        { label: 'Platforms', value: 'LinkedIn • FT • Indeed' },
-        { label: 'Status', value: 'Testing Phase (Beta)' }
+        { label: 'Deployment', value: 'Local Only (Private)' },
+        { label: 'Target', value: 'Creative Studios & ADs' },
+        { label: 'Scraping', value: 'Emails, Portals & MX' }
       ]
     },
     {

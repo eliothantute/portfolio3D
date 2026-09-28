@@ -172,6 +172,13 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                 </a>
               )}
 
+              {!project.liveUrl && !project.githubUrl && (
+                <div className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/90 dark:bg-zinc-800/80 px-4 py-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>{lang === 'fr' ? '🔒 Outil Interne • Usage Local Uniquement' : '🔒 Internal Tool • Local Use Only'}</span>
+                </div>
+              )}
+
               {project.githubUrl && (
                 <a
                   href={project.githubUrl}
