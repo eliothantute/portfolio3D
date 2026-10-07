@@ -160,10 +160,17 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   }, [isDragging, isPointerOver, hoveredFlatIndex, singleSetWidth]);
 
   // Pointer & Drag handlers
+  // Tracks whether this pointer session has crossed the drag threshold and
+  // actually captured the pointer, so a plain tap never steals the native
+  // click target away from the card/link the user pressed on.
+  const isCapturedRef = useRef(false);
+  const pointerIdRef = useRef<number | null>(null);
+
   const handlePointerDown = (e: React.PointerEvent) => {
     if (e.button !== 0) return;
-    setIsDragging(true);
     hasMovedRef.current = false;
+    isCapturedRef.current = false;
+    pointerIdRef.current = e.pointerId;
     dragStartRef.current = {
       startX: e.clientX,
       startPos: posRef.current,
@@ -172,18 +179,24 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
       velocity: 0,
     };
     velocityRef.current = 0;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging) return;
+    if (pointerIdRef.current === null) return;
     const now = performance.now();
     const dt = Math.max((now - dragStartRef.current.lastTime) / 1000, 0.001);
     const dx = e.clientX - dragStartRef.current.lastX;
 
-    if (Math.abs(e.clientX - dragStartRef.current.startX) > 6) {
+    if (!hasMovedRef.current && Math.abs(e.clientX - dragStartRef.current.startX) > 6) {
       hasMovedRef.current = true;
+      // Only now do we know this is a real drag: capture the pointer so the
+      // rest of the gesture tracks smoothly even if it leaves the track.
+      isCapturedRef.current = true;
+      setIsDragging(true);
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     }
+
+    if (!hasMovedRef.current) return;
 
     posRef.current = dragStartRef.current.startPos - (e.clientX - dragStartRef.current.startX);
 
@@ -198,7 +211,9 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    if (!isDragging) return;
+    pointerIdRef.current = null;
+    if (!isCapturedRef.current) return;
+    isCapturedRef.current = false;
     setIsDragging(false);
     // Apply inertia velocity
     const v = dragStartRef.current.velocity;
@@ -340,9 +355,18 @@ export const LollipopCarousel: React.FC<LollipopCarouselProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (hasMovedRef.current) return;
-                    onSelectProject(item.project);
+                    const url = item.project.liveUrl || item.project.githubUrl;
+                    if (url) {
+                      window.open(url, '_blank', 'noopener,noreferrer');
+                    } else {
+                      onSelectProject(item.project);
+                    }
                   }}
-                  title={lang === 'fr' ? `Afficher les détails de ${item.project.title}` : `View ${item.project.title} details`}
+                  title={
+                    item.project.liveUrl || item.project.githubUrl
+                      ? (lang === 'fr' ? `Ouvrir ${item.project.title} en direct ↗` : `Open ${item.project.title} live ↗`)
+                      : (lang === 'fr' ? `Afficher les détails de ${item.project.title}` : `View ${item.project.title} details`)
+                  }
                 >
                   {/* Media Image */}
                   <img
