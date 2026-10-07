@@ -2,7 +2,6 @@ import React, { useRef, useMemo, useState, useEffect, useCallback, Suspense } fr
 import { Canvas, useFrame, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
-import { Sparkles, Compass, Tv, Eye, Image as ImageIcon, Volume2, VolumeX, Sun, Moon } from 'lucide-react';
 import { dioramaAudio } from './diorama/DioramaSoundEngine';
 import { InteractiveItems3D } from './diorama/InteractiveItems3D';
 
@@ -12,7 +11,6 @@ interface TokyoOtakuDioramaProps {
 }
 
 type LightingMood = 'night' | 'sunset' | 'cyberpunk';
-type CameraView = 'diorama' | 'crt' | 'window' | 'posters';
 
 const PHRASES = [
   'SO, WHAT\nDO YOU FEEL?',
@@ -27,24 +25,8 @@ const PHRASES = [
   'HELLO WORLD_\nLET’S TALK!',
 ];
 
-const CAMERA_PRESETS: Record<CameraView, { pos: [number, number, number]; target: [number, number, number] }> = {
-  diorama: {
-    pos: [1.6, 2.5, 4.4],
-    target: [0.0, 0.7, 0.6],
-  },
-  crt: {
-    pos: [-0.05, 1.15, 1.3],
-    target: [-0.33, 0.86, -0.68],
-  },
-  window: {
-    pos: [0.2, 1.4, 2.2],
-    target: [0.6, 1.2, -1.0],
-  },
-  posters: {
-    pos: [-0.35, 1.35, 1.35],
-    target: [1.65, 1.35, 1.35],
-  },
-};
+const INITIAL_CAMERA_POS: [number, number, number] = [1.6, 2.5, 4.4];
+const INITIAL_CAMERA_TARGET: [number, number, number] = [0.0, 0.7, 0.6];
 
 // Helper to draw authentic CRT scanline text texture with correct orientation (upright, left-to-right)
 function createCrtTexture(text: string, colorHex: string): THREE.CanvasTexture {
@@ -868,61 +850,18 @@ const SceneContent: React.FC<SceneContentProps> = ({
 export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
   className = '',
 }) => {
-  const [mood, setMood] = useState<LightingMood>('night');
-  const [activeView, setActiveView] = useState<CameraView>('diorama');
-  const [isAudioMuted, setIsAudioMuted] = useState<boolean>(true);
+  const mood: LightingMood = 'night';
   const [phraseIndex, setPhraseIndex] = useState<number>(0);
-  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(true);
   const [isDraggingObject, setIsDraggingObject] = useState<boolean>(false);
+  const [isCoarsePointer] = useState<boolean>(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+  );
 
   const controlsRef = useRef<any>(null);
-
-  const handleViewChange = useCallback((view: CameraView) => {
-    setActiveView(view);
-    if (view !== 'diorama') {
-      setIsAutoRotating(false);
-    } else {
-      setIsAutoRotating(true);
-    }
-    const preset = CAMERA_PRESETS[view];
-    if (controlsRef.current) {
-      const controls = controlsRef.current;
-      const startPos = controls.object.position.clone();
-      const startTarget = controls.target.clone();
-      const endPos = new THREE.Vector3(...preset.pos);
-      const endTarget = new THREE.Vector3(...preset.target);
-
-      let p = 0;
-      const anim = () => {
-        p += 0.055;
-        if (p < 1) {
-          controls.object.position.lerpVectors(startPos, endPos, p);
-          controls.target.lerpVectors(startTarget, endTarget, p);
-          controls.update();
-          requestAnimationFrame(anim);
-        } else {
-          controls.object.position.copy(endPos);
-          controls.target.copy(endTarget);
-          controls.update();
-        }
-      };
-      requestAnimationFrame(anim);
-    }
-  }, []);
 
   const handleNextPhrase = useCallback(() => {
     dioramaAudio.playCrtZap();
     setPhraseIndex((prev) => (prev + 1) % PHRASES.length);
-  }, []);
-
-
-
-  const handleToggleAudio = useCallback(() => {
-    setIsAudioMuted((prev) => {
-      const next = !prev;
-      dioramaAudio.setMuted(next);
-      return next;
-    });
   }, []);
 
   return (
@@ -930,12 +869,12 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
       {/* 3D WebGL Canvas */}
       <Canvas
         shadows
-        camera={{ position: CAMERA_PRESETS.diorama.pos, fov: 38 }}
+        camera={{ position: INITIAL_CAMERA_POS, fov: 38 }}
         gl={{
           antialias: true,
           alpha: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: mood === 'sunset' ? 1.15 : mood === 'cyberpunk' ? 1.1 : 1.08,
+          toneMappingExposure: 1.08,
           powerPreference: 'high-performance',
         }}
       >
@@ -950,133 +889,28 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
         </Suspense>
 
         <OrbitControls
-          ref={controlsRef}
+          ref={(instance) => {
+            controlsRef.current = instance;
+            // On touch devices, leave the page's vertical scroll alone instead of
+            // trapping the swipe gesture to orbit the camera.
+            if (instance?.domElement) {
+              instance.domElement.style.touchAction = isCoarsePointer ? 'pan-y' : 'none';
+            }
+          }}
           makeDefault
           enableDamping
           dampingFactor={0.05}
-          enabled={!isDraggingObject}
+          enabled={!isDraggingObject && !isCoarsePointer}
           enablePan={false}
           enableZoom={true}
           minDistance={1.8}
           maxDistance={7.5}
           maxPolarAngle={Math.PI / 2 + 0.04}
-          autoRotate={isAutoRotating && !isDraggingObject}
+          autoRotate={!isDraggingObject}
           autoRotateSpeed={1.0}
-          target={CAMERA_PRESETS.diorama.target}
+          target={INITIAL_CAMERA_TARGET}
         />
       </Canvas>
-
-      {/* Discreet Minimal Top HUD Bar (Camera & Atmosphere Toggles) */}
-      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex flex-wrap items-center gap-1 sm:gap-1.5 max-w-[calc(100%-1.5rem)] justify-end">
-        <div className="flex items-center gap-0.5 sm:gap-1 rounded-2xl border border-zinc-200/80 bg-white/90 p-1 shadow-xl backdrop-blur-xl dark:border-zinc-800/80 dark:bg-zinc-900/90 scale-90 sm:scale-100 origin-top-right">
-          {/* Camera View Buttons */}
-          <div className="flex items-center gap-0.5 pr-1 border-r border-zinc-200 dark:border-zinc-800">
-            <button
-              type="button"
-              id="btn-view-diorama"
-              onClick={() => handleViewChange('diorama')}
-              title="Vue Globale Diorama"
-              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
-                activeView === 'diorama'
-                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs'
-                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
-              }`}
-            >
-              <Compass className="h-3 w-3" />
-              <span className="hidden sm:inline">Diorama</span>
-            </button>
-
-            <button
-              type="button"
-              id="btn-view-crt"
-              onClick={() => handleViewChange('crt')}
-              title="Vue Téléviseur CRT"
-              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
-                activeView === 'crt'
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
-              }`}
-            >
-              <Tv className="h-3 w-3" />
-              <span className="hidden sm:inline">CRT TV</span>
-            </button>
-
-            <button
-              type="button"
-              id="btn-view-window"
-              onClick={() => handleViewChange('window')}
-              title="Vue Baie Vitrée Tokyo"
-              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
-                activeView === 'window'
-                  ? 'bg-sky-600 text-white shadow-xs'
-                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
-              }`}
-            >
-              <Eye className="h-3 w-3" />
-              <span className="hidden sm:inline">Tokyo</span>
-            </button>
-
-            <button
-              type="button"
-              id="btn-view-posters"
-              onClick={() => handleViewChange('posters')}
-              title="Vue Mur des Posters Rétro"
-              className={`flex items-center gap-1.5 rounded-xl px-2 sm:px-2.5 py-1.5 font-mono text-[10px] sm:text-[10.5px] font-semibold transition-all cursor-pointer ${
-                activeView === 'posters'
-                  ? 'bg-rose-600 text-white shadow-xs'
-                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white'
-              }`}
-            >
-              <ImageIcon className="h-3 w-3" />
-              <span className="hidden sm:inline">Posters</span>
-            </button>
-          </div>
-
-          {/* Quick Toggles: Light, Audio, Mood, Auto-rotate */}
-          <div className="flex items-center gap-1 pl-1">
-            {/* Audio Toggle */}
-            <button
-              type="button"
-              id="btn-toggle-audio"
-              onClick={handleToggleAudio}
-              title={isAudioMuted ? 'Activer le son Web Audio' : 'Couper le son'}
-              className={`rounded-xl p-1.5 transition-all cursor-pointer ${
-                !isAudioMuted
-                  ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400'
-                  : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
-              }`}
-            >
-              {!isAudioMuted ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
-            </button>
-
-            {/* Mood Palette Toggle */}
-            <button
-              type="button"
-              onClick={() => setMood((m) => (m === 'night' ? 'sunset' : m === 'sunset' ? 'cyberpunk' : 'night'))}
-              title={`Ambiance: ${mood.toUpperCase()} (Cliquer pour changer)`}
-              className="flex items-center gap-1 rounded-xl px-2 py-1.5 font-mono text-[10.5px] font-medium text-zinc-700 hover:bg-zinc-100 transition-all cursor-pointer dark:text-zinc-300 dark:hover:bg-zinc-800"
-            >
-              {mood === 'night' && <span>🌙<span className="hidden sm:inline"> Nuit</span></span>}
-              {mood === 'sunset' && <span>🌅<span className="hidden sm:inline"> Sunset</span></span>}
-              {mood === 'cyberpunk' && <span>⚡<span className="hidden sm:inline"> Neon</span></span>}
-            </button>
-
-            {/* Auto-rotate Toggle */}
-            <button
-              type="button"
-              onClick={() => setIsAutoRotating((r) => !r)}
-              title={isAutoRotating ? 'Arrêter la rotation' : 'Rotation automatique'}
-              className={`rounded-xl p-1.5 transition-all cursor-pointer ${
-                isAutoRotating
-                  ? 'bg-amber-500/10 text-amber-500'
-                  : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
-              }`}
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

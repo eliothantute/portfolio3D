@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Language } from '../types';
 import { InteractiveText } from './InteractiveText';
 import { ArrowDownRight, Compass } from 'lucide-react';
-import { TokyoOtakuDiorama } from './TokyoOtakuDiorama';
+import { FractalAudioHero } from './FractalAudioHero';
 
 interface HeroProps {
   lang: Language;
+  analyserRef: React.MutableRefObject<AnalyserNode | null>;
   onOpenContact?: () => void;
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, onLeaveItem }) => {
+export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, onHoverItem, onLeaveItem }) => {
   const [parisTime, setParisTime] = useState('');
+  const [isSubtitleHovered, setIsSubtitleHovered] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -39,9 +41,9 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
     >
       {/* Grand Cadre Hero */}
       <div className="relative mx-auto w-full max-w-[1440px] min-h-[85vh] sm:min-h-[88vh] lg:min-h-[92vh] rounded-[2.5rem] sm:rounded-[3.2rem] lg:rounded-[3.8rem] bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/90 dark:border-zinc-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col justify-center">
-        {/* Scène 3D WebGL : Tokyo Otaku Diorama positionné sur la droite en desktop */}
+        {/* Scène 3D WebGL : Cube fractal audio-réactif positionné sur la droite en desktop */}
         <div className="absolute top-0 right-0 w-full lg:w-[66%] h-full z-[1]">
-          <TokyoOtakuDiorama />
+          <FractalAudioHero analyserRef={analyserRef} />
         </div>
 
         {/* Dégradé doux pour assurer une lisibilité parfaite des textes */}
@@ -97,11 +99,37 @@ export const Hero: React.FC<HeroProps> = ({ lang, onOpenContact, onHoverItem, on
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-xl text-sm sm:text-base md:text-lg text-zinc-600 dark:text-zinc-300 font-normal leading-relaxed pointer-events-auto"
+            onMouseEnter={() => setIsSubtitleHovered(true)}
+            onMouseLeave={() => setIsSubtitleHovered(false)}
+            className="max-w-xl min-h-[3.5em] sm:min-h-[2.6em] text-sm sm:text-base md:text-lg text-zinc-600 dark:text-zinc-300 font-normal leading-relaxed pointer-events-auto cursor-help"
           >
-            {lang === 'fr'
-              ? "Entre design et développement, conception d'interfaces et expériences web 3D fluides et immersives."
-              : "Between design and development: crafting fluid, modern 3D interfaces and immersive web experiences."}
+            <AnimatePresence mode="wait">
+              {isSubtitleHovered ? (
+                <motion.span
+                  key="translated"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  className="block"
+                >
+                  {lang === 'fr'
+                    ? "Entre design et développement, conception d'interfaces et expériences web 3D fluides et immersives."
+                    : "Between design and development: crafting fluid, modern 3D interfaces and immersive web experiences."}
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="japanese"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  className="block font-mono tracking-wide"
+                >
+                  デザインと開発のはざまで、流麗で没入感のある3Dインターフェースとウェブ体験を創造する。
+                </motion.span>
+              )}
+            </AnimatePresence>
           </motion.p>
 
           {/* Boutons d'action */}

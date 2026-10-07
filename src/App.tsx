@@ -9,6 +9,7 @@ import { Background3D } from './components/Background3D';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SectionsHub } from './components/SectionsHub';
+import { DioramaShowcase } from './components/DioramaShowcase';
 import { ContactSection } from './components/ContactSection';
 import { AudioPlayer } from './components/AudioPlayer';
 import { ProjectModal } from './components/ProjectModal';
@@ -132,6 +133,7 @@ export default function App() {
         {/* Hero Section (Clean, modern, simple & 100% readable) */}
         <Hero
           lang={lang}
+          analyserRef={analyserRef}
           onOpenContact={() => setIsContactOpen(true)}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
@@ -146,6 +148,9 @@ export default function App() {
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
+
+        {/* Compact 3D Diorama Showcase, before Contact */}
+        <DioramaShowcase lang={lang} />
 
         {/* Dedicated Full Contact Section & Socials Footer */}
         <ContactSection

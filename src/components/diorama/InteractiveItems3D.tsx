@@ -98,6 +98,12 @@ export const InteractiveItems3D: React.FC<InteractiveItems3DProps> = ({
             <meshBasicMaterial transparent opacity={0} />
           </mesh>
 
+          {/* Soft contact shadow, grounds the object visually */}
+          <mesh position={[0, 0.001, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[0.14, 20]} />
+            <meshBasicMaterial color="#000000" transparent opacity={0.22} depthWrite={false} />
+          </mesh>
+
           {/* Main Curved Controller Body */}
           <mesh position={[0, 0.015, 0]}>
             <boxGeometry args={[0.22, 0.03, 0.12]} />
@@ -165,6 +171,12 @@ export const InteractiveItems3D: React.FC<InteractiveItems3DProps> = ({
             <meshBasicMaterial transparent opacity={0} />
           </mesh>
 
+          {/* Soft contact shadow, grounds the object visually */}
+          <mesh position={[0, 0.001, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[0.17, 20]} />
+            <meshBasicMaterial color="#000000" transparent opacity={0.22} depthWrite={false} />
+          </mesh>
+
           {/* Manga Book Block (Paper Pages) */}
           <mesh position={[0, 0.018, 0]}>
             <boxGeometry args={[0.18, 0.032, 0.26]} />
@@ -199,6 +211,12 @@ export const InteractiveItems3D: React.FC<InteractiveItems3DProps> = ({
           <mesh visible={false}>
             <cylinderGeometry args={[0.08, 0.08, 0.22, 16]} />
             <meshBasicMaterial transparent opacity={0} />
+          </mesh>
+
+          {/* Soft contact shadow, grounds the object visually */}
+          <mesh position={[0, 0.001, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[0.07, 20]} />
+            <meshBasicMaterial color="#000000" transparent opacity={0.22} depthWrite={false} />
           </mesh>
 
           {/* Can Cylinder Body */}

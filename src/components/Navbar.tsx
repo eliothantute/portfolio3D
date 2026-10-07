@@ -27,24 +27,61 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('top');
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const sectionIds = ['top', 'modes', 'projects', 'cv', 'diorama', 'contact'];
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
+
+      let current = 'top';
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 140) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
+
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - doc.clientHeight;
+      setScrollProgress(scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0);
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   const isExpanded = !scrolled || isHovered;
 
+  const navItems = [
+    { id: 'modes', label: lang === 'fr' ? 'Prestations' : 'Services' },
+    { id: 'projects', label: lang === 'fr' ? 'Projets' : 'Work' },
+    { id: 'cv', label: lang === 'fr' ? 'CV 3D' : '3D CV' },
+  ];
+
   return (
-    <header
-      className={`fixed left-0 right-0 z-50 flex justify-center px-4 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        scrolled ? 'top-3' : 'top-5'
-      }`}
-    >
+    <>
+      {/* Barre de progression de lecture, liée au scroll global */}
+      <div className="fixed inset-x-0 top-0 z-[60] h-[2px] bg-transparent pointer-events-none">
+        <motion.div
+          className="h-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500"
+          style={{ width: `${scrollProgress * 100}%` }}
+          transition={{ duration: 0.1, ease: 'linear' }}
+        />
+      </div>
+
+      <header
+        className={`fixed left-0 right-0 z-50 flex justify-center px-4 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          scrolled ? 'top-3' : 'top-5'
+        }`}
+      >
       <motion.div
         layout
         onMouseEnter={() => {
@@ -91,34 +128,30 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center justify-between gap-2 sm:gap-6 overflow-hidden pl-2 sm:pl-6 flex-1 min-w-0"
             >
               {/* Center Navigation Links */}
-              <nav className="hidden items-center gap-6 font-sans text-xs font-semibold text-zinc-600 dark:text-zinc-300 md:flex">
-
-                <a
-                  href="#modes"
-                  onMouseEnter={() => onHoverItem?.('PRESTATIONS')}
-                  onMouseLeave={onLeaveItem}
-                  className="transition-colors hover:text-zinc-950 dark:hover:text-white cursor-pointer py-1"
-                >
-                  {lang === 'fr' ? 'Prestations' : 'Services'}
-                </a>
-
-                <a
-                  href="#projects"
-                  onMouseEnter={() => onHoverItem?.('PROJETS')}
-                  onMouseLeave={onLeaveItem}
-                  className="transition-colors hover:text-zinc-950 dark:hover:text-white cursor-pointer py-1"
-                >
-                  {lang === 'fr' ? 'Projets' : 'Work'}
-                </a>
-
-                <a
-                  href="#cv"
-                  onMouseEnter={() => onHoverItem?.('CV 3D')}
-                  onMouseLeave={onLeaveItem}
-                  className="transition-colors hover:text-zinc-950 dark:hover:text-white font-bold cursor-pointer py-1"
-                >
-                  {lang === 'fr' ? 'CV 3D' : '3D CV'}
-                </a>
+              <nav className="hidden items-center gap-1 font-sans text-xs font-semibold text-zinc-500 dark:text-zinc-400 md:flex">
+                {navItems.map((item) => {
+                  const isActive = activeSection === item.id;
+                  return (
+                    <a
+                      key={item.id}
+                      href={`#${item.id}`}
+                      onMouseEnter={() => onHoverItem?.(item.label.toUpperCase())}
+                      onMouseLeave={onLeaveItem}
+                      className={`relative px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+                        isActive ? 'text-zinc-950 dark:text-white font-bold' : 'hover:text-zinc-950 dark:hover:text-white'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-active-pill"
+                          className="absolute inset-0 -z-10 rounded-full bg-zinc-100 dark:bg-zinc-800"
+                          transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                        />
+                      )}
+                      {item.label}
+                    </a>
+                  );
+                })}
               </nav>
 
               {/* Action Controls: Audio + Lang + Contact */}
@@ -199,6 +232,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
         </AnimatePresence>
       </motion.div>
-    </header>
+      </header>
+    </>
   );
 };

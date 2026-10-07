@@ -18,7 +18,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
 
-  const email = 'Eliot.Hantute@gmail.com';
+  const email = 'contact@eliotlab.fr';
   const phone = '+33 7 75 03 68 75';
   const phoneTel = '+33775036875';
 
