@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Language } from '../types';
 import {
   Palette,
@@ -9,7 +11,7 @@ import {
   CheckCircle2,
   ArrowRight,
 } from 'lucide-react';
-import { InteractiveText } from './InteractiveText';
+gsap.registerPlugin(ScrollTrigger);
 
 interface CollaborationModesProps {
   lang: Language;
@@ -149,8 +151,137 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
     },
   ];
 
+  const stageRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Scroll-pin the zoom-through sequence whenever a precise pointer (mouse/
+  // trackpad) is available — this is about input precision, not window
+  // width, so a narrower desktop browser still gets the full sequence.
+  // Touch devices (coarse pointer) keep a normal stacked list instead.
+  const [isPinEnabled] = useState<boolean>(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(pointer: fine)').matches &&
+      window.matchMedia('(min-width: 640px)').matches
+  );
+
+  const handleCta = () => {
+    if (onOpenContact) {
+      onOpenContact();
+    } else {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (!isPinEnabled || !stageRef.current) return;
+    const cards = cardRefs.current.filter((el): el is HTMLDivElement => !!el);
+    if (cards.length < 2) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set(cards, { opacity: 0, scale: 0.84, y: 48 });
+      gsap.set(cards[0], { opacity: 1, scale: 1, y: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stageRef.current,
+          start: 'top top',
+          end: `+=${(cards.length - 1) * 100}%`,
+          scrub: 0.6,
+          pin: true,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            const idx = Math.min(cards.length - 1, Math.round(self.progress * (cards.length - 1)));
+            setActiveIndex((prev) => (prev === idx ? prev : idx));
+          },
+        },
+      });
+
+      for (let i = 0; i < cards.length - 1; i++) {
+        tl.to(cards[i], { opacity: 0, scale: 1.1, y: -48, duration: 1, ease: 'power1.inOut' }, i)
+          .fromTo(
+            cards[i + 1],
+            { opacity: 0, scale: 0.84, y: 48 },
+            { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power1.inOut' },
+            i
+          );
+      }
+    }, stageRef);
+
+    return () => ctx.revert();
+  }, [isPinEnabled, lang]);
+
+  // Keep ScrollTrigger measurements correct once layout/fonts settle.
+  useEffect(() => {
+    if (!isPinEnabled) return;
+    const id = window.setTimeout(() => ScrollTrigger.refresh(), 300);
+    return () => window.clearTimeout(id);
+  }, [isPinEnabled]);
+
+  const renderCardBody = (mode: (typeof modes)[number]) => {
+    const Icon = mode.icon;
+    return (
+      <>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-900 shadow-xs dark:bg-zinc-800 dark:text-white">
+            <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+          </div>
+          <span className="font-mono text-sm font-bold text-zinc-400 dark:text-zinc-500">
+            {mode.num} //
+          </span>
+        </div>
+
+        <div className="mt-5">
+          <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+            {mode.badge}
+          </span>
+          <h3 className="font-urbanist mt-1.5 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-zinc-950 dark:text-white">
+            {mode.title}
+          </h3>
+        </div>
+
+        <p className="mt-4 text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
+          {mode.subtitle}
+        </p>
+
+        <div className="mt-6 border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+            {lang === 'fr' ? 'CE QUI EST INCLUS :' : 'DELIVERABLES:'}
+          </span>
+          <ul className="mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+            {mode.deliverables.map((item, idx) => (
+              <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300">
+                <CheckCircle2 className="h-4 w-4 text-zinc-900 dark:text-white shrink-0 mt-0.5" />
+                <span className="leading-snug">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-5 rounded-xl border border-zinc-100 bg-zinc-50 p-3 text-[11px] sm:text-xs text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400">
+          <span className="font-semibold text-zinc-900 dark:text-white">
+            {lang === 'fr' ? 'Pour qui ? ' : 'Best for: '}
+          </span>
+          {mode.bestFor}
+        </div>
+
+        <div className="mt-7 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+          <button
+            type="button"
+            onClick={handleCta}
+            className="group/btn inline-flex w-full items-center justify-between rounded-xl bg-zinc-950 px-4 py-3 text-xs sm:text-sm font-urbanist font-bold text-white shadow-xs transition-all hover:bg-zinc-800 active:scale-98 cursor-pointer dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
+          >
+            <span>{mode.cta}</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+          </button>
+        </div>
+      </>
+    );
+  };
+
   return (
-    <section id="modes" className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-8 lg:px-12 scroll-mt-24">
+    <section id="modes" className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-12 scroll-mt-24">
       {/* Section Header */}
       {!hideHeader && (
         <div className="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
@@ -175,12 +306,45 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
         </div>
       )}
 
-      {/* 4 Modes Cards Grid (2x2) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-        {modes.map((mode, index) => {
-          const Icon = mode.icon;
+      {isPinEnabled ? (
+        /* Scroll-pinned zoom-through sequence: one mode fills the screen at a
+           time, and scrolling crossfades/zooms into the next. */
+        <div ref={stageRef} className="relative h-screen w-full overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center px-4">
+            {modes.map((mode, index) => (
+              <div
+                key={mode.id}
+                ref={(el) => {
+                  cardRefs.current[index] = el;
+                }}
+                onMouseEnter={() => onHoverItem?.(mode.title.toUpperCase())}
+                onMouseLeave={onLeaveItem}
+                className="absolute inset-0 flex items-center justify-center px-4"
+                style={{ willChange: 'transform, opacity' }}
+              >
+                <div className="w-full max-w-3xl rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-200/90 bg-white p-6 sm:p-10 lg:p-12 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900/95">
+                  {renderCardBody(mode)}
+                </div>
+              </div>
+            ))}
+          </div>
 
-          return (
+          {/* Progress dots */}
+          <div className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-2">
+            {modes.map((mode, index) => (
+              <span
+                key={mode.id}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  index === activeIndex ? 'w-6 bg-zinc-950 dark:bg-white' : 'w-1.5 bg-zinc-300 dark:bg-zinc-700'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* 4 Modes Cards Grid (2x2), mobile & coarse-pointer fallback */
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {modes.map((mode, index) => (
             <motion.div
               key={mode.id}
               initial={{ opacity: 0, y: 24 }}
@@ -191,74 +355,11 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
               onMouseLeave={onLeaveItem}
               className="group relative flex flex-col justify-between rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:border-zinc-400 hover:shadow-xl hover:-translate-y-1 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:border-zinc-700"
             >
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-900 shadow-xs transition-all duration-300 group-hover:scale-110 group-hover:bg-zinc-950 group-hover:text-white dark:bg-zinc-800 dark:text-white dark:group-hover:bg-zinc-700">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <span className="font-mono text-sm font-bold text-zinc-400 dark:text-zinc-500">
-                    {mode.num} //
-                  </span>
-                </div>
-
-                <div className="mt-5">
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-                    {mode.badge}
-                  </span>
-                  <h3 className="font-urbanist mt-1.5 text-xl sm:text-2xl font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
-                    {mode.title}
-                  </h3>
-                </div>
-
-                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-                  {mode.subtitle}
-                </p>
-
-                {/* Deliverables */}
-                <div className="mt-6 border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                    {lang === 'fr' ? 'CE QUI EST INCLUS :' : 'DELIVERABLES:'}
-                  </span>
-                  <ul className="mt-2.5 space-y-2">
-                    {mode.deliverables.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs text-zinc-700 dark:text-zinc-300">
-                        <CheckCircle2 className="h-4 w-4 text-zinc-900 dark:text-white shrink-0 mt-0.5" />
-                        <span className="leading-snug">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Target Audience */}
-                <div className="mt-5 rounded-xl border border-zinc-100 bg-zinc-50 p-3 text-[11px] text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400">
-                  <span className="font-semibold text-zinc-900 dark:text-white">
-                    {lang === 'fr' ? 'Pour qui ? ' : 'Best for: '}
-                  </span>
-                  {mode.bestFor}
-                </div>
-              </div>
-
-              {/* Action CTA */}
-              <div className="mt-7 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onOpenContact) {
-                      onOpenContact();
-                    } else {
-                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className="group/btn inline-flex w-full items-center justify-between rounded-xl bg-zinc-950 px-4 py-3 text-xs font-urbanist font-bold text-white shadow-xs transition-all hover:bg-zinc-800 active:scale-98 cursor-pointer dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
-                >
-                  <span>{mode.cta}</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                </button>
-              </div>
+              <div>{renderCardBody(mode)}</div>
             </motion.div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };

@@ -37,7 +37,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
   return (
     <section
       id="top"
-      className="relative w-full px-3 sm:px-6 lg:px-10 pt-24 sm:pt-28 pb-10"
+      className="relative w-full px-3 sm:px-6 lg:px-10 pt-24 sm:pt-28 pb-16 sm:pb-10"
     >
       {/* Grand Cadre Hero */}
       <div className="relative mx-auto w-full max-w-[1440px] min-h-[85vh] sm:min-h-[88vh] lg:min-h-[92vh] rounded-[2.5rem] sm:rounded-[3.2rem] lg:rounded-[3.8rem] bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/90 dark:border-zinc-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col justify-center">

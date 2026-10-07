@@ -4,6 +4,7 @@ import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
 import { LollipopCarousel } from './LollipopCarousel';
 import { CollaborationModes } from './CollaborationModes';
+import { FeaturedProjects } from './FeaturedProjects';
 import { Resume3D } from './Resume3D';
 
 interface SectionsHubProps {
@@ -100,8 +101,16 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     };
   }, []);
 
+  // Featured projects get the large scroll-pinned showcase; the carousel
+  // below shows everything else.
+  const FEATURED_IDS = ['elora', 'atelier-berger', 'disfocus'];
+  const featuredProjects = FEATURED_IDS.map((id) => projects.find((p) => p.id === id)).filter(
+    (p): p is Project => !!p
+  );
+  const nonFeaturedProjects = projects.filter((p) => !FEATURED_IDS.includes(p.id));
+
   // Filtered projects according to active skill type
-  const filteredProjects = projects.filter((p) => {
+  const filteredProjects = nonFeaturedProjects.filter((p) => {
     if (selectedSkillFilter === 'all') return true;
     return p.skillType === selectedSkillFilter;
   });
@@ -131,7 +140,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
   ];
 
   return (
-    <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-8 lg:px-12">
+    <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-8 lg:px-12">
       {/* Sections Accordion List */}
       <div className="flex flex-col divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
         {sectionHeaders.map((sec) => {
@@ -141,69 +150,88 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
             <section
               key={sec.key}
               id={sec.id}
-              className="py-6 sm:py-8 transition-colors duration-300 scroll-mt-24"
+              className="py-9 sm:py-8 transition-colors duration-300 scroll-mt-24"
             >
-              {/* Section Header Title Row (Clickable to open/close) */}
-              <button
-                type="button"
-                onClick={() => toggleSection(sec.key)}
-                onMouseEnter={() => onHoverItem?.(sec.title.toUpperCase())}
-                onMouseLeave={onLeaveItem}
-                className="group flex w-full items-center justify-between text-left cursor-pointer focus:outline-none"
-              >
-                <div className="flex flex-col gap-1.5 sm:gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-zinc-400 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
-                      {sec.num} //
-                    </span>
-                    <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      {sec.badge}
-                    </span>
+              {/* Section Header Title Row (Clickable to open/close, except "modes"/"projects" which reveal themselves on scroll) */}
+              {sec.key === 'modes' || sec.key === 'projects' ? (
+                <div
+                  onMouseEnter={() => onHoverItem?.(sec.title.toUpperCase())}
+                  onMouseLeave={onLeaveItem}
+                  className="flex w-full items-center justify-between text-left"
+                >
+                  <div className="flex flex-col gap-1.5 sm:gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-zinc-400">
+                        {sec.num} //
+                      </span>
+                      <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        {sec.badge}
+                      </span>
+                    </div>
+                    <h2 className="font-urbanist text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-white">
+                      <InteractiveText text={sec.title} hoverColor="#52525b" />
+                    </h2>
                   </div>
-                  <h2 className="font-urbanist text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 group-hover:text-zinc-800 transition-colors dark:text-white dark:group-hover:text-zinc-200">
-                    <InteractiveText text={sec.title} hoverColor="#52525b" />
-                  </h2>
                 </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => toggleSection(sec.key)}
+                  onMouseEnter={() => onHoverItem?.(sec.title.toUpperCase())}
+                  onMouseLeave={onLeaveItem}
+                  className="group flex w-full items-center justify-between text-left cursor-pointer focus:outline-none"
+                >
+                  <div className="flex flex-col gap-1.5 sm:gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-zinc-400 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
+                        {sec.num} //
+                      </span>
+                      <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        {sec.badge}
+                      </span>
+                    </div>
+                    <h2 className="font-urbanist text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 group-hover:text-zinc-800 transition-colors dark:text-white dark:group-hover:text-zinc-200">
+                      <InteractiveText text={sec.title} hoverColor="#52525b" />
+                    </h2>
+                  </div>
 
-                <div className="flex items-center gap-4">
-                  <motion.span
-                    animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-950 font-mono text-lg shadow-sm transition-all group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white cursor-pointer dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
-                  >
-                    +
-                  </motion.span>
+                  <div className="flex items-center gap-4">
+                    <motion.span
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-950 font-mono text-lg shadow-sm transition-all group-hover:scale-105 group-hover:bg-zinc-950 group-hover:text-white cursor-pointer dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+                    >
+                      +
+                    </motion.span>
+                  </div>
+                </button>
+              )}
+
+              {/* "modes"/"projects" always render their scroll-driven reveal; other sections stay a click-to-expand accordion */}
+              {sec.key === 'modes' && (
+                <div className="pt-8 pb-6">
+                  <CollaborationModes
+                    lang={lang}
+                    onOpenContact={onOpenContact}
+                    onHoverItem={onHoverItem}
+                    onLeaveItem={onLeaveItem}
+                    hideHeader={true}
+                  />
                 </div>
-              </button>
+              )}
 
-              {/* Section Expandable Body */}
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    key={`content-${sec.key}`}
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                    className="overflow-hidden pt-8"
-                  >
-                    {/* SECTION 01: MODES D'INTERVENTION */}
-                    {sec.key === 'modes' && (
-                      <div className="flex flex-col pb-6">
-                        <CollaborationModes
-                          lang={lang}
-                          onOpenContact={onOpenContact}
-                          onHoverItem={onHoverItem}
-                          onLeaveItem={onLeaveItem}
-                          hideHeader={true}
-                        />
-                      </div>
-                    )}
+              {sec.key === 'projects' && (
+                <div className="flex flex-col gap-6 pt-8 pb-6">
+                  {/* Featured Projects: scroll-pinned showcase */}
+                  <FeaturedProjects
+                    projects={featuredProjects}
+                    lang={lang}
+                    onSelectProject={onSelectProject}
+                    onHoverItem={onHoverItem}
+                    onLeaveItem={onLeaveItem}
+                  />
 
-                    {/* SECTION 02: PROJETS & RÉALISATIONS */}
-                    {sec.key === 'projects' && (
-                      <div className="flex flex-col gap-6 pb-6">
-                        {/* Skill Filter Buttons (Front-End : Design : App : Tous) */}
+                  {/* Skill Filter Buttons (Front-End : Design : App : Tous) */}
                         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 py-2">
                           <button
                             type="button"
@@ -213,7 +241,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                               }`}
                           >
-                            {lang === 'fr' ? 'TOUS LES PROJETS' : 'ALL PROJECTS'} ({projects.length})
+                            {lang === 'fr' ? 'TOUS LES PROJETS' : 'ALL PROJECTS'} ({nonFeaturedProjects.length})
                           </button>
 
                           <button
@@ -225,7 +253,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                               }`}
                           >
                             FRONT-END (
-                            {projects.filter((p) => p.skillType === 'frontend').length})
+                            {nonFeaturedProjects.filter((p) => p.skillType === 'frontend').length})
                           </button>
 
                           <button
@@ -237,7 +265,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                               }`}
                           >
                             DESIGN (
-                            {projects.filter((p) => p.skillType === 'design').length})
+                            {nonFeaturedProjects.filter((p) => p.skillType === 'design').length})
                           </button>
 
                           <button
@@ -248,7 +276,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                               }`}
                           >
-                            APP ({projects.filter((p) => p.skillType === 'app').length})
+                            APP ({nonFeaturedProjects.filter((p) => p.skillType === 'app').length})
                           </button>
 
                           <button
@@ -260,21 +288,33 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                               }`}
                           >
                             {lang === 'fr' ? 'COMPOSITION MUSICALE' : 'MUSIC COMPOSITION'} (
-                            {projects.filter((p) => p.skillType === 'music').length})
+                            {nonFeaturedProjects.filter((p) => p.skillType === 'music').length})
                           </button>
                         </div>
 
                         {/* Lollipop Carousel */}
-                        <LollipopCarousel
-                          projects={filteredProjects}
-                          lang={lang}
-                          onSelectProject={onSelectProject}
-                          onHoverItem={onHoverItem}
-                          onLeaveItem={onLeaveItem}
-                        />
-                      </div>
-                    )}
+                  <LollipopCarousel
+                    projects={filteredProjects}
+                    lang={lang}
+                    onSelectProject={onSelectProject}
+                    onHoverItem={onHoverItem}
+                    onLeaveItem={onLeaveItem}
+                  />
+                </div>
+              )}
 
+              {/* Section Expandable Body (CV, and any other future accordion sections) */}
+              {sec.key !== 'modes' && sec.key !== 'projects' && (
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    key={`content-${sec.key}`}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden pt-8"
+                  >
                     {/* SECTION 03: CV 2026 */}
                     {sec.key === 'cv' && (
                       <div className="pb-6">
@@ -289,6 +329,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                   </motion.div>
                 )}
               </AnimatePresence>
+              )}
             </section>
           );
         })}

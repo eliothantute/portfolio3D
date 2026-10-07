@@ -150,7 +150,7 @@ export default function App() {
         />
 
         {/* Compact 3D Diorama Showcase, before Contact */}
-        <DioramaShowcase lang={lang} />
+        <DioramaShowcase />
 
         {/* Dedicated Full Contact Section & Socials Footer */}
         <ContactSection
