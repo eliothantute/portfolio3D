@@ -891,18 +891,16 @@ export const TokyoOtakuDiorama: React.FC<TokyoOtakuDioramaProps> = ({
         <OrbitControls
           ref={(instance) => {
             controlsRef.current = instance;
-            // On touch devices, leave the page's vertical scroll alone instead of
-            // trapping the swipe gesture to orbit the camera.
             if (instance?.domElement) {
-              instance.domElement.style.touchAction = isCoarsePointer ? 'pan-y' : 'none';
+              instance.domElement.style.touchAction = 'none';
             }
           }}
           makeDefault
           enableDamping
           dampingFactor={0.05}
-          enabled={!isDraggingObject && !isCoarsePointer}
+          enabled={!isDraggingObject}
           enablePan={false}
-          enableZoom={true}
+          enableZoom={!isCoarsePointer}
           minDistance={1.8}
           maxDistance={7.5}
           maxPolarAngle={Math.PI / 2 + 0.04}

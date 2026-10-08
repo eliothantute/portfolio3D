@@ -95,7 +95,7 @@ export const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
                 }}
                 onMouseEnter={() => onHoverItem?.(project.title.toUpperCase())}
                 onMouseLeave={onLeaveItem}
-                className="absolute inset-0"
+                className={`absolute inset-0 ${index === activeIndex ? 'pointer-events-auto z-10' : 'pointer-events-none z-0'}`}
                 style={{ willChange: 'transform, opacity' }}
               >
                 <FeaturedCard project={project} lang={lang} onSelectProject={onSelectProject} />

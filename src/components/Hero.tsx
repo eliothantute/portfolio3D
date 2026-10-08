@@ -39,22 +39,24 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
       id="top"
       className="relative w-full px-3 sm:px-6 lg:px-10 pt-24 sm:pt-28 pb-16 sm:pb-10"
     >
-      {/* Grand Cadre Hero */}
-      <div className="relative mx-auto w-full max-w-[1440px] min-h-[85vh] sm:min-h-[88vh] lg:min-h-[92vh] rounded-[2.5rem] sm:rounded-[3.2rem] lg:rounded-[3.8rem] bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/90 dark:border-zinc-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col justify-center">
-        {/* Scène 3D WebGL : Cube fractal audio-réactif positionné sur la droite en desktop */}
-        <div className="absolute top-0 right-0 w-full lg:w-[66%] h-full z-[1]">
+      {/* Grand Cadre Hero : sur mobile, l'animation 3D occupe son propre bloc, suivi du texte en dessous ;
+          sur desktop, les deux se superposent comme avant. */}
+      <div className="relative mx-auto w-full max-w-[1440px] sm:min-h-[88vh] lg:min-h-[92vh] rounded-[2.5rem] sm:rounded-[3.2rem] lg:rounded-[3.8rem] bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/90 dark:border-zinc-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden sm:flex sm:flex-col sm:justify-center">
+        {/* Scène 3D WebGL : seule sur mobile (bloc dédié), superposée à droite sur desktop */}
+        <div className="relative h-[68vh] min-h-[460px] w-full sm:absolute sm:inset-y-0 sm:right-0 sm:h-full sm:w-full lg:w-[66%] z-[1]">
           <FractalAudioHero analyserRef={analyserRef} />
         </div>
 
-        {/* Dégradé doux pour assurer une lisibilité parfaite des textes */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-white/85 to-transparent dark:from-zinc-950 dark:via-zinc-950/85 dark:to-transparent lg:w-[48%] z-[5]" />
+        {/* Dégradé doux pour assurer une lisibilité parfaite des textes (superposition desktop uniquement) */}
+        <div className="hidden sm:block absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-white/85 to-transparent dark:from-zinc-950 dark:via-zinc-950/85 dark:to-transparent lg:w-[48%] z-[5]" />
 
-        {/* Contenu avant-plan : Typographie & Boutons */}
-        <div className="relative z-10 flex w-full max-w-2xl flex-col items-start text-left p-5 sm:p-10 lg:p-16 pointer-events-none">
+        {/* Contenu : sur mobile en flux normal sous l'animation ; en superposition sur desktop */}
+        <div className="relative z-10 flex w-full max-w-2xl flex-col items-start text-left p-5 sm:absolute sm:inset-0 sm:p-10 lg:p-16 sm:pointer-events-none">
           {/* Badge Pillule Rôle avec Heure de Paris */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="mb-6 inline-flex max-w-full flex-wrap items-center gap-2.5 sm:gap-3 rounded-2xl sm:rounded-full border border-zinc-200 bg-zinc-100/90 dark:border-zinc-800 dark:bg-zinc-900/90 px-3.5 py-2 sm:px-5 sm:py-2.5 shadow-sm backdrop-blur-xl pointer-events-auto"
           >
@@ -74,7 +76,8 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
           {/* Titre Principal */}
           <motion.div
             initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
             className="mb-6 max-w-2xl pointer-events-auto"
           >
@@ -97,7 +100,8 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
           {/* Description Sous-Titre */}
           <motion.p
             initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={() => setIsSubtitleHovered(true)}
             onMouseLeave={() => setIsSubtitleHovered(false)}
@@ -135,7 +139,8 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
           {/* Boutons d'action */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.65, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
             className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5 pointer-events-auto w-full sm:w-auto"
           >
