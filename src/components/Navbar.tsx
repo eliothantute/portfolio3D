@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Volume2, VolumeX, Sun, Moon } from 'lucide-react';
 import { Language, Theme } from '../types';
 
 interface NavbarProps {
@@ -165,7 +166,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="hidden sm:inline-flex h-8 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-2.5 font-mono text-xs text-zinc-600 hover:text-zinc-950 hover:bg-white transition-all cursor-pointer dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
                   title={isMuted ? 'Activer le son' : 'Couper le son'}
                 >
-                  <span>{isMuted ? '🔇' : '🔊'}</span>
+                  {isMuted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
                 </button>
 
                 {/* Lang toggle pill */}
@@ -207,7 +208,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }
                   aria-label="Toggle theme"
                 >
-                  <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
+                  {theme === 'dark' ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
                 </button>
 
                 {/* Contact CTA pill */}
