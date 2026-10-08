@@ -42,8 +42,8 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
       {/* Grand Cadre Hero : sur mobile, l'animation 3D occupe son propre bloc, suivi du texte en dessous ;
           sur desktop, les deux se superposent comme avant. */}
       <div className="relative mx-auto w-full max-w-[1440px] sm:min-h-[88vh] lg:min-h-[92vh] rounded-[2.5rem] sm:rounded-[3.2rem] lg:rounded-[3.8rem] bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/90 dark:border-zinc-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden sm:flex sm:flex-col sm:justify-center">
-        {/* Scène 3D WebGL : seule sur mobile (bloc dédié), superposée à droite sur desktop */}
-        <div className="relative h-[68vh] min-h-[460px] w-full sm:absolute sm:inset-y-0 sm:right-0 sm:h-full sm:w-full lg:w-[66%] z-[1]">
+        {/* Scène 3D WebGL : seule, plein écran sur mobile (aucun texte visible sans scroller) ; superposée à droite sur desktop */}
+        <div className="relative h-[100dvh] min-h-[560px] w-full sm:absolute sm:inset-y-0 sm:right-0 sm:h-full sm:w-full lg:w-[66%] z-[1]">
           <FractalAudioHero analyserRef={analyserRef} />
         </div>
 
