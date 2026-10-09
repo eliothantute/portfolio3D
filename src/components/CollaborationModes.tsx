@@ -254,7 +254,10 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
           case 1: {
             // "Refonte" — brick-by-brick reveal: a solid brick wall sits over
             // the card and clears away in a staggered construction pattern.
-            tl.set(incoming, { opacity: 1, scale: 1, y: 0 }, i);
+            // A real tween (not .set) so it stays at opacity 0 until the
+            // scrub actually reaches this segment, instead of jumping
+            // visible the instant the timeline is built.
+            tl.to(incoming, { opacity: 1, scale: 1, y: 0, duration: 0.1, ease: 'none' }, i);
             tl.set(bricks, { opacity: 1, scaleY: 1 }, i);
             tl.to(
               bricks,

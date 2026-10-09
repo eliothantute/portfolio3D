@@ -67,8 +67,8 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onHoverItem, onLe
                   className="block"
                 >
                   {lang === 'fr'
-                    ? 'Creative Front-End Developer — expériences web 3D immersives.'
-                    : 'Creative Front-End Developer — immersive 3D web experiences.'}
+                    ? 'Creative Front-End Developer — expériences web immersives.'
+                    : 'Creative Front-End Developer — immersive web experiences.'}
                 </motion.span>
               ) : (
                 <motion.span
@@ -79,7 +79,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onHoverItem, onLe
                   transition={{ duration: 0.2 }}
                   className="block font-mono tracking-wide"
                 >
-                  デザインと開発のはざまで、没入感のある3D体験を創造する。
+                  デザインと開発のはざまで、没入感のある体験を創造する。
                 </motion.span>
               )}
             </AnimatePresence>
