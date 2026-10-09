@@ -32,9 +32,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       isThreeD: true,
       coordinates: { lat: 48.8566, lng: 2.3522, locationName: 'Paris // Dubaï // Tokyo' },
       metrics: [
-        { label: 'FPS Cible', value: '60 FPS' },
-        { label: 'Particules 3D', value: '22,000+' },
-        { label: 'Temps de réponse', value: '< 16ms' }
+        { label: 'Rôle', value: 'Design' },
+        { label: 'Client', value: 'Atelier Berger' }
       ]
     },
     {
@@ -239,9 +238,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       featured: true,
       isThreeD: true,
       metrics: [
-        { label: 'Moteur 3D', value: 'Three.js / GLSL' },
-        { label: 'Audio', value: 'Visualizer Réactif' },
-        { label: 'BPM', value: '125 — 175 BPM' }
+        { label: 'Rôle', value: 'Design / Développeur' },
+        { label: 'Client', value: 'Disfocus (DJ Producer)' }
       ]
     },
     {
@@ -290,9 +288,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       isThreeD: true,
       coordinates: { lat: 48.8566, lng: 2.3522, locationName: 'Paris // Dubai // Tokyo' },
       metrics: [
-        { label: 'Target FPS', value: '60 FPS' },
-        { label: '3D Particles', value: '22,000+' },
-        { label: 'Frame Time', value: '< 16ms' }
+        { label: 'Role', value: 'Design' },
+        { label: 'Client', value: 'Atelier Berger' }
       ]
     },
     {
@@ -497,9 +494,8 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       featured: true,
       isThreeD: true,
       metrics: [
-        { label: '3D Engine', value: 'Three.js / GLSL' },
-        { label: 'Audio', value: 'Reactive Visualizer' },
-        { label: 'BPM', value: '125 — 175 BPM' }
+        { label: 'Role', value: 'Design / Developer' },
+        { label: 'Client', value: 'Disfocus (DJ Producer)' }
       ]
     },
     {

@@ -103,7 +103,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 
   // Featured projects get the large scroll-pinned showcase; the carousel
   // below shows everything else.
-  const FEATURED_IDS = ['elora', 'atelier-berger', 'disfocus'];
+  const FEATURED_IDS = ['elora', 'atelier-berger', 'aum-paris', 'disfocus'];
   const featuredProjects = FEATURED_IDS.map((id) => projects.find((p) => p.id === id)).filter(
     (p): p is Project => !!p
   );

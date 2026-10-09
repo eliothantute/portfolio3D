@@ -14,11 +14,12 @@ interface FeaturedProjectsProps {
   onLeaveItem?: () => void;
 }
 
-// Each featured card enters from a different direction: top, then right, then bottom.
+// Each featured card enters from a different direction: top, then right, then bottom, then left.
 const ENTER_FROM: Array<{ x: number; y: number }> = [
   { x: 0, y: -120 },
   { x: 140, y: 0 },
   { x: 0, y: 120 },
+  { x: -140, y: 0 },
 ];
 
 export const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
@@ -138,14 +139,19 @@ const FeaturedCard: React.FC<{
   onSelectProject: (project: Project) => void;
 }> = ({ project, lang, onSelectProject }) => {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-zinc-950">
+    <div className="group relative h-full w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-zinc-950 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_30px_90px_-20px_rgba(0,0,0,0.6)]">
       <img
         src={project.image}
         alt={project.title}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover brightness-[1.08] saturate-[1.15] transition-transform duration-700 ease-out group-hover:scale-105"
         loading="lazy"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/10" />
+      {/* Warm spotlight glow behind the text block, for a more luminous feel */}
+      <div className="pointer-events-none absolute -bottom-24 -left-24 h-[28rem] w-[28rem] rounded-full bg-amber-200/20 blur-[100px]" />
+      <div className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-emerald-300/10 blur-[90px]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+      {/* Diagonal shine sweep on hover */}
+      <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-full" />
 
       {/* Metrics chips: top-right on desktop, clear of the floating navbar pill on mobile */}
       {project.metrics && project.metrics.length > 0 && (
@@ -153,7 +159,7 @@ const FeaturedCard: React.FC<{
           {project.metrics.slice(0, 3).map((metric) => (
             <div
               key={metric.label}
-              className="rounded-full border border-white/20 bg-black/40 backdrop-blur-md px-3.5 py-1.5 text-right"
+              className="rounded-full border border-white/25 bg-black/40 backdrop-blur-md px-3.5 py-1.5 text-right shadow-[0_0_20px_rgba(0,0,0,0.3)]"
             >
               <span className="block font-mono text-[9px] uppercase tracking-wider text-white/60">{metric.label}</span>
               <span className="block font-mono text-xs font-bold text-white">{metric.value}</span>
@@ -164,7 +170,7 @@ const FeaturedCard: React.FC<{
 
       <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 lg:p-14">
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white">
+          <span className="rounded-full border border-emerald-300/30 bg-emerald-400/15 backdrop-blur-md px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-200">
             {project.category}
           </span>
           <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-white/60">
@@ -172,7 +178,7 @@ const FeaturedCard: React.FC<{
           </span>
         </div>
 
-        <h3 className="font-urbanist text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white">
+        <h3 className="font-urbanist text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white drop-shadow-[0_2px_20px_rgba(255,255,255,0.15)]">
           {project.title}
         </h3>
         <p className="mt-3 max-w-xl text-sm sm:text-base text-white/80 leading-relaxed">
