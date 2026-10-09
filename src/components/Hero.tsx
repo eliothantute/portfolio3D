@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Language } from '../types';
-import { InteractiveText } from './InteractiveText';
-import { ArrowDownRight, Compass } from 'lucide-react';
 import { FractalAudioHero } from './FractalAudioHero';
 
 interface HeroProps {
   lang: Language;
   analyserRef: React.MutableRefObject<AnalyserNode | null>;
-  onOpenContact?: () => void;
   onHoverItem?: (text: string) => void;
   onLeaveItem?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, onHoverItem, onLeaveItem }) => {
+export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onHoverItem, onLeaveItem }) => {
   const [parisTime, setParisTime] = useState('');
-  const [isSubtitleHovered, setIsSubtitleHovered] = useState(false);
+  const [isTaglineHovered, setIsTaglineHovered] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -35,91 +32,43 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
   }, []);
 
   return (
-    <section
-      id="top"
-      className="relative w-full px-3 sm:px-6 lg:px-10 pt-24 sm:pt-28 pb-16 sm:pb-10"
-    >
-      {/* Grand Cadre Hero : sur mobile, l'animation 3D occupe son propre bloc, suivi du texte en dessous ;
-          sur desktop, les deux se superposent comme avant. */}
-      <div className="relative mx-auto w-full max-w-[1440px] sm:min-h-[88vh] lg:min-h-[92vh] rounded-[2.5rem] sm:rounded-[3.2rem] lg:rounded-[3.8rem] bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/90 dark:border-zinc-800/90 shadow-[0_20px_60px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden sm:flex sm:flex-col sm:justify-center">
-        {/* Scène 3D WebGL : seule, plein écran sur mobile (aucun texte visible sans scroller) ; superposée à droite sur desktop */}
-        <div className="relative h-[100dvh] min-h-[560px] w-full sm:absolute sm:inset-y-0 sm:right-0 sm:h-full sm:w-full lg:w-[66%] z-[1]">
-          <FractalAudioHero analyserRef={analyserRef} />
-        </div>
-
-        {/* Dégradé doux pour assurer une lisibilité parfaite des textes (superposition desktop uniquement) */}
-        <div className="hidden sm:block absolute inset-0 pointer-events-none bg-gradient-to-r from-white via-white/85 to-transparent dark:from-zinc-950 dark:via-zinc-950/85 dark:to-transparent lg:w-[48%] z-[5]" />
-
-        {/* Contenu : sur mobile en flux normal sous l'animation ; en superposition sur desktop */}
-        <div className="relative z-10 flex w-full max-w-2xl flex-col items-start text-left p-5 sm:absolute sm:inset-0 sm:p-10 lg:p-16 sm:pointer-events-none">
-          {/* Badge Pillule Rôle avec Heure de Paris */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-6 inline-flex max-w-full flex-wrap items-center gap-2.5 sm:gap-3 rounded-2xl sm:rounded-full border border-zinc-200 bg-zinc-100/90 dark:border-zinc-800 dark:bg-zinc-900/90 px-3.5 py-2 sm:px-5 sm:py-2.5 shadow-sm backdrop-blur-xl pointer-events-auto"
-          >
-            <span className="relative flex h-2 sm:h-2.5 w-2 sm:w-2.5 shrink-0">
+    <section id="top" className="relative w-full px-3 sm:px-6 lg:px-10 pt-24 sm:pt-28 pb-10">
+      <div className="mx-auto w-full max-w-[1440px]">
+        {/* Ligne d'intro compacte : statut + courte signature, pas de gros titre */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-4 sm:mb-6 flex flex-col gap-3 px-1 sm:flex-row sm:items-start sm:justify-between sm:gap-10"
+        >
+          <div className="inline-flex shrink-0 items-center gap-2">
+            <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex h-2 sm:h-2.5 w-2 sm:w-2.5 rounded-full bg-emerald-500" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
-            <span className="font-mono text-sm sm:text-base md:text-lg lg:text-xl font-extrabold uppercase tracking-wider text-zinc-950 dark:text-zinc-100">
-              ELIOT HANTUTE // PARIS {parisTime ? `• ${parisTime}` : ''}
+            <span className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
+              Eliot Hantute // Paris {parisTime ? `• ${parisTime}` : ''}
             </span>
-            <span className="h-4 w-px bg-zinc-300 dark:bg-zinc-700 hidden sm:inline" />
-            <span className="font-mono text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400 hidden sm:inline">
-              {lang === 'fr' ? 'Disponible pour projets' : 'Available for projects'}
-            </span>
-          </motion.div>
+          </div>
 
-          {/* Titre Principal */}
-          <motion.div
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-6 max-w-2xl pointer-events-auto"
-          >
-            <h1 className="font-urbanist flex flex-col text-3xl sm:text-5xl md:text-6xl lg:text-[4.6rem] xl:text-[5.2rem] font-black tracking-tight text-zinc-950 dark:text-white leading-[1.04] sm:leading-[1.02]">
-              <span className="block text-zinc-950 dark:text-white">
-                <InteractiveText
-                  text="Creative Front-End"
-                  hoverColor="#2563eb"
-                />
-              </span>
-              <span className="mt-1 block text-zinc-900 dark:text-zinc-200 sm:mt-2">
-                <InteractiveText
-                  text="Developer"
-                  hoverColor="#4f46e5"
-                />
-              </span>
-            </h1>
-          </motion.div>
-
-          {/* Description Sous-Titre */}
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            onMouseEnter={() => setIsSubtitleHovered(true)}
-            onMouseLeave={() => setIsSubtitleHovered(false)}
-            className="max-w-xl min-h-[3.5em] sm:min-h-[2.6em] text-sm sm:text-base md:text-lg text-zinc-600 dark:text-zinc-300 font-normal leading-relaxed pointer-events-auto cursor-help"
+          <p
+            onMouseEnter={() => setIsTaglineHovered(true)}
+            onMouseLeave={() => setIsTaglineHovered(false)}
+            className="max-w-md cursor-help text-sm leading-snug text-zinc-700 dark:text-zinc-300 sm:text-right sm:text-base md:text-lg"
           >
             <AnimatePresence mode="wait">
-              {isSubtitleHovered ? (
+              {isTaglineHovered ? (
                 <motion.span
                   key="translated"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.2 }}
                   className="block"
                 >
                   {lang === 'fr'
-                    ? "Entre design et développement, conception d'interfaces et expériences web 3D fluides et immersives."
-                    : "Between design and development: crafting fluid, modern 3D interfaces and immersive web experiences."}
+                    ? 'Creative Front-End Developer — expériences web 3D immersives.'
+                    : 'Creative Front-End Developer — immersive 3D web experiences.'}
                 </motion.span>
               ) : (
                 <motion.span
@@ -127,54 +76,35 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onOpenContact, on
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.2 }}
                   className="block font-mono tracking-wide"
                 >
-                  デザインと開発のはざまで、流麗で没入感のある3Dインターフェースとウェブ体験を創造する。
+                  デザインと開発のはざまで、没入感のある3D体験を創造する。
                 </motion.span>
               )}
             </AnimatePresence>
-          </motion.p>
+          </p>
+        </motion.div>
 
-          {/* Boutons d'action */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.65, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5 pointer-events-auto w-full sm:w-auto"
-          >
-            {/* Bouton Principal */}
-            <button
-              type="button"
-              onClick={() => {
-                const el = document.getElementById('contact');
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else if (onOpenContact) {
-                  onOpenContact();
-                }
-              }}
-              onMouseEnter={() => onHoverItem?.('DISCUTER D’UN PROJET')}
-              onMouseLeave={onLeaveItem}
-              className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 px-7 sm:px-8 py-3.5 sm:py-4 text-sm font-urbanist font-bold shadow-md transition-all hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:scale-105 active:scale-95 cursor-pointer text-center"
-            >
-              <span>{lang === 'fr' ? 'Démarrer un projet' : 'Start a project'}</span>
-              <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
-            </button>
+        {/* Grand panneau visuel : le cube fractal audio-réactif occupe presque tout l'écran */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+          onMouseEnter={() => onHoverItem?.('ELIOT LAB // 3D')}
+          onMouseLeave={onLeaveItem}
+          className="relative h-[72vh] min-h-[460px] w-full overflow-hidden rounded-[2.5rem] bg-zinc-950 shadow-[0_30px_80px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.6)] sm:h-[80vh] sm:rounded-[3rem] lg:h-[85vh] lg:rounded-[3.5rem]"
+        >
+          <FractalAudioHero analyserRef={analyserRef} />
 
-            {/* Bouton Explorer les Projets */}
-            <a
-              href="#projects"
-              onMouseEnter={() => onHoverItem?.('PROJETS')}
-              onMouseLeave={onLeaveItem}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white hover:border-zinc-900 text-zinc-700 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:white dark:hover:border-zinc-700 px-6 py-3.5 sm:py-4 font-urbanist text-sm font-medium backdrop-blur-md transition-all hover:scale-105 cursor-pointer shadow-xs text-center"
-            >
-              <Compass className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
-              <span>{lang === 'fr' ? 'Explorer les Projets' : 'Explore Projects'}</span>
-            </a>
-          </motion.div>
-        </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between px-6 pb-5 text-white/50 sm:px-10 sm:pb-7">
+            <span className="font-mono text-sm sm:text-base">+</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] sm:text-xs">
+              {lang === 'fr' ? 'Défiler pour explorer' : 'Scroll to explore'}
+            </span>
+            <span className="font-mono text-sm sm:text-base">+</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

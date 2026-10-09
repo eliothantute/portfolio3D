@@ -130,11 +130,10 @@ export default function App() {
           onLeaveItem={handleLeaveItem}
         />
 
-        {/* Hero Section (Clean, modern, simple & 100% readable) */}
+        {/* Hero Section — court, dominé par l'animation 3D (style Lusion) */}
         <Hero
           lang={lang}
           analyserRef={analyserRef}
-          onOpenContact={() => setIsContactOpen(true)}
           onHoverItem={handleHoverItem}
           onLeaveItem={handleLeaveItem}
         />
