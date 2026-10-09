@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -20,6 +20,11 @@ interface CollaborationModesProps {
   onLeaveItem?: () => void;
   hideHeader?: boolean;
 }
+
+const BRICK_COLS = 6;
+const BRICK_ROWS = 4;
+const PARTICLE_COUNT = 18;
+const WAVE_BAR_COUNT = 16;
 
 export const CollaborationModes: React.FC<CollaborationModesProps> = ({
   lang,
@@ -155,6 +160,23 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Per-card signature entrance effects (desktop pinned sequence only)
+  const brushEdgeRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const brushContentRef = useRef<HTMLDivElement | null>(null);
+  const brickRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const particleRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const waveBarRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  const particleSeeds = useMemo(
+    () =>
+      Array.from({ length: PARTICLE_COUNT }, () => ({
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        delay: Math.random() * 0.3,
+      })),
+    []
+  );
+
   // Scroll-pin the zoom-through sequence whenever a precise pointer (mouse/
   // trackpad) is available — this is about input precision, not window
   // width, so a narrower desktop browser still gets the full sequence.
@@ -180,8 +202,29 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
     if (cards.length < 2) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(cards, { opacity: 0, scale: 0.84, y: 48 });
+      gsap.set(cards, { opacity: 0, scale: 0.84, y: 48, rotationY: 0 });
       gsap.set(cards[0], { opacity: 1, scale: 1, y: 0 });
+
+      // Initial states for each card's signature effect
+      const brushEdges = brushEdgeRefs.current.filter((el): el is HTMLDivElement => !!el);
+      if (brushEdges.length === 4) {
+        gsap.set(brushEdges[0], { scaleX: 0 }); // top
+        gsap.set(brushEdges[1], { scaleY: 0 }); // right
+        gsap.set(brushEdges[2], { scaleX: 0 }); // bottom
+        gsap.set(brushEdges[3], { scaleY: 0 }); // left
+      }
+      if (brushContentRef.current) {
+        gsap.set(brushContentRef.current, { clipPath: 'inset(0 100% 0 0)' });
+      }
+
+      const bricks = brickRefs.current.filter((el): el is HTMLDivElement => !!el);
+      gsap.set(bricks, { opacity: 1, scaleY: 1 });
+
+      const particles = particleRefs.current.filter((el): el is HTMLDivElement => !!el);
+      gsap.set(particles, { opacity: 0, scale: 0 });
+
+      const waveBars = waveBarRefs.current.filter((el): el is HTMLDivElement => !!el);
+      gsap.set(waveBars, { scaleY: 0.08 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -199,13 +242,83 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       });
 
       for (let i = 0; i < cards.length - 1; i++) {
-        tl.to(cards[i], { opacity: 0, scale: 1.1, y: -48, duration: 1, ease: 'power1.inOut' }, i)
-          .fromTo(
-            cards[i + 1],
-            { opacity: 0, scale: 0.84, y: 48 },
-            { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power1.inOut' },
-            i
-          );
+        const outgoing = cards[i];
+        const incoming = cards[i + 1];
+        const nextIndex = i + 1;
+
+        // Generic exit for the card leaving the stage
+        tl.to(outgoing, { opacity: 0, scale: 1.1, y: -48, duration: 1, ease: 'power1.inOut' }, i);
+
+        // Signature entrance for the card taking over, keyed to its theme
+        switch (nextIndex) {
+          case 1: {
+            // "Refonte" — brick-by-brick reveal: a solid brick wall sits over
+            // the card and clears away in a staggered construction pattern.
+            tl.set(incoming, { opacity: 1, scale: 1, y: 0 }, i);
+            tl.set(bricks, { opacity: 1, scaleY: 1 }, i);
+            tl.to(
+              bricks,
+              {
+                opacity: 0,
+                scaleY: 0,
+                duration: 0.75,
+                ease: 'power1.in',
+                stagger: { each: 0.022, grid: [BRICK_ROWS, BRICK_COLS], from: 'start' },
+              },
+              i + 0.15
+            );
+            break;
+          }
+          case 2: {
+            // "Animation & 3D" — materializes out of particles while spinning
+            // once around the Y axis.
+            tl.fromTo(
+              incoming,
+              { opacity: 0, scale: 0.86, y: 0, rotationY: 0 },
+              { opacity: 1, scale: 1, rotationY: 360, duration: 1, ease: 'power1.inOut' },
+              i
+            );
+            tl.fromTo(
+              particles,
+              { opacity: 0, scale: 0 },
+              { opacity: 1, scale: 1, duration: 0.45, stagger: 0.018, ease: 'back.out(2)' },
+              i
+            ).to(particles, { opacity: 0, duration: 0.35, ease: 'power1.in' }, i + 0.6);
+            break;
+          }
+          case 3: {
+            // "Composition Musicale" — an equalizer ripple builds the card in.
+            tl.fromTo(incoming, { opacity: 0, scale: 0.9, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power1.inOut' }, i);
+            tl.fromTo(
+              waveBars,
+              { scaleY: 0.08 },
+              {
+                scaleY: 1,
+                duration: 0.5,
+                ease: 'power2.out',
+                stagger: { each: 0.035, from: 'center' },
+                yoyo: true,
+                repeat: 1,
+              },
+              i + 0.1
+            );
+            break;
+          }
+          default:
+            tl.fromTo(incoming, { opacity: 0, scale: 0.84, y: 48 }, { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power1.inOut' }, i);
+        }
+      }
+
+      // "Design au Déploiement" is already on stage at rest: give it a
+      // one-time brush draw-in as the section is first reached.
+      if (brushEdges.length === 4 && brushContentRef.current) {
+        const intro = gsap.timeline();
+        intro
+          .to(brushEdges[0], { scaleX: 1, duration: 0.35, ease: 'power2.out' })
+          .to(brushEdges[1], { scaleY: 1, duration: 0.3, ease: 'power2.out' })
+          .to(brushEdges[2], { scaleX: 1, duration: 0.35, ease: 'power2.out' })
+          .to(brushEdges[3], { scaleY: 1, duration: 0.3, ease: 'power2.out' })
+          .to(brushContentRef.current, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, '-=0.5');
       }
     }, stageRef);
 
@@ -219,9 +332,9 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
     return () => window.clearTimeout(id);
   }, [isPinEnabled]);
 
-  const renderCardBody = (mode: (typeof modes)[number]) => {
+  const renderCardBody = (mode: (typeof modes)[number], withBrushWrapper: boolean) => {
     const Icon = mode.icon;
-    return (
+    const body = (
       <>
         <div className="flex items-center justify-between gap-3">
           <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-900 shadow-xs dark:bg-zinc-800 dark:text-white">
@@ -278,6 +391,13 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
         </div>
       </>
     );
+
+    if (!withBrushWrapper) return body;
+    return (
+      <div ref={brushContentRef} className="h-full w-full">
+        {body}
+      </div>
+    );
   };
 
   return (
@@ -308,9 +428,9 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
 
       {isPinEnabled ? (
         /* Scroll-pinned zoom-through sequence: one mode fills the screen at a
-           time, and scrolling crossfades/zooms into the next. */
+           time, each with a signature entrance tied to its theme. */
         <div ref={stageRef} className="relative h-screen w-full overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center px-4">
+          <div className="absolute inset-0 flex items-center justify-center px-4" style={{ perspective: 1600 }}>
             {modes.map((mode, index) => (
               <div
                 key={mode.id}
@@ -320,10 +440,91 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                 onMouseEnter={() => onHoverItem?.(mode.title.toUpperCase())}
                 onMouseLeave={onLeaveItem}
                 className="absolute inset-0 flex items-center justify-center px-4"
-                style={{ willChange: 'transform, opacity' }}
+                style={{ willChange: 'transform, opacity', transformStyle: 'preserve-3d' }}
               >
-                <div className="w-full max-w-3xl rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-200/90 bg-white p-6 sm:p-10 lg:p-12 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900/95">
-                  {renderCardBody(mode)}
+                <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-200/90 bg-white p-6 sm:p-10 lg:p-12 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900/95">
+                  {renderCardBody(mode, index === 0)}
+
+                  {/* Card 0: brush-drawn frame */}
+                  {index === 0 && (
+                    <>
+                      <div
+                        ref={(el) => {
+                          brushEdgeRefs.current[0] = el;
+                        }}
+                        className="absolute top-0 left-0 h-[3px] w-full origin-left bg-blue-500"
+                      />
+                      <div
+                        ref={(el) => {
+                          brushEdgeRefs.current[1] = el;
+                        }}
+                        className="absolute top-0 right-0 w-[3px] h-full origin-top bg-blue-500"
+                      />
+                      <div
+                        ref={(el) => {
+                          brushEdgeRefs.current[2] = el;
+                        }}
+                        className="absolute bottom-0 right-0 h-[3px] w-full origin-right bg-blue-500"
+                      />
+                      <div
+                        ref={(el) => {
+                          brushEdgeRefs.current[3] = el;
+                        }}
+                        className="absolute bottom-0 left-0 w-[3px] h-full origin-bottom bg-blue-500"
+                      />
+                    </>
+                  )}
+
+                  {/* Card 1: brick-wall reveal overlay */}
+                  {index === 1 && (
+                    <div
+                      className="pointer-events-none absolute inset-0 grid"
+                      style={{ gridTemplateColumns: `repeat(${BRICK_COLS}, 1fr)`, gridTemplateRows: `repeat(${BRICK_ROWS}, 1fr)` }}
+                    >
+                      {Array.from({ length: BRICK_COLS * BRICK_ROWS }, (_, b) => (
+                        <div
+                          key={b}
+                          ref={(el) => {
+                            brickRefs.current[b] = el;
+                          }}
+                          className="origin-center bg-zinc-200 dark:bg-zinc-700"
+                          style={{ outline: '1px solid rgba(0,0,0,0.06)' }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Card 2: particle materialization */}
+                  {index === 2 && (
+                    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                      {particleSeeds.map((seed, p) => (
+                        <div
+                          key={p}
+                          ref={(el) => {
+                            particleRefs.current[p] = el;
+                          }}
+                          className="absolute h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.9)]"
+                          style={{ left: `${seed.left}%`, top: `${seed.top}%` }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Card 3: waveform build-in strip */}
+                  {index === 3 && (
+                    <div className="pointer-events-none absolute inset-x-0 top-0 flex h-12 items-end justify-center gap-1 overflow-hidden px-8 opacity-70">
+                      {Array.from({ length: WAVE_BAR_COUNT }, (_, w) => (
+                        <div
+                          key={w}
+                          ref={(el) => {
+                            waveBarRefs.current[w] = el;
+                          }}
+                          className="w-full origin-bottom rounded-full bg-purple-500"
+                          style={{ height: 36 }}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -355,7 +556,7 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
               onMouseLeave={onLeaveItem}
               className="group relative flex flex-col justify-between rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:border-zinc-400 hover:shadow-xl hover:-translate-y-1 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:border-zinc-700"
             >
-              <div>{renderCardBody(mode)}</div>
+              <div>{renderCardBody(mode, false)}</div>
             </motion.div>
           ))}
         </div>
