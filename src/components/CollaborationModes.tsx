@@ -24,7 +24,21 @@ interface CollaborationModesProps {
 const BRICK_COLS = 6;
 const BRICK_ROWS = 4;
 const PARTICLE_COUNT = 18;
-const WAVE_BAR_COUNT = 16;
+
+// A single smooth sine-wave path, drawn on with stroke-dashoffset — a quiet
+// alternative to a bar-style equalizer.
+function buildWavePath(width: number, height: number, cycles: number, points = 80) {
+  const mid = height / 2;
+  const amp = height * 0.4;
+  let d = '';
+  for (let i = 0; i <= points; i++) {
+    const x = (i / points) * width;
+    const y = mid + Math.sin((i / points) * Math.PI * 2 * cycles) * amp;
+    d += i === 0 ? `M${x},${y}` : ` L${x},${y}`;
+  }
+  return d;
+}
+const WAVE_PATH = buildWavePath(400, 40, 4);
 
 export const CollaborationModes: React.FC<CollaborationModesProps> = ({
   lang,
@@ -161,11 +175,11 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Per-card signature entrance effects (desktop pinned sequence only)
-  const brushEdgeRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const drawLineRef = useRef<HTMLDivElement | null>(null);
   const brushContentRef = useRef<HTMLDivElement | null>(null);
   const brickRefs = useRef<Array<HTMLDivElement | null>>([]);
   const particleRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const waveBarRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const wavePathRef = useRef<SVGPathElement | null>(null);
 
   const particleSeeds = useMemo(
     () =>
@@ -206,15 +220,11 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       gsap.set(cards[0], { opacity: 1, scale: 1, y: 0 });
 
       // Initial states for each card's signature effect
-      const brushEdges = brushEdgeRefs.current.filter((el): el is HTMLDivElement => !!el);
-      if (brushEdges.length === 4) {
-        gsap.set(brushEdges[0], { scaleX: 0 }); // top
-        gsap.set(brushEdges[1], { scaleY: 0 }); // right
-        gsap.set(brushEdges[2], { scaleX: 0 }); // bottom
-        gsap.set(brushEdges[3], { scaleY: 0 }); // left
+      if (drawLineRef.current) {
+        gsap.set(drawLineRef.current, { scaleX: 0 });
       }
       if (brushContentRef.current) {
-        gsap.set(brushContentRef.current, { clipPath: 'inset(0 100% 0 0)' });
+        gsap.set(brushContentRef.current, { opacity: 0, scale: 1.04, filter: 'blur(14px)' });
       }
 
       const bricks = brickRefs.current.filter((el): el is HTMLDivElement => !!el);
@@ -223,8 +233,10 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       const particles = particleRefs.current.filter((el): el is HTMLDivElement => !!el);
       gsap.set(particles, { opacity: 0, scale: 0 });
 
-      const waveBars = waveBarRefs.current.filter((el): el is HTMLDivElement => !!el);
-      gsap.set(waveBars, { scaleY: 0.08 });
+      if (wavePathRef.current) {
+        const len = wavePathRef.current.getTotalLength();
+        gsap.set(wavePathRef.current, { strokeDasharray: len, strokeDashoffset: len });
+      }
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -290,21 +302,11 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
             break;
           }
           case 3: {
-            // "Composition Musicale" — an equalizer ripple builds the card in.
+            // "Composition Musicale" — a single quiet waveform draws itself in.
             tl.fromTo(incoming, { opacity: 0, scale: 0.9, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power1.inOut' }, i);
-            tl.fromTo(
-              waveBars,
-              { scaleY: 0.08 },
-              {
-                scaleY: 1,
-                duration: 0.5,
-                ease: 'power2.out',
-                stagger: { each: 0.035, from: 'center' },
-                yoyo: true,
-                repeat: 1,
-              },
-              i + 0.1
-            );
+            if (wavePathRef.current) {
+              tl.to(wavePathRef.current, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' }, i + 0.1);
+            }
             break;
           }
           default:
@@ -312,16 +314,17 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
         }
       }
 
-      // "Design au Déploiement" is already on stage at rest: give it a
-      // one-time brush draw-in as the section is first reached.
-      if (brushEdges.length === 4 && brushContentRef.current) {
+      // "Design au Déploiement" is already on stage at rest: a quiet
+      // blur-to-focus reveal with a thin rule drawing in underneath.
+      if (drawLineRef.current && brushContentRef.current) {
         const intro = gsap.timeline();
         intro
-          .to(brushEdges[0], { scaleX: 1, duration: 0.35, ease: 'power2.out' })
-          .to(brushEdges[1], { scaleY: 1, duration: 0.3, ease: 'power2.out' })
-          .to(brushEdges[2], { scaleX: 1, duration: 0.35, ease: 'power2.out' })
-          .to(brushEdges[3], { scaleY: 1, duration: 0.3, ease: 'power2.out' })
-          .to(brushContentRef.current, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, '-=0.5');
+          .to(drawLineRef.current, { scaleX: 1, duration: 0.7, ease: 'power3.out' })
+          .to(
+            brushContentRef.current,
+            { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
+            '-=0.55'
+          );
       }
     }, stageRef);
 
@@ -448,34 +451,12 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                 <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-200/90 bg-white p-6 sm:p-10 lg:p-12 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900/95">
                   {renderCardBody(mode, index === 0)}
 
-                  {/* Card 0: brush-drawn frame */}
+                  {/* Card 0: a single quiet rule drawn under the card */}
                   {index === 0 && (
-                    <>
-                      <div
-                        ref={(el) => {
-                          brushEdgeRefs.current[0] = el;
-                        }}
-                        className="absolute top-0 left-0 h-[3px] w-full origin-left bg-blue-500"
-                      />
-                      <div
-                        ref={(el) => {
-                          brushEdgeRefs.current[1] = el;
-                        }}
-                        className="absolute top-0 right-0 w-[3px] h-full origin-top bg-blue-500"
-                      />
-                      <div
-                        ref={(el) => {
-                          brushEdgeRefs.current[2] = el;
-                        }}
-                        className="absolute bottom-0 right-0 h-[3px] w-full origin-right bg-blue-500"
-                      />
-                      <div
-                        ref={(el) => {
-                          brushEdgeRefs.current[3] = el;
-                        }}
-                        className="absolute bottom-0 left-0 w-[3px] h-full origin-bottom bg-blue-500"
-                      />
-                    </>
+                    <div
+                      ref={drawLineRef}
+                      className="absolute inset-x-6 sm:inset-x-10 bottom-0 h-px origin-left bg-gradient-to-r from-transparent via-zinc-400 dark:via-white/50 to-transparent shadow-[0_0_12px_rgba(161,161,170,0.6)]"
+                    />
                   )}
 
                   {/* Card 1: brick-wall reveal overlay */}
@@ -513,19 +494,26 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                     </div>
                   )}
 
-                  {/* Card 3: waveform build-in strip */}
+                  {/* Card 3: a single quiet waveform drawn across the top */}
                   {index === 3 && (
-                    <div className="pointer-events-none absolute inset-x-0 top-0 flex h-12 items-end justify-center gap-1 overflow-hidden px-8 opacity-70">
-                      {Array.from({ length: WAVE_BAR_COUNT }, (_, w) => (
-                        <div
-                          key={w}
-                          ref={(el) => {
-                            waveBarRefs.current[w] = el;
-                          }}
-                          className="w-full origin-bottom rounded-full bg-purple-500"
-                          style={{ height: 36 }}
+                    <div className="pointer-events-none absolute inset-x-0 top-6 sm:top-8 flex justify-center opacity-60">
+                      <svg
+                        width="100%"
+                        height="40"
+                        viewBox="0 0 400 40"
+                        preserveAspectRatio="none"
+                        className="max-w-md text-zinc-400 dark:text-white/50"
+                      >
+                        <path
+                          ref={wavePathRef}
+                          d={WAVE_PATH}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1.5}
+                          strokeLinecap="round"
+                          style={{ filter: 'drop-shadow(0 0 6px currentColor)' }}
                         />
-                      ))}
+                      </svg>
                     </div>
                   )}
                 </div>
