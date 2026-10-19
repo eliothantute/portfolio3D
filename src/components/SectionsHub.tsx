@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
 import { CollaborationModes } from './CollaborationModes';
-import { ProjectsGrid } from './ProjectsGrid';
+import { ProjectsWheel } from './ProjectsWheel';
 import { Resume3D } from './Resume3D';
 
 interface SectionsHubProps {
@@ -274,7 +274,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           </button>
                         </div>
 
-                  <ProjectsGrid
+                  <ProjectsWheel
                     projects={filteredProjects}
                     lang={lang}
                     onSelectProject={onSelectProject}
