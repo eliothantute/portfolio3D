@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Language } from '../types';
 import { ScrambleText } from './ScrambleText';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface HeroProps {
   lang: Language;
@@ -11,106 +15,138 @@ interface HeroProps {
 }
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+const SCROLL_LENGTH = '+=450%';
+const SMOOTHING = 0.08;
+
+const formatTime = (s: number) => {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+};
 
 export const Hero: React.FC<HeroProps> = ({ lang, onHoverItem, onLeaveItem }) => {
-  const [isTaglineHovered, setIsTaglineHovered] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const timecodeRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const video = videoRef.current;
+    if (!section || !video) return;
+
+    let target = 0;
+    let current = 0;
+    let raf = 0;
+
+    // iOS Safari only paints seeked frames once the video has been played once.
+    const prime = () => {
+      video.play().then(() => video.pause()).catch(() => {});
+    };
+    if (video.readyState >= 1) prime();
+    else video.addEventListener('loadedmetadata', prime, { once: true });
+
+    const tick = () => {
+      const duration = video.duration;
+      if (Number.isFinite(duration) && duration > 0) {
+        current += (target - current) * SMOOTHING;
+        const time = current * duration;
+        if (Math.abs(video.currentTime - time) > 0.01 && !video.seeking) {
+          video.currentTime = time;
+        }
+        if (timecodeRef.current) {
+          timecodeRef.current.textContent = `${formatTime(time)} / ${formatTime(duration)}`;
+        }
+      }
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${current})`;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    const trigger = ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      end: SCROLL_LENGTH,
+      pin: true,
+      anticipatePin: 1,
+      onUpdate: (self) => {
+        target = self.progress;
+        const fade = Math.max(0, 1 - self.progress / 0.12);
+        if (titleRef.current) {
+          titleRef.current.style.opacity = String(fade);
+          titleRef.current.style.transform = `translateY(${(1 - fade) * -40}px)`;
+        }
+        if (hintRef.current) hintRef.current.style.opacity = String(fade);
+      },
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      trigger.kill();
+      video.removeEventListener('loadedmetadata', prime);
+    };
+  }, []);
 
   return (
-    <section id="top" className="relative w-full overflow-hidden px-3 sm:px-6 lg:px-10 pt-28 sm:pt-32 pb-10">
-      {/* Texture pointillée, façon fond "agence" */}
-      <div className="bg-dot-grid pointer-events-none absolute inset-x-0 top-0 h-[70vh]" />
+    <section
+      ref={sectionRef}
+      id="top"
+      className="relative h-[100svh] w-full overflow-hidden bg-zinc-950 text-white"
+      onMouseEnter={() => onHoverItem?.('ELIOT LAB // FILM')}
+      onMouseLeave={onLeaveItem}
+    >
+      <video
+        ref={videoRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      >
+        <source src={`${import.meta.env.BASE_URL}video/hero-scrub-mobile.mp4`} type="video/mp4" media="(max-width: 640px)" />
+        <source src={`${import.meta.env.BASE_URL}video/hero-scrub.mp4`} type="video/mp4" />
+      </video>
 
-      <div className="relative mx-auto w-full max-w-[1440px]" style={{ containerType: 'inline-size' }}>
-        {/* Panneau visuel : le cube fractal audio-réactif */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: EASE }}
-          onMouseEnter={() => onHoverItem?.('ELIOT LAB // 3D')}
-          onMouseLeave={onLeaveItem}
-          className="relative z-10 h-[52vh] min-h-[340px] w-full overflow-hidden rounded-[2.5rem] bg-zinc-950 shadow-[0_30px_80px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.6)] sm:h-[58vh] sm:rounded-[3rem] lg:h-[62vh] lg:rounded-[3.5rem]"
-        >
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-          >
-            <source src={`${import.meta.env.BASE_URL}video/hero-mobile.mp4`} type="video/mp4" media="(max-width: 640px)" />
-            <source src={`${import.meta.env.BASE_URL}video/hero-540.mp4`} type="video/mp4" />
-          </video>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/40" />
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between px-6 pb-5 text-white/50 sm:px-10 sm:pb-7">
-            <span className="font-mono text-sm sm:text-base">+</span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] sm:text-xs">
-              {lang === 'fr' ? 'Défiler pour explorer' : 'Scroll to explore'}
-            </span>
-            <span className="font-mono text-sm sm:text-base">+</span>
-          </div>
-        </motion.div>
-
-        {/* Eyebrow, collé juste au-dessus de la signature, aligné à gauche comme Mondragon */}
-        <div className="relative z-10 mt-8 px-1 text-left sm:mt-10">
+      <div
+        className="pointer-events-none relative mx-auto flex h-full w-full max-w-[1440px] flex-col justify-end px-3 pb-20 sm:px-6 sm:pb-24 lg:px-10"
+        style={{ containerType: 'inline-size' }}
+      >
+        <div ref={titleRef} className="will-change-transform">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
-            className="font-space-mono text-sm font-normal uppercase tracking-[-0.01em] text-zinc-500 dark:text-zinc-400 sm:text-base"
+            transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
+            className="block px-1 font-space-mono text-sm font-normal uppercase tracking-[-0.01em] text-white/70 sm:text-base"
           >
             <ScrambleText text={lang === 'fr' ? 'Développeur Front-End Créatif' : 'Creative Front-End Developer'} />
           </motion.span>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.35, ease: EASE }}
+            className="-ml-1 mt-1 select-none whitespace-nowrap font-space-mono font-bold uppercase leading-none text-white"
+            style={{ fontSize: '18.5cqw', letterSpacing: '-0.02em' }}
+          >
+            Eliot Lab
+          </motion.h1>
         </div>
+      </div>
 
-        {/* Signature géante, prend toute la largeur, alignée à gauche */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
-          className="relative z-10 -ml-1 mt-1 select-none whitespace-nowrap text-left font-space-mono font-bold uppercase leading-none text-zinc-950 dark:text-white"
-          style={{ fontSize: '18.5cqw', letterSpacing: '-0.02em' }}
-        >
-          Eliot Lab
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          onMouseEnter={() => setIsTaglineHovered(true)}
-          onMouseLeave={() => setIsTaglineHovered(false)}
-          className="relative z-10 mt-5 max-w-md cursor-help text-left text-sm leading-snug text-zinc-600 dark:text-zinc-400 sm:text-base"
-        >
-          <AnimatePresence mode="wait">
-            {isTaglineHovered ? (
-              <motion.span
-                key="translated"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="block"
-              >
-                {lang === 'fr'
-                  ? 'Creative Front-End Developer — expériences web immersives.'
-                  : 'Creative Front-End Developer — immersive web experiences.'}
-              </motion.span>
-            ) : (
-              <motion.span
-                key="japanese"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="block font-mono tracking-wide"
-              >
-                デザインと開発のはざまで、没入感のある体験を創造する。
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.p>
+      {/* Barre cinéma : timecode + progression */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto w-full max-w-[1440px] px-4 pb-5 sm:px-6 sm:pb-7 lg:px-10">
+        <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-white/60 sm:text-xs">
+          <span ref={timecodeRef} className="tabular-nums">00:00 / 00:00</span>
+          <div ref={hintRef}>{lang === 'fr' ? 'Défiler pour explorer' : 'Scroll to explore'}</div>
+          <span>+</span>
+        </div>
+        <div className="mt-3 h-px w-full bg-white/15">
+          <div ref={progressRef} className="h-full origin-left scale-x-0 bg-white/80" />
+        </div>
       </div>
     </section>
   );
