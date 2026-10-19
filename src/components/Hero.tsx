@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Language } from '../types';
-import { FractalAudioHero } from './FractalAudioHero';
 import { ScrambleText } from './ScrambleText';
 
 interface HeroProps {
@@ -13,7 +12,7 @@ interface HeroProps {
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onHoverItem, onLeaveItem }) => {
+export const Hero: React.FC<HeroProps> = ({ lang, onHoverItem, onLeaveItem }) => {
   const [isTaglineHovered, setIsTaglineHovered] = useState(false);
 
   return (
@@ -31,7 +30,18 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onHoverItem, onLe
           onMouseLeave={onLeaveItem}
           className="relative z-10 h-[52vh] min-h-[340px] w-full overflow-hidden rounded-[2.5rem] bg-zinc-950 shadow-[0_30px_80px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.6)] sm:h-[58vh] sm:rounded-[3rem] lg:h-[62vh] lg:rounded-[3.5rem]"
         >
-          <FractalAudioHero analyserRef={analyserRef} />
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          >
+            <source src={`${import.meta.env.BASE_URL}video/hero-mobile.mp4`} type="video/mp4" media="(max-width: 640px)" />
+            <source src={`${import.meta.env.BASE_URL}video/hero-540.mp4`} type="video/mp4" />
+          </video>
 
           <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between px-6 pb-5 text-white/50 sm:px-10 sm:pb-7">
             <span className="font-mono text-sm sm:text-base">+</span>
