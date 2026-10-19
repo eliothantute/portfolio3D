@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
-import { LollipopCarousel } from './LollipopCarousel';
 import { CollaborationModes } from './CollaborationModes';
-import { FeaturedProjects } from './FeaturedProjects';
+import { ProjectsGrid } from './ProjectsGrid';
 import { Resume3D } from './Resume3D';
 
 interface SectionsHubProps {
@@ -101,16 +100,8 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     };
   }, []);
 
-  // Featured projects get the large scroll-pinned showcase; the carousel
-  // below shows everything else.
-  const FEATURED_IDS = ['elora', 'atelier-berger', 'aum-paris', 'disfocus'];
-  const featuredProjects = FEATURED_IDS.map((id) => projects.find((p) => p.id === id)).filter(
-    (p): p is Project => !!p
-  );
-  const nonFeaturedProjects = projects.filter((p) => !FEATURED_IDS.includes(p.id));
-
   // Filtered projects according to active skill type
-  const filteredProjects = nonFeaturedProjects.filter((p) => {
+  const filteredProjects = projects.filter((p) => {
     if (selectedSkillFilter === 'all') return true;
     return p.skillType === selectedSkillFilter;
   });
@@ -221,16 +212,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
               )}
 
               {sec.key === 'projects' && (
-                <div className="flex flex-col gap-6 pt-8 pb-6">
-                  {/* Featured Projects: scroll-pinned showcase */}
-                  <FeaturedProjects
-                    projects={featuredProjects}
-                    lang={lang}
-                    onSelectProject={onSelectProject}
-                    onHoverItem={onHoverItem}
-                    onLeaveItem={onLeaveItem}
-                  />
-
+                <div className="flex flex-col gap-10 pt-8 pb-6">
                   {/* Skill Filter Buttons (Front-End : Design : App : Tous) */}
                         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 py-2">
                           <button
@@ -241,7 +223,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                               }`}
                           >
-                            {lang === 'fr' ? 'TOUS LES PROJETS' : 'ALL PROJECTS'} ({nonFeaturedProjects.length})
+                            {lang === 'fr' ? 'TOUS LES PROJETS' : 'ALL PROJECTS'} ({projects.length})
                           </button>
 
                           <button
@@ -253,7 +235,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                               }`}
                           >
                             FRONT-END (
-                            {nonFeaturedProjects.filter((p) => p.skillType === 'frontend').length})
+                            {projects.filter((p) => p.skillType === 'frontend').length})
                           </button>
 
                           <button
@@ -265,7 +247,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                               }`}
                           >
                             DESIGN (
-                            {nonFeaturedProjects.filter((p) => p.skillType === 'design').length})
+                            {projects.filter((p) => p.skillType === 'design').length})
                           </button>
 
                           <button
@@ -276,7 +258,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                               }`}
                           >
-                            APP ({nonFeaturedProjects.filter((p) => p.skillType === 'app').length})
+                            APP ({projects.filter((p) => p.skillType === 'app').length})
                           </button>
 
                           <button
@@ -288,12 +270,11 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                               }`}
                           >
                             {lang === 'fr' ? 'COMPOSITION MUSICALE' : 'MUSIC COMPOSITION'} (
-                            {nonFeaturedProjects.filter((p) => p.skillType === 'music').length})
+                            {projects.filter((p) => p.skillType === 'music').length})
                           </button>
                         </div>
 
-                        {/* Lollipop Carousel */}
-                  <LollipopCarousel
+                  <ProjectsGrid
                     projects={filteredProjects}
                     lang={lang}
                     onSelectProject={onSelectProject}

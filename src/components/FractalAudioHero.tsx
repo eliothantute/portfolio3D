@@ -4,9 +4,18 @@ import { ParticlesSwarm } from '../three/ParticlesSwarm';
 interface FractalAudioHeroProps {
   analyserRef: React.MutableRefObject<AnalyserNode | null>;
   className?: string;
+  particleCount?: number;
+  presetParams?: Record<string, number>;
+  backgroundColor?: number;
 }
 
-export const FractalAudioHero: React.FC<FractalAudioHeroProps> = ({ analyserRef, className = '' }) => {
+export const FractalAudioHero: React.FC<FractalAudioHeroProps> = ({
+  analyserRef,
+  className = '',
+  particleCount = 14000,
+  presetParams,
+  backgroundColor,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const swarmRef = useRef<InstanceType<typeof ParticlesSwarm> | null>(null);
 
@@ -14,7 +23,8 @@ export const FractalAudioHero: React.FC<FractalAudioHeroProps> = ({ analyserRef,
     const container = containerRef.current;
     if (!container) return;
 
-    const swarm = new ParticlesSwarm(container, 14000);
+    const swarm = new ParticlesSwarm(container, particleCount, { backgroundColor });
+    if (presetParams) swarm.setParams(presetParams);
     swarmRef.current = swarm;
 
     const handleResize = () => swarm.resize(container.clientWidth, container.clientHeight);
@@ -48,7 +58,7 @@ export const FractalAudioHero: React.FC<FractalAudioHeroProps> = ({ analyserRef,
       swarm.dispose();
       swarmRef.current = null;
     };
-  }, [analyserRef]);
+  }, [analyserRef, particleCount]);
 
   return (
     <div

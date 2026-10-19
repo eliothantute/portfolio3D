@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Project, Language } from '../types';
@@ -14,13 +15,7 @@ interface FeaturedProjectsProps {
   onLeaveItem?: () => void;
 }
 
-// Each featured card enters from a different direction: top, then right, then bottom, then left.
-const ENTER_FROM: Array<{ x: number; y: number }> = [
-  { x: 0, y: -120 },
-  { x: 140, y: 0 },
-  { x: 0, y: 120 },
-  { x: -140, y: 0 },
-];
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 export const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
   projects,
@@ -30,7 +25,7 @@ export const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
   onLeaveItem,
 }) => {
   const stageRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const imageRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [isPinEnabled] = useState<boolean>(
@@ -42,39 +37,36 @@ export const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
 
   useLayoutEffect(() => {
     if (!isPinEnabled || !stageRef.current) return;
-    const cards = cardRefs.current.filter((el): el is HTMLDivElement => !!el);
-    if (cards.length < 2) return;
+    const images = imageRefs.current.filter((el): el is HTMLDivElement => !!el);
+    if (images.length < 2) return;
 
     const ctx = gsap.context(() => {
-      cards.forEach((card, i) => {
-        gsap.set(card, { opacity: 0, scale: 0.88, x: ENTER_FROM[i]?.x ?? 0, y: ENTER_FROM[i]?.y ?? 0 });
+      images.forEach((img, i) => {
+        gsap.set(img, { opacity: i === 0 ? 1 : 0, scale: i === 0 ? 1 : 1.06 });
       });
-      gsap.set(cards[0], { opacity: 1, scale: 1, x: 0, y: 0 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: stageRef.current,
           start: 'top top',
-          end: `+=${(cards.length - 1) * 100}%`,
+          end: `+=${(images.length - 1) * 100}%`,
           scrub: 0.6,
           pin: true,
           anticipatePin: 1,
           onUpdate: (self) => {
-            const idx = Math.min(cards.length - 1, Math.round(self.progress * (cards.length - 1)));
+            const idx = Math.min(images.length - 1, Math.round(self.progress * (images.length - 1)));
             setActiveIndex((prev) => (prev === idx ? prev : idx));
           },
         },
       });
 
-      for (let i = 0; i < cards.length - 1; i++) {
-        const next = ENTER_FROM[i + 1] ?? { x: 0, y: 0 };
-        tl.to(cards[i], { opacity: 0, scale: 1.08, x: -(next.x / 2), y: -(next.y / 2), duration: 1, ease: 'power1.inOut' }, i)
-          .fromTo(
-            cards[i + 1],
-            { opacity: 0, scale: 0.88, x: next.x, y: next.y },
-            { opacity: 1, scale: 1, x: 0, y: 0, duration: 1, ease: 'power1.inOut' },
-            i
-          );
+      for (let i = 0; i < images.length - 1; i++) {
+        tl.to(images[i], { opacity: 0, scale: 0.96, duration: 1, ease: 'power1.inOut' }, i).fromTo(
+          images[i + 1],
+          { opacity: 0, scale: 1.06 },
+          { opacity: 1, scale: 1, duration: 1, ease: 'power1.inOut' },
+          i
+        );
       }
     }, stageRef);
 
@@ -83,49 +75,143 @@ export const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
 
   if (projects.length === 0) return null;
 
+  const active = projects[activeIndex] ?? projects[0];
+
   return (
     <div className="mb-10">
       {isPinEnabled ? (
-        <div ref={stageRef} className="relative h-screen w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]">
-          <div className="absolute inset-0">
-            {projects.map((project, index) => (
-              <div
-                key={project.id}
-                ref={(el) => {
-                  cardRefs.current[index] = el;
-                }}
-                onMouseEnter={() => onHoverItem?.(project.title.toUpperCase())}
-                onMouseLeave={onLeaveItem}
-                className={`absolute inset-0 ${index === activeIndex ? 'pointer-events-auto z-10' : 'pointer-events-none z-0'}`}
-                style={{ willChange: 'transform, opacity' }}
-              >
-                <FeaturedCard project={project} lang={lang} onSelectProject={onSelectProject} />
-              </div>
-            ))}
-          </div>
+        <div ref={stageRef} className="relative h-screen w-full overflow-hidden">
+          <div className="grid h-full grid-cols-12 items-center gap-8 lg:gap-12">
+            {/* Colonne texte, sticky visuellement grâce au pin */}
+            <div className="col-span-5 flex flex-col gap-8">
+              <p className="max-w-sm font-mono text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                {lang === 'fr'
+                  ? 'Une sélection de réalisations récentes. Chaque projet détaille le besoin, l’approche et le résultat livré.'
+                  : 'A selection of recent work. Each project covers the brief, the approach, and the delivered result.'}
+              </p>
 
-          <div className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-2 z-20">
-            {projects.map((project, index) => (
-              <span
-                key={project.id}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  index === activeIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/40'
-                }`}
-              />
-            ))}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.4, ease: EASE }}
+                  onMouseEnter={() => onHoverItem?.(active.title.toUpperCase())}
+                  onMouseLeave={onLeaveItem}
+                  className="flex flex-col gap-5"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full border border-zinc-200 bg-white px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-600 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-300">
+                      {active.category}
+                    </span>
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      {active.year}
+                    </span>
+                  </div>
+
+                  <h3 className="font-urbanist text-4xl font-black leading-[0.95] tracking-tight text-zinc-950 dark:text-white lg:text-6xl">
+                    {active.title}
+                  </h3>
+
+                  <p className="max-w-sm text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 lg:text-base">
+                    {active.subtitle}
+                  </p>
+
+                  {active.metrics && active.metrics.length > 0 && (
+                    <div className="flex flex-wrap gap-8 pt-2">
+                      {active.metrics.slice(0, 2).map((metric) => (
+                        <div key={metric.label}>
+                          <p
+                            className="font-mono font-black leading-none tracking-tight text-zinc-950 dark:text-white"
+                            style={{ fontSize: 'clamp(1.75rem, 3vw, 2.75rem)' }}
+                          >
+                            {metric.value}
+                          </p>
+                          <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                            {metric.label}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    {(active.liveUrl || active.githubUrl) && (
+                      <a
+                        href={active.liveUrl || active.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-3 text-sm font-urbanist font-bold text-white shadow-lg transition-all hover:scale-105 active:scale-95 dark:bg-white dark:text-zinc-950"
+                      >
+                        <span>{lang === 'fr' ? 'Voir le projet' : 'View project'}</span>
+                        <ArrowUpRight className="h-4 w-4" />
+                      </a>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => onSelectProject(active)}
+                      className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-urbanist font-bold text-zinc-950 transition-all hover:bg-zinc-100 active:scale-95 dark:border-white/15 dark:bg-transparent dark:text-white dark:hover:bg-white/10"
+                    >
+                      <Info className="h-4 w-4" />
+                      <span>{lang === 'fr' ? 'Détails' : 'Details'}</span>
+                    </button>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Compteur + progression */}
+              <div className="mt-auto flex items-center gap-4 pt-6">
+                <span className="font-mono text-xs font-bold text-zinc-400">
+                  {String(activeIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+                </span>
+                <div className="flex items-center gap-2">
+                  {projects.map((project, index) => (
+                    <span
+                      key={project.id}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        index === activeIndex ? 'w-6 bg-zinc-950 dark:bg-white' : 'w-1.5 bg-zinc-300 dark:bg-zinc-700'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Colonne image, crossfade au scroll */}
+            <div className="relative col-span-7 h-[80vh] overflow-hidden rounded-[2.5rem] bg-zinc-950 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.25)] dark:shadow-[0_30px_90px_-20px_rgba(0,0,0,0.7)]">
+              {projects.map((project, index) => (
+                <div
+                  key={project.id}
+                  ref={(el) => {
+                    imageRefs.current[index] = el;
+                  }}
+                  className="absolute inset-0"
+                  style={{ willChange: 'transform, opacity' }}
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-full w-full object-cover brightness-[1.03] saturate-[1.1]"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-10">
           {projects.map((project) => (
-            <div
+            <MobileFeaturedCard
               key={project.id}
-              onMouseEnter={() => onHoverItem?.(project.title.toUpperCase())}
-              onMouseLeave={onLeaveItem}
-              className="relative h-[70vh] min-h-[420px] w-full overflow-hidden rounded-[2rem]"
-            >
-              <FeaturedCard project={project} lang={lang} onSelectProject={onSelectProject} />
-            </div>
+              project={project}
+              lang={lang}
+              onSelectProject={onSelectProject}
+              onHoverItem={onHoverItem}
+              onLeaveItem={onLeaveItem}
+            />
           ))}
         </div>
       )}
@@ -133,98 +219,82 @@ export const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
   );
 };
 
-const FeaturedCard: React.FC<{
+const MobileFeaturedCard: React.FC<{
   project: Project;
   lang: Language;
   onSelectProject: (project: Project) => void;
-}> = ({ project, lang, onSelectProject }) => {
+  onHoverItem?: (text: string) => void;
+  onLeaveItem?: () => void;
+}> = ({ project, lang, onSelectProject, onHoverItem, onLeaveItem }) => {
   return (
-    <div className="group relative h-full w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-zinc-950 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_30px_90px_-20px_rgba(0,0,0,0.6)]">
-      <img
-        src={project.image}
-        alt={project.title}
-        className="absolute inset-0 h-full w-full object-cover brightness-[1.08] saturate-[1.15] transition-transform duration-700 ease-out group-hover:scale-105"
-        loading="lazy"
-      />
-      {/* Warm spotlight glow behind the text block, for a more luminous feel */}
-      <div className="pointer-events-none absolute -bottom-24 -left-24 h-[28rem] w-[28rem] rounded-full bg-amber-200/20 blur-[100px]" />
-      <div className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-emerald-300/10 blur-[90px]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-      {/* Diagonal shine sweep on hover */}
-      <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-full" />
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6, ease: EASE }}
+      onMouseEnter={() => onHoverItem?.(project.title.toUpperCase())}
+      onMouseLeave={onLeaveItem}
+      className="flex flex-col gap-5"
+    >
+      <div className="relative h-[46vh] min-h-[320px] w-full overflow-hidden rounded-[2rem] bg-zinc-950">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="h-full w-full object-cover brightness-[1.03] saturate-[1.1]"
+          loading="lazy"
+        />
+      </div>
 
-      {/* Metrics chips: top-right on desktop, clear of the floating navbar pill on mobile */}
+      <div className="flex items-center gap-2">
+        <span className="rounded-full border border-zinc-200 bg-white px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-600 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-300">
+          {project.category}
+        </span>
+        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+          {project.year}
+        </span>
+      </div>
+
+      <h3 className="font-urbanist text-3xl font-black leading-[0.95] tracking-tight text-zinc-950 dark:text-white">
+        {project.title}
+      </h3>
+      <p className="max-w-sm text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{project.subtitle}</p>
+
       {project.metrics && project.metrics.length > 0 && (
-        <div className="absolute top-6 right-6 hidden sm:flex flex-col gap-2 items-end">
-          {project.metrics.slice(0, 3).map((metric) => (
-            <div
-              key={metric.label}
-              className="rounded-full border border-white/25 bg-black/40 backdrop-blur-md px-3.5 py-1.5 text-right shadow-[0_0_20px_rgba(0,0,0,0.3)]"
-            >
-              <span className="block font-mono text-[9px] uppercase tracking-wider text-white/60">{metric.label}</span>
-              <span className="block font-mono text-xs font-bold text-white">{metric.value}</span>
+        <div className="flex flex-wrap gap-6">
+          {project.metrics.slice(0, 2).map((metric) => (
+            <div key={metric.label}>
+              <p className="font-mono text-2xl font-black leading-none tracking-tight text-zinc-950 dark:text-white">
+                {metric.value}
+              </p>
+              <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                {metric.label}
+              </p>
             </div>
           ))}
         </div>
       )}
 
-      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 lg:p-14">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-emerald-300/30 bg-emerald-400/15 backdrop-blur-md px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-200">
-            {project.category}
-          </span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-white/60">
-            {project.year}
-          </span>
-        </div>
-
-        <h3 className="font-urbanist text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white drop-shadow-[0_2px_20px_rgba(255,255,255,0.15)]">
-          {project.title}
-        </h3>
-        <p className="mt-3 max-w-xl text-sm sm:text-base text-white/80 leading-relaxed">
-          {project.subtitle}
-        </p>
-
-        {project.metrics && project.metrics.length > 0 && (
-          <div className="mt-4 flex sm:hidden flex-wrap gap-2">
-            {project.metrics.slice(0, 3).map((metric) => (
-              <div
-                key={metric.label}
-                className="rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-3 py-1.5"
-              >
-                <span className="font-mono text-[9px] uppercase tracking-wider text-white/60">{metric.label} </span>
-                <span className="font-mono text-[11px] font-bold text-white">{metric.value}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          {(project.liveUrl || project.githubUrl) && (
-            <a
-              href={project.liveUrl || project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-urbanist font-bold text-zinc-950 shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              <span>{lang === 'fr' ? 'Voir le projet' : 'View project'}</span>
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          )}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelectProject(project);
-            }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-md px-5 py-3 text-sm font-urbanist font-bold text-white transition-all hover:bg-white/20 active:scale-95 cursor-pointer"
+      <div className="flex flex-wrap items-center gap-3 pt-1">
+        {(project.liveUrl || project.githubUrl) && (
+          <a
+            href={project.liveUrl || project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-zinc-950 px-5 py-3 text-sm font-urbanist font-bold text-white shadow-lg active:scale-95 dark:bg-white dark:text-zinc-950"
           >
-            <Info className="h-4 w-4" />
-            <span>{lang === 'fr' ? 'Détails' : 'Details'}</span>
-          </button>
-        </div>
+            <span>{lang === 'fr' ? 'Voir le projet' : 'View project'}</span>
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+        )}
+        <button
+          type="button"
+          onClick={() => onSelectProject(project)}
+          className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-urbanist font-bold text-zinc-950 active:scale-95 dark:border-white/15 dark:bg-transparent dark:text-white"
+        >
+          <Info className="h-4 w-4" />
+          <span>{lang === 'fr' ? 'Détails' : 'Details'}</span>
+        </button>
       </div>
-    </div>
+    </motion.div>
   );
 };

@@ -75,6 +75,10 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
+.font-space-mono {
+  font-family: 'Space Mono', monospace;
+}
+
 .font-sans {
   font-family: 'Inter', 'Urbanist', -apple-system, sans-serif;
 }
@@ -294,4 +298,15 @@
   border-color: #000000;
   background: #fafafa;
   transform: translateY(-1.5px);
+}
+
+/* Hero dot-grid texture (Mondragon-inspired) */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 80% 65% at 50% 0%, #000 50%, transparent 100%);
+}
+
+.dark .bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
 }

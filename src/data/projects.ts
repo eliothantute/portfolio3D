@@ -6,8 +6,7 @@ import haziImg from '../assets/images/hazi-project.png';
 import nariOsImg from '../assets/images/nari-os-project.png';
 import aumParisImg from '../assets/aum-paris.jpg';
 import disfocusImg from '../assets/disfocus.jpg';
-import leZincImg from '../assets/le-zinc.jpg';
-import oneshotImg from '../assets/images/oneshot-project.png';
+import chouquetteImg from '../assets/chouquette.jpg';
 
 export const projectsData: Record<'fr' | 'en', Project[]> = {
   fr: [
@@ -127,76 +126,6 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
-      id: 'oneshot',
-      title: 'Oneshot',
-      client: 'Outil Interne & Propriétaire',
-      subtitle: 'Outil Local de Prospection B2B & Web Scraping',
-      description: "Outil automatisé de prospection et scraping d'agences web & studios créatifs, extraction d'adresses qualifiées, audit de délivrabilité MX et automatisation de candidatures directes.",
-      longDescription: "Oneshot est un outil sur-mesure développé pour un usage strictement local et personnel. Il orchestre un pipeline complet de scraping et de prospection : découverte continue d'agences web et studios de design (Paris, Lyon, remote), extraction automatique des adresses emails directes et des décideurs clés (directeurs artistiques, fondateurs), audit de délivrabilité en temps réel (résolution DNS MX anti-bounce) et génération dynamique de pitchs adaptés avec balises contextuelles. L'outil intègre également une console télémétrique locale, une base de données SQLite embarquée et un mode de postulation automatique furtif Playwright.",
-      year: '2026',
-      category: 'App // Prospection & Scraping',
-      skillType: 'app',
-      role: ['Architecture Outil Local', 'Web Scraping & Extraction', 'Audit DNS / MX', 'Automatisation B2B'],
-      stack: ['Python', 'FastAPI', 'Playwright', 'SQLite', 'Web Scraping', 'DNS MX Audit'],
-      objective: "Automatiser à 100% la veille, le scraping et la prospection ciblée auprès des agences web et DA en local, sans dépendre de plateformes tierces.",
-      status: 'Usage Local Privé (Non partageable)',
-      image: oneshotImg,
-      featured: true,
-      metrics: [
-        { label: 'Déploiement', value: 'Local Only (Privé)' },
-        { label: 'Cible', value: 'Agences Web & DA' },
-        { label: 'Scraping', value: 'Emails, Portails & MX' }
-      ]
-    },
-    {
-      id: 'motion-study',
-      title: 'Motion Study',
-      client: 'Composition & Motion',
-      subtitle: 'Composition Musicale & Rythme Cinématique',
-      description: "Rythme cinématique, chorégraphie lumineuse et tension architecturale au service d'une composition sonore immersive.",
-      longDescription: "Création sonore originale et composition musicale synchronisée sur une étude de mouvement en grand format. Exploration de textures électroniques, de rythmes minimaux et d'une ambiance cinématique spatiale.",
-      year: '2026',
-      category: 'Composition Musicale // Sound Design',
-      skillType: 'music',
-      role: ['Composition Musicale', 'Sound Design', 'Production Sonore', 'Direction Artistique'],
-      stack: ['Production Audio', 'Sound Design', 'Cinematic Scoring', 'Ableton / DAW'],
-      objective: "Composer une œuvre sonore cinématique et immersive synchronisée avec des mouvements visuels de haute précision.",
-      status: 'Vidéo YouTube disponible',
-      liveUrl: 'https://www.youtube.com/watch?v=p_tCq55WbfA',
-      youtubeId: 'p_tCq55WbfA',
-      image: 'https://img.youtube.com/vi/p_tCq55WbfA/maxresdefault.jpg',
-      featured: true,
-      metrics: [
-        { label: 'Format', value: '4K Vidéo' },
-        { label: 'Plateforme', value: 'YouTube' },
-        { label: 'Style', value: 'Cinematic' }
-      ]
-    },
-    {
-      id: 'spatial-flow',
-      title: 'Spatial Flow',
-      client: 'Showcase Éditorial',
-      subtitle: 'Composition Musicale & Ambiance Immersive',
-      description: "Une seconde séquence pensée comme un showcase éditorial immersif avec une texture musicale enveloppante.",
-      longDescription: "Production sonore atmosphérique alliant nappes harmoniques synthétiques et progressions dynamiques pour enrichir l'expérience visuelle d'un showcase éditorial.",
-      year: '2026',
-      category: 'Composition Musicale // Sound Design',
-      skillType: 'music',
-      role: ['Composition Musicale', 'Arrangements', 'Mixage', 'Atmosphère'],
-      stack: ['Synthèse Sonore', 'Spatial Audio', 'Soundtrack', 'Mastering'],
-      objective: "Développer une signature sonore organique et moderne qui porte la narration spatiale.",
-      status: 'Vidéo YouTube disponible',
-      liveUrl: 'https://www.youtube.com/watch?v=066sAQYrylw',
-      youtubeId: '066sAQYrylw',
-      image: 'https://img.youtube.com/vi/066sAQYrylw/maxresdefault.jpg',
-      featured: false,
-      metrics: [
-        { label: 'Format', value: 'HD Vidéo' },
-        { label: 'Plateforme', value: 'YouTube' },
-        { label: 'Type', value: 'Ambient' }
-      ]
-    },
-    {
       id: 'aum-paris',
       title: 'AUM Paris',
       client: 'AUM Paris',
@@ -243,26 +172,50 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
-      id: 'le-zinc',
-      title: 'Le Zinc Parisien',
-      client: 'Le Zinc Parisien',
-      subtitle: 'Site Vitrine Mobile-First & Horaires Dynamiques',
-      description: "Site vitrine mobile-first ultra-rapide (< 0.4s) pour bistrot parisien : zéro PDF, horaires d'ouverture calculés en temps réel et réservation directe.",
-      longDescription: "Conception et déploiement d'un template vitrine haute performance pour la restauration parisienne. Conçu spécifiquement pour convertir les clients sur smartphone sans friction : carte interactive tactile sans téléchargement de PDF, calcul en direct du statut d'ouverture (heure de Paris), carousel photographique contemporain et bouton d'appel direct au pouce.",
+      id: 'chouquette',
+      title: 'Chouquette — La Manufacture',
+      client: 'Chouquette — La Manufacture',
+      subtitle: 'Site Vitrine Boulangerie & Traiteur, Marché Saint-Martin',
+      description: "Site vitrine mobile-first pour une boulangerie-traiteur artisanale du Marché couvert Saint-Martin : carte de saison, horaires en temps réel et appel direct.",
+      longDescription: "Conception et déploiement d'un site vitrine chaleureux pour une boulangerie-traiteur parisienne installée au cœur du Marché couvert Saint-Martin. Hero vidéo immersif, carte filtrable par catégorie (pâtisseries, salades, boulangerie, épicerie), statut d'ouverture calculé en temps réel, avis clients mis en avant et appel direct en un geste pour les commandes traiteur.",
       year: '2026',
-      category: 'Site Vitrine // Restauration & Mobile-First',
+      category: 'Site Vitrine // Artisanat & Mobile-First',
       skillType: 'frontend',
       role: ['Product Design', 'UI/UX Mobile-First', 'Développement Front-End', 'Performance Web'],
       stack: ['HTML5 Sémantique', 'CSS3 Moderne', 'JavaScript Pur (ES6+)', 'Moteur Horaires Temps Réel', 'SEO Schema.org', 'Vercel'],
-      objective: "Prouver aux restaurateurs l'impact d'un site ultra-fluide se chargeant en une demi-seconde avec consultation de carte instantanée.",
+      objective: "Donner à une adresse artisanale de marché une vitrine en ligne à la hauteur de son savoir-faire : carte claire, horaires fiables et contact en un geste.",
       status: 'En ligne',
-      liveUrl: 'https://bistrot-le-zinc-paris.vercel.app/',
-      image: leZincImg,
+      liveUrl: 'https://chouquette-la-manufacture.vercel.app/',
+      image: chouquetteImg,
       featured: true,
       metrics: [
-        { label: 'Temps de chargement', value: '< 0.4s' },
-        { label: 'Score Mobile', value: '100/100' },
-        { label: 'Expérience Carte', value: 'Zéro PDF' }
+        { label: 'Carte', value: '4 catégories' },
+        { label: 'Horaires', value: 'Temps réel' },
+        { label: 'Commande', value: 'Appel direct' }
+      ]
+    },
+    {
+      id: 'motion-study',
+      title: 'Son à l’Image',
+      client: 'Composition & Motion',
+      subtitle: 'Composition Musicale & Rythme Cinématique',
+      description: "Rythme cinématique, chorégraphie lumineuse et tension architecturale au service d'une composition sonore immersive.",
+      longDescription: "Création sonore originale et composition musicale synchronisée sur une étude de mouvement en grand format. Exploration de textures électroniques, de rythmes minimaux et d'une ambiance cinématique spatiale.",
+      year: '2026',
+      category: 'Composition Musicale // Sound Design',
+      skillType: 'music',
+      role: ['Composition Musicale', 'Sound Design', 'Production Sonore', 'Direction Artistique'],
+      stack: ['Production Audio', 'Sound Design', 'Cinematic Scoring', 'Ableton / DAW'],
+      objective: "Composer une œuvre sonore cinématique et immersive synchronisée avec des mouvements visuels de haute précision.",
+      status: 'Vidéo YouTube disponible',
+      liveUrl: 'https://www.youtube.com/watch?v=p_tCq55WbfA',
+      youtubeId: 'p_tCq55WbfA',
+      image: 'https://img.youtube.com/vi/p_tCq55WbfA/maxresdefault.jpg',
+      featured: true,
+      metrics: [
+        { label: 'Format', value: '4K Vidéo' },
+        { label: 'Plateforme', value: 'YouTube' },
+        { label: 'Style', value: 'Cinematic' }
       ]
     },
   ],
@@ -383,76 +336,6 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
-      id: 'oneshot',
-      title: 'Oneshot',
-      client: 'Internal & Proprietary Tool',
-      subtitle: 'Local Web Scraping & B2B Prospecting Engine',
-      description: "Automated engine for B2B prospecting and scraping creative studios & web agencies, extracting decision-maker emails, verifying MX deliverability and running 1-click tailored outreach.",
-      longDescription: "Oneshot is a custom engineering tool developed exclusively for private, local use. It powers a full scraping and prospecting pipeline: continuous discovery of digital agencies and design studios, automated extraction of direct emails and key decision makers (Art Directors, studio founders), real-time DNS MX deliverability audits to prevent bounces, and dynamic contextual pitch generation. Includes a local telemetry console, embedded SQLite store, and stealth Playwright browser automation.",
-      year: '2026',
-      category: 'App // Prospecting & Scraping',
-      skillType: 'app',
-      role: ['Local Tool Architecture', 'Web Scraping & Extraction', 'DNS / MX Deliverability', 'B2B Automation'],
-      stack: ['Python', 'FastAPI', 'Playwright', 'SQLite', 'Web Scraping', 'DNS MX Audit'],
-      objective: "Fully automate agency scouting, contact extraction and B2B outreach locally with zero third-party dependency.",
-      status: 'Private Local Tool (Not Public)',
-      image: oneshotImg,
-      featured: true,
-      metrics: [
-        { label: 'Deployment', value: 'Local Only (Private)' },
-        { label: 'Target', value: 'Creative Studios & ADs' },
-        { label: 'Scraping', value: 'Emails, Portals & MX' }
-      ]
-    },
-    {
-      id: 'motion-study',
-      title: 'Motion Study',
-      client: 'Composition & Motion',
-      subtitle: 'Music Composition & Cinematic Rhythm',
-      description: 'Cinematic pacing, light choreography, and architectural tension driving an immersive sound composition.',
-      longDescription: 'Original music score and sound design synchronized to a large-format motion study. Exploring electronic textures, minimal rhythms, and spatial cinematic atmosphere.',
-      year: '2026',
-      category: 'Music Composition // Sound Design',
-      skillType: 'music',
-      role: ['Music Composition', 'Sound Design', 'Audio Production', 'Art Direction'],
-      stack: ['Audio Production', 'Sound Design', 'Cinematic Scoring', 'Ableton / DAW'],
-      objective: 'Score an immersive cinematic piece synchronized with precision visual motion.',
-      status: 'YouTube Video Available',
-      liveUrl: 'https://www.youtube.com/watch?v=p_tCq55WbfA',
-      youtubeId: 'p_tCq55WbfA',
-      image: 'https://img.youtube.com/vi/p_tCq55WbfA/maxresdefault.jpg',
-      featured: true,
-      metrics: [
-        { label: 'Format', value: '4K Video' },
-        { label: 'Platform', value: 'YouTube' },
-        { label: 'Style', value: 'Cinematic' }
-      ]
-    },
-    {
-      id: 'spatial-flow',
-      title: 'Spatial Flow',
-      client: 'Editorial Showcase',
-      subtitle: 'Music Composition & Immersive Flow',
-      description: 'A second sequence conceived as an immersive editorial showcase with enveloping musical atmosphere.',
-      longDescription: 'Atmospheric audio production blending synthetic harmonic pads and dynamic progressions to elevate the visual narrative of an editorial showcase.',
-      year: '2026',
-      category: 'Music Composition // Sound Design',
-      skillType: 'music',
-      role: ['Music Composition', 'Arranging', 'Mixing', 'Atmosphere'],
-      stack: ['Sound Synthesis', 'Spatial Audio', 'Soundtrack', 'Mastering'],
-      objective: 'Develop an organic, modern audio identity to drive spatial storytelling.',
-      status: 'YouTube Video Available',
-      liveUrl: 'https://www.youtube.com/watch?v=066sAQYrylw',
-      youtubeId: '066sAQYrylw',
-      image: 'https://img.youtube.com/vi/066sAQYrylw/maxresdefault.jpg',
-      featured: false,
-      metrics: [
-        { label: 'Format', value: 'HD Video' },
-        { label: 'Platform', value: 'YouTube' },
-        { label: 'Type', value: 'Ambient' }
-      ]
-    },
-    {
       id: 'aum-paris',
       title: 'AUM Paris',
       client: 'AUM Paris',
@@ -499,26 +382,50 @@ export const projectsData: Record<'fr' | 'en', Project[]> = {
       ]
     },
     {
-      id: 'le-zinc',
-      title: 'Le Zinc Parisien',
-      client: 'Le Zinc Parisien',
-      subtitle: 'Mobile-First Bistro Showcase & Live Hours Engine',
-      description: "Ultra-fast (< 0.4s) mobile-first showcase for Parisian bistro: zero heavy PDFs, real-time live business hours engine, and 1-tap booking.",
-      longDescription: "High-performance showcase template engineered for the Parisian restaurant industry. Built for seamless mobile conversion: interactive menu with zero PDF downloads, live real-time business hours computation (Paris time), contemporary cinematic photo carousel, and 1-tap thumb-friendly booking.",
+      id: 'chouquette',
+      title: 'Chouquette — La Manufacture',
+      client: 'Chouquette — La Manufacture',
+      subtitle: 'Bakery & Catering Showcase, Marché Saint-Martin',
+      description: "Mobile-first showcase site for an artisan bakery-caterer inside the covered Marché Saint-Martin: seasonal menu, live opening hours, and 1-tap calling.",
+      longDescription: "A warm, mobile-first showcase built for a Parisian bakery-caterer at the heart of the covered Marché Saint-Martin. Immersive video hero, category-filterable menu (pastries, salads, bakery, grocery), live real-time opening-hours status, featured customer reviews, and 1-tap calling for catering orders.",
       year: '2026',
-      category: 'Showcase // Restaurant & Mobile-First',
+      category: 'Showcase // Craft & Mobile-First',
       skillType: 'frontend',
       role: ['Product Design', 'Mobile-First UI/UX', 'Front-End Engineering', 'Web Performance'],
       stack: ['Semantic HTML5', 'Modern CSS3', 'Vanilla JavaScript', 'Live Hours Engine', 'Schema.org SEO', 'Vercel'],
-      objective: "Demonstrate to restaurateurs the business impact of a sub-half-second interface with instant frictionless menu access.",
+      objective: "Give a craft market address an online showcase worthy of its know-how: a clear menu, reliable hours, and one-tap contact.",
       status: 'Live',
-      liveUrl: 'https://bistrot-le-zinc-paris.vercel.app/',
-      image: leZincImg,
+      liveUrl: 'https://chouquette-la-manufacture.vercel.app/',
+      image: chouquetteImg,
       featured: true,
       metrics: [
-        { label: 'Load Speed', value: '< 0.4s' },
-        { label: 'Mobile Score', value: '100/100' },
-        { label: 'Menu Flow', value: 'Zero PDF' }
+        { label: 'Menu', value: '4 categories' },
+        { label: 'Hours', value: 'Real-time' },
+        { label: 'Order', value: '1-tap call' }
+      ]
+    },
+    {
+      id: 'motion-study',
+      title: 'Sound to Picture',
+      client: 'Composition & Motion',
+      subtitle: 'Music Composition & Cinematic Rhythm',
+      description: 'Cinematic pacing, light choreography, and architectural tension driving an immersive sound composition.',
+      longDescription: 'Original music score and sound design synchronized to a large-format motion study. Exploring electronic textures, minimal rhythms, and spatial cinematic atmosphere.',
+      year: '2026',
+      category: 'Music Composition // Sound Design',
+      skillType: 'music',
+      role: ['Music Composition', 'Sound Design', 'Audio Production', 'Art Direction'],
+      stack: ['Audio Production', 'Sound Design', 'Cinematic Scoring', 'Ableton / DAW'],
+      objective: 'Score an immersive cinematic piece synchronized with precision visual motion.',
+      status: 'YouTube Video Available',
+      liveUrl: 'https://www.youtube.com/watch?v=p_tCq55WbfA',
+      youtubeId: 'p_tCq55WbfA',
+      image: 'https://img.youtube.com/vi/p_tCq55WbfA/maxresdefault.jpg',
+      featured: true,
+      metrics: [
+        { label: 'Format', value: '4K Video' },
+        { label: 'Platform', value: 'YouTube' },
+        { label: 'Style', value: 'Cinematic' }
       ]
     },
   ]

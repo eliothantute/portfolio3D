@@ -149,7 +149,7 @@ export const PRESETS = {
 };
 
 export class ParticlesSwarm {
-    constructor(container, count = 20000) {
+    constructor(container, count = 20000, options = {}) {
         this.count = count;
         this.container = container;
         this.speedMult = 1;
@@ -164,7 +164,13 @@ export class ParticlesSwarm {
         const height = container.clientHeight || window.innerHeight;
 
         this.scene = new THREE.Scene();
-        this.scene.fog = new THREE.FogExp2(0x000206, 0.01);
+        const fogColor = options.backgroundColor ?? 0x000206;
+        this.scene.fog = new THREE.FogExp2(fogColor, 0.01);
+        // Post-processing (bloom) flattens transparency to opaque black, so
+        // give the scene a real background colour instead of relying on
+        // canvas alpha — this way what shows through a CSS mask is still
+        // genuinely rendered by the scene, not a fake backdrop.
+        this.scene.background = new THREE.Color(options.backgroundColor ?? 0x05050f);
         this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
         this.camera.position.set(0, 15, 95);
 

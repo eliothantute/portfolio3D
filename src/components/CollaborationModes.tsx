@@ -1,17 +1,7 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Language } from '../types';
-import {
-  Palette,
-  RefreshCw,
-  Zap,
-  Music,
-  CheckCircle2,
-  ArrowRight,
-} from 'lucide-react';
-gsap.registerPlugin(ScrollTrigger);
+import { CheckCircle2, ArrowRight, ChevronDown } from 'lucide-react';
 
 interface CollaborationModesProps {
   lang: Language;
@@ -21,24 +11,16 @@ interface CollaborationModesProps {
   hideHeader?: boolean;
 }
 
-const BRICK_COLS = 6;
-const BRICK_ROWS = 4;
-const PARTICLE_COUNT = 18;
+const EASE = [0.16, 1, 0.3, 1] as const;
 
-// A single smooth sine-wave path, drawn on with stroke-dashoffset — a quiet
-// alternative to a bar-style equalizer.
-function buildWavePath(width: number, height: number, cycles: number, points = 80) {
-  const mid = height / 2;
-  const amp = height * 0.4;
-  let d = '';
-  for (let i = 0; i <= points; i++) {
-    const x = (i / points) * width;
-    const y = mid + Math.sin((i / points) * Math.PI * 2 * cycles) * amp;
-    d += i === 0 ? `M${x},${y}` : ` L${x},${y}`;
-  }
-  return d;
-}
-const WAVE_PATH = buildWavePath(400, 40, 4);
+// Horizontal cascade offsets for each row, Mondragon-style staggered stack
+// (desktop only — rows sit flush full-width on mobile).
+const CASCADE = [
+  { ml: '0%', w: '74%' },
+  { ml: '30%', w: '70%' },
+  { ml: '16%', w: '76%' },
+  { ml: '4%', w: '80%' },
+];
 
 export const CollaborationModes: React.FC<CollaborationModesProps> = ({
   lang,
@@ -52,12 +34,12 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       id: 'design-to-deployment',
       num: '01',
       badge: lang === 'fr' ? 'DE A À Z // CLÉ EN MAIN' : 'END-TO-END // ALL-IN-ONE',
+      caption: lang === 'fr' ? 'FIGMA, REACT, DÉPLOIEMENT.' : 'FIGMA, REACT, DEPLOYMENT.',
       title: lang === 'fr' ? 'Design au Déploiement' : 'Design to Deployment',
       subtitle:
         lang === 'fr'
           ? 'Prise en charge complète de votre projet : de la direction artistique et maquettes Figma jusqu’au code front-end réactif et à la mise en ligne finale.'
           : 'Complete project ownership: from art direction and bespoke Figma prototypes to responsive front-end development and live cloud deployment.',
-      icon: Palette,
       deliverables:
         lang === 'fr'
           ? [
@@ -82,12 +64,12 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       id: 'refonte',
       num: '02',
       badge: lang === 'fr' ? 'MODERNISATION // ERGONOMIE' : 'MODERNIZATION // REDESIGN',
+      caption: lang === 'fr' ? 'AUDIT, UI, PERFORMANCE.' : 'AUDIT, UI, PERFORMANCE.',
       title: lang === 'fr' ? 'Refonte de Site & d’Expérience' : 'Website & UX Redesign',
       subtitle:
         lang === 'fr'
           ? 'Modernisation intégrale d’un site ou produit existant : nouveau souffle visuel, parcours utilisateur simplifié, optimisation mobile et accélération des performances.'
           : 'Full modernization of an existing site or product: fresh contemporary aesthetics, simplified user journeys, mobile polish, and massive speed boost.',
-      icon: RefreshCw,
       deliverables:
         lang === 'fr'
           ? [
@@ -112,12 +94,12 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       id: 'animation-integration',
       num: '03',
       badge: lang === 'fr' ? 'MICRO-INTERACTIONS // 3D WEBGL' : 'MICRO-INTERACTIONS // 3D WEBGL',
+      caption: lang === 'fr' ? 'GSAP, THREE.JS, WEBGL.' : 'GSAP, THREE.JS, WEBGL.',
       title: lang === 'fr' ? 'Intégration d’Animation & 3D' : 'Animation & 3D Integration',
       subtitle:
         lang === 'fr'
           ? 'Enrichissement d’interfaces web avec des animations fluides (GSAP, Framer Motion) et modules 3D temps réel (Three.js/WebGL) pour une expérience vivante et marquante.'
           : 'Elevating web interfaces with fluid micro-interactions (GSAP, Framer Motion) and interactive real-time 3D modules (Three.js/WebGL) for unforgettable impressions.',
-      icon: Zap,
       deliverables:
         lang === 'fr'
           ? [
@@ -142,12 +124,12 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       id: 'composition-musicale',
       num: '04',
       badge: lang === 'fr' ? 'SOUND DESIGN // ATMOSPHÈRE' : 'SOUND DESIGN // ATMOSPHERE',
+      caption: lang === 'fr' ? 'SOUND DESIGN, MIXAGE.' : 'SOUND DESIGN, MIXING.',
       title: lang === 'fr' ? 'Composition Musicale & Atmosphère' : 'Music Composition & Atmosphere',
       subtitle:
         lang === 'fr'
           ? 'Création d’univers sonores immersifs et compositions musicales sur-mesure pour sublimer vos expériences web, applications interactives et identités de marque.'
           : 'Original musical compositions and immersive soundscapes crafted to give web experiences and digital products a distinct sensory signature.',
-      icon: Music,
       deliverables:
         lang === 'fr'
           ? [
@@ -170,37 +152,43 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
     },
   ];
 
-  const stageRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // Per-card signature entrance effects (desktop pinned sequence only)
-  const drawLineRef = useRef<HTMLDivElement | null>(null);
-  const brushContentRef = useRef<HTMLDivElement | null>(null);
-  const brickRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const particleRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const wavePathRef = useRef<SVGPathElement | null>(null);
-
-  const particleSeeds = useMemo(
-    () =>
-      Array.from({ length: PARTICLE_COUNT }, () => ({
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        delay: Math.random() * 0.3,
-      })),
-    []
+  // Click opens/closes the panel (several can stay open at once); hover only
+  // flips a row to its "negative" black look, without opening anything —
+  // exactly the two separate interactions on the Mondragon reference.
+  const [openIds, setOpenIds] = useState<Set<string>>(() => new Set());
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [isFinePointer] = useState<boolean>(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
   );
 
-  // Scroll-pin the zoom-through sequence whenever a precise pointer (mouse/
-  // trackpad) is available — this is about input precision, not window
-  // width, so a narrower desktop browser still gets the full sequence.
-  // Touch devices (coarse pointer) keep a normal stacked list instead.
-  const [isPinEnabled] = useState<boolean>(
-    () =>
-      typeof window !== 'undefined' &&
-      window.matchMedia('(pointer: fine)').matches &&
-      window.matchMedia('(min-width: 640px)').matches
-  );
+  const handleHoverStart = (id: string) => {
+    if (isFinePointer) setHoveredId(id);
+  };
+
+  const handleHoverEnd = () => {
+    if (isFinePointer) setHoveredId(null);
+  };
+
+  // Rideau noir qui ferme puis rouvre sur chaque ligne au clic, façon flash,
+  // et bascule l'état (ouvert/fermé) pendant qu'il est entièrement fermé —
+  // le changement de couleur du panneau se fait donc caché derrière.
+  const [flashId, setFlashId] = useState<string | null>(null);
+
+  const toggleOpen = (id: string) => {
+    setFlashId(id);
+    window.setTimeout(() => {
+      setOpenIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+        return next;
+      });
+    }, 220);
+    window.setTimeout(() => setFlashId((prev) => (prev === id ? null : prev)), 480);
+  };
 
   const handleCta = () => {
     if (onOpenContact) {
@@ -208,202 +196,6 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
     } else {
       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  useLayoutEffect(() => {
-    if (!isPinEnabled || !stageRef.current) return;
-    const cards = cardRefs.current.filter((el): el is HTMLDivElement => !!el);
-    if (cards.length < 2) return;
-
-    const ctx = gsap.context(() => {
-      gsap.set(cards, { opacity: 0, scale: 0.84, y: 48, rotationY: 0 });
-      gsap.set(cards[0], { opacity: 1, scale: 1, y: 0 });
-
-      // Initial states for each card's signature effect
-      if (drawLineRef.current) {
-        gsap.set(drawLineRef.current, { scaleX: 0 });
-      }
-      if (brushContentRef.current) {
-        gsap.set(brushContentRef.current, { opacity: 0, scale: 1.04, filter: 'blur(14px)' });
-      }
-
-      const bricks = brickRefs.current.filter((el): el is HTMLDivElement => !!el);
-      gsap.set(bricks, { opacity: 1, scaleY: 1 });
-
-      const particles = particleRefs.current.filter((el): el is HTMLDivElement => !!el);
-      gsap.set(particles, { opacity: 0, scale: 0 });
-
-      if (wavePathRef.current) {
-        const len = wavePathRef.current.getTotalLength();
-        gsap.set(wavePathRef.current, { strokeDasharray: len, strokeDashoffset: len });
-      }
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: stageRef.current,
-          start: 'top top',
-          end: `+=${(cards.length - 1) * 100}%`,
-          scrub: 0.6,
-          pin: true,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            const idx = Math.min(cards.length - 1, Math.round(self.progress * (cards.length - 1)));
-            setActiveIndex((prev) => (prev === idx ? prev : idx));
-          },
-        },
-      });
-
-      for (let i = 0; i < cards.length - 1; i++) {
-        const outgoing = cards[i];
-        const incoming = cards[i + 1];
-        const nextIndex = i + 1;
-
-        // Generic exit for the card leaving the stage
-        tl.to(outgoing, { opacity: 0, scale: 1.1, y: -48, duration: 1, ease: 'power1.inOut' }, i);
-
-        // Signature entrance for the card taking over, keyed to its theme
-        switch (nextIndex) {
-          case 1: {
-            // "Refonte" — brick-by-brick reveal: a solid brick wall sits over
-            // the card and clears away in a staggered construction pattern.
-            // A real tween (not .set) so it stays at opacity 0 until the
-            // scrub actually reaches this segment, instead of jumping
-            // visible the instant the timeline is built.
-            tl.to(incoming, { opacity: 1, scale: 1, y: 0, duration: 0.1, ease: 'none' }, i);
-            tl.set(bricks, { opacity: 1, scaleY: 1 }, i);
-            tl.to(
-              bricks,
-              {
-                opacity: 0,
-                scaleY: 0,
-                duration: 0.75,
-                ease: 'power1.in',
-                stagger: { each: 0.022, grid: [BRICK_ROWS, BRICK_COLS], from: 'start' },
-              },
-              i + 0.15
-            );
-            break;
-          }
-          case 2: {
-            // "Animation & 3D" — materializes out of particles while spinning
-            // once around the Y axis.
-            tl.fromTo(
-              incoming,
-              { opacity: 0, scale: 0.86, y: 0, rotationY: 0 },
-              { opacity: 1, scale: 1, rotationY: 360, duration: 1, ease: 'power1.inOut' },
-              i
-            );
-            tl.fromTo(
-              particles,
-              { opacity: 0, scale: 0 },
-              { opacity: 1, scale: 1, duration: 0.45, stagger: 0.018, ease: 'back.out(2)' },
-              i
-            ).to(particles, { opacity: 0, duration: 0.35, ease: 'power1.in' }, i + 0.6);
-            break;
-          }
-          case 3: {
-            // "Composition Musicale" — a single quiet waveform draws itself in.
-            tl.fromTo(incoming, { opacity: 0, scale: 0.9, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power1.inOut' }, i);
-            if (wavePathRef.current) {
-              tl.to(wavePathRef.current, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' }, i + 0.1);
-            }
-            break;
-          }
-          default:
-            tl.fromTo(incoming, { opacity: 0, scale: 0.84, y: 48 }, { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'power1.inOut' }, i);
-        }
-      }
-
-      // "Design au Déploiement" is already on stage at rest: a quiet
-      // blur-to-focus reveal with a thin rule drawing in underneath.
-      if (drawLineRef.current && brushContentRef.current) {
-        const intro = gsap.timeline();
-        intro
-          .to(drawLineRef.current, { scaleX: 1, duration: 0.7, ease: 'power3.out' })
-          .to(
-            brushContentRef.current,
-            { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
-            '-=0.55'
-          );
-      }
-    }, stageRef);
-
-    return () => ctx.revert();
-  }, [isPinEnabled, lang]);
-
-  // Keep ScrollTrigger measurements correct once layout/fonts settle.
-  useEffect(() => {
-    if (!isPinEnabled) return;
-    const id = window.setTimeout(() => ScrollTrigger.refresh(), 300);
-    return () => window.clearTimeout(id);
-  }, [isPinEnabled]);
-
-  const renderCardBody = (mode: (typeof modes)[number], withBrushWrapper: boolean) => {
-    const Icon = mode.icon;
-    const body = (
-      <>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-900 shadow-xs dark:bg-zinc-800 dark:text-white">
-            <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
-          </div>
-          <span className="font-mono text-sm font-bold text-zinc-400 dark:text-zinc-500">
-            {mode.num} //
-          </span>
-        </div>
-
-        <div className="mt-5">
-          <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-            {mode.badge}
-          </span>
-          <h3 className="font-urbanist mt-1.5 text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-zinc-950 dark:text-white">
-            {mode.title}
-          </h3>
-        </div>
-
-        <p className="mt-4 text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
-          {mode.subtitle}
-        </p>
-
-        <div className="mt-6 border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-            {lang === 'fr' ? 'CE QUI EST INCLUS :' : 'DELIVERABLES:'}
-          </span>
-          <ul className="mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-            {mode.deliverables.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300">
-                <CheckCircle2 className="h-4 w-4 text-zinc-900 dark:text-white shrink-0 mt-0.5" />
-                <span className="leading-snug">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="mt-5 rounded-xl border border-zinc-100 bg-zinc-50 p-3 text-[11px] sm:text-xs text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400">
-          <span className="font-semibold text-zinc-900 dark:text-white">
-            {lang === 'fr' ? 'Pour qui ? ' : 'Best for: '}
-          </span>
-          {mode.bestFor}
-        </div>
-
-        <div className="mt-7 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-          <button
-            type="button"
-            onClick={handleCta}
-            className="group/btn inline-flex w-full items-center justify-between rounded-xl bg-zinc-950 px-4 py-3 text-xs sm:text-sm font-urbanist font-bold text-white shadow-xs transition-all hover:bg-zinc-800 active:scale-98 cursor-pointer dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
-          >
-            <span>{mode.cta}</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-          </button>
-        </div>
-      </>
-    );
-
-    if (!withBrushWrapper) return body;
-    return (
-      <div ref={brushContentRef} className="h-full w-full">
-        {body}
-      </div>
-    );
   };
 
   return (
@@ -432,126 +224,151 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
         </div>
       )}
 
-      {isPinEnabled ? (
-        /* Scroll-pinned zoom-through sequence: one mode fills the screen at a
-           time, each with a signature entrance tied to its theme. */
-        <div ref={stageRef} className="relative h-screen w-full overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center px-4" style={{ perspective: 1600 }}>
-            {modes.map((mode, index) => (
-              <div
-                key={mode.id}
-                ref={(el) => {
-                  cardRefs.current[index] = el;
-                }}
-                onMouseEnter={() => onHoverItem?.(mode.title.toUpperCase())}
-                onMouseLeave={onLeaveItem}
-                className="absolute inset-0 flex items-center justify-center px-4"
-                style={{ willChange: 'transform, opacity', transformStyle: 'preserve-3d' }}
-              >
-                <div className="relative w-full max-w-3xl overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-zinc-200/90 bg-white p-6 sm:p-10 lg:p-12 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900/95">
-                  {renderCardBody(mode, index === 0)}
+      {/* Accordéon en cascade façon Mondragon : chaque ligne entre au scroll,
+          décalée horizontalement. Le survol bascule juste les couleurs en
+          négatif ; seul le clic ouvre le panneau (plusieurs peuvent rester
+          ouverts en même temps). */}
+      <div className="flex flex-col">
+        {modes.map((mode, index) => {
+          const isOpen = openIds.has(mode.id);
+          const isNegative = isOpen || hoveredId === mode.id;
+          const cascade = CASCADE[index % CASCADE.length];
+          const captionAfter = index === 0;
 
-                  {/* Card 0: a single quiet rule drawn under the card */}
-                  {index === 0 && (
-                    <div
-                      ref={drawLineRef}
-                      className="absolute inset-x-6 sm:inset-x-10 bottom-0 h-px origin-left bg-gradient-to-r from-transparent via-zinc-400 dark:via-white/50 to-transparent shadow-[0_0_12px_rgba(161,161,170,0.6)]"
-                    />
-                  )}
-
-                  {/* Card 1: brick-wall reveal overlay */}
-                  {index === 1 && (
-                    <div
-                      className="pointer-events-none absolute inset-0 grid"
-                      style={{ gridTemplateColumns: `repeat(${BRICK_COLS}, 1fr)`, gridTemplateRows: `repeat(${BRICK_ROWS}, 1fr)` }}
-                    >
-                      {Array.from({ length: BRICK_COLS * BRICK_ROWS }, (_, b) => (
-                        <div
-                          key={b}
-                          ref={(el) => {
-                            brickRefs.current[b] = el;
-                          }}
-                          className="origin-center bg-zinc-200 dark:bg-zinc-700"
-                          style={{ outline: '1px solid rgba(0,0,0,0.06)' }}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Card 2: particle materialization */}
-                  {index === 2 && (
-                    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                      {particleSeeds.map((seed, p) => (
-                        <div
-                          key={p}
-                          ref={(el) => {
-                            particleRefs.current[p] = el;
-                          }}
-                          className="absolute h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.9)]"
-                          style={{ left: `${seed.left}%`, top: `${seed.top}%` }}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Card 3: a single quiet waveform drawn across the top */}
-                  {index === 3 && (
-                    <div className="pointer-events-none absolute inset-x-0 top-6 sm:top-8 flex justify-center opacity-60">
-                      <svg
-                        width="100%"
-                        height="40"
-                        viewBox="0 0 400 40"
-                        preserveAspectRatio="none"
-                        className="max-w-md text-zinc-400 dark:text-white/50"
-                      >
-                        <path
-                          ref={wavePathRef}
-                          d={WAVE_PATH}
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={1.5}
-                          strokeLinecap="round"
-                          style={{ filter: 'drop-shadow(0 0 6px currentColor)' }}
-                        />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Progress dots */}
-          <div className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-2">
-            {modes.map((mode, index) => (
-              <span
-                key={mode.id}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  index === activeIndex ? 'w-6 bg-zinc-950 dark:bg-white' : 'w-1.5 bg-zinc-300 dark:bg-zinc-700'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      ) : (
-        /* 4 Modes Cards Grid (2x2), mobile & coarse-pointer fallback */
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {modes.map((mode, index) => (
+          return (
             <motion.div
               key={mode.id}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              onMouseEnter={() => onHoverItem?.(mode.title.toUpperCase())}
-              onMouseLeave={onLeaveItem}
-              className="group relative flex flex-col justify-between rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:border-zinc-400 hover:shadow-xl hover:-translate-y-1 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:border-zinc-700"
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.55, delay: index * 0.09, ease: EASE }}
+              style={{ zIndex: isOpen ? 50 : index + 1, ['--ml' as string]: cascade.ml, ['--w' as string]: cascade.w } as React.CSSProperties}
+              className={`relative w-full sm:ml-[var(--ml)] sm:w-[var(--w)] ${index > 0 ? 'sm:-mt-3' : ''}`}
             >
-              <div>{renderCardBody(mode, false)}</div>
+              <div
+                role="button"
+                tabIndex={0}
+                onMouseEnter={() => {
+                  handleHoverStart(mode.id);
+                  onHoverItem?.(mode.title.toUpperCase());
+                }}
+                onMouseLeave={() => {
+                  handleHoverEnd();
+                  onLeaveItem?.();
+                }}
+                onClick={() => toggleOpen(mode.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') toggleOpen(mode.id);
+                }}
+                className={`group relative overflow-hidden rounded-2xl px-6 py-7 text-left shadow-sm transition-colors duration-400 ease-out cursor-pointer sm:rounded-[1.75rem] sm:px-10 sm:py-10 lg:py-12 ${
+                  isNegative ? 'bg-black text-white' : 'bg-[#f4f4f4] text-black dark:bg-zinc-900 dark:text-white'
+                }`}
+              >
+                {/* Rideaux noirs : se ferment puis se rouvrent, façon flash, au moment où le panneau change de couleur */}
+                <AnimatePresence>
+                  {flashId === mode.id && (
+                    <>
+                      <motion.div
+                        key="curtain-top"
+                        initial={{ height: 0 }}
+                        animate={{ height: '50%' }}
+                        exit={{ height: 0 }}
+                        transition={{ duration: 0.22, ease: 'easeIn' }}
+                        className="pointer-events-none absolute inset-x-0 top-0 z-30 bg-zinc-950"
+                      />
+                      <motion.div
+                        key="curtain-bottom"
+                        initial={{ height: 0 }}
+                        animate={{ height: '50%' }}
+                        exit={{ height: 0 }}
+                        transition={{ duration: 0.22, ease: 'easeIn' }}
+                        className="pointer-events-none absolute inset-x-0 bottom-0 z-30 bg-zinc-950"
+                      />
+                    </>
+                  )}
+                </AnimatePresence>
+
+                <div
+                  className={`relative z-0 flex flex-wrap items-baseline gap-x-4 gap-y-1 ${captionAfter ? '' : 'flex-row-reverse justify-end'}`}
+                >
+                  <h3
+                    className="font-space-mono font-bold uppercase text-xl sm:text-3xl lg:text-[44px]"
+                    style={{ lineHeight: '1.05', letterSpacing: '-0.03em' }}
+                  >
+                    {mode.title}
+                  </h3>
+                  <span
+                    className={`font-space-mono font-normal uppercase ${
+                      isNegative ? 'text-white/60' : 'text-black/70 dark:text-zinc-500'
+                    }`}
+                    style={{ fontSize: '13px', lineHeight: '14px', letterSpacing: '0.3px' }}
+                  >
+                    {mode.caption}
+                  </span>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3, ease: EASE }}
+                    className={`ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-full border sm:h-8 sm:w-8 ${
+                      isNegative ? 'border-white/20 text-white' : 'border-zinc-300 text-zinc-950 dark:border-white/15 dark:text-white'
+                    }`}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </motion.span>
+                </div>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: EASE }}
+                      className="overflow-hidden"
+                    >
+                      <div className="max-w-2xl pt-6">
+                        <p className="text-sm leading-relaxed text-white/75 sm:text-base">{mode.subtitle}</p>
+
+                        <div className="mt-6 border-t border-white/10 pt-4">
+                          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-white/40">
+                            {lang === 'fr' ? 'CE QUI EST INCLUS :' : 'DELIVERABLES:'}
+                          </span>
+                          <ul className="mt-2.5 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+                            {mode.deliverables.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-white/80 sm:text-sm">
+                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-white" />
+                                <span className="leading-snug">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className="mt-5 rounded-xl border border-white/10 bg-white/5 p-3 text-[11px] text-white/70 sm:text-xs">
+                          <span className="font-semibold text-white">{lang === 'fr' ? 'Pour qui ? ' : 'Best for: '}</span>
+                          {mode.bestFor}
+                        </div>
+
+                        <div className="mt-7 border-t border-white/10 pt-4">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCta();
+                            }}
+                            className="group/btn inline-flex w-full items-center justify-between rounded-xl bg-white px-4 py-3 text-xs font-urbanist font-bold text-zinc-950 shadow-xs transition-all hover:bg-zinc-200 active:scale-98 sm:text-sm"
+                          >
+                            <span>{mode.cta}</span>
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
     </section>
   );
 };
