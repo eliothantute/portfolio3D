@@ -58,7 +58,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, analyserRef, onHoverItem, onLe
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: EASE }}
-            className="flex shrink-0 flex-col items-start gap-2.5 sm:items-end"
+            className="hidden shrink-0 flex-col items-start gap-2.5 sm:flex sm:items-end"
           >
             <div className="rounded-2xl border border-zinc-200 bg-white/90 p-4 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.12)] backdrop-blur-md dark:border-white/10 dark:bg-zinc-900/80 sm:text-right">
               <p className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500">
