@@ -95,7 +95,7 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
       num: '03',
       badge: lang === 'fr' ? 'MICRO-INTERACTIONS // 3D WEBGL' : 'MICRO-INTERACTIONS // 3D WEBGL',
       caption: lang === 'fr' ? 'GSAP, THREE.JS, WEBGL.' : 'GSAP, THREE.JS, WEBGL.',
-      title: lang === 'fr' ? 'Intégration d’Animation & 3D' : 'Animation & 3D Integration',
+      title: lang === 'fr' ? 'Motion & 3D' : 'Motion & 3D',
       subtitle:
         lang === 'fr'
           ? 'Enrichissement d’interfaces web avec des animations fluides (GSAP, Framer Motion) et modules 3D temps réel (Three.js/WebGL) pour une expérience vivante et marquante.'
@@ -292,16 +292,15 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                   className={`relative z-0 flex flex-wrap items-baseline gap-x-4 gap-y-1 ${captionAfter ? '' : 'flex-row-reverse justify-end'}`}
                 >
                   <h3
-                    className="font-space-mono font-bold uppercase text-xl sm:text-3xl lg:text-[44px]"
-                    style={{ lineHeight: '1.05', letterSpacing: '-0.03em' }}
+                    className="font-urbanist font-black tracking-tight text-xl sm:text-3xl lg:text-[44px]"
+                    style={{ lineHeight: '1.05' }}
                   >
                     {mode.title}
                   </h3>
                   <span
-                    className={`font-space-mono font-normal uppercase ${
-                      isNegative ? 'text-white/60' : 'text-black/70 dark:text-zinc-500'
+                    className={`font-mono text-[11px] font-bold uppercase tracking-wider sm:text-xs ${
+                      isNegative ? 'text-white/50' : 'text-zinc-500 dark:text-zinc-500'
                     }`}
-                    style={{ fontSize: '13px', lineHeight: '14px', letterSpacing: '0.3px' }}
                   >
                     {mode.caption}
                   </span>
