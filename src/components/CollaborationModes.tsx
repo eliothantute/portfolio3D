@@ -16,10 +16,10 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 // Horizontal cascade offsets for each row, Mondragon-style staggered stack
 // (desktop only — rows sit flush full-width on mobile).
 const CASCADE = [
-  { ml: '0%', w: '74%' },
-  { ml: '30%', w: '70%' },
-  { ml: '16%', w: '76%' },
-  { ml: '4%', w: '80%' },
+  { ml: '0%', w: '74%', titleFirst: true },
+  { ml: '0%', w: '100%', titleFirst: false },
+  { ml: '8%', w: '92%', titleFirst: false },
+  { ml: '0%', w: '84%', titleFirst: true },
 ];
 
 export const CollaborationModes: React.FC<CollaborationModesProps> = ({
@@ -228,12 +228,18 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
           décalée horizontalement. Le survol bascule juste les couleurs en
           négatif ; seul le clic ouvre le panneau (plusieurs peuvent rester
           ouverts en même temps). */}
-      <div className="flex flex-col">
+      <div className="mb-6 flex items-center gap-2">
+        <span className="font-mono text-xs font-bold text-zinc-400">01 //</span>
+        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+          {lang === 'fr' ? 'Compétences' : 'Skills'}
+        </span>
+      </div>
+
+      <div className="relative left-1/2 flex w-screen -translate-x-1/2 flex-col gap-0.5 bg-white dark:bg-zinc-950">
         {modes.map((mode, index) => {
           const isOpen = openIds.has(mode.id);
           const isNegative = isOpen || hoveredId === mode.id;
           const cascade = CASCADE[index % CASCADE.length];
-          const captionAfter = index === 0;
 
           return (
             <motion.div
@@ -243,7 +249,7 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.55, delay: index * 0.09, ease: EASE }}
               style={{ zIndex: isOpen ? 50 : index + 1, ['--ml' as string]: cascade.ml, ['--w' as string]: cascade.w } as React.CSSProperties}
-              className={`relative w-full sm:ml-[var(--ml)] sm:w-[var(--w)] ${index > 0 ? 'sm:-mt-3' : ''}`}
+              className="relative w-full sm:ml-[var(--ml)] sm:w-[var(--w)]"
             >
               <div
                 role="button"
@@ -260,7 +266,7 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') toggleOpen(mode.id);
                 }}
-                className={`group relative overflow-hidden rounded-2xl px-6 py-7 text-left shadow-sm transition-colors duration-400 ease-out cursor-pointer sm:rounded-[1.75rem] sm:px-10 sm:py-10 lg:py-12 ${
+                className={`group relative overflow-hidden rounded-md px-5 py-6 text-left transition-colors duration-300 ease-out cursor-pointer sm:px-10 sm:py-9 lg:py-10 ${
                   isNegative ? 'bg-black text-white' : 'bg-[#f4f4f4] text-black dark:bg-zinc-900 dark:text-white'
                 }`}
               >
@@ -289,30 +295,21 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                 </AnimatePresence>
 
                 <div
-                  className={`relative z-0 flex flex-wrap items-baseline gap-x-4 gap-y-1 ${captionAfter ? '' : 'flex-row-reverse justify-end'}`}
+                  className={`relative z-0 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-8 ${cascade.titleFirst ? '' : 'sm:flex-row-reverse sm:justify-start'}`}
                 >
                   <h3
-                    className="font-urbanist font-black tracking-tight text-xl sm:text-3xl lg:text-[44px]"
-                    style={{ lineHeight: '1.05' }}
+                    className="min-w-0 text-[30px] uppercase sm:text-[44px] lg:text-[64px]"
+                    style={{ fontFamily: "'Martian Mono', monospace", fontVariationSettings: "'wdth' 75", fontWeight: 600, lineHeight: 1, letterSpacing: '-0.03em' }}
                   >
                     {mode.title}
                   </h3>
                   <span
-                    className={`font-mono text-[11px] font-bold uppercase tracking-wider sm:text-xs ${
-                      isNegative ? 'text-white/50' : 'text-zinc-500 dark:text-zinc-500'
-                    }`}
+                    className={`font-space-mono shrink-0 text-[10px] uppercase sm:max-w-[16rem] sm:text-[11px] ${
+                      isNegative ? 'text-white/60' : 'text-zinc-950 dark:text-zinc-400'
+                    } ${cascade.titleFirst ? '' : 'sm:ml-auto'}`}
                   >
                     {mode.caption}
                   </span>
-                  <motion.span
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3, ease: EASE }}
-                    className={`ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-full border sm:h-8 sm:w-8 ${
-                      isNegative ? 'border-white/20 text-white' : 'border-zinc-300 text-zinc-950 dark:border-white/15 dark:text-white'
-                    }`}
-                  >
-                    <ChevronDown className="h-4 w-4" />
-                  </motion.span>
                 </div>
 
                 <AnimatePresence initial={false}>

@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
 import { CollaborationModes } from './CollaborationModes';
-import { ProjectsWheel } from './ProjectsWheel';
+import { CollageSpread } from './CollageSpread';
+import { ProjectsStack } from './ProjectsStack';
 import { Resume3D } from './Resume3D';
 
 interface SectionsHubProps {
@@ -124,27 +125,28 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     {
       key: 'cv',
       id: 'cv',
-      num: '03',
+      num: '04',
       badge: lang === 'fr' ? 'CURRICULUM VITAE OFFICIEL' : 'OFFICIAL RESUME',
       title: lang === 'fr' ? 'Curriculum Vitae 2026' : 'Curriculum Vitae 2026',
     },
   ];
 
   return (
-    <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-8 lg:px-12">
+    <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
       {/* Sections Accordion List */}
-      <div className="flex flex-col divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+      <div className="flex flex-col">
         {sectionHeaders.map((sec) => {
           const isOpen = openSections[sec.key];
 
           return (
+            <React.Fragment key={sec.key}>
+            {sec.key === 'cv' && <CollageSpread lang={lang} />}
             <section
-              key={sec.key}
               id={sec.id}
-              className="py-9 sm:py-8 transition-colors duration-300 scroll-mt-24"
+              className="pt-10 transition-colors duration-300 scroll-mt-24"
             >
               {/* Section Header Title Row (Clickable to open/close, except "modes"/"projects" which reveal themselves on scroll) */}
-              {sec.key === 'modes' || sec.key === 'projects' ? (
+              {sec.key === 'modes' ? null : sec.key === 'projects' ? (
                 <div
                   onMouseEnter={() => onHoverItem?.(sec.title.toUpperCase())}
                   onMouseLeave={onLeaveItem}
@@ -159,9 +161,6 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                         {sec.badge}
                       </span>
                     </div>
-                    <h2 className="font-urbanist text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-white">
-                      <InteractiveText text={sec.title} hoverColor="#52525b" />
-                    </h2>
                   </div>
                 </div>
               ) : (
@@ -219,7 +218,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             type="button"
                             onClick={() => setSelectedSkillFilter('all')}
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'all'
-                                ? 'bg-zinc-950 text-white shadow-md scale-105'
+                                ? 'bg-zinc-950 text-white shadow-md scale-105 dark:bg-white dark:text-zinc-950'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                               }`}
                           >
@@ -242,7 +241,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             type="button"
                             onClick={() => setSelectedSkillFilter('design')}
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'design'
-                                ? 'bg-zinc-950 text-white shadow-md scale-105'
+                                ? 'bg-zinc-950 text-white shadow-md scale-105 dark:bg-white dark:text-zinc-950'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                               }`}
                           >
@@ -254,7 +253,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                             type="button"
                             onClick={() => setSelectedSkillFilter('app')}
                             className={`rounded-full px-5 py-2 font-mono text-xs font-bold transition-all cursor-pointer ${selectedSkillFilter === 'app'
-                                ? 'bg-zinc-950 text-white shadow-md scale-105'
+                                ? 'bg-zinc-950 text-white shadow-md scale-105 dark:bg-white dark:text-zinc-950'
                                 : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200'
                               }`}
                           >
@@ -274,7 +273,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
                           </button>
                         </div>
 
-                  <ProjectsWheel
+                  <ProjectsStack
                     projects={filteredProjects}
                     lang={lang}
                     onSelectProject={onSelectProject}
@@ -312,6 +311,7 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
               </AnimatePresence>
               )}
             </section>
+            </React.Fragment>
           );
         })}
       </div>

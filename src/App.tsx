@@ -27,9 +27,8 @@ export default function App() {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme') as Theme | null;
       if (saved === 'light' || saved === 'dark') return saved;
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
     }
-    return 'light';
+    return 'dark';
   });
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
@@ -149,7 +148,7 @@ export default function App() {
         />
 
         {/* Compact 3D Diorama Showcase, before Contact */}
-        <DioramaShowcase />
+        <DioramaShowcase lang={lang} />
 
         {/* Dedicated Full Contact Section & Socials Footer */}
         <ContactSection

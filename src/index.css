@@ -50,7 +50,7 @@
     margin: 0;
     color: var(--text-primary);
     background-color: var(--bg);
-    font-family: var(--font-serif);
+    font-family: var(--font-main);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -63,20 +63,22 @@
 }
 
 :root {
-  /* PS Times first: add its licensed @font-face files to switch from Newsreader. */
-  --font-serif: 'PS Times', 'Newsreader', 'Times New Roman', Times, serif;
+  --font-main: 'JetBrains Mono', ui-monospace, monospace;
+  --font-head: 'Space Mono', ui-monospace, monospace;
 }
 
 .font-urbanist,
 .font-display {
-  font-family: var(--font-serif);
+  font-family: var(--font-main);
 }
 
-/* PS Times spec: Regular weight, 0 tracking, ~1.1 line height on display text. */
+/* Headings echo the hero wordmark: bold Space Mono capitals. */
 :is(h1, h2, h3):is(.font-urbanist, .font-display) {
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
+  font-family: var(--font-head);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
 .font-mono {
@@ -88,7 +90,7 @@
 }
 
 .font-sans {
-  font-family: var(--font-serif);
+  font-family: var(--font-main);
 }
 
 /* Quora Signature Bento Design System */
@@ -151,7 +153,7 @@
   background: #09090b;
   color: #ffffff;
   border-radius: 9999px;
-  font-family: var(--font-serif);
+  font-family: var(--font-main);
   font-weight: 700;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
@@ -209,7 +211,7 @@
   border-radius: 9999px;
   background: #000000;
   color: #ffffff;
-  font-family: var(--font-serif);
+  font-family: var(--font-main);
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -233,7 +235,7 @@
   border-radius: 9999px;
   background: #ffffff;
   color: #000000;
-  font-family: var(--font-serif);
+  font-family: var(--font-main);
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: -0.01em;
