@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ParticleText } from './ParticleText';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Language } from '../types';
 import { CheckCircle2, ArrowRight, ChevronDown } from 'lucide-react';
@@ -301,7 +302,7 @@ export const CollaborationModes: React.FC<CollaborationModesProps> = ({
                     className="min-w-0 text-[30px] uppercase sm:text-[44px] lg:text-[64px]"
                     style={{ fontFamily: "'Martian Mono', monospace", fontVariationSettings: "'wdth' 75", fontWeight: 600, lineHeight: 1, letterSpacing: '-0.03em' }}
                   >
-                    {mode.title}
+                    <ParticleText text={mode.title} active={hoveredId === mode.id} />
                   </h3>
                   <span
                     className={`font-space-mono shrink-0 text-[10px] uppercase sm:max-w-[16rem] sm:text-[11px] ${
