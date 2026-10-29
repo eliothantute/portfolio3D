@@ -81,7 +81,7 @@ export const CollageSpread: React.FC<{ lang: Language }> = ({ lang }) => {
   return (
     <section id="gallery" className="relative w-full overflow-x-clip pb-[24vw] pt-10 sm:pb-[14vw]">
       <div className="mx-auto mb-10 flex max-w-7xl items-center gap-2 px-4 sm:px-8 lg:px-12">
-        <span className="font-mono text-xs font-bold text-zinc-400">03 //</span>
+        <span className="font-mono text-xs font-bold text-zinc-400">05 //</span>
         <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
           Portrait
         </span>

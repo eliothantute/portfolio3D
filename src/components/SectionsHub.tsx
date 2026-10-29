@@ -4,6 +4,7 @@ import { Project, Language, SkillType } from '../types';
 import { InteractiveText } from './InteractiveText';
 import { CollaborationModes } from './CollaborationModes';
 import { CollageSpread } from './CollageSpread';
+import { ShowreelSection, SyzygySection } from './VideoSections';
 import { ProjectsStack } from './ProjectsStack';
 import { Resume3D } from './Resume3D';
 
@@ -118,14 +119,14 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
     {
       key: 'projects',
       id: 'projects',
-      num: '02',
+      num: '03',
       badge: lang === 'fr' ? 'SÉLECTION DE TRAVAUX' : 'SELECTED WORKS',
       title: lang === 'fr' ? 'Projets & Réalisations' : 'Selected Projects',
     },
     {
       key: 'cv',
       id: 'cv',
-      num: '04',
+      num: '06',
       badge: lang === 'fr' ? 'CURRICULUM VITAE OFFICIEL' : 'OFFICIAL RESUME',
       title: lang === 'fr' ? 'Curriculum Vitae 2026' : 'Curriculum Vitae 2026',
     },
@@ -140,7 +141,13 @@ export const SectionsHub: React.FC<SectionsHubProps> = ({
 
           return (
             <React.Fragment key={sec.key}>
-            {sec.key === 'cv' && <CollageSpread lang={lang} />}
+            {sec.key === 'projects' && <ShowreelSection lang={lang} num="02" />}
+            {sec.key === 'cv' && (
+              <>
+                <SyzygySection lang={lang} num="04" />
+                <CollageSpread lang={lang} />
+              </>
+            )}
             <section
               id={sec.id}
               className="pt-10 transition-colors duration-300 scroll-mt-24"

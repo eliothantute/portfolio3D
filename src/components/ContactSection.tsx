@@ -56,7 +56,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
         className="mx-auto max-w-4xl p-8 text-center [transform-style:preserve-3d] sm:p-14"
       >
         <span className="mb-4 inline-block font-mono text-xs font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500">
-          05 // {lang === 'fr' ? 'CONTACT & COLLABORATION' : 'CONTACT & COLLABORATION'}
+          07 // {lang === 'fr' ? 'CONTACT & COLLABORATION' : 'CONTACT & COLLABORATION'}
         </span>
 
         <h2 className="font-urbanist text-3xl font-black tracking-tight text-zinc-950 dark:text-white sm:text-5xl lg:text-6xl">

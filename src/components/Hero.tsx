@@ -91,7 +91,7 @@ export const Hero: React.FC<HeroProps> = ({ lang, onHoverItem, onLeaveItem }) =>
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top top',
-      end: () => `+=${window.innerHeight * (media.isMobile ? 1.6 : 2.2)}`,
+      end: () => `+=${window.innerHeight * (media.isMobile ? 1.1 : 1.5)}`,
       pin: true,
       anticipatePin: 1,
       invalidateOnRefresh: true,
